@@ -2,5 +2,12 @@
   "Homepage": {
     "title": "Welcome to the Homepage",
     "description": "This is the homepage of our application. Here you can find various resources and links to other sections."
+  },
+  "Navbar": {
+    "home": "Home",
+    "destinations": "Destinations",
+    "blog": "Blog",
+    "aboutUs": "About Us",
+    "contact": "Contact"
   }
 }
