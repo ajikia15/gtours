@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
@@ -45,7 +46,10 @@ export default async function Navbar() {
               {t("contact")}
             </Link>
           </div>
-          <div className="flex items-center space-x-4">user</div>
+          <div className="flex items-center space-x-4">
+            <LocaleSwitcher />
+            <p>user</p>
+          </div>
         </div>
       </div>
     </nav>
