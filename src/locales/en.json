@@ -1,0 +1,19 @@
+{
+  "logo": "LOGO",
+  "nav": {
+    "features": "Features",
+    "pricing": "Pricing",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "languages": {
+    "en": "English",
+    "ge": "Georgian",
+    "ru": "Russian"
+  }
+}
