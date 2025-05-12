@@ -1,5 +1,5 @@
 import { getTranslations } from "next-intl/server";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
@@ -21,25 +21,25 @@ export default async function Navbar() {
               {t("home")}
             </Link>
             <Link
-              href="/pricing"
+              href="/destinations"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               {t("destinations")}
             </Link>
             <Link
-              href="/about"
+              href="/blog"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               {t("blog")}
             </Link>
             <Link
-              href="/contact"
+              href="/about"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               {t("aboutUs")}
             </Link>
             <Link
-              href="/features"
+              href="/contact"
               className="text-muted-foreground hover:text-foreground transition-colors"
             >
               {t("contact")}
