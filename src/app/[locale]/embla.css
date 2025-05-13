@@ -1,13 +1,14 @@
 .embla {
-  --slide-height: 28rem;
+  --slide-height: 32rem;
   --slide-spacing: 0rem;
   --slide-size: 100%;
-  --embla-dot-font-size: 1.4rem;
-  --embla-dot-font-size-active: 1.8rem;
+  --embla-dot-font-size: 1.6rem;
+  --embla-dot-font-size-active: 2rem;
+  --embla-dot-gap: 0.5rem;
 }
 .embla__viewport {
   overflow: hidden;
-  border-radius: 1.8rem;
+  border-radius: 1rem;
 }
 .embla__container {
   display: flex;
@@ -49,7 +50,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 0.5rem;
+  gap: var(--embla-dot-gap);
   position: absolute;
   top: 50%;
   right: 1.2rem;
