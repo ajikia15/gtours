@@ -17,7 +17,7 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="px-12">
         <NextIntlClientProvider>
           <Navbar />
           {children}
