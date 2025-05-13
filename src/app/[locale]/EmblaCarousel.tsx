@@ -32,17 +32,34 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
   return (
     <section className="embla">
-      <div className="embla__viewport" ref={emblaRef}>
+      <div
+        className="embla__viewport"
+        ref={emblaRef}
+        style={{ position: "relative" }}
+      >
         <div className="embla__container">
           {slides.map((index) => (
-            <div className="embla__slide" key={index}>
-              <div className="embla__slide__number">{index + 1}</div>
+            <div
+              className="embla__slide"
+              key={index}
+              style={{ position: "relative", overflow: "hidden" }}
+            >
+              <img
+                src={`https://picsum.photos/800/340?random=${index + 1}`}
+                alt={`Random ${index + 1}`}
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  borderRadius: "1.8rem",
+                }}
+              />
             </div>
           ))}
         </div>
-      </div>
-
-      <div className="embla__controls">
         <div className="embla__dots">
           {scrollSnaps.map((_, index) => (
             <DotButton
@@ -51,7 +68,9 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
               className={"embla__dot".concat(
                 index === selectedIndex ? " embla__dot--selected" : ""
               )}
-            />
+            >
+              0{index + 1}
+            </DotButton>
           ))}
         </div>
       </div>
