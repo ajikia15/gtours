@@ -60,20 +60,20 @@ export const ActivityCarousel: React.FC<ActivityCarouselProps> = ({
       {prevBtnVisible && (
         <button
           onClick={scrollPrev}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1 shadow-md"
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-0.5 sm:p-1 shadow-md"
           aria-label="Previous"
         >
-          <ChevronLeft className="h-5 w-5 text-gray-600" />
+          <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
         </button>
       )}
 
       {nextBtnVisible && (
         <button
           onClick={scrollNext}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-1 shadow-md"
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-0.5 sm:p-1 shadow-md"
           aria-label="Next"
         >
-          <ChevronRight className="h-5 w-5 text-gray-600" />
+          <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
         </button>
       )}
     </div>

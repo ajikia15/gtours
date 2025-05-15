@@ -21,9 +21,9 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
       {activities.map((activity, index) => (
         <div
           key={index}
-          className="w-36 flex-none px-2 flex flex-col items-center justify-center cursor-pointer"
+          className="w-36 sm:w-28 md:w-32 lg:w-36 flex-none px-1 sm:px-2 flex flex-col items-center justify-center cursor-pointer py-4"
         >
-          <div className="relative h-12 w-12 mb-2">
+          <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
             <Image
               src={`/${activity.name}.svg`}
               alt={activity.name}
@@ -32,13 +32,10 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
             />
           </div>
           <div className="w-full text-center flex items-center justify-center">
-            <span className="text-base font-medium leading-tight">
+            <span className="text-xs sm:text-sm md:text-base font-medium leading-tight">
               {t(`${activity.name}`)}
             </span>
           </div>
-          {index < activities.length - 1 && (
-            <div className="absolute right-0 top-1/2 h-8 w-px bg-gray-200 -translate-y-1/2"></div>
-          )}
         </div>
       ))}
     </ActivityCarousel>
