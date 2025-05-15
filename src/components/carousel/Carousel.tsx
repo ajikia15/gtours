@@ -1,4 +1,4 @@
-import EmblaCarousel from "./EmblaCarousel";
+import EmblaCarousel from "@/components/carousel/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
 import "./embla.css";
 export default function Carousel() {

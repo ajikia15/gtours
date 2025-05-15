@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { getTranslations } from "next-intl/server";
-import Carousel from "./Carousel";
+import Carousel from "@/components/carousel/Carousel";
 
 export default async function HomePage() {
   // const t = useTranslations("Homepage");

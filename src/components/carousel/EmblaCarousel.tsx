@@ -1,7 +1,10 @@
 "use client";
 import React, { useCallback } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
-import { DotButton, useDotButton } from "./EmblaCarouselDotButton";
+import {
+  DotButton,
+  useDotButton,
+} from "@/components/carousel/EmblaCarouselDotButton";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 type PropType = {
