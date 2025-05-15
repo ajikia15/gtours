@@ -9,5 +9,11 @@
     "blog": "ბლოგი",
     "aboutUs": "ჩვენს შესახებ",
     "contact": "კონტაქტი"
+  },
+  "QuickCategory": {
+    "hiking": "Hiking",
+    "horseRiding": "Horse Riding",
+    "parasailing": "Parasailing",
+    "surfing": "Surfing"
   }
 }

@@ -9,5 +9,11 @@
     "blog": "Blog",
     "aboutUs": "About Us",
     "contact": "Contact"
+  },
+  "QuickCategory": {
+    "HorseRiding": "Horse Riding",
+    "Hiking": "Hiking",
+    "Surfing": "Surfing",
+    "Parasailing": "Parasailing"
   }
 }

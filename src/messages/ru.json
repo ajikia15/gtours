@@ -9,5 +9,11 @@
     "blog": "Блог",
     "aboutUs": "О нас",
     "contact": "Контакт"
+  },
+  "QuickCategory": {
+    "hiking": "Пеший туризм",
+    "horseRiding": "Верховая езда",
+    "parasailing": "Парасейл",
+    "surfing": "Серфинг"
   }
 }
