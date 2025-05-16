@@ -1,5 +1,5 @@
 "use client";
-import { useAuth } from "@/context";
+import { useAuth } from "@/context/auth";
 import { Button } from "./ui/button";
 import { Link } from "@/i18n/navigation";
 
