@@ -7,6 +7,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
@@ -18,14 +19,18 @@ export default function AuthButtons() {
       {auth?.currentUser ? (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full">
-              <UserIcon className="h-5 w-5" />
+            <Button
+              variant="outline"
+              size="icon"
+              className="rounded-full w-10 h-10"
+            >
+              <UserIcon className="h-10 w-10" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem className="font-medium">
-              Welcome, {auth.currentUser.email?.split("@")[0] || "User"}
-            </DropdownMenuItem>
+            <DropdownMenuLabel className="font-medium">
+              Welcome, {auth.currentUser.displayName}
+            </DropdownMenuLabel>
             <DropdownMenuItem onClick={() => auth.logout()}>
               Sign out
             </DropdownMenuItem>

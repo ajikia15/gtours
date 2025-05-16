@@ -61,7 +61,7 @@
 
 .embla__dot {
   background: none;
-  color: #bbb;
+  color: #dddddd;
   width: auto;
   height: auto;
   font-size: var(--embla-dot-font-size);
