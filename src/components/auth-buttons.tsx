@@ -15,10 +15,10 @@ export default function AuthButtons() {
         </>
       ) : (
         <>
-          <Button>
+          <Button className="">
             <Link href="/register">Register</Link>
           </Button>
-          <Button>
+          <Button variant="brandred">
             <Link href="/login">Sign in</Link>
           </Button>
         </>
