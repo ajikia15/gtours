@@ -4,6 +4,7 @@ import { routing } from "@/i18n/routing";
 import Navbar from "../../components/layout/Navbar";
 import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
+import { AuthProvider } from "@/context";
 export default async function LocaleLayout({
   children,
   params,
@@ -19,11 +20,13 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className="px-20">
       <body>
-        <NextIntlClientProvider>
-          <Navbar />
-          {children}
-          <Footer />
-        </NextIntlClientProvider>
+        <AuthProvider>
+          <NextIntlClientProvider>
+            <Navbar />
+            {children}
+            <Footer />
+          </NextIntlClientProvider>
+        </AuthProvider>
       </body>
     </html>
   );
