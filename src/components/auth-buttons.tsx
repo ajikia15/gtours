@@ -13,7 +13,6 @@ import {
 
 export default function AuthButtons() {
   const auth = useAuth();
-
   return (
     <div>
       {auth?.currentUser ? (
@@ -31,6 +30,17 @@ export default function AuthButtons() {
             <DropdownMenuLabel className="font-medium">
               Welcome, {auth.currentUser.displayName}
             </DropdownMenuLabel>
+            <DropdownMenuItem>My Account</DropdownMenuItem>
+            {!!auth.customClaims?.admin && (
+              <DropdownMenuItem>
+                <Link href="/admin">Admin Dashboard</Link>
+              </DropdownMenuItem>
+            )}
+            {!auth.customClaims?.admin && (
+              <DropdownMenuItem>
+                <Link href="/admin">My Favorite Tours</Link>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem onClick={() => auth.logout()}>
               Sign out
             </DropdownMenuItem>

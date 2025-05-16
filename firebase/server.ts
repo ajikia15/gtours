@@ -1,6 +1,7 @@
 import { getApps, initializeApp, ServiceAccount } from "firebase-admin/app";
 import { Firestore, getFirestore } from "firebase-admin/firestore";
 import admin from "firebase-admin";
+import { Auth, getAuth } from "firebase-admin/auth";
 const serviceAccount = {
   type: "service_account",
   project_id: "gtours-fcd56",
@@ -16,16 +17,19 @@ const serviceAccount = {
   universe_domain: "googleapis.com",
 };
 let firestore: Firestore;
+let auth: Auth;
 const currentApps = getApps();
 
 if (!currentApps.length) {
-  const app = initializeApp({
+  const app = admin.initializeApp({
     credential: admin.credential.cert(serviceAccount as ServiceAccount),
   });
   firestore = getFirestore(app);
+  auth = getAuth(app);
 } else {
   const app = currentApps[0];
   firestore = getFirestore(app);
+  auth = getAuth(app);
 }
 
-export { firestore };
+export { firestore, auth };
