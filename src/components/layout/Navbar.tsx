@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
+import { Button } from "../ui/button";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
@@ -49,6 +50,12 @@ export default async function Navbar() {
           <div className="flex items-center space-x-4">
             <LocaleSwitcher />
             <p>user</p>
+            <Button variant="outline">
+              <Link href="/login">Login</Link>
+            </Button>
+            <Button variant="outline">
+              <Link href="/register">Register</Link>
+            </Button>
           </div>
         </div>
       </div>
