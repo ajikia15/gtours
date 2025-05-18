@@ -6,8 +6,10 @@ import { z } from "zod";
 import { saveNewTour } from "../actions";
 import TourForm from "@/components/tour-form";
 import { toast } from "sonner";
+import { useRouter } from "@/i18n/navigation";
 export default function NewTourForm() {
   const auth = useAuth();
+  const router = useRouter();
   async function handleSubmit(data: z.infer<typeof tourDataSchema>) {
     const token = await auth?.currentUser?.getIdToken();
     if (!token) {
@@ -19,8 +21,8 @@ export default function NewTourForm() {
     }
     if (result?.success) {
       toast.success("Tour saved successfully");
+      router.push("/admin"); // TODO: redirect to the new tour
     }
-    console.log({ result });
   }
   return (
     <div>
