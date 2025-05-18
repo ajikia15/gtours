@@ -7,12 +7,7 @@ export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,
   token: string
 ) => {
-  console.log("Running");
   const docRef = firestore.collection("tours").doc();
-  await docRef.set({
-    price: 100,
-  });
-  console.log("Done");
 
   const verifiedToken = await auth.verifyIdToken(token);
   if (!verifiedToken.admin) {
@@ -32,12 +27,12 @@ export const saveNewTour = async (
   }
   const tour = await firestore.collection("tours").add({
     ...data,
+    createdAt: new Date(),
+    updatedAt: new Date(),
   });
   return {
     tourId: tour.id,
     success: "Tour saved successfully",
     message: "Tour saved successfully",
-    createdAt: new Date(),
-    updatedAt: new Date(),
   };
 };

@@ -29,7 +29,6 @@ if (!currentApps.length) {
 } else {
   const app = currentApps[0];
   firestore = getFirestore(app);
-  console.log("firestore");
   auth = getAuth(app);
 }
 

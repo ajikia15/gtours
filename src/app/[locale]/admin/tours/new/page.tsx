@@ -1,8 +1,10 @@
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import NewTourForm from "./new-tour-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getTours } from "../../../../../../firebase/tours";
 
-export default function NewTour() {
+export default async function NewTour() {
+  const tours = await getTours({});
   return (
     <div className="max-w-xl mx-auto mt-5">
       <Breadcrumbs
