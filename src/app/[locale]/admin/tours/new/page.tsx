@@ -1,9 +1,10 @@
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import NewTourForm from "./new-tour-form";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function NewTour() {
   return (
-    <div>
+    <div className="max-w-xl mx-auto mt-5">
       <Breadcrumbs
         items={[
           { label: "Admin Dashboard", href: "/admin" },
@@ -11,8 +12,14 @@ export default function NewTour() {
           { label: "New Tour" },
         ]}
       />
-
-      <NewTourForm />
+      <Card className="mt-5">
+        <CardHeader>
+          <CardTitle>New Tour</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <NewTourForm />
+        </CardContent>
+      </Card>
     </div>
   );
 }

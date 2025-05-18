@@ -15,14 +15,14 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-type PropertyFormProps = {
+type TourFormProps = {
   handleSubmit: (data: z.infer<typeof tourDataSchema>) => void;
   submitButtonLabel: React.ReactNode;
 };
-export default function PropertyForm({
+export default function TourForm({
   handleSubmit,
   submitButtonLabel,
-}: PropertyFormProps) {
+}: TourFormProps) {
   const form = useForm<z.infer<typeof tourDataSchema>>({
     resolver: zodResolver(tourDataSchema),
     defaultValues: {
@@ -35,7 +35,7 @@ export default function PropertyForm({
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4">
           <fieldset>
             <FormField
               control={form.control}
@@ -99,7 +99,7 @@ export default function PropertyForm({
         <Button
           type="submit"
           variant="brandred"
-          className="mx-auto mt-4 max-w-md w-full"
+          className="mx-auto mt-4  w-full"
         >
           {submitButtonLabel}
         </Button>
