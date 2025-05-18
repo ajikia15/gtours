@@ -4,12 +4,7 @@ import { z } from "zod";
 import { auth, firestore } from "../../../../../firebase/server";
 
 export const saveNewTour = async (
-  data: {
-    name: string;
-    description: string;
-    price: number;
-    image: string;
-  },
+  data: z.infer<typeof tourDataSchema>,
   token: string
 ) => {
   console.log("Running");
@@ -42,5 +37,7 @@ export const saveNewTour = async (
     tourId: tour.id,
     success: "Tour saved successfully",
     message: "Tour saved successfully",
+    createdAt: new Date(),
+    updatedAt: new Date(),
   };
 };
