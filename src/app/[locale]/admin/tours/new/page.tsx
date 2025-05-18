@@ -6,9 +6,11 @@ export default function NewTour() {
       <Breadcrumbs
         items={[
           { label: "Admin Dashboard", href: "/admin" },
+          { label: "Tours" },
           { label: "New Tour" },
         ]}
       />
+      <h1 className="text-2xl font-bold">New Tour</h1>
     </div>
   );
 }

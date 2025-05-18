@@ -16,13 +16,16 @@ const Breadcrumbs = ({
     <Breadcrumb>
       <BreadcrumbList>
         {items.map((item, index) => (
-          <BreadcrumbItem key={index}>
-            {item.href ? (
-              <Link href={item.href}>{item.label}</Link>
-            ) : (
-              <BreadcrumbPage>{item.label}</BreadcrumbPage>
-            )}
-          </BreadcrumbItem>
+          <React.Fragment key={index}>
+            <BreadcrumbItem>
+              {item.href ? (
+                <Link href={item.href}>{item.label}</Link>
+              ) : (
+                <BreadcrumbPage>{item.label}</BreadcrumbPage>
+              )}
+            </BreadcrumbItem>
+            {index !== items.length - 1 && <BreadcrumbSeparator key={index} />}
+          </React.Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>
