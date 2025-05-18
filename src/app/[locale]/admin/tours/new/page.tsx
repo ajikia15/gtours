@@ -14,6 +14,7 @@ export default async function NewTour() {
           { label: "New Tour" },
         ]}
       />
+
       <Card className="mt-5">
         <CardHeader>
           <CardTitle>New Tour</CardTitle>

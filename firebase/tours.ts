@@ -1,6 +1,15 @@
 import "server-only";
 import { firestore } from "./server";
 
+export type Tour = {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  image: string;
+  updatedAt?: Date;
+};
+
 type getToursOptions = {
   filters?: {
     minPrice?: number | null;
@@ -33,7 +42,7 @@ export async function getTours(options: getToursOptions) {
   const tours = toursSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  }));
+  })) as Tour[];
 
   return { data: tours };
 }
