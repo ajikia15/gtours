@@ -1,4 +1,5 @@
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
+import NewTourForm from "./new-tour-form";
 
 export default function NewTour() {
   return (
@@ -10,7 +11,8 @@ export default function NewTour() {
           { label: "New Tour" },
         ]}
       />
-      <h1 className="text-2xl font-bold">New Tour</h1>
+
+      <NewTourForm />
     </div>
   );
 }
