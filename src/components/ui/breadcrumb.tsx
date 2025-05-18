@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
-import { ChevronRight, Link, MoreHorizontal } from "lucide-react";
-
+import { ChevronRight, MoreHorizontal } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
 
 const Breadcrumbs = ({
@@ -18,9 +18,7 @@ const Breadcrumbs = ({
         {items.map((item, index) => (
           <BreadcrumbItem key={index}>
             {item.href ? (
-              <BreadcrumbItem>
-                <Link href={item.href}>{item.label}</Link>
-              </BreadcrumbItem>
+              <Link href={item.href}>{item.label}</Link>
             ) : (
               <BreadcrumbPage>{item.label}</BreadcrumbPage>
             )}
