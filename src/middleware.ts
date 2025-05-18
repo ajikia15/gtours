@@ -29,13 +29,9 @@ export async function middleware(request: NextRequest) {
     }
 
     const decodedToken = decodeJwt(token);
-    if (!decodedToken) {
+    if (!decodedToken.admin) {
       return NextResponse.redirect(new URL(`/${locale}/`, request.url));
     }
-    //   const { role } = decodedToken;
-    //   if (role !== "admin") {
-    //     return NextResponse.redirect(new URL("/", request.url));
-    //   }
   }
 
   // Then handle i18n routing for all requests
