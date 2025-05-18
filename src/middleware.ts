@@ -29,6 +29,9 @@ export async function middleware(request: NextRequest) {
     }
 
     const decodedToken = decodeJwt(token);
+    // if (!decodedToken) {
+    //   return NextResponse.redirect(new URL(`/${locale}/`, request.url));
+    // }
     if (!decodedToken.admin) {
       return NextResponse.redirect(new URL(`/${locale}/`, request.url));
     }
