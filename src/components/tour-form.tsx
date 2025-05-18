@@ -36,7 +36,7 @@ export default function TourForm({
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)}>
         <div className="grid grid-cols-1 gap-4">
-          <fieldset>
+          <fieldset disabled={form.formState.isSubmitting}>
             <FormField
               control={form.control}
               name="name"
@@ -94,6 +94,7 @@ export default function TourForm({
           type="submit"
           variant="brandred"
           className="mx-auto mt-4  w-full"
+          disabled={form.formState.isSubmitting}
         >
           {submitButtonLabel}
         </Button>

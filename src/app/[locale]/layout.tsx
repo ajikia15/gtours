@@ -5,6 +5,7 @@ import Navbar from "../../components/layout/Navbar";
 import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/auth";
+import { Toaster } from "@/components/ui/sonner";
 export default async function LocaleLayout({
   children,
   params,
@@ -24,6 +25,7 @@ export default async function LocaleLayout({
           <NextIntlClientProvider>
             <Navbar />
             {children}
+            <Toaster />
             <Footer />
           </NextIntlClientProvider>
         </AuthProvider>
