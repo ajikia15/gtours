@@ -1,6 +1,10 @@
 "use client";
 
-import { tourDataSchema } from "@/validation/tourSchema";
+import {
+  tourDataSchema,
+  tourStatusEnum,
+  type TourStatus,
+} from "@/validation/tourSchema";
 import { useForm } from "react-hook-form";
 import { Form } from "./ui/form";
 import { z } from "zod";
@@ -15,8 +19,15 @@ import {
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { Switch } from "./ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
+// Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourDataSchema>;
 
 type TourFormProps = {
@@ -25,7 +36,7 @@ type TourFormProps = {
 };
 
 export default function TourForm({
-  handleSubmit,
+  handleSubmit: onSubmit,
   submitButtonLabel,
 }: TourFormProps) {
   const form = useForm<TourFormData>({
@@ -39,14 +50,13 @@ export default function TourForm({
       leaveTime: "",
       returnTime: "",
       location: "",
-      isActive: true,
+      status: "draft",
     },
-    mode: "onChange",
   });
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
         {/* Main Info Fieldsets */}
         <fieldset
           disabled={form.formState.isSubmitting}
@@ -161,18 +171,28 @@ export default function TourForm({
 
             <FormField
               control={form.control}
-              name="isActive"
+              name="status"
               render={({ field }) => (
-                <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
-                  <div className="space-y-0.5">
-                    <FormLabel className="text-base">Active Status</FormLabel>
-                  </div>
-                  <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
-                  </FormControl>
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {tourStatusEnum.options.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status.charAt(0).toUpperCase() + status.slice(1)}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
                 </FormItem>
               )}
             />
@@ -188,7 +208,7 @@ export default function TourForm({
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea {...field} rows={8} className="min-h-[200px]" />
+                  <Textarea {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -198,9 +218,8 @@ export default function TourForm({
 
         <Button
           type="submit"
-          variant="brandred"
-          className="w-full"
           disabled={form.formState.isSubmitting}
+          className="w-full"
         >
           {submitButtonLabel}
         </Button>

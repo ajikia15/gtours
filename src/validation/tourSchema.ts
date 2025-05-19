@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const tourStatusEnum = z.enum(["active", "disabled", "draft"]);
+export type TourStatus = z.infer<typeof tourStatusEnum>;
+
 export const tourDataSchema = z.object({
   title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
@@ -26,5 +29,5 @@ export const tourDataSchema = z.object({
     )
     .optional(),
   location: z.string().optional(),
-  isActive: z.boolean().optional(),
+  status: tourStatusEnum.default("draft").optional(),
 });
