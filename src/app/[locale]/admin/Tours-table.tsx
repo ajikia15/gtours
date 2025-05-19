@@ -19,6 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Link } from "@/i18n/navigation";
+import { Pencil, Trash } from "lucide-react";
 
 export default async function ToursTable({
   page = 1,
@@ -60,9 +61,13 @@ export default async function ToursTable({
                 <TableCell>{tour.location}</TableCell>
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
-                <TableCell>
-                  <Button>Edit</Button>
-                  <Button>Delete</Button>
+                <TableCell className="flex items-center gap-1">
+                  <Button>
+                    <Pencil />
+                  </Button>
+                  <Button variant="destructive">
+                    <Trash />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
