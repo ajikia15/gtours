@@ -6,8 +6,10 @@ import ToursTable from "./Tours-table";
 
 export default async function AdminDashboard({
   searchParams,
+  params,
 }: {
   searchParams?: Promise<any>;
+  params: { locale: string };
 }) {
   const searchParamsValue = await searchParams;
   console.log({ searchParamsValue });
@@ -25,6 +27,7 @@ export default async function AdminDashboard({
       </Button>
       <ToursTable
         page={searchParamsValue?.page ? parseInt(searchParamsValue.page) : 1}
+        params={params}
       />
     </>
   );

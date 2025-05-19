@@ -18,9 +18,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
-export default async function ToursTable({ page = 1 }: { page?: number }) {
+export default async function ToursTable({
+  page = 1,
+  params = { locale: "en" },
+}: {
+  page?: number;
+  params?: { locale: string };
+}) {
+  const locale = params.locale;
   const { data, totalPages } = await getTours({
     pagination: {
       page,
@@ -62,12 +69,14 @@ export default async function ToursTable({ page = 1 }: { page?: number }) {
           </TableBody>
           <TableFooter>
             <TableRow>
-              <TableCell colSpan={5} className="flex items-center justify-end">
+              <TableCell colSpan={6} className="text-center">
                 <Pagination>
                   <PaginationContent>
                     <PaginationItem>
                       <PaginationPrevious
-                        href={`/en/admin?page=${page > 1 ? page - 1 : 1}`}
+                        href={`/${locale}/admin?page=${
+                          page > 1 ? page - 1 : 1
+                        }`}
                         aria-disabled={page <= 1}
                         className={
                           page <= 1 ? "pointer-events-none opacity-50" : ""
@@ -78,7 +87,7 @@ export default async function ToursTable({ page = 1 }: { page?: number }) {
                     {Array.from({ length: totalPages }).map((_, i) => (
                       <PaginationItem key={i}>
                         <PaginationLink
-                          href={`/en/admin?page=${i + 1}`}
+                          href={`/${locale}/admin?page=${i + 1}`}
                           isActive={page === i + 1}
                         >
                           {i + 1}
@@ -88,7 +97,7 @@ export default async function ToursTable({ page = 1 }: { page?: number }) {
 
                     <PaginationItem>
                       <PaginationNext
-                        href={`/en/admin?page=${
+                        href={`/${locale}/admin?page=${
                           page < totalPages ? page + 1 : totalPages
                         }`}
                         aria-disabled={page >= totalPages}
