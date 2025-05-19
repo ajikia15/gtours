@@ -6,8 +6,20 @@ import {
   TableHead,
   TableCell,
   TableBody,
+  TableFooter,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
+import Link from "next/link";
+
 export default async function ToursTable({ page = 1 }: { page?: number }) {
   const { data, totalPages } = await getTours({
     pagination: {
@@ -15,6 +27,7 @@ export default async function ToursTable({ page = 1 }: { page?: number }) {
       pageSize: 2,
     },
   });
+
   return (
     <>
       {!data?.length && (
@@ -47,6 +60,50 @@ export default async function ToursTable({ page = 1 }: { page?: number }) {
               </TableRow>
             ))}
           </TableBody>
+          <TableFooter>
+            <TableRow>
+              <TableCell colSpan={5} className="flex items-center justify-end">
+                <Pagination>
+                  <PaginationContent>
+                    <PaginationItem>
+                      <PaginationPrevious
+                        href={`/en/admin?page=${page > 1 ? page - 1 : 1}`}
+                        aria-disabled={page <= 1}
+                        className={
+                          page <= 1 ? "pointer-events-none opacity-50" : ""
+                        }
+                      />
+                    </PaginationItem>
+
+                    {Array.from({ length: totalPages }).map((_, i) => (
+                      <PaginationItem key={i}>
+                        <PaginationLink
+                          href={`/en/admin?page=${i + 1}`}
+                          isActive={page === i + 1}
+                        >
+                          {i + 1}
+                        </PaginationLink>
+                      </PaginationItem>
+                    ))}
+
+                    <PaginationItem>
+                      <PaginationNext
+                        href={`/en/admin?page=${
+                          page < totalPages ? page + 1 : totalPages
+                        }`}
+                        aria-disabled={page >= totalPages}
+                        className={
+                          page >= totalPages
+                            ? "pointer-events-none opacity-50"
+                            : ""
+                        }
+                      />
+                    </PaginationItem>
+                  </PaginationContent>
+                </Pagination>
+              </TableCell>
+            </TableRow>
+          </TableFooter>
         </Table>
       )}
     </>

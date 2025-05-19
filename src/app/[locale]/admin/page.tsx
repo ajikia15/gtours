@@ -23,7 +23,9 @@ export default async function AdminDashboard({
           New Tour
         </Link>
       </Button>
-      <ToursTable page={searchParamsValue?.page} />
+      <ToursTable
+        page={searchParamsValue?.page ? parseInt(searchParamsValue.page) : 1}
+      />
     </>
   );
 }
