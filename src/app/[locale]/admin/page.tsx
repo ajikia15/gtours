@@ -9,7 +9,7 @@ export default async function AdminDashboard({
   params,
 }: {
   searchParams?: Promise<any>;
-  params: { locale: string };
+  params: Promise<{ locale: string }> | { locale: string };
 }) {
   const searchParamsValue = await searchParams;
   console.log({ searchParamsValue });

@@ -26,16 +26,18 @@ export default async function ToursTable({
   params = { locale: "en" },
 }: {
   page?: number;
-  params?: { locale: string };
+  params?: Promise<{ locale: string }> | { locale: string };
 }) {
-  const locale = params.locale;
+  // Ensure params is awaited
+  const resolvedParams = await Promise.resolve(params);
+  const locale = resolvedParams.locale;
+
   const { data, totalPages } = await getTours({
     pagination: {
       page,
       pageSize: 2,
     },
   });
-
   return (
     <>
       {!data?.length && (
@@ -62,8 +64,10 @@ export default async function ToursTable({
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
                 <TableCell className="flex items-center gap-1">
-                  <Button>
-                    <Pencil />
+                  <Button asChild>
+                    <Link href={`/${locale}/admin/tours/${tour.id}`}>
+                      <Pencil />
+                    </Link>
                   </Button>
                   <Button variant="destructive">
                     <Trash />
