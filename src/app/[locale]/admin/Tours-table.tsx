@@ -5,8 +5,9 @@ import {
   TableRow,
   TableHead,
   TableCell,
+  TableBody,
 } from "@/components/ui/table";
-
+import { Button } from "@/components/ui/button";
 export default async function ToursTable() {
   const { data } = await getTours({
     pagination: {
@@ -22,12 +23,30 @@ export default async function ToursTable() {
         </div>
       )}
       {data?.length && (
-        <Table>
+        <Table className="mt-5">
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Location</TableHead>
+              <TableHead>Duration</TableHead>
+              <TableHead>Price</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
+          <TableBody>
+            {data.map((tour) => (
+              <TableRow key={tour.id}>
+                <TableCell>{tour.title}</TableCell>
+                <TableCell>{tour.location}</TableCell>
+                <TableCell>{tour.duration} Days</TableCell>
+                <TableCell>{tour.basePrice}</TableCell>
+                <TableCell>
+                  <Button>Edit</Button>
+                  <Button>Delete</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
         </Table>
       )}
     </>

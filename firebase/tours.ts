@@ -3,10 +3,15 @@ import { firestore } from "./server";
 
 export type Tour = {
   id: string;
-  name: string;
+  title: string;
   description: string;
-  price: number;
-  image: string;
+  imageUrl: string;
+  basePrice: number;
+  duration?: number;
+  leaveTime?: string;
+  returnTime?: string;
+  location?: string;
+  isActive?: boolean;
   updatedAt?: Date;
 };
 
@@ -26,13 +31,13 @@ export async function getTours(options: getToursOptions) {
   const pageSize = options?.pagination?.pageSize || 10;
   const { minPrice, maxPrice } = options?.filters || {};
 
-  let toursQuery = firestore.collection("tours").orderBy("price", "desc");
+  let toursQuery = firestore.collection("tours").orderBy("basePrice", "desc");
 
   if (minPrice !== null && minPrice !== undefined) {
-    toursQuery = toursQuery.where("price", ">=", minPrice);
+    toursQuery = toursQuery.where("basePrice", ">=", minPrice);
   }
   if (maxPrice !== null && maxPrice !== undefined) {
-    toursQuery = toursQuery.where("price", "<=", maxPrice);
+    toursQuery = toursQuery.where("basePrice", "<=", maxPrice);
   }
   const toursSnapshot = await toursQuery
     .limit(pageSize)
@@ -43,6 +48,5 @@ export async function getTours(options: getToursOptions) {
     id: doc.id,
     ...doc.data(),
   })) as Tour[];
-
   return { data: tours };
 }

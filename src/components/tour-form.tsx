@@ -35,7 +35,7 @@ export default function TourForm({
       description: "",
       imageUrl: "",
       basePrice: 0,
-      tourDuration: 0,
+      duration: 0,
       leaveTime: "",
       returnTime: "",
       location: "",
@@ -88,7 +88,7 @@ export default function TourForm({
 
             <FormField
               control={form.control}
-              name="tourDuration"
+              name="duration"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Tour Duration (days)</FormLabel>
