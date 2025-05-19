@@ -4,7 +4,13 @@ import { Link } from "@/i18n/navigation";
 import { PlusCircleIcon } from "lucide-react";
 import ToursTable from "./Tours-table";
 
-export default function AdminDashboard() {
+export default async function AdminDashboard({
+  searchParams,
+}: {
+  searchParams?: Promise<any>;
+}) {
+  const searchParamsValue = await searchParams;
+  console.log({ searchParamsValue });
   return (
     <>
       <div>
@@ -17,7 +23,7 @@ export default function AdminDashboard() {
           New Tour
         </Link>
       </Button>
-      <ToursTable />
+      <ToursTable page={searchParamsValue?.page} />
     </>
   );
 }

@@ -8,11 +8,11 @@ import {
   TableBody,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-export default async function ToursTable() {
+export default async function ToursTable({ page = 1 }: { page?: number }) {
   const { data, totalPages } = await getTours({
     pagination: {
-      page: 1,
-      pageSize: 10,
+      page,
+      pageSize: 2,
     },
   });
   return (
