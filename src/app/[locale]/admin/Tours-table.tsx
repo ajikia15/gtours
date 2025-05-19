@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 export default async function ToursTable() {
-  const { data } = await getTours({
+  const { data, totalPages } = await getTours({
     pagination: {
       page: 1,
       pageSize: 10,

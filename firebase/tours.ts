@@ -1,5 +1,5 @@
 import "server-only";
-import { firestore } from "./server";
+import { firestore, getTotalPages } from "./server";
 
 export type Tour = {
   id: string;
@@ -39,6 +39,8 @@ export async function getTours(options: getToursOptions) {
   if (maxPrice !== null && maxPrice !== undefined) {
     toursQuery = toursQuery.where("basePrice", "<=", maxPrice);
   }
+
+  const totalPages = await getTotalPages(toursQuery, pageSize);
   const toursSnapshot = await toursQuery
     .limit(pageSize)
     .offset((page - 1) * pageSize)
@@ -48,5 +50,5 @@ export async function getTours(options: getToursOptions) {
     id: doc.id,
     ...doc.data(),
   })) as Tour[];
-  return { data: tours };
+  return { data: tours, totalPages };
 }
