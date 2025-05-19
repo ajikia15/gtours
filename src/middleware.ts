@@ -14,6 +14,11 @@ const handleI18nRouting = createMiddleware({
 });
 
 export async function middleware(request: NextRequest) {
+  // Handle root path redirect
+  if (request.nextUrl.pathname === "/") {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url));
+  }
+
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
   // First check if this is an admin route that needs authentication
   if (request.nextUrl.pathname.match(/(en|ge|ru)\/admin/)) {
@@ -42,5 +47,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/(en|ge|ru)/admin"],
+  matcher: ["/", "/(en|ge|ru)/:path*"],
 };

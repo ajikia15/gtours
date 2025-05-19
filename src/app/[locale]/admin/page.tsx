@@ -2,6 +2,7 @@ import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { PlusCircleIcon } from "lucide-react";
+import ToursTable from "./Tours-table";
 
 export default function AdminDashboard() {
   return (
@@ -16,6 +17,7 @@ export default function AdminDashboard() {
           New Tour
         </Link>
       </Button>
+      <ToursTable />
     </>
   );
 }
