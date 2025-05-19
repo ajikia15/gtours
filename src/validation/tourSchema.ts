@@ -1,14 +1,29 @@
 import { z } from "zod";
 
 export const tourDataSchema = z.object({
-  name: z.string().min(1, "Name is required"),
+  title: z.string().min(1, "Title is required"),
   description: z.string().min(1, "Description is required"),
-  price: z.coerce.number().min(1, "Price is required"),
-  image: z.string().min(1, "Image is required"),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  imageUrl: z.string().url("Invalid URL format"),
+  basePrice: z.coerce.number().min(1, "Base price is required"),
+  tourDuration: z
+    .number()
+    .int()
+    .min(1, "Tour duration must be at least 1 day")
+    .optional(),
+  leaveTime: z
+    .string()
+    .regex(
+      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+      "Leave time must be in HH:MM format"
+    )
+    .optional(),
+  returnTime: z
+    .string()
+    .regex(
+      /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/,
+      "Return time must be in HH:MM format"
+    )
+    .optional(),
   location: z.string().optional(),
-  status: z.string().optional(),
-  isFeatured: z.boolean().optional(),
   isActive: z.boolean().optional(),
 });
