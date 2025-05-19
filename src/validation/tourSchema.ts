@@ -5,11 +5,12 @@ export const tourDataSchema = z.object({
   description: z.string().min(1, "Description is required"),
   imageUrl: z.string().url("Invalid URL format"),
   basePrice: z.coerce.number().min(1, "Base price is required"),
-  tourDuration: z
+  tourDuration: z.coerce
     .number()
     .int()
     .min(1, "Tour duration must be at least 1 day")
-    .optional(),
+    .optional()
+    .or(z.literal("")),
   leaveTime: z
     .string()
     .regex(

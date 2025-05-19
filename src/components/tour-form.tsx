@@ -35,12 +35,13 @@ export default function TourForm({
       description: "",
       imageUrl: "",
       basePrice: 0,
-      tourDuration: undefined,
+      tourDuration: 0,
       leaveTime: "",
       returnTime: "",
       location: "",
       isActive: true,
     },
+    mode: "onChange",
   });
 
   return (
