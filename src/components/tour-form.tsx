@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
 // Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourDataSchema>;
 
@@ -218,7 +219,11 @@ export default function TourForm({
             )}
           />
         </fieldset>
-
+        <MultiImageUploader
+          onImagesChange={(images: ImageUpload[]) => {
+            console.log({ images });
+          }}
+        />
         <Button
           type="submit"
           disabled={form.formState.isSubmitting}

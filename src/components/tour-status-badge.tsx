@@ -6,10 +6,12 @@ const statusLabel = {
   disabled: "Disabled",
   active: "Active",
 };
-const variant: { [key: string]: "default" | "destructive" | "outline" } = {
-  draft: "default",
-  disabled: "outline",
-  active: "destructive",
+const variant: {
+  [key: string]: "default" | "destructive" | "outline" | "secondary";
+} = {
+  draft: "outline",
+  disabled: "secondary",
+  active: "default",
 };
 export default function TourStatusBadge({ status }: { status: TourStatus }) {
   const label = statusLabel[status];
