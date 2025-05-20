@@ -1,6 +1,6 @@
 import "server-only";
 import { firestore, getTotalPages } from "./server";
-
+import { TourStatus } from "@/validation/tourSchema";
 export type Tour = {
   id: string;
   title: string;
@@ -11,7 +11,7 @@ export type Tour = {
   leaveTime?: string;
   returnTime?: string;
   location?: string;
-  isActive?: boolean;
+  status?: TourStatus;
   updatedAt?: Date;
 };
 
@@ -51,4 +51,8 @@ export async function getTours(options: getToursOptions) {
     ...doc.data(),
   })) as Tour[];
   return { data: tours, totalPages };
+}
+export async function getTourById(tourId: string) {
+  const tour = await firestore.collection("tours").doc(tourId).get();
+  return tour.data() as Tour;
 }

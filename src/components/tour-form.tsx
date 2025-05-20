@@ -26,32 +26,35 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 // Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourDataSchema>;
 
-type TourFormProps = {
+type Props = {
   handleSubmit: (data: TourFormData) => void;
   submitButtonLabel: React.ReactNode;
+  defaultValues?: TourFormData;
 };
 
 export default function TourForm({
   handleSubmit: onSubmit,
   submitButtonLabel,
-}: TourFormProps) {
+  defaultValues,
+}: Props) {
+  const combinedDefaultValues = {
+    ...defaultValues,
+    title: defaultValues?.title || "",
+    description: defaultValues?.description || "",
+    imageUrl: defaultValues?.imageUrl || "",
+    basePrice: defaultValues?.basePrice || 0,
+    duration: defaultValues?.duration || 0,
+    leaveTime: defaultValues?.leaveTime || "",
+    returnTime: defaultValues?.returnTime || "",
+    location: defaultValues?.location || "",
+    status: defaultValues?.status || "draft",
+  };
   const form = useForm<TourFormData>({
     resolver: zodResolver(tourDataSchema),
-    defaultValues: {
-      title: "",
-      description: "",
-      imageUrl: "",
-      basePrice: 0,
-      duration: 0,
-      leaveTime: "",
-      returnTime: "",
-      location: "",
-      status: "draft",
-    },
+    defaultValues: combinedDefaultValues,
   });
 
   return (
@@ -220,6 +223,7 @@ export default function TourForm({
           type="submit"
           disabled={form.formState.isSubmitting}
           className="w-full"
+          variant="brandred"
         >
           {submitButtonLabel}
         </Button>

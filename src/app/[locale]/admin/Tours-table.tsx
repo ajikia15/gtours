@@ -64,11 +64,12 @@ export default async function ToursTable({
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
                 <TableCell className="flex items-center gap-1">
-                  <Button asChild>
-                    <Link href={`/${locale}/admin/tours/${tour.id}`}>
+                  <Link href={`/admin/tours/edit/${tour.id}`}>
+                    <Button>
                       <Pencil />
-                    </Link>
-                  </Button>
+                    </Button>
+                  </Link>
+
                   <Button variant="destructive">
                     <Trash />
                   </Button>
