@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/pagination";
 import { Link } from "@/i18n/navigation";
 import { Eye, Pencil, Trash } from "lucide-react";
+import TourStatusBadge from "@/components/tour-status-badge";
 
 export default async function ToursTable({
   page = 1,
@@ -53,6 +54,7 @@ export default async function ToursTable({
               <TableHead>Location</TableHead>
               <TableHead>Duration</TableHead>
               <TableHead>Price</TableHead>
+              <TableHead>Status</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
@@ -63,6 +65,9 @@ export default async function ToursTable({
                 <TableCell>{tour.location}</TableCell>
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
+                <TableCell>
+                  <TourStatusBadge status={tour.status} />
+                </TableCell>
                 <TableCell className="flex items-center gap-1">
                   <Link href={`/tours/${tour.id}`}>
                     <Button variant="outline">
