@@ -9,7 +9,7 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { MoveIcon, XIcon } from "lucide-react";
+import { MoveIcon, Trash, Upload, XIcon } from "lucide-react";
 export type ImageUpload = {
   id: string;
   url: string;
@@ -24,7 +24,6 @@ export default function MultiImageUploader({
   images = [],
   onImagesChange,
 }: Props) {
-  console.log({ images });
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);
@@ -55,7 +54,7 @@ export default function MultiImageUploader({
     onImagesChange(updatedImages);
   };
   return (
-    <div className="w-full max-w-3xl mx-auto p-4">
+    <div className="w-full max-w-3xl mx-auto">
       <input
         className="hidden"
         ref={uploadInputRef}
@@ -66,10 +65,11 @@ export default function MultiImageUploader({
       />
       <Button
         className="w-full"
-        variant="outline"
+        variant="default"
         type="button"
         onClick={() => uploadInputRef?.current?.click()}
       >
+        <Upload className="mr-2" />
         Upload Images
       </Button>
       <DragDropContext onDragEnd={handleDragEnd}>
@@ -103,10 +103,10 @@ export default function MultiImageUploader({
                         </div>
                         <div className="flex items-center p-2">
                           <button
-                            className="text-red-500 p-2"
+                            className="text-red-400 p-2 cursor-pointer"
                             onClick={() => handleDeleteImage(image.id)}
                           >
-                            <XIcon />
+                            <Trash />
                           </button>
                           <div className="text-gray-500">
                             <MoveIcon />

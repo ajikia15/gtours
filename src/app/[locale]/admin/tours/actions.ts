@@ -68,3 +68,38 @@ export const editTour = async (
       updatedAt: new Date(),
     });
 };
+
+export const saveTourImages = async (
+  {
+    tourId,
+    images,
+  }: {
+    tourId: string;
+    images: string[];
+  },
+  token: string
+) => {
+  const verifiedToken = await auth.verifyIdToken(token);
+  if (!verifiedToken.admin) {
+    return {
+      error: "Unauthorized",
+      message: "You are not privileged to save a new tour",
+    };
+  }
+
+  const schema = z.object({
+    tourId: z.string(),
+    images: z.array(z.string()),
+  });
+
+  const validation = schema.safeParse({ tourId, images });
+  if (!validation.success) {
+    return {
+      error: "Invalid data",
+      message: "Please check your data and try again",
+    };
+  }
+  await firestore.collection("tours").doc(tourId).update({
+    images,
+  });
+};
