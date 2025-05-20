@@ -17,6 +17,7 @@ export default function MultiImageUploader({
   images = [],
   onImagesChange,
 }: Props) {
+  console.log({ images });
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(e.target.files || []);

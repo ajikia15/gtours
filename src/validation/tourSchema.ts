@@ -31,3 +31,15 @@ export const tourDataSchema = z.object({
   location: z.string().optional(),
   status: tourStatusEnum.default("draft").optional(),
 });
+
+export const tourImageSchema = z.object({
+  images: z.array(
+    z.object({
+      id: z.string(),
+      url: z.string().url("Invalid URL format"),
+      file: z.instanceof(File).optional(),
+    })
+  ),
+});
+
+export const tourSchema = tourDataSchema.and(tourImageSchema);

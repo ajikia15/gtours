@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  tourDataSchema,
+  tourSchema,
   tourStatusEnum,
   type TourStatus,
 } from "@/validation/tourSchema";
@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
 // Define the TourFormData type directly from the schema
-type TourFormData = z.infer<typeof tourDataSchema>;
+type TourFormData = z.infer<typeof tourSchema>;
 
 type Props = {
   handleSubmit: (data: TourFormData) => void;
@@ -52,9 +52,10 @@ export default function TourForm({
     returnTime: defaultValues?.returnTime || "",
     location: defaultValues?.location || "",
     status: defaultValues?.status || "draft",
+    images: defaultValues?.images || [],
   };
   const form = useForm<TourFormData>({
-    resolver: zodResolver(tourDataSchema),
+    resolver: zodResolver(tourSchema),
     defaultValues: combinedDefaultValues,
   });
 
@@ -219,11 +220,24 @@ export default function TourForm({
             )}
           />
         </fieldset>
-        <MultiImageUploader
-          onImagesChange={(images: ImageUpload[]) => {
-            console.log({ images });
-          }}
+        <FormField
+          control={form.control}
+          name="images"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <MultiImageUploader
+                  onImagesChange={(images: ImageUpload[]) => {
+                    form.setValue("images", images);
+                  }}
+                  images={field.value}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
+
         <Button
           type="submit"
           disabled={form.formState.isSubmitting}
