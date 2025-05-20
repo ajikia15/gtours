@@ -2,13 +2,14 @@
 
 import { useRef } from "react";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import {
   DragDropContext,
   Draggable,
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { Badge, MoveIcon, XIcon } from "lucide-react";
+import { MoveIcon, XIcon } from "lucide-react";
 export type ImageUpload = {
   id: string;
   url: string;
@@ -84,7 +85,7 @@ export default function MultiImageUploader({
                       ref={provided.innerRef}
                       className="relative p-2"
                     >
-                      <div className="bg-gray-100 rounded-lg flex gap-2 items-center overflow-hidden">
+                      <div className="border border-gray-200 rounded-lg flex gap-2 items-center overflow-hidden">
                         <div className="size-16 relative">
                           <img
                             src={image.url}
@@ -96,7 +97,9 @@ export default function MultiImageUploader({
                           <p className="text-sm font-medium">
                             Image {index + 1}
                           </p>
-                          {index === 0 && <Badge>Featured Image</Badge>}
+                          {index === 0 && (
+                            <Badge variant="outline">Featured Image</Badge>
+                          )}
                         </div>
                         <div className="flex items-center p-2">
                           <button
