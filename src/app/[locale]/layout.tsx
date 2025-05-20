@@ -21,14 +21,14 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className="px-20">
       <body>
-        <AuthProvider>
-          <NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <AuthProvider>
             <Navbar />
             {children}
             <Toaster />
             <Footer />
-          </NextIntlClientProvider>
-        </AuthProvider>
+          </AuthProvider>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

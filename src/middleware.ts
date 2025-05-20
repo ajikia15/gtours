@@ -1,7 +1,7 @@
-import { cookies } from "next/headers";
-import { NextRequest, NextResponse } from "next/server";
-import { decodeJwt } from "jose";
 import createMiddleware from "next-intl/middleware";
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { decodeJwt } from "jose";
 
 // Define your locales and default locale
 const locales = ["en", "ge", "ru"];
@@ -20,10 +20,11 @@ export async function middleware(request: NextRequest) {
   }
 
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
-  // First check if this is an admin route that needs authentication
+
+  // Handle admin routes
   if (request.nextUrl.pathname.match(/(en|ge|ru)\/admin/)) {
     if (request.method === "POST") {
-      return NextResponse.next();
+      return handleI18nRouting(request);
     }
 
     const cookieStore = await cookies();
@@ -33,16 +34,17 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL(`/${locale}/`, request.url));
     }
 
-    const decodedToken = decodeJwt(token);
-    // if (!decodedToken) {
-    //   return NextResponse.redirect(new URL(`/${locale}/`, request.url));
-    // }
-    if (!decodedToken.admin) {
+    try {
+      const decodedToken = decodeJwt(token);
+      if (!decodedToken.admin) {
+        return NextResponse.redirect(new URL(`/${locale}/`, request.url));
+      }
+    } catch (error) {
       return NextResponse.redirect(new URL(`/${locale}/`, request.url));
     }
   }
 
-  // Then handle i18n routing for all requests
+  // Handle i18n routing for all other requests
   return handleI18nRouting(request);
 }
 
