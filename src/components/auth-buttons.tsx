@@ -10,9 +10,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import { useRouter } from "@/i18n/navigation";
 
 export default function AuthButtons() {
   const auth = useAuth();
+  const router = useRouter();
   return (
     <div>
       {auth?.currentUser ? (
@@ -41,7 +43,12 @@ export default function AuthButtons() {
                 <Link href="/admin">My Favorite Tours</Link>
               </DropdownMenuItem>
             )}
-            <DropdownMenuItem onClick={() => auth.logout()}>
+            <DropdownMenuItem
+              onClick={async () => {
+                await auth.logout();
+                router.refresh();
+              }}
+            >
               Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>

@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    signInWithPopup(auth, provider);
+    await signInWithPopup(auth, provider);
   };
   return (
     <AuthContext.Provider

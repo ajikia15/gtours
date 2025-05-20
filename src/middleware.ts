@@ -55,15 +55,28 @@ const handleAdminRoute = async (locale: string, request: NextRequest) => {
 };
 
 export async function middleware(request: NextRequest) {
+  console.log("running middleware");
+  const cookieStore = await cookies();
+  const token = cookieStore.get("firebaseAuthToken")?.value;
+  const pathname = request.nextUrl.pathname;
+
   // Handle root path redirect
-  if (request.nextUrl.pathname === "/") {
+  if (pathname === "/") {
     return createRedirectUrl(defaultLocale, "", request);
   }
 
-  const [, locale, ...segments] = request.nextUrl.pathname.split("/");
+  const [, locale, ...segments] = pathname.split("/");
+  if (
+    token &&
+    (pathname.startsWith(`/${locale}/login`) ||
+      pathname.startsWith(`/${locale}/login`))
+  ) {
+    console.log("was positive");
+    return createRedirectUrl(locale, "/", request); // Redirect to root of locale
+  }
 
   // Handle admin routes
-  if (request.nextUrl.pathname.match(/(en|ge|ru)\/admin/)) {
+  if (pathname.match(/(en|ge|ru)\/admin/)) {
     const adminRedirect = await handleAdminRoute(locale, request);
     if (adminRedirect) {
       return adminRedirect;
