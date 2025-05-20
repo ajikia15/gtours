@@ -1,7 +1,7 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { auth } from "../../firebase/server";
+import { auth } from "../firebase/server";
 export const removeToken = async () => {
   const cookieStore = await cookies();
   cookieStore.delete("firebaseAuthToken");

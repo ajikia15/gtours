@@ -1,7 +1,7 @@
 "use server";
 import { tourDataSchema } from "@/validation/tourSchema";
 import { z } from "zod";
-import { auth, firestore } from "../../../../../firebase/server";
+import { auth, firestore } from "@/firebase/server";
 
 export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,

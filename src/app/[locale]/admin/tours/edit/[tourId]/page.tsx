@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import EditTourForm from "./edit-tour-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTourById } from "@/../firebase/tours";
+import { getTourById } from "@/firebase/tours";
 export default async function EditTour({
   params,
 }: {

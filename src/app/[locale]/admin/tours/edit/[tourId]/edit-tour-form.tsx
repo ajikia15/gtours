@@ -7,7 +7,7 @@ import { saveNewTour } from "../../actions";
 import TourForm from "@/components/tour-form";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
-import { Tour } from "@/../firebase/tours";
+import { Tour } from "@/types/Tour";
 
 type Props = Tour;
 
