@@ -35,7 +35,7 @@ export default async function ToursTable({
   const { data, totalPages } = await getTours({
     pagination: {
       page,
-      pageSize: 2,
+      pageSize: 10,
     },
   });
   return (
