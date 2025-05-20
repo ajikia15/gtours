@@ -13,34 +13,60 @@ const handleI18nRouting = createMiddleware({
   defaultLocale,
 });
 
+// Helper function to create redirect URL
+const createRedirectUrl = (
+  locale: string,
+  path: string,
+  request: NextRequest
+) => {
+  return NextResponse.redirect(new URL(`/${locale}${path}`, request.url));
+};
+
+// Helper function to check admin access
+const checkAdminAccess = async (
+  token: string | undefined,
+  locale: string,
+  request: NextRequest
+) => {
+  if (!token) {
+    return createRedirectUrl(locale, "/", request);
+  }
+
+  try {
+    const decodedToken = decodeJwt(token);
+    if (!decodedToken.admin) {
+      return createRedirectUrl(locale, "/", request);
+    }
+    return null; // No redirect needed
+  } catch (error) {
+    return createRedirectUrl(locale, "/", request);
+  }
+};
+
+// Helper function to handle admin routes
+const handleAdminRoute = async (locale: string, request: NextRequest) => {
+  if (request.method === "POST") {
+    return null; // Allow POST requests
+  }
+
+  const cookieStore = await cookies();
+  const token = cookieStore.get("firebaseAuthToken")?.value;
+  return checkAdminAccess(token, locale, request);
+};
+
 export async function middleware(request: NextRequest) {
   // Handle root path redirect
   if (request.nextUrl.pathname === "/") {
-    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url));
+    return createRedirectUrl(defaultLocale, "", request);
   }
 
   const [, locale, ...segments] = request.nextUrl.pathname.split("/");
 
   // Handle admin routes
   if (request.nextUrl.pathname.match(/(en|ge|ru)\/admin/)) {
-    if (request.method === "POST") {
-      return handleI18nRouting(request);
-    }
-
-    const cookieStore = await cookies();
-    const token = cookieStore.get("firebaseAuthToken")?.value;
-
-    if (!token) {
-      return NextResponse.redirect(new URL(`/${locale}/`, request.url));
-    }
-
-    try {
-      const decodedToken = decodeJwt(token);
-      if (!decodedToken.admin) {
-        return NextResponse.redirect(new URL(`/${locale}/`, request.url));
-      }
-    } catch (error) {
-      return NextResponse.redirect(new URL(`/${locale}/`, request.url));
+    const adminRedirect = await handleAdminRoute(locale, request);
+    if (adminRedirect) {
+      return adminRedirect;
     }
   }
 
