@@ -14,10 +14,10 @@ export default async function AdminDashboard({
   const searchParamsValue = await searchParams;
   return (
     <>
-      <div>
+      {/* <div>
         <Breadcrumbs items={[{ label: "Admin Dashboard" }]} />
-      </div>
-      <h1 className="text-3xl font-bold">Admin Dashboard</h1>
+      </div> */}
+      <h1 className="text-3xl font-bold my-4">Admin Dashboard</h1>
       <Button>
         <Link href="/admin/tours/new" className="flex items-center gap-2">
           <PlusCircleIcon className="size-4 " />

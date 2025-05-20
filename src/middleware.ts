@@ -55,7 +55,6 @@ const handleAdminRoute = async (locale: string, request: NextRequest) => {
 };
 
 export async function middleware(request: NextRequest) {
-  console.log("running middleware");
   const cookieStore = await cookies();
   const token = cookieStore.get("firebaseAuthToken")?.value;
   const pathname = request.nextUrl.pathname;
@@ -71,8 +70,7 @@ export async function middleware(request: NextRequest) {
     (pathname.startsWith(`/${locale}/login`) ||
       pathname.startsWith(`/${locale}/login`))
   ) {
-    console.log("was positive");
-    return createRedirectUrl(locale, "/", request); // Redirect to root of locale
+    return createRedirectUrl(locale, "/", request);
   }
 
   // Handle admin routes

@@ -19,7 +19,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Link } from "@/i18n/navigation";
-import { Pencil, Trash } from "lucide-react";
+import { Eye, Pencil, Trash } from "lucide-react";
 
 export default async function ToursTable({
   page = 1,
@@ -64,13 +64,18 @@ export default async function ToursTable({
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
                 <TableCell className="flex items-center gap-1">
+                  <Link href={`/tours/${tour.id}`}>
+                    <Button variant="outline">
+                      <Eye />
+                    </Button>
+                  </Link>
                   <Link href={`/admin/tours/edit/${tour.id}`}>
-                    <Button>
+                    <Button variant="outline">
                       <Pencil />
                     </Button>
                   </Link>
 
-                  <Button variant="destructive">
+                  <Button variant="outline">
                     <Trash />
                   </Button>
                 </TableCell>
