@@ -3,6 +3,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  @apply overflow-x-hidden;
+}
+
+body {
+  @apply !min-w-full;
+}
+
+@media screen and (min-width: 960px) {
+  html {
+    margin-left: calc(100vw - 100%);
+    margin-right: 0;
+  }
+}
+
 @theme inline {
   --color-brand-primary: oklch(0.24 0.0152 290.94);
   --color-brand-secondary: oklch(0.57 0.231491 22.1799);
