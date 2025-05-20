@@ -10,6 +10,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { MoveIcon, Trash, Upload, XIcon } from "lucide-react";
+import Image from "next/image";
 export type ImageUpload = {
   id: string;
   url: string;
@@ -18,11 +19,12 @@ export type ImageUpload = {
 type Props = {
   images?: ImageUpload[];
   onImagesChange: (images: ImageUpload[]) => void;
-  onImageRemove?: (image: ImageUpload) => void;
+  urlFormatter?: (image: ImageUpload) => string;
 };
 export default function MultiImageUploader({
   images = [],
   onImagesChange,
+  urlFormatter = (image: ImageUpload) => image.url,
 }: Props) {
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,9 +89,11 @@ export default function MultiImageUploader({
                     >
                       <div className="border border-gray-200 rounded-lg flex gap-2 items-center overflow-hidden">
                         <div className="size-16 relative">
-                          <img
-                            src={image.url}
+                          <Image
+                            src={urlFormatter ? urlFormatter(image) : image.url}
                             alt=""
+                            width={200}
+                            height={200}
                             className="object-cover"
                           />
                         </div>

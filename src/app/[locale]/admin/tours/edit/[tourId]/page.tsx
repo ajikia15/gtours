@@ -35,6 +35,7 @@ export default async function EditTour({
             returnTime={tour.returnTime}
             location={tour.location}
             status={tour.status}
+            images={tour.images || []}
           />
         </CardContent>
       </Card>

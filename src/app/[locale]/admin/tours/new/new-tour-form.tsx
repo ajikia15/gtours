@@ -19,8 +19,8 @@ export default function NewTourForm() {
       return;
     }
     const { images, ...rest } = data;
-    const result = await saveNewTour(rest, token);
-    if (!!result.error || !result.tourId) {
+    const response = await saveNewTour(rest, token);
+    if (!!response.error || !response.tourId) {
       toast.error("Error saving tour");
       return;
     }
@@ -29,7 +29,7 @@ export default function NewTourForm() {
     const paths: string[] = [];
     images.forEach((image, index) => {
       if (image.file) {
-        const path = `tours/${result.tourId}/${Date.now()}-${index}-${
+        const path = `tours/${response.tourId}/${Date.now()}-${index}-${
           image.file.name
         }`;
         paths.push(path);
@@ -41,12 +41,12 @@ export default function NewTourForm() {
     await Promise.all(uploadTasks);
     await saveTourImages(
       {
-        tourId: result.tourId,
+        tourId: response.tourId,
         images: paths,
       },
       token
     );
-    if (result?.success) {
+    if (response?.success) {
       toast.success("Tour saved successfully");
       router.push("/admin"); // TODO: redirect to the new tour
     }

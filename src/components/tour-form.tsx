@@ -230,6 +230,14 @@ export default function TourForm({
                   onImagesChange={(images: ImageUpload[]) => {
                     form.setValue("images", images);
                   }}
+                  urlFormatter={(image) => {
+                    if (!image.file) {
+                      return `https://firebasestorage.googleapis.com/v0/b/gtours-fcd56.firebasestorage.app/o/${encodeURIComponent(
+                        image.url
+                      )}?alt=media`;
+                    }
+                    return image.url;
+                  }}
                   images={field.value}
                 />
               </FormControl>
