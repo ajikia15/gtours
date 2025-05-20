@@ -1,4 +1,4 @@
-import { getTours } from "@/firebase/tours";
+import { getTours } from "@/data/tours";
 import {
   Table,
   TableHeader,

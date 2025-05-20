@@ -2,6 +2,7 @@
 import { tourDataSchema } from "@/validation/tourSchema";
 import { z } from "zod";
 import { auth, firestore } from "@/firebase/server";
+import { Tour, TourWithId } from "@/types/Tour";
 
 export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,
@@ -35,4 +36,35 @@ export const saveNewTour = async (
     success: "Tour saved successfully",
     message: "Tour saved successfully",
   };
+};
+
+export const editTour = async (
+  data: z.infer<typeof tourDataSchema>,
+  id: string,
+  token: string
+) => {
+  const verifiedToken = await auth.verifyIdToken(token);
+  if (!verifiedToken.admin) {
+    return {
+      error: "Unauthorized",
+      message: "You are not privileged to save a new tour",
+    };
+  }
+
+  const validation = tourDataSchema.safeParse(data);
+
+  if (!validation.success) {
+    return {
+      error: "Invalid data",
+      message: "Please check your data and try again",
+    };
+  }
+
+  await firestore
+    .collection("tours")
+    .doc(id)
+    .update({
+      ...data,
+      updatedAt: new Date(),
+    });
 };

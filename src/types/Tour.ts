@@ -5,12 +5,11 @@ export type Tour = {
   description: string;
   imageUrl: string;
   basePrice: number;
-  duration?: number;
-  leaveTime?: string;
-  returnTime?: string;
-  location?: string;
-  status?: TourStatus;
-  updatedAt?: Date;
+  duration: number;
+  leaveTime: string;
+  returnTime: string;
+  location: string;
+  status: TourStatus;
 };
 
 export type TourWithId = Tour & { id: string };
