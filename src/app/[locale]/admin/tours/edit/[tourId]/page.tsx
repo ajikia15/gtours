@@ -5,9 +5,10 @@ import { getTourById } from "@/../firebase/tours";
 export default async function EditTour({
   params,
 }: {
-  params: { tourId: string };
+  params: Promise<{ tourId: string }>;
 }) {
-  const tour = await getTourById(params.tourId);
+  const { tourId } = await params;
+  const tour = await getTourById(tourId);
   return (
     <div className="max-w-xl mx-auto mt-5">
       <Breadcrumbs

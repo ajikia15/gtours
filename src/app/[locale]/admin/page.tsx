@@ -12,7 +12,6 @@ export default async function AdminDashboard({
   params: Promise<{ locale: string }> | { locale: string };
 }) {
   const searchParamsValue = await searchParams;
-  console.log({ searchParamsValue });
   return (
     <>
       <div>

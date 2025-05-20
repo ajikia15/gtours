@@ -1,7 +1,7 @@
 import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import NewTourForm from "./new-tour-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTours } from "../../../../../../firebase/tours";
+import { getTours } from "@/../firebase/tours";
 
 export default async function NewTour() {
   const tours = await getTours({});
