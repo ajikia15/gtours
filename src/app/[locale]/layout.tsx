@@ -16,7 +16,7 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  const locale = params.locale;
+  const { locale } = await params;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
@@ -43,8 +43,8 @@ export default async function LocaleLayout({
       <body className={`${fontClassName} antialiased`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
+            <Navbar />
             <div className="container mx-auto">
-              <Navbar />
               {children}
               <Toaster />
               <Footer />

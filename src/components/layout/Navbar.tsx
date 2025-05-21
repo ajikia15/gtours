@@ -8,8 +8,8 @@ export default async function Navbar() {
   const t = await getTranslations("Navbar");
 
   return (
-    <nav className="bg-background border-b">
-      <div className=" ">
+    <nav className="bg-background sticky top-0 z-50 w-full">
+      <div className="container mx-auto ">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-2">

@@ -137,3 +137,33 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+/* tour description md */
+.tour-description h1 {
+  @apply text-5xl font-bold my-6;
+}
+.tour-description h2 {
+  @apply text-4xl font-bold my-4;
+}
+.tour-description h3 {
+  @apply text-3xl font-bold my-3;
+}
+.tour-description h4 {
+  @apply text-2xl font-bold my-3;
+}
+.tour-description h5 {
+  @apply text-xl font-bold my-2;
+}
+.tour-description h6 {
+  @apply text-lg font-bold my-1;
+}
+.tour-description p {
+  @apply text-base font-normal;
+}
+/* TODO set custom marker for list disc */
+.tour-description ul {
+  @apply list-disc list-inside my-4 ml-4;
+}
+.tour-description ol {
+  @apply list-decimal list-inside my-4 ml-4;
+}

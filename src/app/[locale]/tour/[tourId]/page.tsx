@@ -13,11 +13,14 @@ export default async function TourPage({
   const tour = await getTourById(tourId);
 
   return (
-    <div className="">
+    <div>
       <Suspense fallback={<div>Loading...</div>}>
         <ImageSection images={tour.images} tourId={tourId} />
       </Suspense>
-      <ReactMarkdown>{tour.description}</ReactMarkdown>
+      <h1 className="text-2xl font-bold">About the Tour</h1>
+      <div className="tour-description">
+        <ReactMarkdown>{tour.description}</ReactMarkdown>
+      </div>
     </div>
   );
 }
