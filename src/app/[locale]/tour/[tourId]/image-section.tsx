@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-
+import fakeTimeOutForSkeletons from "@/components/fakeTimeoutForSkeletons";
 export default async function ImageSection({
   images,
   tourId,
@@ -9,7 +9,7 @@ export default async function ImageSection({
   tourId: string;
 }) {
   // Artificial delay for testing skeleton
-  await new Promise((resolve) => setTimeout(resolve, 300));
+  await fakeTimeOutForSkeletons();
 
   const getImageUrl = (image?: string) =>
     image
@@ -36,7 +36,9 @@ export default async function ImageSection({
         </div>
         <div className="relative w-full flex-1 rounded-xl overflow-hidden shadow-md">
           <Image
-            src={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[0]) : mainImage
+            }
             alt={mainImage}
             fill
             className="object-cover rounded-xl"
@@ -48,16 +50,20 @@ export default async function ImageSection({
       <div className="flex flex-col gap-4 aspect-[1/2]">
         <div className="relative w-full flex-1 rounded-xl overflow-hidden shadow-md">
           <Image
-            src={mainImage}
-            alt={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[1]) : mainImage
+            }
+            alt={images && images.length > 0 ? images[1] : mainImage}
             fill
             className="object-cover rounded-xl"
           />
         </div>
         <div className="relative w-full flex-1 rounded-xl overflow-hidden shadow-md">
           <Image
-            src={mainImage}
-            alt={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[2]) : mainImage
+            }
+            alt={images && images.length > 0 ? images[2] : mainImage}
             fill
             className="object-cover rounded-xl"
           />
@@ -68,16 +74,20 @@ export default async function ImageSection({
       <div className="flex flex-col gap-4 aspect-[1/2]">
         <div className="relative w-full grow-[3] rounded-xl overflow-hidden shadow-md">
           <Image
-            src={mainImage}
-            alt={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[3]) : mainImage
+            }
+            alt={images && images.length > 0 ? images[3] : mainImage}
             fill
             className="object-cover rounded-xl"
           />
         </div>
         <div className="relative w-full grow-[2] rounded-xl overflow-hidden shadow-md">
           <Image
-            src={mainImage}
-            alt={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[4]) : mainImage
+            }
+            alt={images && images.length > 0 ? images[4] : mainImage}
             fill
             className="object-cover rounded-xl"
           />
@@ -88,8 +98,10 @@ export default async function ImageSection({
       <div className="flex flex-col gap-4 aspect-[1/2]">
         <div className="relative w-full grow-[4] rounded-xl overflow-hidden shadow-md">
           <Image
-            src={mainImage}
-            alt={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[5]) : mainImage
+            }
+            alt={images && images.length > 0 ? images[5] : mainImage}
             fill
             className="object-cover rounded-xl"
           />
@@ -99,8 +111,10 @@ export default async function ImageSection({
           className="relative w-full grow rounded-xl overflow-hidden cursor-pointer group shadow-md"
         >
           <Image
-            src={mainImage}
-            alt={mainImage}
+            src={
+              images && images.length > 0 ? getImageUrl(images[6]) : mainImage
+            }
+            alt={images && images.length > 0 ? images[6] : mainImage}
             fill
             className="object-cover rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-105"
           />

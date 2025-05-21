@@ -5,6 +5,10 @@ import { Suspense } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import ImageSection from "./image-section";
+import TextSectionSkeleton from "./text-section-skeleton";
+import TextSection from "./text-section";
+
+import TourDetailsCard from "./tour-details-card";
 export default async function TourPage({
   params,
 }: {
@@ -18,9 +22,19 @@ export default async function TourPage({
       <Suspense fallback={<ImageSectionSkeleton />}>
         <ImageSection images={tour.images} tourId={tourId} />
       </Suspense>
-      <h1 className="text-2xl font-bold">About the Tour</h1>
-      <div className="tour-description">
-        <ReactMarkdown>{tour.description}</ReactMarkdown>
+      <div className="flex flex-row gap-10 items-start">
+        <div className="flex flex-col gap-8 h-full">
+          <Suspense fallback={<TextSectionSkeleton />}>
+            <TextSection description={tour.description} />
+          </Suspense>
+          {/* map goes here */}
+          <div className="w-full h-64 bg-teal-200 grid place-items-center rounded-xl">
+            <h1>Map</h1>
+          </div>
+        </div>
+        <div className="sticky top-22 flex-1">
+          <TourDetailsCard tour={tour} />
+        </div>
       </div>
     </div>
   );
