@@ -13,7 +13,7 @@ export default async function TourPage({
   const tour = await getTourById(tourId);
 
   return (
-    <div className="container mx-auto">
+    <div className="">
       <Suspense fallback={<div>Loading...</div>}>
         <ImageSection images={tour.images} />
       </Suspense>

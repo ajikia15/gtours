@@ -13,7 +13,7 @@ export default async function AdminDashboard({
 }) {
   const searchParamsValue = await searchParams;
   return (
-    <div className="container mx-auto">
+    <div className="">
       {/* <div>
         <Breadcrumbs items={[{ label: "Admin Dashboard" }]} />
       </div> */}

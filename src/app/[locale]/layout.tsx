@@ -19,14 +19,16 @@ export default async function LocaleLayout({
   }
 
   return (
-    <html lang={locale}>
-      <body>
+    <html lang={locale} className="">
+      <body className="">
         <NextIntlClientProvider>
           <AuthProvider>
-            <Navbar />
-            {children}
-            <Toaster />
-            <Footer />
+            <div className="container mx-auto">
+              <Navbar />
+              {children}
+              <Toaster />
+              <Footer />
+            </div>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>
