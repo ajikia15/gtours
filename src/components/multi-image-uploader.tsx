@@ -94,7 +94,7 @@ export default function MultiImageUploader({
                       <div className="border border-gray-200 rounded-lg flex gap-2 items-center overflow-hidden">
                         <div className="size-16 relative">
                           {/* TODO */}
-                          <img
+                          <Image
                             src={urlFormatter ? urlFormatter(image) : image.url}
                             alt=""
                             width={200}

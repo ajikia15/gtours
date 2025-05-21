@@ -11,12 +11,10 @@ import { Tour } from "@/types/Tour";
 import {
   deleteObject,
   ref,
-  StorageReference,
   uploadBytesResumable,
   UploadTask,
-} from "@firebase/storage";
+} from "firebase/storage";
 import { storage } from "@/firebase/client";
-
 type Props = Tour;
 
 export default function EditTourForm({
@@ -40,10 +38,35 @@ export default function EditTourForm({
       return;
     }
 
-    const { images, ...rest } = data;
+    const { images: newImages, ...rest } = data;
     console.log(rest);
     const response = await editTour(rest, id, token);
+    if (!!response?.error) {
+      toast.success("sexfully updated");
+      return;
+    }
+    const storageTasks: (UploadTask | Promise<void>)[] = [];
+    const imagesToDelete = images.filter((image) =>
+      newImages.find((newImage) => image === newImage.url)
+    );
+    imagesToDelete.forEach((image) => {
+      storageTasks.push(deleteObject(ref(storage, image)));
+    });
 
+    const paths: string[] = [];
+    newImages.forEach((image, index) => {
+      if (image.file) {
+        const path = `tours/${id}/${Date.now()}-${index}-${image.file.name}`;
+        paths.push(path);
+        const storageRef = ref(storage, path);
+        storageTasks.push(uploadBytesResumable(storageRef, image.file));
+      } else {
+        paths.push(image.url);
+      }
+    });
+
+    await Promise.all(storageTasks);
+    await saveTourImages({ tourId: id, images: paths }, token);
     toast.success("Tour saved successfully");
     router.push("/admin"); // TODO: redirect to the new tour
   }
