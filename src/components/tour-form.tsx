@@ -41,7 +41,7 @@ export default function TourForm({
   submitButtonLabel,
   defaultValues,
 }: Props) {
-  const combinedDefaultValues = {
+  const combinedDefaultValues: z.infer<typeof tourSchema> = {
     ...defaultValues,
     title: defaultValues?.title || "",
     description: defaultValues?.description || "",

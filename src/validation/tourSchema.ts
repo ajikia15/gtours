@@ -36,7 +36,7 @@ export const tourImageSchema = z.object({
   images: z.array(
     z.object({
       id: z.string(),
-      url: z.string().url("Invalid URL format"),
+      url: z.string(),
       file: z.instanceof(File).optional(),
     })
   ),

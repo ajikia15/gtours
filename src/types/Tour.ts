@@ -10,7 +10,7 @@ export type Tour = {
   returnTime: string;
   location: string;
   status: TourStatus;
-  images: [];
+  images?: string[];
 };
 
-export type TourWithId = Tour & { id: string };
+// export type TourWithId = Tour & { id: string };
