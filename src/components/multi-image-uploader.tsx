@@ -10,6 +10,7 @@ import {
   DropResult,
 } from "@hello-pangea/dnd";
 import { MoveIcon, Trash, Upload, XIcon } from "lucide-react";
+import Image from "next/image";
 export type ImageUpload = {
   id: string;
   url: string;
@@ -93,9 +94,11 @@ export default function MultiImageUploader({
                       <div className="border border-gray-200 rounded-lg flex gap-2 items-center overflow-hidden">
                         <div className="size-16 relative">
                           {/* TODO */}
-                          <img
+                          <Image
                             src={urlFormatter ? urlFormatter(image) : image.url}
                             alt=""
+                            width={200}
+                            height={200}
                             className="object-cover"
                           />
                         </div>
