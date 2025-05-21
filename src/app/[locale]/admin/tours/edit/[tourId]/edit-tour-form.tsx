@@ -30,7 +30,11 @@ export default function EditTourForm({
     if (!token) {
       return;
     }
-    await editTour(data, id, token);
+
+    const { images, ...rest } = data;
+    console.log(rest);
+    const response = await editTour(rest, id, token);
+
     toast.success("Tour saved successfully");
     router.push("/admin"); // TODO: redirect to the new tour
   }
