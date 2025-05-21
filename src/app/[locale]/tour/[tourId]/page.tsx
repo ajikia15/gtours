@@ -15,7 +15,7 @@ export default async function TourPage({
   return (
     <div className="">
       <Suspense fallback={<div>Loading...</div>}>
-        <ImageSection images={tour.images} />
+        <ImageSection images={tour.images} tourId={tourId} />
       </Suspense>
       <ReactMarkdown>{tour.description}</ReactMarkdown>
     </div>

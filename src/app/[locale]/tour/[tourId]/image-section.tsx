@@ -1,9 +1,13 @@
 import ImageSectionMember from "./image-section-member";
 import Image from "next/image";
+import { Link } from "@/i18n/navigation";
+
 export default function ImageSection({
   images,
+  tourId,
 }: {
   images: string[] | undefined;
+  tourId: string;
 }) {
   const getImageUrl = (image?: string) =>
     image
@@ -15,7 +19,7 @@ export default function ImageSection({
     images && images.length > 0 ? images[0] : undefined
   );
   return (
-    <div className="grid grid-cols-4 gap-4 w-full">
+    <div className="grid grid-cols-4 gap-4 w-full my-10">
       <div className="flex flex-col gap-4 aspect-[1/2]">
         <div className="flex flex-col gap-2">
           <h1 className="font-bold text-2xl">Tbilisi</h1>
@@ -88,17 +92,20 @@ export default function ImageSection({
             className="object-cover rounded-xl"
           />
         </div>
-        <div className="relative w-full grow rounded-xl overflow-hidden">
+        <Link
+          href={`/tour/${tourId}/gallery`}
+          className="relative w-full grow rounded-xl overflow-hidden cursor-pointer group"
+        >
           <Image
             src={mainImage}
             alt={mainImage}
             fill
-            className="object-cover rounded-xl"
+            className="object-cover rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-black/75 flex items-center justify-center rounded-xl">
+          <div className="absolute inset-0 bg-gray-800/75 hover:bg-gray-800/90 flex items-center justify-center rounded-xl transition-colors duration-300 ease-in-out">
             <span className="text-white font-bold text-lg">View More</span>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

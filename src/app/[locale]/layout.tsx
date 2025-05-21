@@ -19,8 +19,8 @@ export default async function LocaleLayout({
   }
 
   return (
-    <html lang={locale} className="">
-      <body className="">
+    <html lang={locale}>
+      <body>
         <NextIntlClientProvider>
           <AuthProvider>
             <div className="container mx-auto">
