@@ -24,7 +24,7 @@ type Props = {
 export default function MultiImageUploader({
   images = [],
   onImagesChange,
-  urlFormatter = (image: ImageUpload) => image.url,
+  urlFormatter,
 }: Props) {
   const uploadInputRef = useRef<HTMLInputElement | null>(null);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,8 @@ export default function MultiImageUploader({
                     >
                       <div className="border border-gray-200 rounded-lg flex gap-2 items-center overflow-hidden">
                         <div className="size-16 relative">
-                          <Image
+                          {/* TODO */}
+                          <img
                             src={urlFormatter ? urlFormatter(image) : image.url}
                             alt=""
                             width={200}

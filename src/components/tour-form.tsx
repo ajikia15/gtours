@@ -239,6 +239,14 @@ export default function TourForm({
                     return image.url;
                   }}
                   images={field.value}
+                  urlFormatter={(image) => {
+                    if (!image.file) {
+                      return `https://firebasestorage.googleapis.com/v0/b/gtours-fcd56.firebasestorage.app/o/${encodeURIComponent(
+                        image.url
+                      )}?alt=media`;
+                    }
+                    return image.url;
+                  }}
                 />
               </FormControl>
               <FormMessage />
