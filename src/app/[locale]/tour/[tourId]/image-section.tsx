@@ -60,7 +60,7 @@ export default function ImageSection({
 
       {/* Column 3: 2 Images */}
       <div className="flex flex-col gap-4 aspect-[1/2]">
-        <div className="relative w-full flex-1 rounded-xl overflow-hidden">
+        <div className="relative w-full grow-[3] rounded-xl overflow-hidden">
           <Image
             src={mainImage}
             alt={mainImage}
@@ -68,7 +68,7 @@ export default function ImageSection({
             className="object-cover rounded-xl"
           />
         </div>
-        <div className="relative w-full flex-1 rounded-xl overflow-hidden">
+        <div className="relative w-full grow-[2] rounded-xl overflow-hidden">
           <Image
             src={mainImage}
             alt={mainImage}
@@ -80,7 +80,7 @@ export default function ImageSection({
 
       {/* Column 4: 2 Images */}
       <div className="flex flex-col gap-4 aspect-[1/2]">
-        <div className="relative w-full flex-1 rounded-xl overflow-hidden">
+        <div className="relative w-full grow-[4] rounded-xl overflow-hidden">
           <Image
             src={mainImage}
             alt={mainImage}
@@ -88,7 +88,7 @@ export default function ImageSection({
             className="object-cover rounded-xl"
           />
         </div>
-        <div className="relative w-full flex-1 rounded-xl overflow-hidden">
+        <div className="relative w-full grow rounded-xl overflow-hidden">
           <Image
             src={mainImage}
             alt={mainImage}
