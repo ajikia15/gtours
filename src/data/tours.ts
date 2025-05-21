@@ -1,6 +1,6 @@
 import "server-only";
 import { firestore, getTotalPages } from "../firebase/server";
-import { Tour, TourWithId } from "@/types/Tour";
+import { Tour } from "@/types/Tour";
 
 type getToursOptions = {
   filters?: {
@@ -36,7 +36,7 @@ export async function getTours(options: getToursOptions) {
   const tours = toursSnapshot.docs.map((doc) => ({
     id: doc.id,
     ...doc.data(),
-  })) as TourWithId[];
+  })) as Tour[];
   return { data: tours, totalPages };
 }
 export async function getTourById(tourId: string) {
@@ -45,5 +45,5 @@ export async function getTourById(tourId: string) {
     id: tour.id,
     ...tour.data(),
   };
-  return tourData as TourWithId;
+  return tourData as Tour;
 }

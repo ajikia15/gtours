@@ -1,14 +1,13 @@
 "use client";
 import { useAuth } from "@/context/auth";
-import { tourDataSchema } from "@/validation/tourSchema";
-import { CirclePlusIcon, PencilIcon } from "lucide-react";
+import { tourSchema } from "@/validation/tourSchema";
+import { PencilIcon } from "lucide-react";
 import { z } from "zod";
 import { editTour, saveNewTour } from "../../actions";
 import TourForm from "@/components/tour-form";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { Tour } from "@/types/Tour";
-
 type Props = Tour;
 
 export default function EditTourForm({
@@ -22,10 +21,11 @@ export default function EditTourForm({
   returnTime,
   location,
   status,
+  images = [],
 }: Props) {
   const auth = useAuth();
   const router = useRouter();
-  async function handleSubmit(data: z.infer<typeof tourDataSchema>) {
+  async function handleSubmit(data: z.infer<typeof tourSchema>) {
     const token = await auth?.currentUser?.getIdToken();
     if (!token) {
       return;
@@ -53,7 +53,11 @@ export default function EditTourForm({
           leaveTime,
           returnTime,
           location,
-          status: status || "draft",
+          status,
+          images: images.map((image) => ({
+            id: image,
+            url: image,
+          })),
         }}
       />
     </div>
