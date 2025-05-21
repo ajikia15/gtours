@@ -1,14 +1,16 @@
-import ImageSectionMember from "./image-section-member";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
 
-export default function ImageSection({
+export default async function ImageSection({
   images,
   tourId,
 }: {
   images: string[] | undefined;
   tourId: string;
 }) {
+  // Artificial delay for testing skeleton
+  await new Promise((resolve) => setTimeout(resolve, 300));
+
   const getImageUrl = (image?: string) =>
     image
       ? `https://firebasestorage.googleapis.com/v0/b/gtours-fcd56.firebasestorage.app/o/${encodeURIComponent(

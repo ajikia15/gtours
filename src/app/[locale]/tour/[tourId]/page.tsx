@@ -1,4 +1,5 @@
 "use server";
+import ImageSectionSkeleton from "./image-section-skeleton";
 import { getTourById } from "@/data/tours";
 import { Suspense } from "react";
 import Image from "next/image";
@@ -14,7 +15,7 @@ export default async function TourPage({
 
   return (
     <div>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<ImageSectionSkeleton />}>
         <ImageSection images={tour.images} tourId={tourId} />
       </Suspense>
       <h1 className="text-2xl font-bold">About the Tour</h1>
