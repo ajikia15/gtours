@@ -9,7 +9,7 @@ export default async function Navbar() {
 
   return (
     <nav className="bg-background border-b">
-      <div className=" px-4">
+      <div className=" ">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-2">

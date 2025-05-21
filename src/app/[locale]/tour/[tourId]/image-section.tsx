@@ -102,8 +102,8 @@ export default function ImageSection({
             fill
             className="object-cover rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-105"
           />
-          <div className="absolute inset-0 bg-gray-800/75 hover:bg-gray-800/90 flex items-center justify-center rounded-xl transition-colors duration-300 ease-in-out">
-            <span className="text-white font-bold text-lg">View More</span>
+          <div className="absolute inset-0 bg-gray-300/75 hover:bg-gray-300/90 flex items-center justify-center rounded-xl transition-colors duration-300 ease-in-out">
+            <span className="text-black font-bold text-lg">View More</span>
           </div>
         </Link>
       </div>

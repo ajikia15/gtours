@@ -6,22 +6,42 @@ import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/auth";
 import { Toaster } from "@/components/ui/sonner";
+import { roboto, notoSansGeorgian, openSans } from "./fonts";
+import { getMessages } from "next-intl/server";
+
 export default async function LocaleLayout({
   children,
   params,
 }: {
   children: React.ReactNode;
-  params: Promise<{ locale: string }>;
+  params: { locale: string };
 }) {
-  const { locale } = await params;
+  const locale = params.locale;
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
 
+  let fontClassName = "";
+  switch (locale) {
+    case "en":
+      fontClassName = roboto.className;
+      break;
+    case "ge":
+      fontClassName = notoSansGeorgian.className;
+      break;
+    case "ru":
+      fontClassName = openSans.className;
+      break;
+    default:
+      fontClassName = roboto.className;
+  }
+
+  const messages = await getMessages();
+
   return (
     <html lang={locale}>
-      <body>
-        <NextIntlClientProvider>
+      <body className={`${fontClassName} antialiased`}>
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <div className="container mx-auto">
               <Navbar />
