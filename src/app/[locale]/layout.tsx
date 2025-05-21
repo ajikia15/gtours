@@ -19,7 +19,7 @@ export default async function LocaleLayout({
   }
 
   return (
-    <html lang={locale} className="px-20">
+    <html lang={locale}>
       <body>
         <NextIntlClientProvider>
           <AuthProvider>

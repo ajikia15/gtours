@@ -15,7 +15,7 @@ export default function ImageSection({
     images && images.length > 0 ? images[0] : undefined
   );
   return (
-    <div className="grid grid-cols-4 gap-4 w-full ">
+    <div className="grid grid-cols-4 gap-4 w-full">
       <div className="flex flex-col gap-4 aspect-[1/2]">
         <div className="flex flex-col gap-2">
           <h1 className="font-bold text-2xl">Tbilisi</h1>
@@ -95,6 +95,9 @@ export default function ImageSection({
             fill
             className="object-cover rounded-xl"
           />
+          <div className="absolute inset-0 bg-black/75 flex items-center justify-center rounded-xl">
+            <span className="text-white font-bold text-lg">View More</span>
+          </div>
         </div>
       </div>
     </div>

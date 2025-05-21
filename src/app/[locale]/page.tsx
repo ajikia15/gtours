@@ -8,7 +8,7 @@ export default async function HomePage() {
   const t = await getTranslations("Homepage");
 
   return (
-    <div>
+    <div className="container mx-auto">
       <h1>{t("title")}</h1>
       <Carousel />
       <QuickCategory />
