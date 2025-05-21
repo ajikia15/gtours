@@ -39,10 +39,9 @@ export default function EditTourForm({
     }
 
     const { images: newImages, ...rest } = data;
-    console.log(rest);
     const response = await editTour(rest, id, token);
     if (!!response?.error) {
-      toast.success("sexfully updated");
+      toast.success("sucessfully updated");
       return;
     }
     const storageTasks: (UploadTask | Promise<void>)[] = [];
@@ -51,7 +50,6 @@ export default function EditTourForm({
     );
     imagesToDelete.forEach((image) => {
       storageTasks.push(deleteObject(ref(storage, image)));
-      console.log("supposed to delete ", image);
     });
 
     const paths: string[] = [];

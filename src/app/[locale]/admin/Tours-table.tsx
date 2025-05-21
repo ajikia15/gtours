@@ -69,7 +69,7 @@ export default async function ToursTable({
                   <TourStatusBadge status={tour.status} />
                 </TableCell>
                 <TableCell className="flex items-center gap-1">
-                  <Link href={`/tours/${tour.id}`}>
+                  <Link href={`/tour/${tour.id}`}>
                     <Button variant="outline">
                       <Eye />
                     </Button>
