@@ -46,11 +46,12 @@ export default function EditTourForm({
       return;
     }
     const storageTasks: (UploadTask | Promise<void>)[] = [];
-    const imagesToDelete = images.filter((image) =>
-      newImages.find((newImage) => image === newImage.url)
+    const imagesToDelete = images.filter(
+      (image) => !newImages.some((newImage) => image === newImage.url)
     );
     imagesToDelete.forEach((image) => {
       storageTasks.push(deleteObject(ref(storage, image)));
+      console.log("supposed to delete ", image);
     });
 
     const paths: string[] = [];

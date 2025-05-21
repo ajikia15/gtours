@@ -33,7 +33,7 @@ export default function MultiImageUploader({
       return {
         id: `${Date.now()}-${index}-${file.name}`,
         url: URL.createObjectURL(file),
-        file: file,
+        file,
       };
     });
 
