@@ -1,7 +1,7 @@
 "use client";
 import { useAuth } from "@/context/auth";
 import { tourSchema } from "@/validation/tourSchema";
-import { CirclePlusIcon, PencilIcon } from "lucide-react";
+import { PencilIcon } from "lucide-react";
 import { z } from "zod";
 import { editTour, saveNewTour, saveTourImages } from "../../actions";
 import TourForm from "@/components/tour-form";
@@ -90,7 +90,7 @@ export default function EditTourForm({
           leaveTime,
           returnTime,
           location,
-          status: status || "draft",
+          status,
           images: images.map((image) => ({
             id: image,
             url: image,
