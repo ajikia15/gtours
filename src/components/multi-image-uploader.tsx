@@ -9,7 +9,7 @@ import {
   Droppable,
   DropResult,
 } from "@hello-pangea/dnd";
-import { MoveIcon, Trash, Upload, XIcon } from "lucide-react";
+import { MoveIcon, Trash, Upload } from "lucide-react";
 import Image from "next/image";
 export type ImageUpload = {
   id: string;

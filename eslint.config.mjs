@@ -31,6 +31,7 @@ const eslintConfig = [
           message: "Please import from `@/i18n/navigation` instead.",
         },
       ],
+      "@typescript-eslint/no-explicit-any": "off",
     },
   },
 ];

@@ -15,6 +15,10 @@ export const setToken = async ({
   refreshToken: string;
 }) => {
   try {
+    if (refreshToken) {
+      console.log("");
+    }
+
     const verifiedToken = await auth.verifyIdToken(token);
     if (!verifiedToken) {
       throw new Error("Invalid token");

@@ -39,6 +39,7 @@ const checkAdminAccess = async (
     }
     return null; // No redirect needed
   } catch (error) {
+    console.error(error);
     return createRedirectUrl(locale, "/", request);
   }
 };
@@ -65,6 +66,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const [, locale, ...segments] = pathname.split("/");
+  console.log(segments);
   if (
     token &&
     (pathname.startsWith(`/${locale}/login`) ||

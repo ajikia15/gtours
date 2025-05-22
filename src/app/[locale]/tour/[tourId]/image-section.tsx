@@ -27,7 +27,7 @@ export default async function ImageSection({
             <div className="w-4 bg-black my-1.5"></div>
             <div>
               <h1>Explore</h1>
-              <h1 className="font-bold">{tourTitle}'s</h1>
+              <h1 className="font-bold">{tourTitle}&apos;s</h1>
               <h1>Wonders</h1>
             </div>
           </div>

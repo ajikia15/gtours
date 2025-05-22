@@ -7,6 +7,7 @@ import {
 } from "@/components/carousel/EmblaCarouselDotButton";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
+import Image from "next/image";
 type PropType = {
   slides: number[];
   options?: EmblaOptionsType;
@@ -47,7 +48,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
               key={index}
               style={{ position: "relative", overflow: "hidden" }}
             >
-              <img
+              <Image
                 src={`https://picsum.photos/800/340?random=${index + 1}`}
                 alt={`Random ${index + 1}`}
                 style={{
@@ -58,6 +59,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                   height: "100%",
                   objectFit: "cover",
                 }}
+                fill
               />
             </div>
           ))}

@@ -2,13 +2,12 @@
 import { tourDataSchema } from "@/validation/tourSchema";
 import { z } from "zod";
 import { auth, firestore } from "@/firebase/server";
-import { Tour } from "@/types/Tour";
 
 export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,
   token: string
 ) => {
-  const docRef = firestore.collection("tours").doc();
+  // const docRef = firestore.collection("tours").doc();
 
   const verifiedToken = await auth.verifyIdToken(token);
   if (!verifiedToken.admin) {

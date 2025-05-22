@@ -1,11 +1,14 @@
+import Image from "next/image";
 export default function BlogCard() {
   return (
     <div className="flex w-full flex-col gap-6 mb-20">
       <div className="flex">
         <div className="w-5/6 aspect-video">
-          <img
-            src="https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fi.pinimg.com%2Foriginals%2F0f%2F85%2F67%2F0f856728e78c91f00e9b9d4c9c3db825.jpg&f=1&nofb=1&ipt=0a23196d29391f7a091a3ddbf2c21bd18e9a5a5d8f7928fb10b4622ccb7f7b35"
-            alt=""
+          <Image
+            src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=2566&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="Blog Image"
+            width={100}
+            height={100}
             className="rounded-sm w-full h-full object-cover"
           />
         </div>

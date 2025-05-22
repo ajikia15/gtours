@@ -2,15 +2,13 @@
 import ImageSectionSkeleton from "./image-section-skeleton";
 import { getTourById } from "@/data/tours";
 import { Suspense } from "react";
-import Image from "next/image";
-import ReactMarkdown from "react-markdown";
 import ImageSection from "./image-section";
 import TextSectionSkeleton from "./text-section-skeleton";
 import TextSection from "./text-section";
 
 import TourDetailsCard from "./tour-details-card";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 
 export default async function TourPage({
   params,

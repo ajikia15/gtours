@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import ContinueWithGoogleButton from "@/components/continue-with-google-button";
 
@@ -50,7 +50,7 @@ export default function LoginPage() {
         </form>
         <ContinueWithGoogleButton />
         <div className="text-center text-sm">
-          Don't have an account?{" "}
+          Don&apos;t have an account?
           <Link
             href="/register"
             className="font-medium text-blue-600 hover:underline"

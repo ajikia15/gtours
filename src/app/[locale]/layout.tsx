@@ -11,10 +11,10 @@ import { getLocale, getMessages } from "next-intl/server";
 
 export default async function LocaleLayout({
   children,
-  params,
-}: {
+}: // params,
+{
   children: React.ReactNode;
-  params: { locale: string };
+  // params: { locale: string };
 }) {
   const locale = await getLocale();
 

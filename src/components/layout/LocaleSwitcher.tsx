@@ -8,7 +8,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { useParams } from "next/navigation";
 
 export default function LocaleSwitcher() {
   const locale = useLocale();
@@ -16,7 +15,7 @@ export default function LocaleSwitcher() {
   const router = useRouter();
 
   const pathname = usePathname();
-  const params = useParams();
+  // const params = useParams();
   function handleLocaleChange(nextLocale: string) {
     router.replace({ pathname }, { locale: nextLocale as Locale });
   }

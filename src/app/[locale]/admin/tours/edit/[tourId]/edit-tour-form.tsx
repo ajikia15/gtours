@@ -3,7 +3,7 @@ import { useAuth } from "@/context/auth";
 import { tourSchema } from "@/validation/tourSchema";
 import { PencilIcon } from "lucide-react";
 import { z } from "zod";
-import { editTour, saveNewTour, saveTourImages } from "../../actions";
+import { editTour, saveTourImages } from "../../actions";
 import TourForm from "@/components/tour-form";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";

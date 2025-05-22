@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  tourSchema,
-  tourStatusEnum,
-  type TourStatus,
-} from "@/validation/tourSchema";
+import { tourSchema, tourStatusEnum } from "@/validation/tourSchema";
 import { useForm } from "react-hook-form";
 import { Form } from "./ui/form";
 import { z } from "zod";
