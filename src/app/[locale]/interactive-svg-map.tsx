@@ -15,16 +15,11 @@ export default function InteractiveMapSection() {
 
   return (
     <div className="flex max-h-128">
-      {/* Make the container take full width and auto height for responsiveness */}
       <div className="w-1/3 h-full">
-        {" "}
-        {/* Added some padding and border for clarity */}
         {selectedRegion ? (
           <div>
             <h3>Selected Region:</h3>
             <p>{selectedRegion.NAME_1}</p>
-            {/* You can display other properties here if needed */}
-            {/* <p>{hoveredRegion.ENGTYPE_1}</p> */}
           </div>
         ) : (
           <p>Hover over a region to see its name</p>
@@ -67,11 +62,11 @@ export default function InteractiveMapSection() {
           }
         </Geographies>
         <Marker coordinates={[44.7, 41.95]}>
-          <Pin strokeWidth={1.5} size={48} />
+          <Pin strokeWidth={1.5} size={40} />
         </Marker>
         <Marker coordinates={[42.6783, 42.8097]}>
           {/* Kutaisi coordinates */}
-          <Pin strokeWidth={1.5} size={48} />
+          <Pin strokeWidth={1.5} size={40} />
         </Marker>
       </ComposableMap>
     </div>

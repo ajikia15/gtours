@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { PlusCircleIcon } from "lucide-react";
 import ToursTable from "./Tours-table";
+import { Suspense } from "react";
+import ToursTableSkeleton from "./tours-table-skeleton";
 
 export default async function AdminDashboard({
   searchParams,
@@ -13,10 +15,7 @@ export default async function AdminDashboard({
 }) {
   const searchParamsValue = await searchParams;
   return (
-    <div className="">
-      {/* <div>
-        <Breadcrumbs items={[{ label: "Admin Dashboard" }]} />
-      </div> */}
+    <div>
       <h1 className="text-3xl font-bold my-4 ">Admin Dashboard</h1>
       <Button>
         <Link href="/admin/tours/new" className="flex items-center gap-2">
@@ -24,10 +23,17 @@ export default async function AdminDashboard({
           New Tour
         </Link>
       </Button>
-      <ToursTable
-        page={searchParamsValue?.page ? parseInt(searchParamsValue.page) : 1}
-        params={params}
-      />
+
+      <div className="mt-4">
+        <Suspense fallback={<ToursTableSkeleton />}>
+          <ToursTable
+            page={
+              searchParamsValue?.page ? parseInt(searchParamsValue.page) : 1
+            }
+            params={params}
+          />
+        </Suspense>
+      </div>
     </div>
   );
 }

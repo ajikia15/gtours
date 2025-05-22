@@ -47,7 +47,7 @@ export default async function ToursTable({
         </div>
       )}
       {data?.length && (
-        <Table className="mt-5">
+        <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Title</TableHead>
@@ -62,7 +62,9 @@ export default async function ToursTable({
             {data.map((tour) => (
               <TableRow key={tour.id}>
                 <TableCell>{tour.title}</TableCell>
-                <TableCell>{tour.location}</TableCell>
+                <TableCell>
+                  {tour.lat}, {tour.long}
+                </TableCell>
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
                 <TableCell>
