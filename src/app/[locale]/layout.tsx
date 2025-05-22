@@ -7,7 +7,7 @@ import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { roboto, notoSansGeorgian, openSans } from "./fonts";
-import { getMessages } from "next-intl/server";
+import { getLocale, getMessages } from "next-intl/server";
 
 export default async function LocaleLayout({
   children,
@@ -16,8 +16,8 @@ export default async function LocaleLayout({
   children: React.ReactNode;
   params: { locale: string };
 }) {
-  // TODO probably not good
-  const { locale } = await params;
+  const locale = await getLocale();
+
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
@@ -41,11 +41,11 @@ export default async function LocaleLayout({
 
   return (
     <html lang={locale}>
-      <body className={`${fontClassName} antialiased`}>
+      <body className={`${fontClassName} antialiased `}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <Navbar />
-            <div className="container mx-auto">
+            <div className="container mx-auto mt-20">
               {children}
               <Toaster />
               <Footer />

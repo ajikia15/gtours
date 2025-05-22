@@ -1,9 +1,7 @@
 import { Tour } from "@/types/Tour";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 
@@ -27,7 +25,7 @@ export default function MapTourCard({ tour }: { tour: Tour }) {
           {getLocalizedDescription(tour, locale)}
         </p>
         <Link
-          href={`/tours/${tour.id}`}
+          href={`/tour/${tour.id}`}
           className="w-fit font-bold hover:underline"
         >
           View Tour

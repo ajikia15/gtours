@@ -6,9 +6,11 @@ import { getImageUrl } from "@/lib/imageHelpers";
 export default async function ImageSection({
   images,
   tourId,
+  tourTitle,
 }: {
   images: string[] | undefined;
   tourId: string;
+  tourTitle: string;
 }) {
   // Artificial delay for testing skeleton
   await fakeTimeOutForSkeletons();
@@ -20,12 +22,12 @@ export default async function ImageSection({
     <div className="grid grid-cols-4 gap-4 w-full my-10">
       <div className="flex flex-col gap-4 aspect-[1/2]">
         <div className="flex flex-col gap-2">
-          <h1 className="font-bold text-2xl">Tbilisi</h1>
+          <h1 className="font-bold text-2xl">{tourTitle}</h1>
           <div className="flex flex-row gap-2 text-lg">
             <div className="w-4 bg-black my-1.5"></div>
             <div>
               <h1>Explore</h1>
-              <h1 className="font-bold">Tbilisi's</h1>
+              <h1 className="font-bold">{tourTitle}'s</h1>
               <h1>Wonders</h1>
             </div>
           </div>
@@ -35,7 +37,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[0]) : mainImage
             }
-            alt={mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl"
           />
@@ -49,7 +51,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[1]) : mainImage
             }
-            alt={images && images.length > 0 ? images[1] : mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl"
           />
@@ -59,7 +61,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[2]) : mainImage
             }
-            alt={images && images.length > 0 ? images[2] : mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl"
           />
@@ -73,7 +75,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[3]) : mainImage
             }
-            alt={images && images.length > 0 ? images[3] : mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl"
           />
@@ -83,7 +85,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[4]) : mainImage
             }
-            alt={images && images.length > 0 ? images[4] : mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl"
           />
@@ -97,7 +99,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[5]) : mainImage
             }
-            alt={images && images.length > 0 ? images[5] : mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl"
           />
@@ -110,7 +112,7 @@ export default async function ImageSection({
             src={
               images && images.length > 0 ? getImageUrl(images[6]) : mainImage
             }
-            alt={images && images.length > 0 ? images[6] : mainImage}
+            alt={tourTitle}
             fill
             className="object-cover rounded-xl transition-transform duration-300 ease-in-out group-hover:scale-105"
           />
