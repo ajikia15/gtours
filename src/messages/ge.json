@@ -11,9 +11,9 @@
     "contact": "კონტაქტი"
   },
   "QuickCategory": {
-    "hiking": "Hiking",
-    "horseRiding": "Horse Riding",
-    "parasailing": "Parasailing",
-    "surfing": "Surfing"
+    "Hiking": "Hiking",
+    "HorseRiding": "ჯირითი",
+    "Parasailing": "Parasailing",
+    "Surfing": "Surfing"
   }
 }

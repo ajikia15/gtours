@@ -11,9 +11,9 @@
     "contact": "Контакт"
   },
   "QuickCategory": {
-    "hiking": "Пеший туризм",
-    "horseRiding": "Верховая езда",
-    "parasailing": "Парасейл",
-    "surfing": "Серфинг"
+    "Hiking": "Пеший туризм",
+    "HorseRiding": "Верховая езда",
+    "Parasailing": "Парасейл",
+    "Surfing": "Серфинг"
   }
 }
