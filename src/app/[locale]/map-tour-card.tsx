@@ -3,6 +3,8 @@ import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+
 export default function MapTourCard({ tour }: { tour: Tour }) {
   return (
     <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl">

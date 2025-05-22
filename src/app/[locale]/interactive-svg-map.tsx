@@ -11,7 +11,7 @@ import geoData from "@/../public/gadm41_GEO_1.json";
 import { MapPin } from "lucide-react";
 import { Tour } from "@/types/Tour";
 import MapTourCard from "./map-tour-card";
-
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(
     tours[0] || null
@@ -49,12 +49,13 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   function handleTourClick(tour: Tour) {
     setSelectedTour(tour);
   }
+  const [animationParent] = useAutoAnimate();
 
   return (
     <div className="flex">
-      <div className="w-1/3 h-full p-4">
+      <div className="w-1/3 h-full p-4" ref={animationParent}>
         {selectedTour ? (
-          <MapTourCard tour={selectedTour} />
+          <MapTourCard key={selectedTour.id} tour={selectedTour} />
         ) : (
           <p className="text-gray-500">Click on a tour marker to see details</p>
         )}
