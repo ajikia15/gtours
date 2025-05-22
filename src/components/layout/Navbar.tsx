@@ -1,7 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
-import { Button } from "../ui/button";
 import AuthButtons from "../auth-buttons";
 
 export default async function Navbar() {
