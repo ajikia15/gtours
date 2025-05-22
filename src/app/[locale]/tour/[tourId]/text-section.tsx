@@ -1,5 +1,5 @@
 import ReactMarkdown from "react-markdown";
-import fakeTimeOutForSkeletons from "@/components/fakeTimeoutForSkeletons";
+import fakeTimeOutForSkeletons from "@/lib/fakeTimeoutForSkeletons";
 export default async function TextSection({
   description,
 }: {

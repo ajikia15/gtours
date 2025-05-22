@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import fakeTimeOutForSkeletons from "@/components/fakeTimeoutForSkeletons";
+import fakeTimeOutForSkeletons from "@/lib/fakeTimeoutForSkeletons";
+import { getImageUrl } from "@/lib/imageHelpers";
+
 export default async function ImageSection({
   images,
   tourId,
@@ -11,12 +13,6 @@ export default async function ImageSection({
   // Artificial delay for testing skeleton
   await fakeTimeOutForSkeletons();
 
-  const getImageUrl = (image?: string) =>
-    image
-      ? `https://firebasestorage.googleapis.com/v0/b/gtours-fcd56.firebasestorage.app/o/${encodeURIComponent(
-          image
-        )}?alt=media`
-      : "/HorseRiding.svg";
   const mainImage = getImageUrl(
     images && images.length > 0 ? images[0] : undefined
   );

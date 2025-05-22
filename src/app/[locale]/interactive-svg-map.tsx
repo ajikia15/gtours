@@ -8,32 +8,32 @@ import {
   Marker,
 } from "react-simple-maps";
 import geoData from "@/../public/gadm41_GEO_1.json";
-import { Pin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Tour } from "@/types/Tour";
+import MapTourCard from "./map-tour-card";
 
 export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
-  const [selectedRegion, setSelectedRegion] = useState<any>(null);
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(
+    tours[0] || null
+  );
 
-  function handleRegionClick(geo: any) {
-    setSelectedRegion(geo.properties);
+  function handleTourClick(tour: Tour) {
+    setSelectedTour(tour);
   }
 
   return (
     <div className="flex max-h-128">
-      <div className="w-1/3 h-full">
-        {selectedRegion ? (
-          <div>
-            <h3>Selected Region:</h3>
-            <p>{selectedRegion.NAME_1}</p>
-          </div>
+      <div className="w-1/3 h-full p-4">
+        {selectedTour ? (
+          <MapTourCard tour={selectedTour} />
         ) : (
-          <p>Hover over a region to see its name</p>
+          <p className="text-gray-500">Click on a tour marker to see details</p>
         )}
       </div>
       <ComposableMap
-        className="w-2/3 "
+        className="w-2/3"
         projectionConfig={{
-          scale: 11000,
+          scale: 9000,
           center: [43.5, 42.3],
         }}
         width={800}
@@ -45,15 +45,9 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                fill={
-                  selectedRegion &&
-                  geo.properties.GID_1 === selectedRegion.GID_1
-                    ? "#6699cc"
-                    : "#e0e0e0"
-                }
+                fill="#e0e0e0"
                 stroke="#FFF"
                 strokeWidth={3}
-                onClick={() => handleRegionClick(geo)}
                 style={{
                   default: {
                     outline: "none",
@@ -66,19 +60,20 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
             ))
           }
         </Geographies>
-        {tours.map(
-          (tour) => (
-            console.log(tour.long, tour.lat),
-            (
-              <Marker key={tour.id} coordinates={[tour.long, tour.lat]}>
-                <Pin strokeWidth={1.5} size={40} />
-              </Marker>
-            )
-          )
-        )}
-        {/* <Marker coordinates={[44.7, 41.95]}>
-          <Pin strokeWidth={1.5} size={40} />
-        </Marker> */}
+        {tours.map((tour) => (
+          <Marker
+            key={tour.id}
+            coordinates={[tour.long, tour.lat]}
+            onClick={() => handleTourClick(tour)}
+          >
+            <MapPin
+              strokeWidth={1.5}
+              size={40}
+              color={selectedTour?.id === tour.id ? "#ff3333" : "#000000"}
+              fill={selectedTour?.id === tour.id ? "#ffcccc" : "transparent"}
+            />
+          </Marker>
+        ))}
       </ComposableMap>
     </div>
   );
