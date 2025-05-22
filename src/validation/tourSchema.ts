@@ -5,8 +5,9 @@ export type TourStatus = z.infer<typeof tourStatusEnum>;
 
 export const tourDataSchema = z.object({
   title: z.string().min(1, "Title is required"),
-  description: z.string().min(1, "Description is required"),
-  imageUrl: z.string().url("Invalid URL format"),
+  descriptionEN: z.string().min(1, "English Description is required"),
+  descriptionGE: z.string().min(1, "Georgian Description is required"),
+  descriptionRU: z.string().min(1, "Russian Description is required"),
   basePrice: z.coerce.number().min(1, "Base price is required"),
   duration: z.coerce
     .number()
@@ -28,7 +29,8 @@ export const tourDataSchema = z.object({
       "Return time must be in HH:MM format"
     )
     .optional(),
-  location: z.string().optional(),
+  lat: z.coerce.number().optional(),
+  long: z.coerce.number().optional(),
   status: tourStatusEnum.default("draft").optional(),
 });
 

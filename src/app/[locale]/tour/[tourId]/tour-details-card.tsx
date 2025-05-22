@@ -17,7 +17,9 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 text-gray-700">
           <MapPin className="size-5 text-red-500" />
-          <span>{tour.location}</span>
+          <span>
+            Latitude: {tour.lat}, Longitude: {tour.long}
+          </span>
         </div>
         <div className="flex items-center gap-2 text-gray-700">
           <Clock className="size-5 text-red-500" />
@@ -35,6 +37,11 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
           <Users className="size-5 text-red-500" />
           <span>12-15 Guests</span>
         </div>
+      </div>
+
+      <div className="mt-4">
+        <h4 className="text-md font-medium">Description:</h4>
+        <p>{tour.descriptionEN}</p>
       </div>
 
       <div className="mt-4">

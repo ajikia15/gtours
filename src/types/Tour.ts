@@ -2,13 +2,15 @@ import { TourStatus } from "@/validation/tourSchema";
 export type Tour = {
   id: string;
   title: string;
-  description: string;
-  imageUrl: string;
+  descriptionEN: string;
+  descriptionGE: string;
+  descriptionRU: string;
   basePrice: number;
   duration: number;
   leaveTime: string;
   returnTime: string;
-  location: string;
+  lat: number;
+  long: number;
   status: TourStatus;
   images?: string[];
 };

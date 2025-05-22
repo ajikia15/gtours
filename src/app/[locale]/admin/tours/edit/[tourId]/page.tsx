@@ -27,13 +27,15 @@ export default async function EditTour({
           <EditTourForm
             id={tour.id}
             title={tour.title}
-            description={tour.description}
-            imageUrl={tour.imageUrl}
+            descriptionEN={tour.descriptionEN}
+            descriptionGE={tour.descriptionGE}
+            descriptionRU={tour.descriptionRU}
             basePrice={tour.basePrice}
             duration={tour.duration}
             leaveTime={tour.leaveTime}
             returnTime={tour.returnTime}
-            location={tour.location}
+            lat={tour.lat}
+            long={tour.long}
             status={tour.status}
             images={tour.images || []}
           />

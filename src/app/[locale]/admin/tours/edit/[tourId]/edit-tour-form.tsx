@@ -20,13 +20,15 @@ type Props = Tour;
 export default function EditTourForm({
   id,
   title,
-  description,
-  imageUrl,
+  descriptionEN,
+  descriptionGE,
+  descriptionRU,
   basePrice,
   duration,
   leaveTime,
   returnTime,
-  location,
+  lat,
+  long,
   status,
   images = [],
 }: Props) {
@@ -81,13 +83,15 @@ export default function EditTourForm({
         }
         defaultValues={{
           title,
-          description,
-          imageUrl,
+          descriptionEN,
+          descriptionGE,
+          descriptionRU,
           basePrice,
           duration,
           leaveTime,
           returnTime,
-          location,
+          lat,
+          long,
           status,
           images: images.map((image) => ({
             id: image,

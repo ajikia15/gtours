@@ -44,13 +44,15 @@ export default function TourForm({
   const combinedDefaultValues: z.infer<typeof tourSchema> = {
     ...defaultValues,
     title: defaultValues?.title || "",
-    description: defaultValues?.description || "",
-    imageUrl: defaultValues?.imageUrl || "",
+    descriptionEN: defaultValues?.descriptionEN || "",
+    descriptionGE: defaultValues?.descriptionGE || "",
+    descriptionRU: defaultValues?.descriptionRU || "",
     basePrice: defaultValues?.basePrice || 0,
     duration: defaultValues?.duration || 0,
     leaveTime: defaultValues?.leaveTime || "",
     returnTime: defaultValues?.returnTime || "",
-    location: defaultValues?.location || "",
+    lat: defaultValues?.lat || 0,
+    long: defaultValues?.long || 0,
     status: defaultValues?.status || "draft",
     images: defaultValues?.images || [],
   };
@@ -77,24 +79,6 @@ export default function TourForm({
                   <FormLabel>Title</FormLabel>
                   <FormControl>
                     <Input {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="imageUrl"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Image URL</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      type="url"
-                      placeholder="https://example.com/image.jpg"
-                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,12 +146,26 @@ export default function TourForm({
 
             <FormField
               control={form.control}
-              name="location"
+              name="lat"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Location</FormLabel>
+                  <FormLabel>Latitude</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Input {...field} type="number" />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="long"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Longitude</FormLabel>
+                  <FormControl>
+                    <Input {...field} type="number" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -208,10 +206,36 @@ export default function TourForm({
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <FormField
             control={form.control}
-            name="description"
+            name="descriptionEN"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>Description (English)</FormLabel>
+                <FormControl>
+                  <Textarea {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="descriptionGE"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description (Georgian)</FormLabel>
+                <FormControl>
+                  <Textarea {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="descriptionRU"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description (Russian)</FormLabel>
                 <FormControl>
                   <Textarea {...field} />
                 </FormControl>
