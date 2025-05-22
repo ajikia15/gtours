@@ -9,9 +9,14 @@ import {
 } from "react-simple-maps";
 import geoData from "@/../public/gadm41_GEO_1.json";
 import { Pin } from "lucide-react";
+import { Tour } from "@/types/Tour";
 
-export default function InteractiveMapSection() {
+export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [selectedRegion, setSelectedRegion] = useState<any>(null);
+
+  function handleRegionClick(geo: any) {
+    setSelectedRegion(geo.properties);
+  }
 
   return (
     <div className="flex max-h-128">
@@ -31,6 +36,8 @@ export default function InteractiveMapSection() {
           scale: 11000,
           center: [43.5, 42.3],
         }}
+        width={800}
+        height={450}
       >
         <Geographies geography={geoData}>
           {({ geographies }: { geographies: any[] }) =>
@@ -46,9 +53,7 @@ export default function InteractiveMapSection() {
                 }
                 stroke="#FFF"
                 strokeWidth={3}
-                onClick={() => {
-                  setSelectedRegion(geo.properties);
-                }}
+                onClick={() => handleRegionClick(geo)}
                 style={{
                   default: {
                     outline: "none",
@@ -61,13 +66,19 @@ export default function InteractiveMapSection() {
             ))
           }
         </Geographies>
-        <Marker coordinates={[44.7, 41.95]}>
+        {tours.map(
+          (tour) => (
+            console.log(tour.long, tour.lat),
+            (
+              <Marker key={tour.id} coordinates={[tour.long, tour.lat]}>
+                <Pin strokeWidth={1.5} size={40} />
+              </Marker>
+            )
+          )
+        )}
+        {/* <Marker coordinates={[44.7, 41.95]}>
           <Pin strokeWidth={1.5} size={40} />
-        </Marker>
-        <Marker coordinates={[42.6783, 42.8097]}>
-          {/* Kutaisi coordinates */}
-          <Pin strokeWidth={1.5} size={40} />
-        </Marker>
+        </Marker> */}
       </ComposableMap>
     </div>
   );
