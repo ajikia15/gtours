@@ -4,6 +4,7 @@ import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
+import ReactMarkdown from "react-markdown";
 
 export default function MapTourCard({ tour }: { tour: Tour }) {
   const locale = useLocale();
@@ -21,9 +22,9 @@ export default function MapTourCard({ tour }: { tour: Tour }) {
       </div>
       <div className="flex flex-col gap-2 p-6">
         <h3 className="text-lg font-bold">{tour.title}</h3>
-        <p className="text-sm text-gray-500 line-clamp-3 mr-10">
-          {getLocalizedDescription(tour, locale)}
-        </p>
+        <div className="text-sm text-gray-500 line-clamp-3 mr-10">
+          <ReactMarkdown>{getLocalizedDescription(tour, locale)}</ReactMarkdown>
+        </div>
         <Link
           href={`/tour/${tour.id}`}
           className="w-fit font-bold hover:underline"
