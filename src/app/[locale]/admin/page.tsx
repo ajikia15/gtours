@@ -7,13 +7,23 @@ import { Suspense } from "react";
 import ToursTableSkeleton from "./tours-table-skeleton";
 
 export default async function AdminDashboard({
-  searchParams,
-  params,
+  searchParams: searchParamsPromise,
+  params: paramsPromise,
 }: {
-  searchParams?: Promise<any>;
-  params: Promise<{ locale: string }> | { locale: string };
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: Promise<{ locale: string }>;
 }) {
-  const searchParamsValue = await searchParams;
+  const searchParams = await searchParamsPromise;
+  const params = await paramsPromise;
+
+  const pageQueryParam = searchParams?.page;
+  const page = pageQueryParam
+    ? parseInt(
+        Array.isArray(pageQueryParam) ? pageQueryParam[0] : pageQueryParam,
+        10
+      )
+    : 1;
+
   return (
     <div>
       <h1 className="text-3xl font-bold my-4 ">Admin Dashboard</h1>
@@ -26,12 +36,7 @@ export default async function AdminDashboard({
 
       <div className="mt-4">
         <Suspense fallback={<ToursTableSkeleton />}>
-          <ToursTable
-            page={
-              searchParamsValue?.page ? parseInt(searchParamsValue.page) : 1
-            }
-            params={params}
-          />
+          <ToursTable page={page} params={params} />
         </Suspense>
       </div>
     </div>
