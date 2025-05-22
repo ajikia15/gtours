@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -12,16 +12,37 @@ import { MapPin } from "lucide-react";
 import { Tour } from "@/types/Tour";
 import MapTourCard from "./map-tour-card";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
-export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
-  const [selectedTour, setSelectedTour] = useState<Tour | null>(
-    tours[0] || null
-  );
+
+export default function InteractiveMapSection() {
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const testMode = true;
   const [testMarkerCoords, setTestMarkerCoords] = useState<[number, number]>([
     43.5, 42.3,
   ]);
   const [copied, setCopied] = useState(false);
   const [showTestControls, setShowTestControls] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch tours data directly in the client component
+  useEffect(() => {
+    async function fetchTours() {
+      try {
+        const response = await fetch("/api/tours");
+        const data = await response.json();
+        setTours(data);
+        if (data.length > 0) {
+          setSelectedTour(data[0]);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching tours:", error);
+        setIsLoading(false);
+      }
+    }
+
+    fetchTours();
+  }, []);
 
   const handleCopyToClipboard = () => {
     const textToCopy = `${testMarkerCoords[1].toFixed(
@@ -53,16 +74,21 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
           newLon += step;
           break;
       }
-      // Basic boundary check (optional, depending on desired behavior)
+      // Basic boundary check
       newLat = Math.max(-90, Math.min(90, newLat));
       newLon = Math.max(-180, Math.min(180, newLon));
       return [newLon, newLat];
     });
   };
+
   function handleTourClick(tour: Tour) {
     setSelectedTour(tour);
   }
   const [animationParent] = useAutoAnimate();
+
+  if (isLoading) {
+    return <div className="flex justify-center py-10">Loading map data...</div>;
+  }
 
   return (
     <div className="flex">
@@ -75,7 +101,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
       </div>
       <div className="w-2/3 relative">
         {testMode && (
-          <div className="flex flex-col items-center mt-4 absolute top-0 right-0 bg-gray-50 p-2 rounded shadow">
+          <div className="flex flex-col items-center mt-4 absolute top-0 right-0 bg-gray-50 p-2 rounded shadow z-10">
             <button
               onClick={() => setShowTestControls(!showTestControls)}
               className="mb-2 p-1 text-xs bg-gray-300 hover:bg-gray-400 rounded-sm w-full"
