@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -7,18 +8,33 @@ import {
   Marker,
 } from "react-simple-maps";
 import geoData from "@/../public/gadm41_GEO_1.json";
-import { MapPin } from "lucide-react";
+import { Pin } from "lucide-react";
 
 export default function InteractiveMapSection() {
+  const [selectedRegion, setSelectedRegion] = useState<any>(null);
+
   return (
     <div className="flex max-h-128">
       {/* Make the container take full width and auto height for responsiveness */}
-      <div className="w-1/3 h-full">card goes here</div>
+      <div className="w-1/3 h-full">
+        {" "}
+        {/* Added some padding and border for clarity */}
+        {selectedRegion ? (
+          <div>
+            <h3>Selected Region:</h3>
+            <p>{selectedRegion.NAME_1}</p>
+            {/* You can display other properties here if needed */}
+            {/* <p>{hoveredRegion.ENGTYPE_1}</p> */}
+          </div>
+        ) : (
+          <p>Hover over a region to see its name</p>
+        )}
+      </div>
       <ComposableMap
         className="w-2/3 "
         projectionConfig={{
           scale: 11000,
-          center: [43.5, 42.3], // Adjust center
+          center: [43.5, 42.3],
         }}
       >
         <Geographies geography={geoData}>
@@ -27,18 +43,35 @@ export default function InteractiveMapSection() {
               <Geography
                 key={geo.rsmKey}
                 geography={geo}
-                fill="#DDD"
+                fill={
+                  selectedRegion &&
+                  geo.properties.GID_1 === selectedRegion.GID_1
+                    ? "#6699cc"
+                    : "#e0e0e0"
+                }
                 stroke="#FFF"
+                strokeWidth={3}
+                onClick={() => {
+                  setSelectedRegion(geo.properties);
+                }}
+                style={{
+                  default: {
+                    outline: "none",
+                    transition: "all 250ms ease-in-out",
+                  },
+                  hover: { outline: "none" },
+                  pressed: { outline: "none" },
+                }}
               />
             ))
           }
         </Geographies>
-        <Marker coordinates={[44.8245, 41.7961]}>
-          <MapPin size={48} />
+        <Marker coordinates={[44.7, 41.95]}>
+          <Pin strokeWidth={1.5} size={48} />
         </Marker>
-        <Marker coordinates={[42.6783, 41.8097]}>
+        <Marker coordinates={[42.6783, 42.8097]}>
           {/* Kutaisi coordinates */}
-          <MapPin size={48} />
+          <Pin strokeWidth={1.5} size={48} />
         </Marker>
       </ComposableMap>
     </div>
