@@ -8,7 +8,7 @@ export default async function Navbar() {
   const t = await getTranslations("Navbar");
 
   return (
-    <nav className="bg-background sticky top-0 z-50 w-full">
+    <nav className="bg-background fixed top-0 z-50 w-full">
       <div className="container mx-auto ">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
