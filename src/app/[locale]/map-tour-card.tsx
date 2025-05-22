@@ -3,7 +3,7 @@ import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 export default function MapTourCard({ tour }: { tour: Tour }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 h-full">
       <div className="aspect-square w-full relative rounded-xl">
         {tour.images && (
           <Image

@@ -14,7 +14,6 @@ export default async function HomePage() {
     pagination: { page: 1, pageSize: 10 },
   });
 
-  // Serialize the tours data to ensure it's plain objects
   const serializedTours = JSON.parse(JSON.stringify(data));
   return (
     <div className="space-y-10 mb-10">

@@ -22,7 +22,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   }
 
   return (
-    <div className="flex max-h-128">
+    <div className="flex">
       <div className="w-1/3 h-full p-4">
         {selectedTour ? (
           <MapTourCard tour={selectedTour} />
@@ -33,7 +33,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
       <ComposableMap
         className="w-2/3"
         projectionConfig={{
-          scale: 9000,
+          scale: 8000,
           center: [43.5, 42.3],
         }}
         width={800}
