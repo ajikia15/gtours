@@ -51,6 +51,7 @@ export default function TourForm({
     long: defaultValues?.long || 0,
     status: defaultValues?.status || "draft",
     images: defaultValues?.images || [],
+    offeredActivities: defaultValues?.offeredActivities || [],
   };
   const form = useForm<TourFormData>({
     resolver: zodResolver(tourSchema),

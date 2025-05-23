@@ -15,8 +15,7 @@ export type Tour = {
   long: number;
   status: TourStatus;
   images?: string[];
-  offeredActivities?: OfferedActivity[];
-  activityTypeNames?: string[];
+  offeredActivities: OfferedActivity[];
 };
 
 // export type TourWithId = Tour & { id: string };

@@ -3,7 +3,15 @@ import { z } from "zod";
 export const tourStatusEnum = z.enum(["active", "disabled", "draft"]);
 export type TourStatus = z.infer<typeof tourStatusEnum>;
 
-import { offeredActivitySchema } from "./offeredActivitySchema";
+export const offeredActivitySchema = z.object({
+  activityTypeId: z.string().min(1, "Activity Type ID is required"),
+  nameSnapshot: z.string().min(1, "Activity name snapshot is required"), // For display/search without joins
+  priceIncrement: z.coerce.number().min(0),
+  latitude: z.coerce.number(),
+  longitude: z.coerce.number(),
+  specificDescription: z.string().optional(),
+});
+
 export const tourDataSchema = z.object({
   title: z.string().min(1, "Title is required"),
   descriptionEN: z.string().min(1, "English Description is required"),
@@ -33,8 +41,11 @@ export const tourDataSchema = z.object({
   lat: z.coerce.number().optional(), // Main lat for tour area
   long: z.coerce.number().optional(), // Main long for tour area
   status: tourStatusEnum.default("draft").optional(),
-  offeredActivities: z.array(offeredActivitySchema).optional(), // New field
-  activityTypeNames: z.array(z.string()).optional(), // New field
+});
+
+// Separate schema for activities - better separation of concerns
+export const tourActivitiesSchema = z.object({
+  offeredActivities: z.array(offeredActivitySchema),
 });
 
 export const tourImageSchema = z.object({
@@ -47,4 +58,7 @@ export const tourImageSchema = z.object({
   ),
 });
 
-export const tourSchema = tourDataSchema.and(tourImageSchema);
+// Combine all schemas using .and()
+export const tourSchema = tourDataSchema
+  .and(tourActivitiesSchema)
+  .and(tourImageSchema);
