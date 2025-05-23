@@ -10,7 +10,7 @@ import TourDetailsCard from "./tour-details-card";
 import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import { getLocale } from "next-intl/server";
-import TourMapSection from "./tour-map-section";
+import TourMapSection from "@/components/map/tour-map-section";
 import TourSuggestions from "./tour-suggestions";
 export default async function TourPage({
   params,

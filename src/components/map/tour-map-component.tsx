@@ -119,7 +119,7 @@ const getActivityColor = (activityTypeId: string): string => {
   return (colors as any)[activityType] || colors.default;
 };
 
-export default function TourMapSection({
+export default function TourMapComponent({
   tourCoordinates,
   activities,
   tourTitle,
