@@ -13,7 +13,9 @@ export default async function Navbar() {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-2">
-              <span className="font-bold text-xl text-primary">LOGO</span>
+              <span className="font-bold text-xl text-primary">
+                {t("logo")}
+              </span>
             </Link>
           </div>
 

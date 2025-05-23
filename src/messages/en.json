@@ -8,7 +8,8 @@
     "destinations": "Destinations",
     "blog": "Blog",
     "aboutUs": "About Us",
-    "contact": "Contact"
+    "contact": "Contact",
+    "logo": "GTOURS"
   },
   "QuickCategory": {
     "camping": "Camping",
@@ -19,5 +20,207 @@
     "zip-lining": "Zip Lining",
     "snowmobile": "Snowmobile",
     "horse-rider": "Horse Riding"
+  },
+  "Footer": {
+    "logo": "GTOURS",
+    "description": "Experience unforgettable adventures with our carefully curated tours.",
+    "contact": "Contact",
+    "socialMedia": "Social Media",
+    "partners": "Partners",
+    "aboutUs": "About Us",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "customerSupport": "Customer Support",
+    "phoneNumber": "Phone Number",
+    "emailAddress": "Email Address",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "twitter": "Twitter",
+    "youtube": "YouTube",
+    "localPartners": "Local Partners",
+    "tourOperators": "Tour Operators",
+    "hotelPartners": "Hotel Partners",
+    "transportPartners": "Transport Partners"
+  },
+  "Auth": {
+    "welcome": "Welcome",
+    "myAccount": "My Account",
+    "adminDashboard": "Admin Dashboard",
+    "myFavoriteTours": "My Favorite Tours",
+    "signOut": "Sign out",
+    "register": "Register",
+    "signIn": "Sign in",
+    "continueWithGoogle": "Continue with Google"
+  },
+  "Admin": {
+    "dashboard": {
+      "title": "Admin Dashboard",
+      "newTour": "New Tour",
+      "tours": "Tours",
+      "noToursFound": "No tours found"
+    },
+    "table": {
+      "title": "Title",
+      "location": "Location",
+      "duration": "Duration",
+      "price": "Price",
+      "status": "Status",
+      "actions": "Actions",
+      "noCoordinates": "No coordinates",
+      "days": "Days",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "breadcrumbs": {
+      "adminDashboard": "Admin Dashboard",
+      "tours": "Tours",
+      "newTour": "New Tour",
+      "editTour": "Edit Tour"
+    },
+    "tourForm": {
+      "newTour": "New Tour",
+      "editTour": "Edit Tour",
+      "createTour": "Create Tour",
+      "updateTour": "Update Tour",
+      "sections": {
+        "basicInformation": "Basic Information",
+        "basicInformationDesc": "Essential details about your tour",
+        "pricingDuration": "Pricing & Duration",
+        "pricingDurationDesc": "Business details and tour length",
+        "schedule": "Schedule",
+        "scheduleDesc": "Tour timing details",
+        "location": "Location",
+        "locationDesc": "Main tour area coordinates",
+        "status": "Status",
+        "statusDesc": "Publication status",
+        "images": "Images",
+        "imagesDesc": "Visual content for your tour",
+        "activities": "Activities",
+        "activitiesDesc": "Specific activities included in this tour"
+      },
+      "fields": {
+        "tourTitle": "Tour Title",
+        "tourTitlePlaceholder": "Amazing Georgia Adventure",
+        "descriptionEN": "Description (English)",
+        "descriptionENPlaceholder": "Describe your tour in English...",
+        "descriptionGE": "Description (Georgian)",
+        "descriptionGEPlaceholder": "ჩაწერეთ ტურის აღწერა ქართულად...",
+        "descriptionRU": "Description (Russian)",
+        "descriptionRUPlaceholder": "Опишите ваш тур на русском...",
+        "basePrice": "Base Price (GEL)",
+        "basePricePlaceholder": "150.00",
+        "duration": "Duration (days)",
+        "durationPlaceholder": "3",
+        "departureTime": "Departure Time",
+        "departureTimePlaceholder": "09:00",
+        "returnTime": "Return Time",
+        "returnTimePlaceholder": "17:00",
+        "latitude": "Latitude",
+        "latitudePlaceholder": "41.715138",
+        "longitude": "Longitude",
+        "longitudePlaceholder": "44.827096",
+        "tourStatus": "Tour Status",
+        "selectStatusPlaceholder": "Select a status"
+      },
+      "help": {
+        "coordinatesTip": "Tip:",
+        "coordinatesDesc": "You can paste Google Maps coordinates (e.g., \"41.715138, 44.827096\") directly into either field and both will be automatically filled.",
+        "coordinatesTitle": "Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+      },
+      "messages": {
+        "errorSaving": "Error saving tour",
+        "savedSuccessfully": "Tour saved successfully"
+      }
+    },
+    "status": {
+      "draft": "Draft",
+      "active": "Active",
+      "disabled": "Disabled"
+    }
+  },
+  "Pages": {
+    "about": {
+      "title": "About Us",
+      "subtitle": "Discover our story",
+      "description": "We are passionate about creating unforgettable travel experiences that connect you with the beauty and culture of Georgia.",
+      "ourMission": "Our Mission",
+      "missionText": "To provide authentic, sustainable, and memorable tour experiences that showcase the best of Georgian hospitality and natural beauty.",
+      "ourValues": "Our Values",
+      "authenticity": "Authenticity",
+      "sustainability": "Sustainability",
+      "excellence": "Excellence",
+      "safety": "Safety"
+    },
+    "contact": {
+      "title": "Contact Us",
+      "subtitle": "Get in touch",
+      "description": "We'd love to hear from you. Send us a message and we'll respond as soon as possible.",
+      "phoneNumber": "Phone Number",
+      "emailAddress": "Email Address",
+      "officeLocation": "Office Location",
+      "businessHours": "Business Hours",
+      "weekdays": "Monday - Friday: 9:00 AM - 6:00 PM",
+      "weekends": "Saturday - Sunday: 10:00 AM - 4:00 PM",
+      "sendMessage": "Send us a message",
+      "name": "Name",
+      "email": "Email",
+      "message": "Message",
+      "yourName": "Your name",
+      "yourEmail": "Your email",
+      "yourMessage": "Your message",
+      "sendButton": "Send Message"
+    },
+    "destinations": {
+      "title": "Destinations",
+      "subtitle": "Explore beautiful places",
+      "description": "Discover amazing destinations across Georgia with our carefully crafted tour packages.",
+      "exploreTours": "Explore Tours"
+    },
+    "blog": {
+      "title": "Blog",
+      "subtitle": "Travel stories and tips",
+      "description": "Read about travel experiences, tips, and insights from our expert guides.",
+      "readMore": "Read more",
+      "publishedOn": "Published on",
+      "author": "Author",
+      "categories": "Categories"
+    }
+  },
+  "BlogCard": {
+    "defaultTitle": "What to pack for your hiking trip",
+    "defaultDescription": "Essential items and tips for preparing your backpack for an amazing hiking adventure.",
+    "readMore": "Read more"
+  },
+  "Map": {
+    "loadingMapData": "Loading map data...",
+    "clickMarkerForDetails": "Click on a tour marker to see details",
+    "showControls": "Show Controls",
+    "hideControls": "Hide Controls",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "coordinates": "Coordinates",
+    "up": "Up",
+    "down": "Down",
+    "left": "Left",
+    "right": "Right"
+  },
+  "Common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "retry": "Retry",
+    "close": "Close",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "reset": "Reset"
   }
 }

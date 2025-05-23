@@ -1,6 +1,6 @@
 {
   "Homepage": {
-    "title": "zдравствуй, мир",
+    "title": "Добро пожаловать",
     "description": "Это главная страница нашего приложения. Здесь вы можете найти различные ресурсы и ссылки на другие разделы."
   },
   "Navbar": {
@@ -8,12 +8,219 @@
     "destinations": "Направления",
     "blog": "Блог",
     "aboutUs": "О нас",
-    "contact": "Контакт"
+    "contact": "Контакт",
+    "logo": "GTOURS"
   },
   "QuickCategory": {
-    "Hiking": "Пеший туризм",
-    "HorseRiding": "Верховая езда",
-    "Parasailing": "Парасейл",
-    "Surfing": "Серфинг"
+    "camping": "Кемпинг",
+    "hot-air-balloon": "Воздушный шар",
+    "parachute": "Парашют",
+    "ski": "Лыжи",
+    "water-rafting": "Рафтинг",
+    "zip-lining": "Зип-лайн",
+    "snowmobile": "Снегоход",
+    "horse-rider": "Верховая езда"
+  },
+  "Footer": {
+    "logo": "GTOURS",
+    "description": "Испытайте незабываемые приключения с нашими тщательно отобранными турами.",
+    "contact": "Контакт",
+    "socialMedia": "Социальные сети",
+    "partners": "Партнеры",
+    "aboutUs": "О нас",
+    "privacyPolicy": "Политика конфиденциальности",
+    "termsOfService": "Условия обслуживания",
+    "customerSupport": "Поддержка клиентов",
+    "phoneNumber": "Номер телефона",
+    "emailAddress": "Адрес электронной почты",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "twitter": "Twitter",
+    "youtube": "YouTube",
+    "localPartners": "Местные партнеры",
+    "tourOperators": "Туроператоры",
+    "hotelPartners": "Партнеры отелей",
+    "transportPartners": "Транспортные партнеры"
+  },
+  "Auth": {
+    "welcome": "Добро пожаловать",
+    "myAccount": "Мой аккаунт",
+    "adminDashboard": "Панель администратора",
+    "myFavoriteTours": "Мои любимые туры",
+    "signOut": "Выйти",
+    "register": "Регистрация",
+    "signIn": "Войти",
+    "continueWithGoogle": "Продолжить с Google"
+  },
+  "Admin": {
+    "dashboard": {
+      "title": "Панель администратора",
+      "newTour": "Новый тур",
+      "tours": "Туры",
+      "noToursFound": "Туры не найдены"
+    },
+    "table": {
+      "title": "Название",
+      "location": "Местоположение",
+      "duration": "Продолжительность",
+      "price": "Цена",
+      "status": "Статус",
+      "actions": "Действия",
+      "noCoordinates": "Нет координат",
+      "days": "Дней",
+      "view": "Просмотр",
+      "edit": "Редактировать",
+      "delete": "Удалить"
+    },
+    "breadcrumbs": {
+      "adminDashboard": "Панель администратора",
+      "tours": "Туры",
+      "newTour": "Новый тур",
+      "editTour": "Редактировать тур"
+    },
+    "tourForm": {
+      "newTour": "Новый тур",
+      "editTour": "Редактировать тур",
+      "createTour": "Создать тур",
+      "updateTour": "Обновить тур",
+      "sections": {
+        "basicInformation": "Основная информация",
+        "basicInformationDesc": "Основные детали вашего тура",
+        "pricingDuration": "Цена и продолжительность",
+        "pricingDurationDesc": "Деловые детали и продолжительность тура",
+        "schedule": "Расписание",
+        "scheduleDesc": "Детали времени тура",
+        "location": "Местоположение",
+        "locationDesc": "Координаты основной зоны тура",
+        "status": "Статус",
+        "statusDesc": "Статус публикации",
+        "images": "Изображения",
+        "imagesDesc": "Визуальный контент для вашего тура",
+        "activities": "Активности",
+        "activitiesDesc": "Конкретные активности, включенные в этот тур"
+      },
+      "fields": {
+        "tourTitle": "Название тура",
+        "tourTitlePlaceholder": "Удивительное приключение в Грузии",
+        "descriptionEN": "Описание (Английский)",
+        "descriptionENPlaceholder": "Опишите ваш тур на английском...",
+        "descriptionGE": "Описание (Грузинский)",
+        "descriptionGEPlaceholder": "ჩაწერეთ ტურის აღწერა ქართულად...",
+        "descriptionRU": "Описание (Русский)",
+        "descriptionRUPlaceholder": "Опишите ваш тур на русском...",
+        "basePrice": "Базовая цена (лари)",
+        "basePricePlaceholder": "150.00",
+        "duration": "Продолжительность (дни)",
+        "durationPlaceholder": "3",
+        "departureTime": "Время отправления",
+        "departureTimePlaceholder": "09:00",
+        "returnTime": "Время возвращения",
+        "returnTimePlaceholder": "17:00",
+        "latitude": "Широта",
+        "latitudePlaceholder": "41.715138",
+        "longitude": "Долгота",
+        "longitudePlaceholder": "44.827096",
+        "tourStatus": "Статус тура",
+        "selectStatusPlaceholder": "Выберите статус"
+      },
+      "help": {
+        "coordinatesTip": "Совет:",
+        "coordinatesDesc": "Вы можете вставить координаты Google Maps (например, \"41.715138, 44.827096\") прямо в любое поле, и оба будут автоматически заполнены.",
+        "coordinatesTitle": "Вставьте координаты Google Maps (например, '41.715138, 44.827096') в любое поле"
+      },
+      "messages": {
+        "errorSaving": "Ошибка сохранения тура",
+        "savedSuccessfully": "Тур успешно сохранен"
+      }
+    },
+    "status": {
+      "draft": "Черновик",
+      "active": "Активный",
+      "disabled": "Отключен"
+    }
+  },
+  "Pages": {
+    "about": {
+      "title": "О нас",
+      "subtitle": "Узнайте нашу историю",
+      "description": "Мы страстно увлечены созданием незабываемых туристических впечатлений, которые соединят вас с красотой и культурой Грузии.",
+      "ourMission": "Наша миссия",
+      "missionText": "Предоставление аутентичного, устойчивого и запоминающегося туристического опыта, который показывает лучшее грузинское гостеприимство и природную красоту.",
+      "ourValues": "Наши ценности",
+      "authenticity": "Аутентичность",
+      "sustainability": "Устойчивость",
+      "excellence": "Превосходство",
+      "safety": "Безопасность"
+    },
+    "contact": {
+      "title": "Свяжитесь с нами",
+      "subtitle": "Оставайтесь на связи",
+      "description": "Мы хотели бы услышать от вас. Отправьте нам сообщение, и мы ответим как можно скорее.",
+      "phoneNumber": "Номер телефона",
+      "emailAddress": "Адрес электронной почты",
+      "officeLocation": "Местоположение офиса",
+      "businessHours": "Рабочие часы",
+      "weekdays": "Понедельник - Пятница: 9:00 - 18:00",
+      "weekends": "Суббота - Воскресенье: 10:00 - 16:00",
+      "sendMessage": "Отправьте нам сообщение",
+      "name": "Имя",
+      "email": "Email",
+      "message": "Сообщение",
+      "yourName": "Ваше имя",
+      "yourEmail": "Ваш email",
+      "yourMessage": "Ваше сообщение",
+      "sendButton": "Отправить сообщение"
+    },
+    "destinations": {
+      "title": "Направления",
+      "subtitle": "Исследуйте красивые места",
+      "description": "Откройте для себя удивительные места по всей Грузии с нашими тщательно подобранными туристическими пакетами.",
+      "exploreTours": "Исследовать туры"
+    },
+    "blog": {
+      "title": "Блог",
+      "subtitle": "Истории путешествий и советы",
+      "description": "Читайте о туристическом опыте, советах и идеях от наших экспертов-гидов.",
+      "readMore": "Читать далее",
+      "publishedOn": "Опубликовано",
+      "author": "Автор",
+      "categories": "Категории"
+    }
+  },
+  "BlogCard": {
+    "defaultTitle": "Что взять с собой в поход",
+    "defaultDescription": "Необходимые предметы и советы для подготовки рюкзака к удивительному походу.",
+    "readMore": "Читать далее"
+  },
+  "Map": {
+    "loadingMapData": "Загрузка данных карты...",
+    "clickMarkerForDetails": "Нажмите на маркер тура для подробностей",
+    "showControls": "Показать управление",
+    "hideControls": "Скрыть управление",
+    "copy": "Копировать",
+    "copied": "Скопировано!",
+    "coordinates": "Координаты",
+    "up": "Вверх",
+    "down": "Вниз",
+    "left": "Влево",
+    "right": "Вправо"
+  },
+  "Common": {
+    "loading": "Загрузка...",
+    "error": "Ошибка",
+    "retry": "Повторить",
+    "close": "Закрыть",
+    "save": "Сохранить",
+    "cancel": "Отмена",
+    "delete": "Удалить",
+    "edit": "Редактировать",
+    "view": "Просмотр",
+    "search": "Поиск",
+    "filter": "Фильтр",
+    "sort": "Сортировка",
+    "next": "Следующий",
+    "previous": "Предыдущий",
+    "submit": "Отправить",
+    "reset": "Сброс"
   }
 }

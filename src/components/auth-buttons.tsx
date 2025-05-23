@@ -14,11 +14,13 @@ import { useRouter } from "@/i18n/navigation";
 import { Skeleton } from "./ui/skeleton";
 import LocaleSwitcher from "./layout/LocaleSwitcher";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function AuthButtons() {
   const auth = useAuth();
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
+  const t = useTranslations("Auth");
 
   useEffect(() => {
     setMounted(true);
@@ -60,17 +62,17 @@ export default function AuthButtons() {
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel className="font-medium">
-              Welcome, {auth.currentUser.displayName}
+              {t("welcome")}, {auth.currentUser.displayName}
             </DropdownMenuLabel>
-            <DropdownMenuItem>My Account</DropdownMenuItem>
+            <DropdownMenuItem>{t("myAccount")}</DropdownMenuItem>
             {!!auth.customClaims?.admin && (
               <DropdownMenuItem>
-                <Link href="/admin">Admin Dashboard</Link>
+                <Link href="/admin">{t("adminDashboard")}</Link>
               </DropdownMenuItem>
             )}
             {!auth.customClaims?.admin && (
               <DropdownMenuItem>
-                <Link href="/admin">My Favorite Tours</Link>
+                <Link href="/admin">{t("myFavoriteTours")}</Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem
@@ -79,17 +81,17 @@ export default function AuthButtons() {
                 router.refresh();
               }}
             >
-              Sign out
+              {t("signOut")}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       ) : (
         <>
           <Button className="">
-            <Link href="/register">Register</Link>
+            <Link href="/register">{t("register")}</Link>
           </Button>
           <Button variant="brandred">
-            <Link href="/login">Sign in</Link>
+            <Link href="/login">{t("signIn")}</Link>
           </Button>
         </>
       )}

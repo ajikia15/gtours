@@ -12,6 +12,7 @@ import MapPinIcon from "@/components/map-pin-icon";
 import { Tour } from "@/types/Tour";
 import MapTourCard from "./svg-map-card";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { useTranslations } from "next-intl";
 
 export default function InteractiveMapSection() {
   const [tours, setTours] = useState<Tour[]>([]);
@@ -23,6 +24,7 @@ export default function InteractiveMapSection() {
   const [copied, setCopied] = useState(false);
   const [showTestControls, setShowTestControls] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const t = useTranslations("Map");
 
   // Fetch tours data directly in the client component
   useEffect(() => {
@@ -87,7 +89,9 @@ export default function InteractiveMapSection() {
   const [animationParent] = useAutoAnimate();
 
   if (isLoading) {
-    return <div className="flex justify-center py-10">Loading map data...</div>;
+    return (
+      <div className="flex justify-center py-10">{t("loadingMapData")}</div>
+    );
   }
 
   return (
@@ -96,7 +100,7 @@ export default function InteractiveMapSection() {
         {selectedTour ? (
           <MapTourCard key={selectedTour.id} tour={selectedTour} />
         ) : (
-          <p className="text-gray-500">Click on a tour marker to see details</p>
+          <p className="text-gray-500">{t("clickMarkerForDetails")}</p>
         )}
       </div>
       <div className="w-2/3 relative">
@@ -110,20 +114,20 @@ export default function InteractiveMapSection() {
               onClick={() => setShowTestControls(!showTestControls)}
               className="p-2 text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md w-full transition-colors duration-200"
             >
-              {showTestControls ? "Hide Controls" : "Show Controls"}
+              {showTestControls ? t("hideControls") : t("showControls")}
             </button>
             {showTestControls && (
               <>
                 <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-750 mb-4 flex items-center w-full justify-between text-sm text-gray-700 dark:text-gray-300">
                   <span>
-                    lat: {testMarkerCoords[1].toFixed(4)}, long:
+                    {t("coordinates")}: {testMarkerCoords[1].toFixed(4)},{" "}
                     {testMarkerCoords[0].toFixed(4)}
                   </span>
                   <button
                     onClick={handleCopyToClipboard}
                     className="ml-2 p-2 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200"
                   >
-                    {copied ? "Copied!" : "Copy"}
+                    {copied ? t("copied") : t("copy")}
                   </button>
                 </div>
                 <div className="flex flex-col items-center space-y-1">
@@ -131,27 +135,27 @@ export default function InteractiveMapSection() {
                     className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                     onClick={() => moveMarker("up")}
                   >
-                    Up
+                    {t("up")}
                   </button>
                   <div className="flex">
                     <button
                       className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md mr-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                       onClick={() => moveMarker("left")}
                     >
-                      Left
+                      {t("left")}
                     </button>
                     <button
                       className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md ml-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                       onClick={() => moveMarker("right")}
                     >
-                      Right
+                      {t("right")}
                     </button>
                   </div>
                   <button
                     className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
                     onClick={() => moveMarker("down")}
                   >
-                    Down
+                    {t("down")}
                   </button>
                 </div>
               </>

@@ -4,6 +4,7 @@ import { PlusCircleIcon } from "lucide-react";
 import ToursTable from "./Tours-table";
 import { Suspense } from "react";
 import ToursTableSkeleton from "./tours-table-skeleton";
+import { getTranslations } from "next-intl/server";
 
 export default async function AdminDashboard({
   searchParams: searchParamsPromise,
@@ -14,6 +15,7 @@ export default async function AdminDashboard({
 }) {
   const searchParams = await searchParamsPromise;
   const params = await paramsPromise;
+  const t = await getTranslations("Admin.dashboard");
 
   const pageQueryParam = searchParams?.page;
   const page = pageQueryParam
@@ -25,11 +27,11 @@ export default async function AdminDashboard({
 
   return (
     <div>
-      <h1 className="text-3xl font-bold my-4 ">Admin Dashboard</h1>
+      <h1 className="text-3xl font-bold my-4 ">{t("title")}</h1>
       <Button>
         <Link href="/admin/tours/new" className="flex items-center gap-2">
           <PlusCircleIcon className="size-4 " />
-          New Tour
+          {t("newTour")}
         </Link>
       </Button>
 

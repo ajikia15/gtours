@@ -1,19 +1,226 @@
 {
   "Homepage": {
     "title": "მოგესალმებით",
-    "description": "ააააააააააააააააააააააააააააააააააა"
+    "description": "ეს არის ჩვენი აპლიკაციის მთავარი გვერდი. აქ შეგიძლიათ იპოვოთ სხვადასხვა რესურსები და ბმულები სხვა განყოფილებებზე."
   },
   "Navbar": {
     "home": "მთავარი",
     "destinations": "მიმართულებები",
     "blog": "ბლოგი",
     "aboutUs": "ჩვენს შესახებ",
-    "contact": "კონტაქტი"
+    "contact": "კონტაქტი",
+    "logo": "GTOURS"
   },
   "QuickCategory": {
-    "Hiking": "Hiking",
-    "HorseRiding": "ჯირითი",
-    "Parasailing": "Parasailing",
-    "Surfing": "Surfing"
+    "camping": "კემპინგი",
+    "hot-air-balloon": "ცხელი ჰაერის ბალონი",
+    "parachute": "პარაშუტი",
+    "ski": "სათხილამურო",
+    "water-rafting": "რაფტინგი",
+    "zip-lining": "ზიპ-ლაინი",
+    "snowmobile": "თოვლის მოტორი",
+    "horse-rider": "ჯირითი"
+  },
+  "Footer": {
+    "logo": "GTOURS",
+    "description": "გამოსცადეთ დაუვიწყარი თავგადასავლები ჩვენს ყურადღეებით შერჩეულ ტურებთან.",
+    "contact": "კონტაქტი",
+    "socialMedia": "სოციალური მედია",
+    "partners": "პარტნიორები",
+    "aboutUs": "ჩვენს შესახებ",
+    "privacyPolicy": "კონფიდენციალურობის პოლიტიკა",
+    "termsOfService": "მომსახურების პირობები",
+    "customerSupport": "მომხმარებელთა მხარდაჭერა",
+    "phoneNumber": "ტელეფონის ნომერი",
+    "emailAddress": "ელექტრონული ფოსტა",
+    "facebook": "ფეისბუქი",
+    "instagram": "ინსტაგრამი",
+    "twitter": "ტვიტერი",
+    "youtube": "იუთუბი",
+    "localPartners": "ადგილობრივი პარტნიორები",
+    "tourOperators": "ტურ ოპერატორები",
+    "hotelPartners": "სასტუმრო პარტნიორები",
+    "transportPartners": "ტრანსპორტის პარტნიორები"
+  },
+  "Auth": {
+    "welcome": "მოგესალმებით",
+    "myAccount": "ჩემი ანგარიში",
+    "adminDashboard": "ადმინისტრატორის პანელი",
+    "myFavoriteTours": "ჩემი რჩეული ტურები",
+    "signOut": "გასვლა",
+    "register": "რეგისტრაცია",
+    "signIn": "შესვლა",
+    "continueWithGoogle": "Google-ით გაგრძელება"
+  },
+  "Admin": {
+    "dashboard": {
+      "title": "ადმინისტრატორის პანელი",
+      "newTour": "ახალი ტური",
+      "tours": "ტურები",
+      "noToursFound": "ტურები ვერ მოიძებნა"
+    },
+    "table": {
+      "title": "სათაური",
+      "location": "მდებარეობა",
+      "duration": "ხანგრძლივობა",
+      "price": "ფასი",
+      "status": "სტატუსი",
+      "actions": "ქმედებები",
+      "noCoordinates": "კოორდინატები არ არის",
+      "days": "დღე",
+      "view": "ნახვა",
+      "edit": "რედაქტირება",
+      "delete": "წაშლა"
+    },
+    "breadcrumbs": {
+      "adminDashboard": "ადმინისტრატორის პანელი",
+      "tours": "ტურები",
+      "newTour": "ახალი ტური",
+      "editTour": "ტურის რედაქტირება"
+    },
+    "tourForm": {
+      "newTour": "ახალი ტური",
+      "editTour": "ტურის რედაქტირება",
+      "createTour": "ტურის შექმნა",
+      "updateTour": "ტურის განახლება",
+      "sections": {
+        "basicInformation": "ძირითადი ინფორმაცია",
+        "basicInformationDesc": "თქვენი ტურის არსებითი დეტალები",
+        "pricingDuration": "ფასი და ხანგრძლივობა",
+        "pricingDurationDesc": "ბიზნეს დეტალები და ტურის ხანგრძლივობა",
+        "schedule": "განრიგი",
+        "scheduleDesc": "ტურის დროის დეტალები",
+        "location": "მდებარეობა",
+        "locationDesc": "ტურის მთავარი უბნის კოორდინატები",
+        "status": "სტატუსი",
+        "statusDesc": "გამოქვეყნების სტატუსი",
+        "images": "სურათები",
+        "imagesDesc": "ვიზუალური კონტენტი თქვენი ტურისთვის",
+        "activities": "აქტივობები",
+        "activitiesDesc": "ამ ტურში შეტანილი კონკრეტული აქტივობები"
+      },
+      "fields": {
+        "tourTitle": "ტურის სათაური",
+        "tourTitlePlaceholder": "საოცარი საქართველოს თავგადასავალი",
+        "descriptionEN": "აღწერა (ინგლისური)",
+        "descriptionENPlaceholder": "აღწერეთ თქვენი ტური ინგლისურად...",
+        "descriptionGE": "აღწერა (ქართული)",
+        "descriptionGEPlaceholder": "ჩაწერეთ ტურის აღწერა ქართულად...",
+        "descriptionRU": "აღწერა (რუსული)",
+        "descriptionRUPlaceholder": "აღწერეთ თქვენი ტური რუსულად...",
+        "basePrice": "ძირითადი ფასი (ლარი)",
+        "basePricePlaceholder": "150.00",
+        "duration": "ხანგრძლივობა (დღე)",
+        "durationPlaceholder": "3",
+        "departureTime": "გასვლის დრო",
+        "departureTimePlaceholder": "09:00",
+        "returnTime": "დაბრუნების დრო",
+        "returnTimePlaceholder": "17:00",
+        "latitude": "განედი",
+        "latitudePlaceholder": "41.715138",
+        "longitude": "გრძედი",
+        "longitudePlaceholder": "44.827096",
+        "tourStatus": "ტურის სტატუსი",
+        "selectStatusPlaceholder": "აირჩიეთ სტატუსი"
+      },
+      "help": {
+        "coordinatesTip": "რჩევა:",
+        "coordinatesDesc": "შეგიძლიათ ჩასვით Google Maps-ის კოორდინატები (მაგ., \"41.715138, 44.827096\") პირდაპირ ორივე ველში და ორივე ავტომატურად ევსება.",
+        "coordinatesTitle": "ჩასვით Google Maps-ის კოორდინატები (მაგ., '41.715138, 44.827096') ნებისმიერ ველში"
+      },
+      "messages": {
+        "errorSaving": "შეცდომა ტურის შენახვისას",
+        "savedSuccessfully": "ტური წარმატებით შეინახა"
+      }
+    },
+    "status": {
+      "draft": "შედუღება",
+      "active": "აქტიური",
+      "disabled": "გათიშული"
+    }
+  },
+  "Pages": {
+    "about": {
+      "title": "ჩვენს შესახებ",
+      "subtitle": "გაიცანით ჩვენი ისტორია",
+      "description": "ჩვენ ვაქვთ ნატვრა შევქმნათ დაუვიწყარი მოგზაურობის გამოცდილება, რომელიც დაგაკავშირებთ საქართველოს სილამაზესთან და კულტურასთან.",
+      "ourMission": "ჩვენი მისია",
+      "missionText": "ავთენტური, მდგრადი და დაუვიწყარი ტურისტული გამოცდილების უზრუნველყოფა, რომელიც აჩვენებს ქართული სტუმარმასპინძლობისა და ბუნებრივი სილამაზის საუკეთესოს.",
+      "ourValues": "ჩვენი ღირებულებები",
+      "authenticity": "ავთენტურობა",
+      "sustainability": "მდგრადობა",
+      "excellence": "სრულყოფილება",
+      "safety": "უსაფრთხოება"
+    },
+    "contact": {
+      "title": "დაგვიკავშირდით",
+      "subtitle": "მოგვწერეთ",
+      "description": "ჩვენ გვინდა გავიგოთ თქვენგან. გამოგვიგზავნეთ შეტყობინება და ჩვენ უპასუხებთ რაც შეიძლება მალე.",
+      "phoneNumber": "ტელეფონის ნომერი",
+      "emailAddress": "ელექტრონული ფოსტა",
+      "officeLocation": "ოფისის მდებარეობა",
+      "businessHours": "სამუშაო საათები",
+      "weekdays": "ორშაბათი - პარასკევი: 9:00 - 18:00",
+      "weekends": "შაბათი - კვირა: 10:00 - 16:00",
+      "sendMessage": "გამოგვიგზავნეთ შეტყობინება",
+      "name": "სახელი",
+      "email": "ელ-ფოსტა",
+      "message": "შეტყობინება",
+      "yourName": "თქვენი სახელი",
+      "yourEmail": "თქვენი ელ-ფოსტა",
+      "yourMessage": "თქვენი შეტყობინება",
+      "sendButton": "შეტყობინების გაგზავნა"
+    },
+    "destinations": {
+      "title": "მიმართულებები",
+      "subtitle": "გამოიკვლიეთ ლამაზი ადგილები",
+      "description": "აღმოაჩინეთ საოცარი ადგილები საქართველოს მასშტაბით ჩვენი ყურადღეებით შექმნილი ტურისტული პაკეტებით.",
+      "exploreTours": "ტურების გამოკვლევა"
+    },
+    "blog": {
+      "title": "ბლოგი",
+      "subtitle": "მოგზაურობის ისტორიები და რჩევები",
+      "description": "წაიკითხეთ მოგზაურობის გამოცდილება, რჩევები და ღირსშესანიშნაო ინფორმაცია ჩვენი ექსპერტი გიდებისგან.",
+      "readMore": "სრულად წაკითხვა",
+      "publishedOn": "გამოქვეყნებული",
+      "author": "ავტორი",
+      "categories": "კატეგორიები"
+    }
+  },
+  "BlogCard": {
+    "defaultTitle": "რა უნდა მოიწყოს სალაშქრო ჩანთაში",
+    "defaultDescription": "საჭირო ნივთები და რჩევები თქვენი ზურგჩანთის მოსამზადებლად საოცარი ლაშქრობისთვის.",
+    "readMore": "წაიკითხე ბოლომდე"
+  },
+  "Map": {
+    "loadingMapData": "რუქის მონაცემების ჩატვირთვა...",
+    "clickMarkerForDetails": "დააჭირეთ ტურის მარკერს დეტალების სანახავად",
+    "showControls": "კონტროლის ჩვენება",
+    "hideControls": "კონტროლის დამალვა",
+    "copy": "კოპირება",
+    "copied": "კოპირებულია!",
+    "coordinates": "კოორდინატები",
+    "up": "ზემოთ",
+    "down": "ქვემოთ",
+    "left": "მარცხნივ",
+    "right": "მარჯვნივ"
+  },
+  "Common": {
+    "loading": "იტვირთება...",
+    "error": "შეცდომა",
+    "retry": "ხელმეორედ ცდა",
+    "close": "დახურვა",
+    "save": "შენახვა",
+    "cancel": "გაუქმება",
+    "delete": "წაშლა",
+    "edit": "რედაქტირება",
+    "view": "ნახვა",
+    "search": "ძიება",
+    "filter": "ფილტრი",
+    "sort": "დახარისხება",
+    "next": "შემდეგი",
+    "previous": "წინა",
+    "submit": "გაგზავნა",
+    "reset": "დაბრუნება"
   }
 }

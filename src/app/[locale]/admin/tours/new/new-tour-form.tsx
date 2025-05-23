@@ -9,9 +9,13 @@ import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { ref, uploadBytesResumable, UploadTask } from "@firebase/storage";
 import { storage } from "@/firebase/client";
+import { useTranslations } from "next-intl";
+
 export default function NewTourForm() {
   const auth = useAuth();
   const router = useRouter();
+  const t = useTranslations("Admin.tourForm");
+
   async function handleSubmit(data: z.infer<typeof tourSchema>) {
     const token = await auth?.currentUser?.getIdToken();
 
@@ -21,7 +25,7 @@ export default function NewTourForm() {
     const { images, ...rest } = data;
     const response = await saveNewTour(rest, token);
     if (!!response.error || !response.tourId) {
-      toast.error("Error saving tour");
+      toast.error(t("messages.errorSaving"));
       return;
     }
 
@@ -47,7 +51,7 @@ export default function NewTourForm() {
       token
     );
     if (response?.success) {
-      toast.success("Tour saved successfully");
+      toast.success(t("messages.savedSuccessfully"));
       router.push("/admin"); // TODO: redirect to the new tour
     }
   }
@@ -58,7 +62,7 @@ export default function NewTourForm() {
         submitButtonLabel={
           <>
             <CirclePlusIcon className="size-4" />
-            Create Tour
+            {t("createTour")}
           </>
         }
       />

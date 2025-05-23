@@ -25,6 +25,7 @@ import {
 import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
 import ActivityManager from "./activity-manager";
 import { useCoordinatePaste } from "@/lib/useCoordinatePaste";
+import { useTranslations } from "next-intl";
 
 // Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourSchema>;
@@ -40,6 +41,8 @@ export default function TourForm({
   submitButtonLabel,
   defaultValues,
 }: Props) {
+  const t = useTranslations("Admin.tourForm");
+
   const combinedDefaultValues: z.infer<typeof tourSchema> = {
     ...defaultValues,
     title: defaultValues?.title || "",
@@ -73,10 +76,10 @@ export default function TourForm({
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
             <h3 className="text-lg font-medium text-gray-900">
-              Basic Information
+              {t("sections.basicInformation")}
             </h3>
             <p className="text-sm text-gray-500">
-              Essential details about your tour
+              {t("sections.basicInformationDesc")}
             </p>
           </div>
 
@@ -85,9 +88,12 @@ export default function TourForm({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Tour Title</FormLabel>
+                <FormLabel>{t("fields.tourTitle")}</FormLabel>
                 <FormControl>
-                  <Input {...field} placeholder="Amazing Georgia Adventure" />
+                  <Input
+                    {...field}
+                    placeholder={t("fields.tourTitlePlaceholder")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -100,12 +106,12 @@ export default function TourForm({
               name="descriptionEN"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description (English)</FormLabel>
+                  <FormLabel>{t("fields.descriptionEN")}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       rows={3}
-                      placeholder="Describe your tour in English..."
+                      placeholder={t("fields.descriptionENPlaceholder")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -117,12 +123,12 @@ export default function TourForm({
               name="descriptionGE"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description (Georgian)</FormLabel>
+                  <FormLabel>{t("fields.descriptionGE")}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       rows={3}
-                      placeholder="ჩაწერეთ ტურის აღწერა ქართულად..."
+                      placeholder={t("fields.descriptionGEPlaceholder")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -134,12 +140,12 @@ export default function TourForm({
               name="descriptionRU"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Description (Russian)</FormLabel>
+                  <FormLabel>{t("fields.descriptionRU")}</FormLabel>
                   <FormControl>
                     <Textarea
                       {...field}
                       rows={3}
-                      placeholder="Опишите ваш тур на русском..."
+                      placeholder={t("fields.descriptionRUPlaceholder")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -153,10 +159,10 @@ export default function TourForm({
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
             <h3 className="text-lg font-medium text-gray-900">
-              Pricing & Duration
+              {t("sections.pricingDuration")}
             </h3>
             <p className="text-sm text-gray-500">
-              Business details and tour length
+              {t("sections.pricingDurationDesc")}
             </p>
           </div>
 
@@ -166,14 +172,14 @@ export default function TourForm({
               name="basePrice"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Base Price (GEL)</FormLabel>
+                  <FormLabel>{t("fields.basePrice")}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
                       type="number"
                       min={0}
                       step={0.01}
-                      placeholder="150.00"
+                      placeholder={t("fields.basePricePlaceholder")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -186,9 +192,14 @@ export default function TourForm({
               name="duration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Duration (days)</FormLabel>
+                  <FormLabel>{t("fields.duration")}</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" min={1} placeholder="3" />
+                    <Input
+                      {...field}
+                      type="number"
+                      min={1}
+                      placeholder={t("fields.durationPlaceholder")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -200,8 +211,12 @@ export default function TourForm({
         {/* 3. SCHEDULE */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
-            <h3 className="text-lg font-medium text-gray-900">Schedule</h3>
-            <p className="text-sm text-gray-500">Tour timing details</p>
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("sections.schedule")}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {t("sections.scheduleDesc")}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -210,9 +225,12 @@ export default function TourForm({
               name="leaveTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Departure Time</FormLabel>
+                  <FormLabel>{t("fields.departureTime")}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="09:00" />
+                    <Input
+                      {...field}
+                      placeholder={t("fields.departureTimePlaceholder")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -224,9 +242,12 @@ export default function TourForm({
               name="returnTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Return Time</FormLabel>
+                  <FormLabel>{t("fields.returnTime")}</FormLabel>
                   <FormControl>
-                    <Input {...field} placeholder="17:00" />
+                    <Input
+                      {...field}
+                      placeholder={t("fields.returnTimePlaceholder")}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -238,8 +259,12 @@ export default function TourForm({
         {/* 4. LOCATION */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
-            <h3 className="text-lg font-medium text-gray-900">Location</h3>
-            <p className="text-sm text-gray-500">Main tour area coordinates</p>
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("sections.location")}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {t("sections.locationDesc")}
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -248,7 +273,7 @@ export default function TourForm({
               name="coordinates.0"
               render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
-                  <FormLabel>Latitude</FormLabel>
+                  <FormLabel>{t("fields.latitude")}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -259,8 +284,8 @@ export default function TourForm({
                         onChange(e.target.value ? Number(e.target.value) : 0)
                       }
                       onPaste={(e) => handlePaste(e, true)}
-                      placeholder="41.715138"
-                      title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                      placeholder={t("fields.latitudePlaceholder")}
+                      title={t("help.coordinatesTitle")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -273,7 +298,7 @@ export default function TourForm({
               name="coordinates.1"
               render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
-                  <FormLabel>Longitude</FormLabel>
+                  <FormLabel>{t("fields.longitude")}</FormLabel>
                   <FormControl>
                     <Input
                       {...field}
@@ -284,8 +309,8 @@ export default function TourForm({
                         onChange(e.target.value ? Number(e.target.value) : 0)
                       }
                       onPaste={(e) => handlePaste(e, false)}
-                      placeholder="44.827096"
-                      title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                      placeholder={t("fields.longitudePlaceholder")}
+                      title={t("help.coordinatesTitle")}
                     />
                   </FormControl>
                   <FormMessage />
@@ -299,9 +324,8 @@ export default function TourForm({
             <div className="flex items-start">
               <div className="text-blue-500 mr-2">💡</div>
               <div className="text-sm text-blue-700">
-                <strong>Tip:</strong> You can paste Google Maps coordinates
-                (e.g., "41.715138, 44.827096") directly into either field and
-                both will be automatically filled.
+                <strong>{t("help.coordinatesTip")}</strong>{" "}
+                {t("help.coordinatesDesc")}
               </div>
             </div>
           </div>
@@ -310,8 +334,10 @@ export default function TourForm({
         {/* 5. ADMINISTRATIVE */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
-            <h3 className="text-lg font-medium text-gray-900">Status</h3>
-            <p className="text-sm text-gray-500">Publication status</p>
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("sections.status")}
+            </h3>
+            <p className="text-sm text-gray-500">{t("sections.statusDesc")}</p>
           </div>
 
           <FormField
@@ -319,14 +345,16 @@ export default function TourForm({
             name="status"
             render={({ field }) => (
               <FormItem className="max-w-xs">
-                <FormLabel>Tour Status</FormLabel>
+                <FormLabel>{t("fields.tourStatus")}</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a status" />
+                      <SelectValue
+                        placeholder={t("fields.selectStatusPlaceholder")}
+                      />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
@@ -346,10 +374,10 @@ export default function TourForm({
         {/* 6. VISUAL CONTENT */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
-            <h3 className="text-lg font-medium text-gray-900">Images</h3>
-            <p className="text-sm text-gray-500">
-              Visual content for your tour
-            </p>
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("sections.images")}
+            </h3>
+            <p className="text-sm text-gray-500">{t("sections.imagesDesc")}</p>
           </div>
 
           <FormField
@@ -382,9 +410,11 @@ export default function TourForm({
         {/* 7. ACTIVITIES */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
-            <h3 className="text-lg font-medium text-gray-900">Activities</h3>
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("sections.activities")}
+            </h3>
             <p className="text-sm text-gray-500">
-              Specific activities included in this tour
+              {t("sections.activitiesDesc")}
             </p>
           </div>
 

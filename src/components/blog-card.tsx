@@ -1,5 +1,9 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+
 export default function BlogCard() {
+  const t = useTranslations("BlogCard");
+
   return (
     <div className="flex w-full flex-col gap-6 mb-20">
       <div className="flex">
@@ -25,16 +29,10 @@ export default function BlogCard() {
         </ul>
       </div>
       <div className="flex w-4/5 flex-col gap-4 px-6">
-        <h2 className="text-xl font-bold text-zinc-800">
-          რა უნდა მეწყოს სალაშქრო ჩანთაში
-        </h2>
-        <p className="line-clamp-3">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Expedita
-          deserunt totam neque, culpa fugiat excepturi sunt enim vitae
-          repellendus nisi?
-        </p>
+        <h2 className="text-xl font-bold text-zinc-800">{t("defaultTitle")}</h2>
+        <p className="line-clamp-3">{t("defaultDescription")}</p>
         <p className="text-sm font-semibold text-red-500">
-          წაიკითხე ბოლომდე &gt;
+          {t("readMore")} &gt;
         </p>
       </div>
     </div>

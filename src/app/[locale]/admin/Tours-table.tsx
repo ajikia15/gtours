@@ -20,6 +20,7 @@ import {
 import { Link } from "@/i18n/navigation";
 import { Eye, Pencil, Trash } from "lucide-react";
 import TourStatusBadge from "@/components/tour-status-badge";
+import { getTranslations } from "next-intl/server";
 
 export default async function ToursTable({
   page = 1,
@@ -31,6 +32,7 @@ export default async function ToursTable({
   // Ensure params is awaited
   const resolvedParams = await Promise.resolve(params);
   const locale = resolvedParams.locale;
+  const t = await getTranslations("Admin");
 
   const { data, totalPages } = await getTours({
     pagination: {
@@ -42,19 +44,21 @@ export default async function ToursTable({
     <>
       {!data?.length && (
         <div className="flex items-center justify-center h-full">
-          <p className="text-sm text-muted-foreground">No tours found</p>
+          <p className="text-sm text-muted-foreground">
+            {t("dashboard.noToursFound")}
+          </p>
         </div>
       )}
       {data?.length && (
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Title</TableHead>
-              <TableHead>Location</TableHead>
-              <TableHead>Duration</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Actions</TableHead>
+              <TableHead>{t("table.title")}</TableHead>
+              <TableHead>{t("table.location")}</TableHead>
+              <TableHead>{t("table.duration")}</TableHead>
+              <TableHead>{t("table.price")}</TableHead>
+              <TableHead>{t("table.status")}</TableHead>
+              <TableHead>{t("table.actions")}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -64,26 +68,28 @@ export default async function ToursTable({
                 <TableCell>
                   {tour.coordinates
                     ? `${tour.coordinates[0]}, ${tour.coordinates[1]}`
-                    : "No coordinates"}
+                    : t("table.noCoordinates")}
                 </TableCell>
-                <TableCell>{tour.duration} Days</TableCell>
+                <TableCell>
+                  {tour.duration} {t("table.days")}
+                </TableCell>
                 <TableCell>{tour.basePrice}</TableCell>
                 <TableCell>
                   <TourStatusBadge status={tour.status} />
                 </TableCell>
                 <TableCell className="flex items-center gap-1">
                   <Link href={`/tour/${tour.id}`}>
-                    <Button variant="outline">
+                    <Button variant="outline" title={t("table.view")}>
                       <Eye />
                     </Button>
                   </Link>
                   <Link href={`/admin/tours/edit/${tour.id}`}>
-                    <Button variant="outline">
+                    <Button variant="outline" title={t("table.edit")}>
                       <Pencil />
                     </Button>
                   </Link>
 
-                  <Button variant="outline">
+                  <Button variant="outline" title={t("table.delete")}>
                     <Trash />
                   </Button>
                 </TableCell>
