@@ -42,13 +42,13 @@ export default async function TourPage({
               tourTitle={tour.title}
             />
           </div>
-          <TourActivitiesSection activities={tour.offeredActivities} />
+          <TourSuggestions />
         </div>
         <div className="sticky top-22 flex-1">
           <Suspense fallback={<TourDetailsCardSkeleton />}>
             <TourDetailsCard tour={tour} />
           </Suspense>
-          <TourSuggestions />
+          <TourActivitiesSection activities={tour.offeredActivities} />
         </div>
       </div>
     </div>

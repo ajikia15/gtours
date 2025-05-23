@@ -71,19 +71,18 @@ const getHueRotation = (hexColor: string): number => {
 // Custom marker component
 const createCustomIcon = (
   icon: React.ReactElement,
-  className: string = "activity-marker",
-  color: string = "#10B981"
+  className: string = "activity-marker"
 ) => {
   return new DivIcon({
     html: renderToString(
-      <div className={className} style={{ backgroundColor: color }}>
+      <div className={`activity-marker ${className} bg-brand-secondary`}>
         {icon}
       </div>
     ),
     className: "custom-div-icon",
-    iconSize: [32, 32],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
+    iconSize: [64, 64],
+    iconAnchor: [32, 64],
+    popupAnchor: [0, -64],
   });
 };
 
@@ -158,19 +157,17 @@ TourMapSectionProps) {
         scrollWheelZoom={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png"
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
+          url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           minZoom={0}
-          maxZoom={20}
+          maxZoom={19}
         />
 
         {/* Activity markers */}
         {activities.map((activity, index) => {
           const activityColor = getActivityColor(activity.activityTypeId);
           const activityIcon = createCustomIcon(
-            getActivityIcon(activity.activityTypeId),
-            "activity-marker",
-            activityColor
+            getActivityIcon(activity.activityTypeId, undefined, 26)
           );
 
           return (

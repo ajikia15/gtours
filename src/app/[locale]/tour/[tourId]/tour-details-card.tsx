@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 export default function TourDetailsCard({ tour }: { tour: Tour }) {
   return (
-    <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-lg w-full min-w-84">
+    <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-sm w-full min-w-84 border border-gray-100">
       <h3 className="text-xl font-semibold text-center">Tour Details</h3>
       <div className="flex flex-col gap-3">
         {tour.coordinates && (
