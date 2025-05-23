@@ -26,7 +26,7 @@ import {
 import { Input } from "./ui/input";
 import { Trash2, Plus, MoveIcon } from "lucide-react";
 import Image from "next/image";
-import { ACTIVITY_TYPES } from "@/data/activity-constants";
+import { activityTypes } from "@/data/activity-constants";
 import { z } from "zod";
 import { tourSchema } from "@/validation/tourSchema";
 import { useCoordinatePaste } from "@/lib/useCoordinatePaste";
@@ -55,7 +55,7 @@ export default function ActivityManager({ control, disabled = false }: Props) {
   const addActivity = () => {
     if (!selectedActivityType) return;
 
-    const activityType = ACTIVITY_TYPES.find(
+    const activityType = activityTypes.find(
       (at) => at.id === selectedActivityType
     );
     if (!activityType) return;
@@ -97,7 +97,7 @@ export default function ActivityManager({ control, disabled = false }: Props) {
               <div className="relative w-5 h-5">
                 <Image
                   src={`/${
-                    ACTIVITY_TYPES.find((at) => at.id === field.activityTypeId)
+                    activityTypes.find((at) => at.id === field.activityTypeId)
                       ?.pngFileName
                   }.png`}
                   alt={field.nameSnapshot}
@@ -140,7 +140,7 @@ export default function ActivityManager({ control, disabled = false }: Props) {
               <SelectValue placeholder="Select activity type" />
             </SelectTrigger>
             <SelectContent>
-              {ACTIVITY_TYPES.map((activityType) => (
+              {activityTypes.map((activityType) => (
                 <SelectItem key={activityType.id} value={activityType.id}>
                   <div className="flex items-center gap-2">
                     <div className="relative w-4 h-4">
@@ -201,7 +201,7 @@ export default function ActivityManager({ control, disabled = false }: Props) {
                               <div className="relative w-5 h-5">
                                 <Image
                                   src={`/${
-                                    ACTIVITY_TYPES.find(
+                                    activityTypes.find(
                                       (at) => at.id === field.activityTypeId
                                     )?.pngFileName
                                   }.png`}

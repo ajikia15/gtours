@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ActivityCarousel } from "./ActivityCarousel";
-import { ACTIVITY_TYPES } from "@/data/activity-constants";
+import { activityTypes } from "@/data/activity-constants";
 
 type QuickCategoryProps = {
   className?: string;
@@ -11,7 +11,7 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
   const t = useTranslations("QuickCategory");
 
   // Use all available activity types
-  const activities = ACTIVITY_TYPES;
+  const activities = activityTypes;
 
   return (
     <ActivityCarousel className={className}>

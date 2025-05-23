@@ -1,5 +1,5 @@
 // Activity types constants - these match the available PNG icons
-export const ACTIVITY_TYPES = [
+export const activityTypes = [
   {
     id: "camping",
     name: "Camping",
@@ -42,4 +42,4 @@ export const ACTIVITY_TYPES = [
   },
 ] as const;
 
-export type ActivityTypeConstant = (typeof ACTIVITY_TYPES)[number];
+export type ActivityTypeConstant = (typeof activityTypes)[number];

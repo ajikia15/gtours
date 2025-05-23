@@ -6,11 +6,12 @@ import { OfferedActivity } from "@/types/Activity";
 import { Coordinates } from "@/validation/tourSchema";
 import { renderToString } from "react-dom/server";
 import { Activity } from "lucide-react";
-import { ACTIVITY_TYPES } from "@/data/activity-constants";
+import { activityTypes } from "@/data/activity-constants";
 
 // Fix for default markers in React Leaflet
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { getActivityIcon } from "@/lib/imageHelpers";
 
 // Fix for default markers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -27,30 +28,10 @@ interface TourMapSectionProps {
 }
 
 // Get icon based on activity type
-const getActivityIcon = (activityTypeId: string) => {
-  const activityType = ACTIVITY_TYPES.find((at) => at.id === activityTypeId);
-
-  if (activityType) {
-    return (
-      <img
-        src={`/${activityType.pngFileName}.png`}
-        alt={activityType.name}
-        style={{
-          width: "16px",
-          height: "16px",
-          filter: "brightness(0) invert(1)",
-        }}
-      />
-    );
-  }
-
-  // Fallback to Activity icon for unknown types
-  return <Activity size={16} />;
-};
 
 // Get icon for popup (colored version)
 const getActivityIconForPopup = (activityTypeId: string, color: string) => {
-  const activityType = ACTIVITY_TYPES.find((at) => at.id === activityTypeId);
+  const activityType = activityTypes.find((at) => at.id === activityTypeId);
 
   if (activityType) {
     return (
