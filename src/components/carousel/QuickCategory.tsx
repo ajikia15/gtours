@@ -36,7 +36,7 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
           {index < activities.length - 1 && (
             <div
               key={`${index}_separator`}
-              className="w-px bg-gray-300 h-10 sm:h-12 md:h-14 lg:h-16 my-auto"
+              className="w-[2px] bg-gray-200 h-10 sm:h-12 md:h-14 lg:h-18 my-auto"
             ></div>
           )}
         </React.Fragment>

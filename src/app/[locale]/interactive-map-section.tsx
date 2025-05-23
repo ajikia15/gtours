@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import {
   ComposableMap,
   Geographies,
@@ -11,6 +11,7 @@ import geoData from "@/../public/gadm41_GEO_1.json";
 import MapPinIcon from "@/components/map-pin-icon";
 import { Tour } from "@/types/Tour";
 import MapTourCard from "./svg-map-card";
+import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useTranslations } from "next-intl";
 
@@ -88,20 +89,20 @@ export default function InteractiveMapSection() {
   }
   const [animationParent] = useAutoAnimate();
 
-  if (isLoading) {
-    return (
-      <div className="flex justify-center py-10">{t("loadingMapData")}</div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex justify-center py-10">{t("loadingMapData")}</div>
+  //   );
+  // }
 
   return (
     <div className="flex">
       <div className="w-1/3 h-full p-4" ref={animationParent}>
-        {selectedTour ? (
+        {isLoading ? (
+          <MapTourCardSkeleton key={1} />
+        ) : selectedTour ? (
           <MapTourCard key={selectedTour.id} tour={selectedTour} />
-        ) : (
-          <p className="text-gray-500">{t("clickMarkerForDetails")}</p>
-        )}
+        ) : null}
       </div>
       <div className="w-2/3 relative">
         {testMode && (
