@@ -11,10 +11,14 @@
     "contact": "Contact"
   },
   "QuickCategory": {
-    "HorseRiding": "Horse Riding",
-    "Hiking": "Hiking",
-    "Surfing": "Surfing",
-    "Parasailing": "Parasailing"
+    "camping": "Camping",
+    "hot-air-balloon": "Hot Air Balloon",
+    "parachute": "Parachute",
+    "ski": "Skiing",
+    "water-rafting": "Water Rafting",
+    "zip-lining": "Zip Lining",
+    "snowmobile": "Snowmobile",
+    "horse-rider": "Horse Riding"
   },
   "AdminNewActivityTypePage": {
     "breadcrumbs": {

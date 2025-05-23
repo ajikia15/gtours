@@ -65,10 +65,13 @@ export default function EditActivityTypeForm({ activityType }: Props) {
           </>
         }
         defaultValues={{
+          id: activityType.id,
           name: activityType.name,
+          pngFileName: activityType.pngFileName,
           genericDescription: activityType.genericDescription,
-          icon: activityType.icon,
+          isActive: activityType.isActive,
         }}
+        isEdit={true}
         isSubmitting={isSubmitting}
       />
     </div>

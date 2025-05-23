@@ -25,17 +25,53 @@ import {
 import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
 import { useState } from "react";
 import { Trash2, Plus } from "lucide-react";
+import Image from "next/image";
 
 // Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourSchema>;
 
 // Mock activity types - this should come from your database
 const ACTIVITY_TYPES = [
-  { id: "skiing", name: "Skiing", icon: "⛷️" },
-  { id: "horse-riding", name: "Horse Riding", icon: "🐎" },
-  { id: "air-balloon", name: "Air Balloon", icon: "🎈" },
-  { id: "hiking", name: "Hiking", icon: "🥾" },
-  { id: "wine-tasting", name: "Wine Tasting", icon: "🍷" },
+  {
+    id: "camping",
+    name: "Camping",
+    pngFileName: "camping" as const,
+  },
+  {
+    id: "hot-air-balloon",
+    name: "Hot Air Balloon",
+    pngFileName: "hot-air-balloon" as const,
+  },
+  {
+    id: "parachute",
+    name: "Parachute",
+    pngFileName: "parachute" as const,
+  },
+  {
+    id: "ski",
+    name: "Skiing",
+    pngFileName: "ski" as const,
+  },
+  {
+    id: "water-rafting",
+    name: "Water Rafting",
+    pngFileName: "water-rafting" as const,
+  },
+  {
+    id: "zip-lining",
+    name: "Zip Lining",
+    pngFileName: "zip-lining" as const,
+  },
+  {
+    id: "snowmobile",
+    name: "Snowmobile",
+    pngFileName: "snowmobile" as const,
+  },
+  {
+    id: "horse-rider",
+    name: "Horse Riding",
+    pngFileName: "horse-rider" as const,
+  },
 ];
 
 type Props = {
@@ -321,7 +357,17 @@ export default function TourForm({
                 <SelectContent>
                   {ACTIVITY_TYPES.map((activityType) => (
                     <SelectItem key={activityType.id} value={activityType.id}>
-                      {activityType.icon} {activityType.name}
+                      <div className="flex items-center gap-2">
+                        <div className="relative w-4 h-4">
+                          <Image
+                            src={`/${activityType.pngFileName}.png`}
+                            alt={activityType.name}
+                            fill
+                            style={{ objectFit: "contain" }}
+                          />
+                        </div>
+                        {activityType.name}
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -348,11 +394,18 @@ export default function TourForm({
                 >
                   <div className="flex items-center justify-between">
                     <h4 className="font-medium flex items-center gap-2">
-                      {
-                        ACTIVITY_TYPES.find(
-                          (at) => at.id === field.activityTypeId
-                        )?.icon
-                      }
+                      <div className="relative w-5 h-5">
+                        <Image
+                          src={`/${
+                            ACTIVITY_TYPES.find(
+                              (at) => at.id === field.activityTypeId
+                            )?.pngFileName
+                          }.png`}
+                          alt={field.nameSnapshot}
+                          fill
+                          style={{ objectFit: "contain" }}
+                        />
+                      </div>
                       {field.nameSnapshot}
                     </h4>
                     <Button

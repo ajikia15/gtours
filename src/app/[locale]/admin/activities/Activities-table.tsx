@@ -14,6 +14,8 @@ import { Link } from "@/i18n/navigation";
 import { Pencil, Trash } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { ActivityType } from "@/types/Activity"; // Import ActivityType
+import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 
 // TODO: Implement pagination in getAllActivityTypes and re-enable here
 export default async function ActivitiesTable({
@@ -43,29 +45,50 @@ export default async function ActivitiesTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{t("nameHeader")}</TableHead>
-              <TableHead>{t("descriptionHeader")}</TableHead>
-              <TableHead>{t("iconHeader")}</TableHead>
-              <TableHead>{t("actionsHeader")}</TableHead>
+              <TableHead>Icon</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>ID (Translation Key)</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {activityTypes.map((activityType) => (
               <TableRow key={activityType.id}>
-                <TableCell>{activityType.name}</TableCell>
                 <TableCell>
-                  {activityType.genericDescription || "N/A"}
+                  {activityType.pngFileName ? (
+                    <div className="relative h-8 w-8">
+                      <Image
+                        src={`/${activityType.pngFileName}.png`}
+                        alt={activityType.name}
+                        fill
+                        style={{ objectFit: "contain" }}
+                      />
+                    </div>
+                  ) : (
+                    <div className="h-8 w-8 bg-gray-200 rounded flex items-center justify-center text-xs text-gray-500">
+                      N/A
+                    </div>
+                  )}
+                </TableCell>
+                <TableCell className="font-medium">
+                  {activityType.name}
                 </TableCell>
                 <TableCell>
-                  {activityType.icon ? (
-                    <img
-                      src={activityType.icon}
-                      alt={activityType.name}
-                      className="h-8 w-8 object-cover"
-                    />
-                  ) : (
-                    "N/A"
-                  )}
+                  <code className="text-xs bg-gray-100 px-2 py-1 rounded">
+                    {activityType.id}
+                  </code>
+                </TableCell>
+                <TableCell className="max-w-xs truncate">
+                  {activityType.genericDescription || "No description"}
+                </TableCell>
+                <TableCell>
+                  <Badge
+                    variant={activityType.isActive ? "default" : "secondary"}
+                  >
+                    {activityType.isActive ? "Active" : "Inactive"}
+                  </Badge>
                 </TableCell>
                 <TableCell className="flex items-center gap-1">
                   {/* Edit link */}

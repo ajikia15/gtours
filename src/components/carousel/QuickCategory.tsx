@@ -7,14 +7,18 @@ type QuickCategoryProps = {
 };
 
 type ActivityItem = {
+  id: string;
   name: string;
 };
 
 const QuickCategory = ({ className }: QuickCategoryProps) => {
   const t = useTranslations("QuickCategory");
 
-  // Mock data: HorseRiding 12 times
-  const activities: ActivityItem[] = Array(18).fill({ name: "HorseRiding" });
+  // Mock data: camping 18 times (using kebab-case id now)
+  const activities: ActivityItem[] = Array(18).fill({
+    id: "camping",
+    name: "camping",
+  });
 
   return (
     <ActivityCarousel className={className}>
@@ -25,7 +29,7 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
         >
           <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
             <Image
-              src={`/${activity.name}.svg`}
+              src={`/${activity.name}.png`}
               alt={activity.name}
               fill
               style={{ objectFit: "contain" }}
@@ -33,7 +37,7 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
           </div>
           <div className="w-full text-center flex items-center justify-center">
             <span className="text-xs sm:text-sm md:text-base font-medium leading-tight">
-              {t(`${activity.name}`)}
+              {t(`${activity.id}`)}
             </span>
           </div>
         </div>

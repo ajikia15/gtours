@@ -1,8 +1,17 @@
 export type ActivityType = {
-  id: string; // Document ID in a new 'activity_master' Firebase collection
-  name: string; // Standardized name, e.g., "Skiing", "Horse Riding"
+  id: string; // Document ID in a new 'activity_master' Firebase collection, also used for translations
+  name: string; // Display name, e.g., "Skiing", "Horse Riding"
+  pngFileName:
+    | "camping"
+    | "hot-air-balloon"
+    | "parachute"
+    | "ski"
+    | "water-rafting"
+    | "zip-lining"
+    | "snowmobile"
+    | "horse-rider"; // PNG filename without .png extension
   genericDescription?: string;
-  icon?: string; // URL or identifier for an icon
+  isActive: boolean; // Whether this activity type is available for selection
 };
 
 export type OfferedActivity = {
@@ -11,5 +20,5 @@ export type OfferedActivity = {
   priceIncrement: number; // Price difference for this activity on this tour
   latitude: number; // Specific latitude for this activity's pin on the map
   longitude: number; // Specific longitude for this activity's pin on the map
-  specificDescription?: string; // Optional description for this activity as part of this specific tour
+  specificDescription: string; // Required description for this activity as part of this specific tour
 };
