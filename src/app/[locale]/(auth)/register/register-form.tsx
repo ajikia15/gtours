@@ -125,7 +125,7 @@ export default function RegisterForm() {
           )}
         />
 
-        <Button type="submit" className="w-full">
+        <Button variant="brandred" type="submit" className="w-full">
           Register
         </Button>
         <div className="text-center">or</div>

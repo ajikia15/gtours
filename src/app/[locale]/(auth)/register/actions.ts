@@ -18,7 +18,11 @@ export const registerUser = async (
       password: validatedFields.data.password,
       displayName: `${validatedFields.data.firstName} ${validatedFields.data.lastName}`,
     });
-  } catch (error) {
-    return { error: "Failed to register user" };
+  } catch (e: any) {
+    if (e.code === "auth/email-already-in-use") {
+      return { error: "Email already in use" };
+    } else {
+      return { error: "Failed to register user" };
+    }
   }
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { ParsedToken, User } from "firebase/auth";
+import { ParsedToken, signInWithEmailAndPassword, User } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase/client";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
@@ -9,6 +9,7 @@ type AuthContextType = {
   currentUser: User | null;
   logout: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
+  loginWithEmail: (email: string, password: string) => Promise<void>;
   customClaims: ParsedToken | null;
   loading: boolean;
 };
@@ -48,9 +49,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     const provider = new GoogleAuthProvider();
     await signInWithPopup(auth, provider);
   };
+
+  const loginWithEmail = async (email: string, password: string) => {
+    await signInWithEmailAndPassword(auth, email, password);
+  };
+
   return (
     <AuthContext.Provider
-      value={{ currentUser, logout, loginWithGoogle, customClaims, loading }}
+      value={{
+        currentUser,
+        logout,
+        loginWithGoogle,
+        loginWithEmail,
+        customClaims,
+        loading,
+      }}
     >
       {children}
     </AuthContext.Provider>
