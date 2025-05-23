@@ -1,4 +1,6 @@
 import { TourStatus } from "@/validation/tourSchema";
+import { OfferedActivity } from "./Activity";
+
 export type Tour = {
   id: string;
   title: string;
@@ -13,6 +15,8 @@ export type Tour = {
   long: number;
   status: TourStatus;
   images?: string[];
+  offeredActivities?: OfferedActivity[];
+  activityTypeNames?: string[];
 };
 
 // export type TourWithId = Tour & { id: string };

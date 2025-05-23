@@ -1,13 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import { PlusCircleIcon } from "lucide-react";
-import ToursTable from "./Tours-table";
+import ActivitiesTable from "./Activities-table";
 import { Suspense } from "react";
-import ToursTableSkeleton from "./tours-table-skeleton";
-import ActivitiesTable from "./activities/Activities-table";
-import ActivitiesTableSkeleton from "./activities/activities-table-skeleton";
+import ActivitiesTableSkeleton from "./activities-table-skeleton";
+import { getTranslations } from "next-intl/server";
 
-export default async function AdminDashboard({
+export default async function AdminActivitiesPage({
   searchParams: searchParamsPromise,
   params: paramsPromise,
 }: {
@@ -15,7 +14,8 @@ export default async function AdminDashboard({
   params: Promise<{ locale: string }>;
 }) {
   const searchParams = await searchParamsPromise;
-  const params = await paramsPromise;
+  const resolvedParams = await paramsPromise; // Resolve params
+  const t = await getTranslations("AdminActivitiesPage"); // For localization
 
   const pageQueryParam = searchParams?.page;
   const page = pageQueryParam
@@ -27,30 +27,20 @@ export default async function AdminDashboard({
 
   return (
     <div>
-      <h1 className="text-3xl font-bold my-4 ">Admin Dashboard</h1>
-      <Button>
-        <Link href="/admin/tours/new" className="flex items-center gap-2">
-          <PlusCircleIcon className="size-4 " />
-          New Tour
-        </Link>
-      </Button>
-
-      <div className="mt-4">
-        <Suspense fallback={<ToursTableSkeleton />}>
-          <ToursTable page={page} params={params} />
-        </Suspense>
-      </div>
-
-      <Button>
+      <h1 className="text-3xl font-bold my-4 ">{t("title")}</h1>
+      <Button asChild>
         <Link href="/admin/activities/new" className="flex items-center gap-2">
           <PlusCircleIcon className="size-4 " />
-          New Activity
+          {t("newActivityButton")}
         </Link>
       </Button>
 
       <div className="mt-4">
         <Suspense fallback={<ActivitiesTableSkeleton />}>
-          <ActivitiesTable page={page} params={params} />
+          {/* Assuming ActivitiesTable will fetch its own data like ToursTable does */}
+          {/* We'll need to implement getAllActivityTypes and pass it or call it within ActivitiesTable */}
+          <ActivitiesTable page={page} params={resolvedParams} />{" "}
+          {/* Pass resolvedParams */}
         </Suspense>
       </div>
     </div>

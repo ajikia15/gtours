@@ -3,6 +3,7 @@ import { z } from "zod";
 export const tourStatusEnum = z.enum(["active", "disabled", "draft"]);
 export type TourStatus = z.infer<typeof tourStatusEnum>;
 
+import { offeredActivitySchema } from "./offeredActivitySchema";
 export const tourDataSchema = z.object({
   title: z.string().min(1, "Title is required"),
   descriptionEN: z.string().min(1, "English Description is required"),
@@ -29,9 +30,11 @@ export const tourDataSchema = z.object({
       "Return time must be in HH:MM format"
     )
     .optional(),
-  lat: z.coerce.number().optional(),
-  long: z.coerce.number().optional(),
+  lat: z.coerce.number().optional(), // Main lat for tour area
+  long: z.coerce.number().optional(), // Main long for tour area
   status: tourStatusEnum.default("draft").optional(),
+  offeredActivities: z.array(offeredActivitySchema).optional(), // New field
+  activityTypeNames: z.array(z.string()).optional(), // New field
 });
 
 export const tourImageSchema = z.object({

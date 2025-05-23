@@ -15,5 +15,12 @@
     "Hiking": "Hiking",
     "Surfing": "Surfing",
     "Parasailing": "Parasailing"
+  },
+  "AdminNewActivityTypePage": {
+    "breadcrumbs": {
+      "adminDashboard": "Admin Dashboard",
+      "activities": "Activities",
+      "newActivityType": "Create new Activity"
+    }
   }
 }
