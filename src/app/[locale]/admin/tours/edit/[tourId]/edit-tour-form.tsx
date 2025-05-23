@@ -98,7 +98,14 @@ export default function EditTourForm({
             id: image,
             url: image,
           })),
-          offeredActivities,
+          offeredActivities: offeredActivities.map((activity) => ({
+            activityTypeId: activity.activityTypeId,
+            nameSnapshot: activity.nameSnapshot,
+            priceIncrement: activity.priceIncrement,
+            latitude: activity.latitude,
+            longitude: activity.longitude,
+            specificDescription: activity.specificDescription || "",
+          })),
         }}
       />
     </div>

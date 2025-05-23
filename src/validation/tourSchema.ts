@@ -9,7 +9,7 @@ export const offeredActivitySchema = z.object({
   priceIncrement: z.coerce.number().min(0),
   latitude: z.coerce.number(),
   longitude: z.coerce.number(),
-  specificDescription: z.string().optional(),
+  specificDescription: z.string().min(1, "Specific description is required"),
 });
 
 export const tourDataSchema = z.object({
