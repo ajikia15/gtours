@@ -2,7 +2,6 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import AuthButtons from "../auth-buttons";
 import NavLinks from "./NavLinks";
-import { cn } from "@/lib/utils";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");

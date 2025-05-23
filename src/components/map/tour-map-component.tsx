@@ -7,7 +7,7 @@ import { Coordinates } from "@/validation/tourSchema";
 import { renderToString } from "react-dom/server";
 import { Activity } from "lucide-react";
 import { activityTypes } from "@/data/activity-constants";
-
+import Image from "next/image";
 // Fix for default markers in React Leaflet
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
@@ -35,9 +35,11 @@ const getActivityIconForPopup = (activityTypeId: string, color: string) => {
 
   if (activityType) {
     return (
-      <img
+      <Image
         src={`/${activityType.pngFileName}.png`}
         alt={activityType.name}
+        width={16}
+        height={16}
         style={{
           width: "16px",
           height: "16px",
@@ -103,8 +105,8 @@ const getActivityColor = (activityTypeId: string): string => {
 export default function TourMapComponent({
   tourCoordinates,
   activities,
-  tourTitle,
-}: TourMapSectionProps) {
+}: // tourTitle,
+TourMapSectionProps) {
   // Default center (Tbilisi, Georgia) if no coordinates provided
   const defaultCenter: LatLngExpression = [41.7151, 44.8271];
 
