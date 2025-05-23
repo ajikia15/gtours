@@ -31,7 +31,7 @@ export default function TourActivitiesSection({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {quickCategory(activity.activityTypeId)}
+                {activity.specificDescription}
               </AccordionContent>
             </AccordionItem>
           ))}
