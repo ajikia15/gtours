@@ -25,7 +25,7 @@ export default function TourActivitiesSection({
               value={activity.activityTypeId}
             >
               <AccordionTrigger>
-                <div className="flex items-center gap-4 text-lg font-semibold">
+                <div className="flex items-center gap-4 font-medium">
                   {getActivityIcon(activity.activityTypeId, false, 24)}
                   {quickCategory(activity.activityTypeId)}
                 </div>

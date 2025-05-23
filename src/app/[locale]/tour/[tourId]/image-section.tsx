@@ -1,6 +1,5 @@
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import fakeTimeOutForSkeletons from "@/lib/fakeTimeoutForSkeletons";
 import { getImageUrl } from "@/lib/imageHelpers";
 
 export default async function ImageSection({
@@ -12,9 +11,6 @@ export default async function ImageSection({
   tourId: string;
   tourTitle: string;
 }) {
-  // Artificial delay for testing skeleton
-  await fakeTimeOutForSkeletons();
-
   const mainImage = getImageUrl(
     images && images.length > 0 ? images[0] : undefined
   );
