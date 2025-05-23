@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ActivityCarousel } from "./ActivityCarousel";
 import { activityTypes } from "@/data/activity-constants";
+import React from "react";
 
 type QuickCategoryProps = {
   className?: string;
@@ -16,24 +17,29 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
   return (
     <ActivityCarousel className={className}>
       {activities.map((activity, index) => (
-        <div
-          key={index}
-          className="w-36 sm:w-28 md:w-32 lg:w-36 flex-none px-1 sm:px-2 flex flex-col items-center justify-center cursor-pointer py-4"
-        >
-          <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
-            <Image
-              src={`/${activity.pngFileName}.png`}
-              alt={activity.name}
-              fill
-              style={{ objectFit: "contain" }}
-            />
+        <React.Fragment key={index}>
+          <div className="w-36 sm:w-28 md:w-32 lg:w-36 flex-none px-1 sm:px-2 flex flex-col items-center justify-center cursor-pointer py-4">
+            <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
+              <Image
+                src={`/${activity.pngFileName}.png`}
+                alt={activity.name}
+                fill
+                style={{ objectFit: "contain" }}
+              />
+            </div>
+            <div className="w-full text-center flex items-center justify-center">
+              <span className="text-xs sm:text-sm md:text-base font-medium leading-tight">
+                {t(`${activity.id}`)}
+              </span>
+            </div>
           </div>
-          <div className="w-full text-center flex items-center justify-center">
-            <span className="text-xs sm:text-sm md:text-base font-medium leading-tight">
-              {t(`${activity.id}`)}
-            </span>
-          </div>
-        </div>
+          {index < activities.length - 1 && (
+            <div
+              key={`${index}_separator`}
+              className="w-px bg-gray-300 h-10 sm:h-12 md:h-14 lg:h-16 my-auto"
+            ></div>
+          )}
+        </React.Fragment>
       ))}
     </ActivityCarousel>
   );

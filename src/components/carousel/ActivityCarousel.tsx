@@ -52,7 +52,11 @@ export const ActivityCarousel: React.FC<ActivityCarouselProps> = ({
   }, [emblaApi, onSelect]);
 
   return (
-    <div className={`relative ${className || ""}`}>
+    <div
+      className={`relative shadow-md border border-gray-200 rounded-xl ${
+        className || ""
+      }`}
+    >
       <div className="overflow-hidden" ref={emblaRef}>
         <div className="flex">{children}</div>
       </div>
