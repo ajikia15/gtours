@@ -5,7 +5,8 @@ import { LatLngExpression, DivIcon } from "leaflet";
 import { OfferedActivity } from "@/types/Activity";
 import { Coordinates } from "@/validation/tourSchema";
 import { renderToString } from "react-dom/server";
-import { MapPin, Activity } from "lucide-react";
+import { Activity } from "lucide-react";
+import { ACTIVITY_TYPES } from "@/data/activity-constants";
 
 // Fix for default markers in React Leaflet
 import "leaflet/dist/leaflet.css";
@@ -25,36 +26,81 @@ interface TourMapSectionProps {
   tourTitle: string;
 }
 
+// Get icon based on activity type
+const getActivityIcon = (activityTypeId: string) => {
+  const activityType = ACTIVITY_TYPES.find((at) => at.id === activityTypeId);
+
+  if (activityType) {
+    return (
+      <img
+        src={`/${activityType.pngFileName}.png`}
+        alt={activityType.name}
+        style={{
+          width: "16px",
+          height: "16px",
+          filter: "brightness(0) invert(1)",
+        }}
+      />
+    );
+  }
+
+  // Fallback to Activity icon for unknown types
+  return <Activity size={16} />;
+};
+
+// Get icon for popup (colored version)
+const getActivityIconForPopup = (activityTypeId: string, color: string) => {
+  const activityType = ACTIVITY_TYPES.find((at) => at.id === activityTypeId);
+
+  if (activityType) {
+    return (
+      <img
+        src={`/${activityType.pngFileName}.png`}
+        alt={activityType.name}
+        style={{
+          width: "16px",
+          height: "16px",
+          filter: `brightness(0) saturate(100%) sepia(100%) hue-rotate(${getHueRotation(
+            color
+          )}deg)`,
+        }}
+      />
+    );
+  }
+
+  // Fallback to Activity icon for unknown types
+  return <Activity size={16} style={{ color }} />;
+};
+
+// Helper to convert hex color to hue rotation (approximate)
+const getHueRotation = (hexColor: string): number => {
+  const colorMap: Record<string, number> = {
+    "#3B82F6": 220, // blue
+    "#10B981": 160, // green
+    "#06B6D4": 190, // cyan
+    "#F59E0B": 40, // orange
+    "#8B5CF6": 270, // purple
+    "#6B7280": 0, // gray
+  };
+  return colorMap[hexColor] || 0;
+};
+
 // Custom marker component
 const createCustomIcon = (
-  content: string,
+  icon: React.ReactElement,
   className: string = "activity-marker",
   color: string = "#10B981"
 ) => {
   return new DivIcon({
     html: renderToString(
       <div className={className} style={{ backgroundColor: color }}>
-        {content}
+        {icon}
       </div>
     ),
     className: "custom-div-icon",
     iconSize: [32, 32],
     iconAnchor: [16, 32],
     popupAnchor: [0, -32],
-  });
-};
-
-const createTourCenterIcon = () => {
-  return new DivIcon({
-    html: renderToString(
-      <div className="tour-center-marker">
-        <MapPin size={20} />
-      </div>
-    ),
-    className: "custom-div-icon",
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-    popupAnchor: [0, -40],
   });
 };
 
@@ -135,26 +181,11 @@ export default function TourMapSection({
           maxZoom={20}
         />
 
-        {/* Tour center marker */}
-        {tourCoordinates && (
-          <Marker
-            position={[tourCoordinates[0], tourCoordinates[1]]}
-            icon={createTourCenterIcon()}
-          >
-            <Popup>
-              <div className="text-center">
-                <h3 className="font-bold text-lg mb-2">{tourTitle}</h3>
-                <p className="text-sm text-gray-600">Tour Starting Point</p>
-              </div>
-            </Popup>
-          </Marker>
-        )}
-
         {/* Activity markers */}
         {activities.map((activity, index) => {
           const activityColor = getActivityColor(activity.activityTypeId);
           const activityIcon = createCustomIcon(
-            (index + 1).toString(),
+            getActivityIcon(activity.activityTypeId),
             "activity-marker",
             activityColor
           );
@@ -168,7 +199,10 @@ export default function TourMapSection({
               <Popup>
                 <div className="min-w-[200px]">
                   <div className="flex items-center gap-2 mb-2">
-                    <Activity size={16} style={{ color: activityColor }} />
+                    {getActivityIconForPopup(
+                      activity.activityTypeId,
+                      activityColor
+                    )}
                     <h3 className="font-bold text-lg">
                       {activity.nameSnapshot}
                     </h3>
