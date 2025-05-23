@@ -10,7 +10,8 @@ import TourDetailsCard from "./tour-details-card";
 import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import { getLocale } from "next-intl/server";
-
+import TourMapSection from "./tour-map-section";
+import TourSuggestions from "./tour-suggestions";
 export default async function TourPage({
   params,
 }: {
@@ -33,14 +34,19 @@ export default async function TourPage({
           <Suspense fallback={<TextSectionSkeleton />}>
             <TextSection description={getLocalizedDescription(tour, locale)} />
           </Suspense>
-          <div className="w-full h-64 bg-teal-200 grid place-items-center rounded-xl">
-            <h1>Map</h1>
+          <div className="w-full h-80">
+            <TourMapSection
+              tourCoordinates={tour.coordinates}
+              activities={tour.offeredActivities}
+              tourTitle={tour.title}
+            />
           </div>
         </div>
         <div className="sticky top-22 flex-1">
           <Suspense fallback={<TourDetailsCardSkeleton />}>
             <TourDetailsCard tour={tour} />
           </Suspense>
+          <TourSuggestions />
         </div>
       </div>
     </div>

@@ -1,0 +1,56 @@
+/* Import Leaflet CSS */
+@import "leaflet/dist/leaflet.css";
+
+/* Custom map styles for modern look */
+.leaflet-container {
+  @apply rounded-xl overflow-hidden;
+  font-family: inherit;
+}
+
+/* Customize the map controls */
+.leaflet-control-zoom {
+  @apply border-none shadow-lg;
+}
+
+.leaflet-control-zoom a {
+  @apply bg-white/90 backdrop-blur-sm border-0 text-gray-700 hover:bg-white;
+  border-radius: 8px !important;
+  margin: 2px;
+  width: 32px;
+  height: 32px;
+  line-height: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Custom popup styles */
+.leaflet-popup-content-wrapper {
+  @apply bg-white rounded-lg shadow-xl border-0;
+  border-radius: 12px !important;
+}
+
+.leaflet-popup-content {
+  @apply p-4 m-0;
+  width: auto !important;
+  min-width: 200px;
+}
+
+.leaflet-popup-tip {
+  @apply bg-white;
+}
+
+/* Attribution control styling */
+.leaflet-control-attribution {
+  @apply bg-white/80 backdrop-blur-sm text-xs;
+  border-radius: 8px !important;
+}
+
+/* Custom marker styles */
+.activity-marker {
+  @apply w-8 h-8 rounded-full border-2 border-white shadow-lg flex items-center justify-center text-white font-bold text-sm;
+}
+
+.tour-center-marker {
+  @apply w-10 h-10 rounded-full border-3 border-white shadow-xl flex items-center justify-center text-white font-bold;
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+}
