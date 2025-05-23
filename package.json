@@ -16,7 +16,7 @@
     "@radix-ui/react-label": "^2.1.6",
     "@radix-ui/react-popover": "^1.1.13",
     "@radix-ui/react-select": "^2.2.4",
-    "@radix-ui/react-slot": "^1.2.2",
+    "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-switch": "^1.2.4",
     "@types/react-simple-maps": "^3.0.6",
     "class-variance-authority": "^0.7.1",
@@ -32,7 +32,7 @@
     "next-intl": "^4.1.0",
     "next-themes": "^0.4.6",
     "react": "^19.0.0",
-    "react-day-picker": "^9.7.0",
+    "react-day-picker": "^8.10.1",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
     "react-markdown": "^10.1.0",
@@ -57,6 +57,10 @@
     "node": "20.x"
   },
   "overrides": {
+    "react-day-picker": {
+      "react": "^19.0.0",
+      "react-dom": "^19.0.0"
+    },
     "react-simple-maps": {
       "d3-geo": "^3.1.0",
       "d3-color": "^3.1.0",
