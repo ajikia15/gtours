@@ -1,8 +1,8 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
 import AuthButtons from "../auth-buttons";
-import { Suspense } from "react";
+import NavLinks from "./NavLinks";
+import { cn } from "@/lib/utils";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
@@ -16,38 +16,8 @@ export default async function Navbar() {
               <span className="font-bold text-xl text-primary">LOGO</span>
             </Link>
           </div>
-          <div className="hidden md:flex space-x-4">
-            <Link
-              href="/"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("home")}
-            </Link>
-            <Link
-              href="/destinations"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("destinations")}
-            </Link>
-            <Link
-              href="/blog"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("blog")}
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("aboutUs")}
-            </Link>
-            <Link
-              href="/contact"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("contact")}
-            </Link>
-          </div>
+
+          <NavLinks />
 
           <div className="flex items-center space-x-4">
             {/* <LocaleSwitcher /> LocaleSwitcher is now rendered inside AuthButtons */}
