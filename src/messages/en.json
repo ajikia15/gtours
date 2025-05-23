@@ -19,12 +19,5 @@
     "zip-lining": "Zip Lining",
     "snowmobile": "Snowmobile",
     "horse-rider": "Horse Riding"
-  },
-  "AdminNewActivityTypePage": {
-    "breadcrumbs": {
-      "adminDashboard": "Admin Dashboard",
-      "activities": "Activities",
-      "newActivityType": "Create new Activity"
-    }
   }
 }

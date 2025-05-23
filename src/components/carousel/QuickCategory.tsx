@@ -1,24 +1,17 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ActivityCarousel } from "./ActivityCarousel";
+import { ACTIVITY_TYPES } from "@/data/activity-constants";
 
 type QuickCategoryProps = {
   className?: string;
 };
 
-type ActivityItem = {
-  id: string;
-  name: string;
-};
-
 const QuickCategory = ({ className }: QuickCategoryProps) => {
   const t = useTranslations("QuickCategory");
 
-  // Mock data: camping 18 times (using kebab-case id now)
-  const activities: ActivityItem[] = Array(18).fill({
-    id: "camping",
-    name: "camping",
-  });
+  // Use all available activity types
+  const activities = ACTIVITY_TYPES;
 
   return (
     <ActivityCarousel className={className}>
@@ -29,7 +22,7 @@ const QuickCategory = ({ className }: QuickCategoryProps) => {
         >
           <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
             <Image
-              src={`/${activity.name}.png`}
+              src={`/${activity.pngFileName}.png`}
               alt={activity.name}
               fill
               style={{ objectFit: "contain" }}

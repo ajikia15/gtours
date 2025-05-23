@@ -4,8 +4,6 @@ import { PlusCircleIcon } from "lucide-react";
 import ToursTable from "./Tours-table";
 import { Suspense } from "react";
 import ToursTableSkeleton from "./tours-table-skeleton";
-import ActivitiesTable from "./activities/Activities-table";
-import ActivitiesTableSkeleton from "./activities/activities-table-skeleton";
 
 export default async function AdminDashboard({
   searchParams: searchParamsPromise,
@@ -38,19 +36,6 @@ export default async function AdminDashboard({
       <div className="mt-4">
         <Suspense fallback={<ToursTableSkeleton />}>
           <ToursTable page={page} params={params} />
-        </Suspense>
-      </div>
-
-      <Button>
-        <Link href="/admin/activities/new" className="flex items-center gap-2">
-          <PlusCircleIcon className="size-4 " />
-          New Activity
-        </Link>
-      </Button>
-
-      <div className="mt-4">
-        <Suspense fallback={<ActivitiesTableSkeleton />}>
-          <ActivitiesTable page={page} params={params} />
         </Suspense>
       </div>
     </div>
