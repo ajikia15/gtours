@@ -40,11 +40,6 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
       </div>
 
       <div className="mt-4">
-        <h4 className="text-md font-medium">Description:</h4>
-        <p>{tour.descriptionEN}</p>
-      </div>
-
-      <div className="mt-4">
         <h4 className="text-md font-medium">Add Tour:</h4>
         <div className="flex items-center justify-between p-2 border border-red-500 rounded-md mt-2">
           <Button variant="ghost" size="icon" className="text-red-500">

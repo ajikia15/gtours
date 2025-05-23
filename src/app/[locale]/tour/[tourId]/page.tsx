@@ -7,6 +7,7 @@ import TextSectionSkeleton from "./text-section-skeleton";
 import TextSection from "./text-section";
 
 import TourDetailsCard from "./tour-details-card";
+import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import { getLocale } from "next-intl/server";
 
@@ -28,17 +29,18 @@ export default async function TourPage({
         />
       </Suspense>
       <div className="flex flex-row gap-10 items-start">
-        <div className="flex flex-col gap-8 h-full">
+        <div className="flex flex-col gap-8 h-full w-full">
           <Suspense fallback={<TextSectionSkeleton />}>
             <TextSection description={getLocalizedDescription(tour, locale)} />
           </Suspense>
-          {/* map goes here */}
           <div className="w-full h-64 bg-teal-200 grid place-items-center rounded-xl">
             <h1>Map</h1>
           </div>
         </div>
         <div className="sticky top-22 flex-1">
-          <TourDetailsCard tour={tour} />
+          <Suspense fallback={<TourDetailsCardSkeleton />}>
+            <TourDetailsCard tour={tour} />
+          </Suspense>
         </div>
       </div>
     </div>
