@@ -68,22 +68,113 @@ export default function TourForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        {/* Main Info Fieldsets */}
-        <fieldset
-          disabled={form.formState.isSubmitting}
-          className="grid grid-cols-1 md:grid-cols-2 gap-4"
-        >
-          {/* Left Column */}
-          <div className="space-y-4">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        {/* 1. BASIC INFORMATION */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">
+              Basic Information
+            </h3>
+            <p className="text-sm text-gray-500">
+              Essential details about your tour
+            </p>
+          </div>
+
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tour Title</FormLabel>
+                <FormControl>
+                  <Input {...field} placeholder="Amazing Georgia Adventure" />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <div className="grid grid-cols-1 gap-4">
             <FormField
               control={form.control}
-              name="title"
+              name="descriptionEN"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Title</FormLabel>
+                  <FormLabel>Description (English)</FormLabel>
                   <FormControl>
-                    <Input {...field} />
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder="Describe your tour in English..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="descriptionGE"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (Georgian)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder="ჩაწერეთ ტურის აღწერა ქართულად..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="descriptionRU"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (Russian)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      {...field}
+                      rows={3}
+                      placeholder="Опишите ваш тур на русском..."
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </fieldset>
+
+        {/* 2. BUSINESS DETAILS */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">
+              Pricing & Duration
+            </h3>
+            <p className="text-sm text-gray-500">
+              Business details and tour length
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="basePrice"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Base Price (GEL)</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="number"
+                      min={0}
+                      step={0.01}
+                      placeholder="150.00"
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -95,40 +186,33 @@ export default function TourForm({
               name="duration"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tour Duration (days)</FormLabel>
+                  <FormLabel>Duration (days)</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" min={1} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="leaveTime"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Leave Time (HH:MM)</FormLabel>
-                  <FormControl>
-                    <Input {...field} placeholder="09:00" />
+                    <Input {...field} type="number" min={1} placeholder="3" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
           </div>
+        </fieldset>
 
-          {/* Right Column */}
-          <div className="space-y-4">
+        {/* 3. SCHEDULE */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">Schedule</h3>
+            <p className="text-sm text-gray-500">Tour timing details</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="basePrice"
+              name="leaveTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Base Price</FormLabel>
+                  <FormLabel>Departure Time</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" min={0} step={0.01} />
+                    <Input {...field} placeholder="09:00" />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -140,7 +224,7 @@ export default function TourForm({
               name="returnTime"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Return Time (HH:MM)</FormLabel>
+                  <FormLabel>Return Time</FormLabel>
                   <FormControl>
                     <Input {...field} placeholder="17:00" />
                   </FormControl>
@@ -148,7 +232,17 @@ export default function TourForm({
                 </FormItem>
               )}
             />
+          </div>
+        </fieldset>
 
+        {/* 4. LOCATION */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">Location</h3>
+            <p className="text-sm text-gray-500">Main tour area coordinates</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <FormField
               control={form.control}
               name="coordinates.0"
@@ -198,80 +292,86 @@ export default function TourForm({
                 </FormItem>
               )}
             />
+          </div>
 
-            {/* Coordinates Info */}
-            <div className="col-span-2 text-xs text-gray-500 mt-1">
-              💡 Tip: You can paste Google Maps coordinates (e.g., "41.715138,
-              44.827096") directly into either field and both will be
-              automatically filled.
+          {/* Coordinates Info */}
+          <div className="bg-blue-50 p-3 rounded-md border border-blue-200">
+            <div className="flex items-start">
+              <div className="text-blue-500 mr-2">💡</div>
+              <div className="text-sm text-blue-700">
+                <strong>Tip:</strong> You can paste Google Maps coordinates
+                (e.g., "41.715138, 44.827096") directly into either field and
+                both will be automatically filled.
+              </div>
             </div>
-
-            <FormField
-              control={form.control}
-              name="status"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a status" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {tourStatusEnum.options.map((status) => (
-                        <SelectItem key={status} value={status}>
-                          {status.charAt(0).toUpperCase() + status.slice(1)}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
           </div>
         </fieldset>
 
-        {/* Description Fieldset */}
+        {/* 5. ADMINISTRATIVE */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">Status</h3>
+            <p className="text-sm text-gray-500">Publication status</p>
+          </div>
+
           <FormField
             control={form.control}
-            name="descriptionEN"
+            name="status"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description (English)</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
+              <FormItem className="max-w-xs">
+                <FormLabel>Tour Status</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a status" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {tourStatusEnum.options.map((status) => (
+                      <SelectItem key={status} value={status}>
+                        {status.charAt(0).toUpperCase() + status.slice(1)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}
           />
+        </fieldset>
+
+        {/* 6. VISUAL CONTENT */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">Images</h3>
+            <p className="text-sm text-gray-500">
+              Visual content for your tour
+            </p>
+          </div>
+
           <FormField
             control={form.control}
-            name="descriptionGE"
+            name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description (Georgian)</FormLabel>
                 <FormControl>
-                  <Textarea {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="descriptionRU"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Description (Russian)</FormLabel>
-                <FormControl>
-                  <Textarea {...field} />
+                  <MultiImageUploader
+                    onImagesChange={(images: ImageUpload[]) => {
+                      form.setValue("images", images);
+                    }}
+                    images={field.value}
+                    urlFormatter={(image) => {
+                      if (!image.file) {
+                        return `https://firebasestorage.googleapis.com/v0/b/gtours-fcd56.firebasestorage.app/o/${encodeURIComponent(
+                          image.url
+                        )}?alt=media`;
+                      }
+                      return image.url;
+                    }}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -279,46 +379,33 @@ export default function TourForm({
           />
         </fieldset>
 
-        <FormField
-          control={form.control}
-          name="images"
-          render={({ field }) => (
-            <FormItem>
-              <FormControl>
-                <MultiImageUploader
-                  onImagesChange={(images: ImageUpload[]) => {
-                    form.setValue("images", images);
-                  }}
-                  images={field.value}
-                  urlFormatter={(image) => {
-                    if (!image.file) {
-                      return `https://firebasestorage.googleapis.com/v0/b/gtours-fcd56.firebasestorage.app/o/${encodeURIComponent(
-                        image.url
-                      )}?alt=media`;
-                    }
-                    return image.url;
-                  }}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {/* 7. ACTIVITIES */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">Activities</h3>
+            <p className="text-sm text-gray-500">
+              Specific activities included in this tour
+            </p>
+          </div>
 
-        {/* Activities Management Section */}
-        <ActivityManager
-          control={form.control}
-          disabled={form.formState.isSubmitting}
-        />
+          <ActivityManager
+            control={form.control}
+            disabled={form.formState.isSubmitting}
+          />
+        </fieldset>
 
-        <Button
-          type="submit"
-          disabled={form.formState.isSubmitting}
-          className="w-full"
-          variant="brandred"
-        >
-          {submitButtonLabel}
-        </Button>
+        {/* SUBMIT BUTTON */}
+        <div className="pt-6 border-t">
+          <Button
+            type="submit"
+            disabled={form.formState.isSubmitting}
+            className="w-full"
+            variant="brandred"
+            size="lg"
+          >
+            {submitButtonLabel}
+          </Button>
+        </div>
       </form>
     </Form>
   );
