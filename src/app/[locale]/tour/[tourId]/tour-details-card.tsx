@@ -66,33 +66,6 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
       <Button className="w-full " variant="brandred">
         Book Tour
       </Button>
-      <p className="text-sm text-gray-600 mb-4">{tour.descriptionEN}</p>
-      <div className="space-y-2 text-sm">
-        <div>
-          <span className="font-medium">Base Price:</span> ${tour.basePrice}
-        </div>
-        {tour.duration && (
-          <div>
-            <span className="font-medium">Duration:</span> {tour.duration} days
-          </div>
-        )}
-        {tour.leaveTime && (
-          <div>
-            <span className="font-medium">Leave Time:</span> {tour.leaveTime}
-          </div>
-        )}
-        {tour.returnTime && (
-          <div>
-            <span className="font-medium">Return Time:</span> {tour.returnTime}
-          </div>
-        )}
-        {tour.coordinates && (
-          <div>
-            <span className="font-medium">Coordinates:</span> Latitude:{" "}
-            {tour.coordinates[0]}, Longitude: {tour.coordinates[1]}
-          </div>
-        )}
-      </div>
     </div>
   );
 }
