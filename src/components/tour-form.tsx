@@ -1,7 +1,7 @@
 "use client";
 
 import { tourSchema, tourStatusEnum } from "@/validation/tourSchema";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { Form } from "./ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,8 +23,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
+import { useState } from "react";
+import { Trash2, Plus } from "lucide-react";
+
 // Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourSchema>;
+
+// Mock activity types - this should come from your database
+const ACTIVITY_TYPES = [
+  { id: "skiing", name: "Skiing", icon: "⛷️" },
+  { id: "horse-riding", name: "Horse Riding", icon: "🐎" },
+  { id: "air-balloon", name: "Air Balloon", icon: "🎈" },
+  { id: "hiking", name: "Hiking", icon: "🥾" },
+  { id: "wine-tasting", name: "Wine Tasting", icon: "🍷" },
+];
 
 type Props = {
   handleSubmit: (data: TourFormData) => void;
@@ -57,6 +69,33 @@ export default function TourForm({
     resolver: zodResolver(tourSchema),
     defaultValues: combinedDefaultValues,
   });
+
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "offeredActivities",
+  });
+
+  const [selectedActivityType, setSelectedActivityType] = useState<string>("");
+
+  const addActivity = () => {
+    if (!selectedActivityType) return;
+
+    const activityType = ACTIVITY_TYPES.find(
+      (at) => at.id === selectedActivityType
+    );
+    if (!activityType) return;
+
+    append({
+      activityTypeId: selectedActivityType,
+      nameSnapshot: activityType.name,
+      priceIncrement: 0,
+      latitude: 0,
+      longitude: 0,
+      specificDescription: "",
+    });
+
+    setSelectedActivityType("");
+  };
 
   return (
     <Form {...form}>
@@ -266,6 +305,154 @@ export default function TourForm({
             </FormItem>
           )}
         />
+
+        {/* Activities Management Section */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-lg font-medium">Activities</h3>
+            <div className="flex gap-2">
+              <Select
+                value={selectedActivityType}
+                onValueChange={setSelectedActivityType}
+              >
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="Select activity type" />
+                </SelectTrigger>
+                <SelectContent>
+                  {ACTIVITY_TYPES.map((activityType) => (
+                    <SelectItem key={activityType.id} value={activityType.id}>
+                      {activityType.icon} {activityType.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Button
+                type="button"
+                onClick={addActivity}
+                disabled={!selectedActivityType}
+                size="sm"
+              >
+                <Plus className="w-4 h-4 mr-2" />
+                Add Activity
+              </Button>
+            </div>
+          </div>
+
+          {/* Activities List */}
+          {fields.length > 0 && (
+            <div className="space-y-4">
+              {fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="border rounded-lg p-4 space-y-4 bg-gray-50"
+                >
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium flex items-center gap-2">
+                      {
+                        ACTIVITY_TYPES.find(
+                          (at) => at.id === field.activityTypeId
+                        )?.icon
+                      }
+                      {field.nameSnapshot}
+                    </h4>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => remove(index)}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name={`offeredActivities.${index}.priceIncrement`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Price Increment ($)</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="number"
+                              min={0}
+                              step={0.01}
+                              placeholder="0.00"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`offeredActivities.${index}.specificDescription`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Specific Description</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              placeholder="Tour-specific details..."
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`offeredActivities.${index}.latitude`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Latitude</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="number"
+                              step="any"
+                              placeholder="41.7151"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name={`offeredActivities.${index}.longitude`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Longitude</FormLabel>
+                          <FormControl>
+                            <Input
+                              {...field}
+                              type="number"
+                              step="any"
+                              placeholder="44.8271"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {fields.length === 0 && (
+            <div className="text-center py-8 text-gray-500">
+              No activities added yet. Select an activity type above to get
+              started.
+            </div>
+          )}
+        </fieldset>
 
         <Button
           type="submit"
