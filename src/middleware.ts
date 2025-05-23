@@ -56,34 +56,28 @@ const handleAdminRoute = async (locale: string, request: NextRequest) => {
 };
 
 export async function middleware(request: NextRequest) {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("firebaseAuthToken")?.value;
   const pathname = request.nextUrl.pathname;
 
-  // Handle root path redirect
   if (pathname === "/") {
     return createRedirectUrl(defaultLocale, "", request);
   }
 
   const [, locale, ...segments] = pathname.split("/");
-  console.log(segments);
+
+  if (pathname.match(/^\/(en|ge|ru)\/admin/)) {
+    const adminRedirect = await handleAdminRoute(locale, request);
+    if (adminRedirect) return adminRedirect;
+  }
+
+  const token = (await cookies()).get("firebaseAuthToken")?.value;
   if (
     token &&
     (pathname.startsWith(`/${locale}/login`) ||
-      pathname.startsWith(`/${locale}/login`))
+      pathname.startsWith(`/${locale}/register`))
   ) {
     return createRedirectUrl(locale, "/", request);
   }
 
-  // Handle admin routes
-  if (pathname.match(/(en|ge|ru)\/admin/)) {
-    const adminRedirect = await handleAdminRoute(locale, request);
-    if (adminRedirect) {
-      return adminRedirect;
-    }
-  }
-
-  // Handle i18n routing for all other requests
   return handleI18nRouting(request);
 }
 
