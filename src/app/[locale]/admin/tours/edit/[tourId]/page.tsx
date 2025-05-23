@@ -34,8 +34,7 @@ export default async function EditTour({
             duration={tour.duration}
             leaveTime={tour.leaveTime}
             returnTime={tour.returnTime}
-            lat={tour.lat}
-            long={tour.long}
+            coordinates={tour.coordinates}
             status={tour.status}
             images={tour.images || []}
             offeredActivities={tour.offeredActivities || []}

@@ -191,7 +191,11 @@ export default function InteractiveMapSection() {
           {tours.map((tour) => (
             <Marker
               key={tour.id}
-              coordinates={[tour.long, tour.lat]}
+              coordinates={
+                tour.coordinates
+                  ? [tour.coordinates[1], tour.coordinates[0]]
+                  : [0, 0]
+              }
               onClick={() => handleTourClick(tour)}
             >
               <MapPinIcon

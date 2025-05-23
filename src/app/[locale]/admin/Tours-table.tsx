@@ -62,7 +62,9 @@ export default async function ToursTable({
               <TableRow key={tour.id}>
                 <TableCell>{tour.title}</TableCell>
                 <TableCell>
-                  {tour.lat}, {tour.long}
+                  {tour.coordinates
+                    ? `${tour.coordinates[0]}, ${tour.coordinates[1]}`
+                    : "No coordinates"}
                 </TableCell>
                 <TableCell>{tour.duration} Days</TableCell>
                 <TableCell>{tour.basePrice}</TableCell>

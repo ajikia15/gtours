@@ -27,11 +27,11 @@ export default function EditTourForm({
   duration,
   leaveTime,
   returnTime,
-  lat,
-  long,
+  coordinates,
   status,
   images = [],
   offeredActivities = [],
+  ...tourProps
 }: Props) {
   const auth = useAuth();
   const router = useRouter();
@@ -91,8 +91,12 @@ export default function EditTourForm({
           duration,
           leaveTime,
           returnTime,
-          lat,
-          long,
+          coordinates:
+            coordinates ||
+            ([(tourProps as any).lat || 0, (tourProps as any).long || 0] as [
+              number,
+              number
+            ]),
           status,
           images: images.map((image) => ({
             id: image,
@@ -102,8 +106,12 @@ export default function EditTourForm({
             activityTypeId: activity.activityTypeId,
             nameSnapshot: activity.nameSnapshot,
             priceIncrement: activity.priceIncrement,
-            latitude: activity.latitude,
-            longitude: activity.longitude,
+            coordinates:
+              activity.coordinates ||
+              ([
+                (activity as any).latitude || 0,
+                (activity as any).longitude || 0,
+              ] as [number, number]),
             specificDescription: activity.specificDescription || "",
           })),
         }}

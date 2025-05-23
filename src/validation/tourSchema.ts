@@ -3,12 +3,18 @@ import { z } from "zod";
 export const tourStatusEnum = z.enum(["active", "disabled", "draft"]);
 export type TourStatus = z.infer<typeof tourStatusEnum>;
 
+// Coordinates schema for [latitude, longitude] tuple
+export const coordinatesSchema = z.tuple([
+  z.coerce.number().min(-90).max(90), // latitude
+  z.coerce.number().min(-180).max(180), // longitude
+]);
+export type Coordinates = z.infer<typeof coordinatesSchema>;
+
 export const offeredActivitySchema = z.object({
   activityTypeId: z.string().min(1, "Activity Type ID is required"),
   nameSnapshot: z.string().min(1, "Activity name snapshot is required"),
   priceIncrement: z.coerce.number().min(0),
-  latitude: z.coerce.number(),
-  longitude: z.coerce.number(),
+  coordinates: coordinatesSchema,
   specificDescription: z.string().min(1, "Specific description is required"),
 });
 
@@ -38,8 +44,7 @@ export const tourDataSchema = z.object({
       "Return time must be in HH:MM format"
     )
     .optional(),
-  lat: z.coerce.number().optional(), // Main lat for tour area
-  long: z.coerce.number().optional(), // Main long for tour area
+  coordinates: coordinatesSchema.optional(), // Main coordinates for tour area
   status: tourStatusEnum.default("draft").optional(),
 });
 

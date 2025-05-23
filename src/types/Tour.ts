@@ -1,4 +1,4 @@
-import { TourStatus } from "@/validation/tourSchema";
+import { TourStatus, Coordinates } from "@/validation/tourSchema";
 import { OfferedActivity } from "./Activity";
 
 export type Tour = {
@@ -11,8 +11,7 @@ export type Tour = {
   duration: number;
   leaveTime: string;
   returnTime: string;
-  lat: number;
-  long: number;
+  coordinates?: Coordinates;
   status: TourStatus;
   images?: string[];
   offeredActivities: OfferedActivity[];

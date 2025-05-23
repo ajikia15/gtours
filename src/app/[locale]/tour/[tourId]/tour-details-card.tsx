@@ -15,12 +15,14 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
     <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-lg w-full min-w-84">
       <h3 className="text-xl font-semibold text-center">Tour Details</h3>
       <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-2 text-gray-700">
-          <MapPin className="size-5 text-red-500" />
-          <span>
-            Latitude: {tour.lat}, Longitude: {tour.long}
-          </span>
-        </div>
+        {tour.coordinates && (
+          <div className="flex items-center gap-2 text-gray-700">
+            <MapPin className="size-5 text-red-500" />
+            <span>
+              Latitude: {tour.coordinates[0]}, Longitude: {tour.coordinates[1]}
+            </span>
+          </div>
+        )}
         <div className="flex items-center gap-2 text-gray-700">
           <Clock className="size-5 text-red-500" />
           <span>Tour duration: {tour.duration} days</span>
@@ -64,6 +66,33 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
       <Button className="w-full " variant="brandred">
         Book Tour
       </Button>
+      <p className="text-sm text-gray-600 mb-4">{tour.descriptionEN}</p>
+      <div className="space-y-2 text-sm">
+        <div>
+          <span className="font-medium">Base Price:</span> ${tour.basePrice}
+        </div>
+        {tour.duration && (
+          <div>
+            <span className="font-medium">Duration:</span> {tour.duration} days
+          </div>
+        )}
+        {tour.leaveTime && (
+          <div>
+            <span className="font-medium">Leave Time:</span> {tour.leaveTime}
+          </div>
+        )}
+        {tour.returnTime && (
+          <div>
+            <span className="font-medium">Return Time:</span> {tour.returnTime}
+          </div>
+        )}
+        {tour.coordinates && (
+          <div>
+            <span className="font-medium">Coordinates:</span> Latitude:{" "}
+            {tour.coordinates[0]}, Longitude: {tour.coordinates[1]}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

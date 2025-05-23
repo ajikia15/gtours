@@ -49,8 +49,7 @@ export default function TourForm({
     duration: defaultValues?.duration || 0,
     leaveTime: defaultValues?.leaveTime || "",
     returnTime: defaultValues?.returnTime || "",
-    lat: defaultValues?.lat || 0,
-    long: defaultValues?.long || 0,
+    coordinates: defaultValues?.coordinates || [0, 0],
     status: defaultValues?.status || "draft",
     images: defaultValues?.images || [],
     offeredActivities: defaultValues?.offeredActivities || [],
@@ -145,12 +144,20 @@ export default function TourForm({
 
             <FormField
               control={form.control}
-              name="lat"
-              render={({ field }) => (
+              name="coordinates.0"
+              render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Latitude</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" />
+                    <Input
+                      {...field}
+                      type="number"
+                      step="any"
+                      value={value ?? 0}
+                      onChange={(e) =>
+                        onChange(e.target.value ? Number(e.target.value) : 0)
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -159,12 +166,20 @@ export default function TourForm({
 
             <FormField
               control={form.control}
-              name="long"
-              render={({ field }) => (
+              name="coordinates.1"
+              render={({ field: { value, onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Longitude</FormLabel>
                   <FormControl>
-                    <Input {...field} type="number" />
+                    <Input
+                      {...field}
+                      type="number"
+                      step="any"
+                      value={value ?? 0}
+                      onChange={(e) =>
+                        onChange(e.target.value ? Number(e.target.value) : 0)
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
