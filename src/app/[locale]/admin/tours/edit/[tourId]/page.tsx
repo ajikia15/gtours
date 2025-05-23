@@ -38,6 +38,7 @@ export default async function EditTour({
             long={tour.long}
             status={tour.status}
             images={tour.images || []}
+            offeredActivities={tour.offeredActivities || []}
           />
         </CardContent>
       </Card>

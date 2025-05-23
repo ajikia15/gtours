@@ -31,6 +31,7 @@ export default function EditTourForm({
   long,
   status,
   images = [],
+  offeredActivities = [],
 }: Props) {
   const auth = useAuth();
   const router = useRouter();
@@ -97,6 +98,7 @@ export default function EditTourForm({
             id: image,
             url: image,
           })),
+          offeredActivities,
         }}
       />
     </div>
