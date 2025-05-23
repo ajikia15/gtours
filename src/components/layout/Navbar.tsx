@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import LocaleSwitcher from "@/components/layout/LocaleSwitcher";
 import AuthButtons from "../auth-buttons";
+import { Suspense } from "react";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
@@ -47,8 +48,9 @@ export default async function Navbar() {
               {t("contact")}
             </Link>
           </div>
+
           <div className="flex items-center space-x-4">
-            <LocaleSwitcher />
+            {/* <LocaleSwitcher /> LocaleSwitcher is now rendered inside AuthButtons */}
             <AuthButtons />
           </div>
         </div>

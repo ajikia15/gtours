@@ -1,12 +1,11 @@
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
 import ContinueWithGoogleButton from "@/components/continue-with-google-button";
 
 export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4">
       <div className="w-full max-w-md space-y-8 rounded-lg border bg-white p-6 shadow-md">
-        <div className="text-center">
+        {/* <div className="text-center">
           <h1 className="text-2xl font-bold">Welcome Back</h1>
           <p className="text-sm text-gray-600">Sign in to your account</p>
         </div>
@@ -47,7 +46,7 @@ export default function LoginPage() {
           <Button type="submit" className="w-full">
             Sign in
           </Button>
-        </form>
+        </form> */}
         <ContinueWithGoogleButton />
         <div className="text-center text-sm">
           Don&apos;t have an account?
