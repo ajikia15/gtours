@@ -1,6 +1,6 @@
 "use client";
 
-import { useFieldArray, Control } from "react-hook-form";
+import { useFieldArray, Control, useFormContext } from "react-hook-form";
 import { useState, useEffect } from "react";
 import {
   DragDropContext,
@@ -29,6 +29,7 @@ import Image from "next/image";
 import { ACTIVITY_TYPES } from "@/data/activity-constants";
 import { z } from "zod";
 import { tourSchema } from "@/validation/tourSchema";
+import { useCoordinatePaste } from "@/lib/useCoordinatePaste";
 
 type TourFormData = z.infer<typeof tourSchema>;
 
@@ -258,6 +259,14 @@ function ActivityFields({
   control: Control<TourFormData>;
   index: number;
 }) {
+  const { setValue } = useFormContext<TourFormData>();
+
+  // Smart paste functionality for this activity's coordinates
+  const { handlePaste } = useCoordinatePaste(
+    (lat) => setValue(`offeredActivities.${index}.coordinates.0`, lat),
+    (lng) => setValue(`offeredActivities.${index}.coordinates.1`, lng)
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <FormField
@@ -305,11 +314,13 @@ function ActivityFields({
                 {...field}
                 type="number"
                 step="any"
-                placeholder="41.7151"
+                placeholder="41.715138"
                 value={value ?? 0}
                 onChange={(e) =>
                   onChange(e.target.value ? Number(e.target.value) : 0)
                 }
+                onPaste={(e) => handlePaste(e, true)}
+                title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
               />
             </FormControl>
             <FormMessage />
@@ -328,11 +339,13 @@ function ActivityFields({
                 {...field}
                 type="number"
                 step="any"
-                placeholder="44.7831"
+                placeholder="44.827096"
                 value={value ?? 0}
                 onChange={(e) =>
                   onChange(e.target.value ? Number(e.target.value) : 0)
                 }
+                onPaste={(e) => handlePaste(e, false)}
+                title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
               />
             </FormControl>
             <FormMessage />

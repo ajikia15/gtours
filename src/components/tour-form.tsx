@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/select";
 import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
 import ActivityManager from "./activity-manager";
+import { useCoordinatePaste } from "@/lib/useCoordinatePaste";
 
 // Define the TourFormData type directly from the schema
 type TourFormData = z.infer<typeof tourSchema>;
@@ -58,6 +59,12 @@ export default function TourForm({
     resolver: zodResolver(tourSchema),
     defaultValues: combinedDefaultValues,
   });
+
+  // Smart paste functionality for coordinates
+  const { handlePaste } = useCoordinatePaste(
+    (lat) => form.setValue("coordinates.0", lat),
+    (lng) => form.setValue("coordinates.1", lng)
+  );
 
   return (
     <Form {...form}>
@@ -157,6 +164,9 @@ export default function TourForm({
                       onChange={(e) =>
                         onChange(e.target.value ? Number(e.target.value) : 0)
                       }
+                      onPaste={(e) => handlePaste(e, true)}
+                      placeholder="41.715138"
+                      title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
                     />
                   </FormControl>
                   <FormMessage />
@@ -179,12 +189,22 @@ export default function TourForm({
                       onChange={(e) =>
                         onChange(e.target.value ? Number(e.target.value) : 0)
                       }
+                      onPaste={(e) => handlePaste(e, false)}
+                      placeholder="44.827096"
+                      title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+
+            {/* Coordinates Info */}
+            <div className="col-span-2 text-xs text-gray-500 mt-1">
+              💡 Tip: You can paste Google Maps coordinates (e.g., "41.715138,
+              44.827096") directly into either field and both will be
+              automatically filled.
+            </div>
 
             <FormField
               control={form.control}
