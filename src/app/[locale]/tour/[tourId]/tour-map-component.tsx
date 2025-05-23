@@ -19,7 +19,7 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "/images/marker-shadow.png",
 });
 
-interface TourMapComponentProps {
+interface TourMapSectionProps {
   tourCoordinates?: Coordinates;
   activities: OfferedActivity[];
   tourTitle: string;
@@ -73,11 +73,11 @@ const getActivityColor = (activityTypeId: string): string => {
   return (colors as any)[activityType] || colors.default;
 };
 
-export default function TourMapComponent({
+export default function TourMapSection({
   tourCoordinates,
   activities,
   tourTitle,
-}: TourMapComponentProps) {
+}: TourMapSectionProps) {
   // Default center (Tbilisi, Georgia) if no coordinates provided
   const defaultCenter: LatLngExpression = [41.7151, 44.8271];
 
@@ -129,8 +129,10 @@ export default function TourMapComponent({
         scrollWheelZoom={true}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="https://www.stadiamaps.com/" target="_blank">Stadia Maps</a> &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url="https://tiles.stadiamaps.com/tiles/outdoors/{z}/{x}/{y}{r}.png"
+          minZoom={0}
+          maxZoom={20}
         />
 
         {/* Tour center marker */}

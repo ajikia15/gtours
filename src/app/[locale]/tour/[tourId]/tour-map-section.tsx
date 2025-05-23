@@ -10,8 +10,8 @@ interface TourMapSectionProps {
   tourTitle: string;
 }
 
-// Dynamic import with no SSR - following Next.js documentation
-const DynamicTourMap = dynamic(() => import("./tour-map-component"), {
+// Dynamic import with no SSR to prevent window errors
+const TourMapComponent = dynamic(() => import("./tour-map-component"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-80 bg-gradient-to-br from-blue-50 to-teal-50 rounded-xl flex items-center justify-center shadow-lg">
@@ -24,5 +24,5 @@ const DynamicTourMap = dynamic(() => import("./tour-map-component"), {
 });
 
 export default function TourMapSection(props: TourMapSectionProps) {
-  return <DynamicTourMap {...props} />;
+  return <TourMapComponent {...props} />;
 }
