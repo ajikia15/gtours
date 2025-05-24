@@ -34,6 +34,18 @@ const checkAdminAccess = async (
 
   try {
     const decodedToken = decodeJwt(token);
+
+    if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      return NextResponse.redirect(
+        new URL(
+          `/api/refresh-token?redirect=${encodeURIComponent(
+            request.nextUrl.pathname
+          )}`,
+          request.url
+        )
+      );
+    }
+
     if (!decodedToken.admin) {
       return createRedirectUrl(locale, "/", request);
     }
@@ -75,6 +87,10 @@ export async function middleware(request: NextRequest) {
     (pathname.startsWith(`/${locale}/login`) ||
       pathname.startsWith(`/${locale}/register`))
   ) {
+    return createRedirectUrl(locale, "/", request);
+  }
+
+  if (!token && pathname.startsWith(`/${locale}/favorites`)) {
     return createRedirectUrl(locale, "/", request);
   }
 

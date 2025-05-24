@@ -96,127 +96,144 @@ export default function InteractiveMapSection() {
   // }
 
   return (
-    <div className="flex">
-      <div className="w-1/3 h-full p-4" ref={animationParent}>
-        {isLoading ? (
-          <MapTourCardSkeleton key={1} />
-        ) : selectedTour ? (
-          <MapTourCard key={selectedTour.id} tour={selectedTour} />
-        ) : null}
-      </div>
-      <div className="w-2/3 relative">
-        {testMode && (
-          <div
-            className={`flex flex-col items-center mt-4 absolute top-0 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-sm z-10 mr-4 border border-gray-200 dark:border-gray-700 ${
-              showTestControls ? "p-4" : "p-0"
-            }`}
-          >
-            <button
-              onClick={() => setShowTestControls(!showTestControls)}
-              className="p-2 text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md w-full transition-colors duration-200"
-            >
-              {showTestControls ? t("hideControls") : t("showControls")}
-            </button>
-            {showTestControls && (
-              <>
-                <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-750 mb-4 flex items-center w-full justify-between text-sm text-gray-700 dark:text-gray-300">
-                  <span>
-                    {t("coordinates")}: {testMarkerCoords[1].toFixed(4)},{" "}
-                    {testMarkerCoords[0].toFixed(4)}
-                  </span>
-                  <button
-                    onClick={handleCopyToClipboard}
-                    className="ml-2 p-2 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200"
-                  >
-                    {copied ? t("copied") : t("copy")}
-                  </button>
+    <>
+      <div className="w-full">
+        <div className="grid grid-cols-4 gap-4 p-4">
+          {isLoading
+            ? // Show 4 skeleton cards while loading
+              Array.from({ length: 4 }, (_, index) => (
+                <MapTourCardSkeleton key={`skeleton-${index}`} />
+              ))
+            : // Show first 4 tours
+              tours.slice(0, 4).map((tour) => (
+                <div key={tour.id}>
+                  <MapTourCard tour={tour} />
                 </div>
-                <div className="flex flex-col items-center space-y-1">
-                  <button
-                    className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
-                    onClick={() => moveMarker("up")}
-                  >
-                    {t("up")}
-                  </button>
-                  <div className="flex">
+              ))}
+        </div>
+      </div>
+      <div className="flex">
+        <div className="w-1/3 h-full p-4" ref={animationParent}>
+          {isLoading ? (
+            <MapTourCardSkeleton key={1} />
+          ) : selectedTour ? (
+            <MapTourCard key={selectedTour.id} tour={selectedTour} />
+          ) : null}
+        </div>
+        <div className="w-2/3 relative">
+          {testMode && (
+            <div
+              className={`flex flex-col items-center mt-4 absolute top-0 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-sm z-10 mr-4 border border-gray-200 dark:border-gray-700 ${
+                showTestControls ? "p-4" : "p-0"
+              }`}
+            >
+              <button
+                onClick={() => setShowTestControls(!showTestControls)}
+                className="p-2 text-sm bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-md w-full transition-colors duration-200"
+              >
+                {showTestControls ? t("hideControls") : t("showControls")}
+              </button>
+              {showTestControls && (
+                <>
+                  <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-750 mb-4 flex items-center w-full justify-between text-sm text-gray-700 dark:text-gray-300">
+                    <span>
+                      {t("coordinates")}: {testMarkerCoords[1].toFixed(4)},{" "}
+                      {testMarkerCoords[0].toFixed(4)}
+                    </span>
                     <button
-                      className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md mr-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
-                      onClick={() => moveMarker("left")}
+                      onClick={handleCopyToClipboard}
+                      className="ml-2 p-2 text-xs bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors duration-200"
                     >
-                      {t("left")}
-                    </button>
-                    <button
-                      className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md ml-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
-                      onClick={() => moveMarker("right")}
-                    >
-                      {t("right")}
+                      {copied ? t("copied") : t("copy")}
                     </button>
                   </div>
-                  <button
-                    className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
-                    onClick={() => moveMarker("down")}
-                  >
-                    {t("down")}
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-        <ComposableMap
-          className="w-full"
-          projectionConfig={{
-            scale: 8000,
-            center: [43.5, 42.3],
-          }}
-          width={800}
-          height={450}
-        >
-          <Geographies geography={geoData}>
-            {({ geographies }: { geographies: any[] }) =>
-              geographies.map((geo: any) => (
-                <Geography
-                  key={geo.rsmKey}
-                  geography={geo}
-                  fill="#e0e0e0"
-                  stroke="#FFF"
-                  strokeWidth={3}
-                  style={{
-                    default: {
-                      outline: "none",
-                      transition: "all 250ms ease-in-out",
-                    },
-                    hover: { outline: "none" },
-                    pressed: { outline: "none" },
-                  }}
-                />
-              ))
-            }
-          </Geographies>
-          {tours.map((tour) => (
-            <Marker
-              key={tour.id}
-              coordinates={
-                tour.coordinates
-                  ? [tour.coordinates[1], tour.coordinates[0]]
-                  : [0, 0]
-              }
-              onClick={() => handleTourClick(tour)}
-            >
-              <MapPinIcon
-                size={40}
-                color={selectedTour?.id === tour.id ? "#ff3333" : "#000000"}
-              />
-            </Marker>
-          ))}
-
-          {testMode && showTestControls && (
-            <Marker coordinates={testMarkerCoords}>
-              <circle r={10} fill="#FF0000" stroke="#fff" strokeWidth={2} />
-            </Marker>
+                  <div className="flex flex-col items-center space-y-1">
+                    <button
+                      className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+                      onClick={() => moveMarker("up")}
+                    >
+                      {t("up")}
+                    </button>
+                    <div className="flex">
+                      <button
+                        className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md mr-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+                        onClick={() => moveMarker("left")}
+                      >
+                        {t("left")}
+                      </button>
+                      <button
+                        className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md ml-0.5 hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+                        onClick={() => moveMarker("right")}
+                      >
+                        {t("right")}
+                      </button>
+                    </div>
+                    <button
+                      className="p-2 text-xs bg-gray-200 dark:bg-gray-700 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 transition-colors duration-200"
+                      onClick={() => moveMarker("down")}
+                    >
+                      {t("down")}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
           )}
-        </ComposableMap>
+          <ComposableMap
+            className="w-full"
+            projectionConfig={{
+              scale: 8000,
+              center: [43.5, 42.3],
+            }}
+            width={800}
+            height={450}
+          >
+            <Geographies geography={geoData}>
+              {({ geographies }: { geographies: any[] }) =>
+                geographies.map((geo: any) => (
+                  <Geography
+                    key={geo.rsmKey}
+                    geography={geo}
+                    fill="#e0e0e0"
+                    stroke="#FFF"
+                    strokeWidth={3}
+                    style={{
+                      default: {
+                        outline: "none",
+                        transition: "all 250ms ease-in-out",
+                      },
+                      hover: { outline: "none" },
+                      pressed: { outline: "none" },
+                    }}
+                  />
+                ))
+              }
+            </Geographies>
+            {tours.map((tour) => (
+              <Marker
+                key={tour.id}
+                coordinates={
+                  tour.coordinates
+                    ? [tour.coordinates[1], tour.coordinates[0]]
+                    : [0, 0]
+                }
+                onClick={() => handleTourClick(tour)}
+              >
+                <MapPinIcon
+                  size={40}
+                  color={selectedTour?.id === tour.id ? "#ff3333" : "#000000"}
+                />
+              </Marker>
+            ))}
+
+            {testMode && showTestControls && (
+              <Marker coordinates={testMarkerCoords}>
+                <circle r={10} fill="#FF0000" stroke="#fff" strokeWidth={2} />
+              </Marker>
+            )}
+          </ComposableMap>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
