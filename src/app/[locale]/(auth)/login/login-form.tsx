@@ -32,6 +32,8 @@ export default function LoginForm() {
     },
   });
 
+  const { isSubmitting } = form.formState;
+
   const onSubmit = async (data: z.infer<typeof loginUserSchema>) => {
     try {
       await auth?.loginWithEmail(data.email, data.password);
@@ -52,6 +54,7 @@ export default function LoginForm() {
         <FormField
           control={form.control}
           name="email"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
@@ -66,6 +69,7 @@ export default function LoginForm() {
         <FormField
           control={form.control}
           name="password"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center justify-between">
@@ -89,8 +93,13 @@ export default function LoginForm() {
           )}
         />
 
-        <Button variant="brandred" type="submit" className="w-full">
-          Login
+        <Button
+          variant="brandred"
+          type="submit"
+          className="w-full"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Logging in..." : "Login"}
         </Button>
         <div className="text-center">or</div>
         <ContinueWithGoogleButton />

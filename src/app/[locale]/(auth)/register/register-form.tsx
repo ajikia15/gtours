@@ -32,6 +32,8 @@ export default function RegisterForm() {
     },
   });
 
+  const { isSubmitting } = form.formState;
+
   const onSubmit = async (data: z.infer<typeof registerUserSchema>) => {
     console.log(data);
     const response = await registerUser(data);
@@ -50,6 +52,7 @@ export default function RegisterForm() {
         <FormField
           control={form.control}
           name="email"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Email</FormLabel>
@@ -64,6 +67,7 @@ export default function RegisterForm() {
         <FormField
           control={form.control}
           name="firstName"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <FormLabel>First Name</FormLabel>
@@ -78,6 +82,7 @@ export default function RegisterForm() {
         <FormField
           control={form.control}
           name="lastName"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Last Name</FormLabel>
@@ -92,6 +97,7 @@ export default function RegisterForm() {
         <FormField
           control={form.control}
           name="password"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Password</FormLabel>
@@ -110,6 +116,7 @@ export default function RegisterForm() {
         <FormField
           control={form.control}
           name="passwordConfirm"
+          disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
@@ -125,8 +132,13 @@ export default function RegisterForm() {
           )}
         />
 
-        <Button variant="brandred" type="submit" className="w-full">
-          Register
+        <Button
+          variant="brandred"
+          type="submit"
+          className="w-full"
+          disabled={isSubmitting}
+        >
+          {isSubmitting ? "Creating Account..." : "Register"}
         </Button>
         <div className="text-center">or</div>
         <ContinueWithGoogleButton />
