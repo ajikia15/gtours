@@ -112,6 +112,7 @@ export default function InteractiveMapSection() {
               ))}
         </div>
       </div>
+
       <div className="flex">
         <div className="w-1/3 h-full p-4" ref={animationParent}>
           {isLoading ? (

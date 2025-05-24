@@ -1,6 +1,6 @@
 .embla {
   --slide-height: 32rem;
-  --slide-spacing: 0rem;
+  --slide-spacing: 1rem;
   --slide-size: 100%;
   --embla-dot-font-size: 1.6rem;
   --embla-dot-font-size-active: 2rem;
@@ -9,24 +9,24 @@
 .embla__viewport {
   overflow: hidden;
   border-radius: 1rem;
+  position: relative;
 }
 .embla__container {
   display: flex;
   touch-action: pan-x pinch-zoom;
-  margin-top: calc(var(--slide-spacing) * -1);
-  height: calc(var(--slide-spacing) + var(--slide-height));
-  flex-direction: column;
+  margin-left: calc(var(--slide-spacing) * -1);
+  flex-direction: row;
 }
 .embla__slide {
   transform: translate3d(0, 0, 0);
   flex: 0 0 var(--slide-size);
   min-height: 0;
-  padding-top: var(--slide-spacing);
+  padding-left: var(--slide-spacing);
   background-color: black;
   color: white;
   aspect-ratio: 21 / 9; /* Custom aspect ratio */
   width: 100%;
-  height: auto; /* Let aspect-ratio control the height */
+  height: var(--slide-height); /* Set explicit height */
 }
 .embla__slide__number {
   box-shadow: inset 0 0 0 0.2rem var(--detail-medium-contrast);
@@ -47,16 +47,18 @@
   margin-top: 1.8rem;
 }
 .embla__dots {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: var(--embla-dot-gap);
-  position: absolute;
-  top: 50%;
-  right: 1.2rem;
-  transform: translateY(-50%);
-  z-index: 2;
-  margin: 0;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: var(--embla-dot-gap) !important;
+  position: absolute !important;
+  top: 50% !important;
+  right: 1.2rem !important;
+  bottom: auto !important;
+  left: auto !important;
+  transform: translateY(-50%) !important;
+  z-index: 2 !important;
+  margin: 0 !important;
 }
 
 .embla__dot {
