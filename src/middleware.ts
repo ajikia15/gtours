@@ -75,6 +75,7 @@ export async function middleware(request: NextRequest) {
   }
 
   const [, locale, ...segments] = pathname.split("/");
+  console.log(segments);
 
   if (pathname.match(/^\/(en|ge|ru)\/admin/)) {
     const adminRedirect = await handleAdminRoute(locale, request);

@@ -24,7 +24,7 @@ export default function LoginPage() {
           href="/register"
           className="text-brand-secondary hover:underline font-medium"
         >
-          Register
+          <Button variant="outline">Register</Button>
         </Link>
       </CardFooter>
     </Card>

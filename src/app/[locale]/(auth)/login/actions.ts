@@ -1,6 +1,5 @@
 "use server";
 
-import { auth } from "@/firebase/server";
 import { loginUserSchema } from "@/validation/loginUser";
 import { z } from "zod";
 
@@ -16,6 +15,7 @@ export const loginUser = async (data: z.infer<typeof loginUserSchema>) => {
     // For now, we'll return a placeholder response
     return { success: true };
   } catch (error) {
+    console.log(error);
     return { error: "Failed to login user" };
   }
 };

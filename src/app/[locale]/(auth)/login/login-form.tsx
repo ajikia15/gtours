@@ -14,7 +14,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import ContinueWithGoogleButton from "@/components/continue-with-google-button";
 import { loginUserSchema } from "@/validation/loginUser";
-import { loginUser } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
