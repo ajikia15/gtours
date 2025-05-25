@@ -28,6 +28,7 @@ export default function ToggleFavouriteButton({
           if (!tokenResult) {
             setIsLoading(false);
             router.push("/login");
+            toast.info("Please log in to add to favorites");
             return;
           }
 
