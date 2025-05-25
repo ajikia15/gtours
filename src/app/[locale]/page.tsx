@@ -3,6 +3,8 @@ import QuickCategory from "@/components/carousel/QuickCategory";
 import InteractiveMapSection from "./interactive-map-section";
 import { getTranslations } from "next-intl/server";
 import DisplayCardsSection from "./display-cards-section";
+import { Suspense } from "react";
+import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 
 export default async function HomePage() {
   // const t = useTranslations("Homepage");
@@ -18,7 +20,17 @@ export default async function HomePage() {
       <h1 className="text-center my-8 text-2xl font-bold">
         {t("discover-georgia")}
       </h1>
-      <DisplayCardsSection />
+      <Suspense
+        fallback={
+          <div className="grid grid-cols-4 gap-4 p-4">
+            {Array.from({ length: 4 }, (_, index) => (
+              <MapTourCardSkeleton key={`skeleton-${index}`} />
+            ))}
+          </div>
+        }
+      >
+        <DisplayCardsSection />
+      </Suspense>
       <InteractiveMapSection />
     </div>
   );
