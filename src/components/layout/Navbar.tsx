@@ -21,7 +21,7 @@ export default async function Navbar() {
           <NavLinks />
 
           <div className="flex items-center space-x-4">
-            {/* <LocaleSwitcher /> LocaleSwitcher is now rendered inside AuthButtons */}
+            {/* <LocaleSwitcher /> moved to authbuttons */}
             <AuthButtons />
           </div>
         </div>

@@ -56,6 +56,37 @@ const checkAdminAccess = async (
   }
 };
 
+// Helper function to check user authentication (for regular user routes)
+const checkUserAuth = async (
+  token: string | undefined,
+  locale: string,
+  request: NextRequest
+) => {
+  if (!token) {
+    return createRedirectUrl(locale, "/", request);
+  }
+
+  try {
+    const decodedToken = decodeJwt(token);
+
+    if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      return NextResponse.redirect(
+        new URL(
+          `/api/refresh-token?redirect=${encodeURIComponent(
+            request.nextUrl.pathname
+          )}`,
+          request.url
+        )
+      );
+    }
+
+    return null; // No redirect needed - user is authenticated
+  } catch (error) {
+    console.error(error);
+    return createRedirectUrl(locale, "/", request);
+  }
+};
+
 // Helper function to handle admin routes
 const handleAdminRoute = async (locale: string, request: NextRequest) => {
   if (request.method === "POST") {
@@ -83,15 +114,18 @@ export async function middleware(request: NextRequest) {
   }
 
   const token = (await cookies()).get("firebaseAuthToken")?.value;
+
+  // Protect account routes - only authenticated users can access
+  if (pathname.startsWith(`/${locale}/account`)) {
+    const userAuthRedirect = await checkUserAuth(token, locale, request);
+    if (userAuthRedirect) return userAuthRedirect;
+  }
+
   if (
     token &&
     (pathname.startsWith(`/${locale}/login`) ||
       pathname.startsWith(`/${locale}/register`))
   ) {
-    return createRedirectUrl(locale, "/", request);
-  }
-
-  if (!token && pathname.startsWith(`/${locale}/favourites`)) {
     return createRedirectUrl(locale, "/", request);
   }
 
