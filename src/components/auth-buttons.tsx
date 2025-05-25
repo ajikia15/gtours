@@ -15,6 +15,7 @@ import { Skeleton } from "./ui/skeleton";
 import LocaleSwitcher from "./layout/LocaleSwitcher";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
+import ShoppingCart from "./shopping-cart";
 
 export default function AuthButtons() {
   const auth = useAuth();
@@ -49,52 +50,54 @@ export default function AuthButtons() {
   return (
     <div className="flex items-center space-x-4">
       <LocaleSwitcher />
-      {auth.currentUser ? (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button
-              variant="outline"
-              size="icon"
-              className="rounded-full w-10 h-10"
-            >
-              <UserIcon className="h-10 w-10" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel className="font-medium">
-              {t("welcome")}, {auth.currentUser.displayName}
-            </DropdownMenuLabel>
-            <DropdownMenuItem>{t("myAccount")}</DropdownMenuItem>
-            {!!auth.customClaims?.admin && (
-              <Link href="/admin">
-                <DropdownMenuItem>{t("adminDashboard")}</DropdownMenuItem>
-              </Link>
-            )}
-            {!auth.customClaims?.admin && (
-              <Link href="/account/my-favourites">
-                <DropdownMenuItem>{t("myFavouriteTours")}</DropdownMenuItem>
-              </Link>
-            )}
-            <DropdownMenuItem
-              onClick={async () => {
-                await auth.logout();
-                router.refresh();
-              }}
-            >
-              {t("signOut")}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ) : (
-        <>
-          <Link href="/register">
-            <Button className="">{t("register")}</Button>
-          </Link>
 
-          <Link href="/login">
-            <Button variant="brandred">{t("signIn")}</Button>
-          </Link>
+      {auth.currentUser ? (
+        <>
+          <ShoppingCart />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="rounded-full w-10 h-10"
+              >
+                <UserIcon className="h-10 w-10" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel className="font-medium">
+                {t("welcome")}, {auth.currentUser.displayName}
+              </DropdownMenuLabel>
+              <DropdownMenuItem>{t("myAccount")}</DropdownMenuItem>
+              {!!auth.customClaims?.admin ? (
+                <Link href="/admin">
+                  <DropdownMenuItem>{t("adminDashboard")}</DropdownMenuItem>
+                </Link>
+              ) : (
+                <Link href="/account/my-favourites">
+                  <DropdownMenuItem>{t("myFavouriteTours")}</DropdownMenuItem>
+                </Link>
+              )}
+              <DropdownMenuItem
+                onClick={async () => {
+                  await auth.logout();
+                  router.refresh();
+                }}
+              >
+                {t("signOut")}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Link href="/login">
+            <Button variant="outline">{t("signIn")}</Button>
+          </Link>
+          <Link href="/register">
+            <Button>{t("signUp")}</Button>
+          </Link>
+        </div>
       )}
     </div>
   );
