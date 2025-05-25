@@ -1,12 +1,10 @@
-"use client";
-import TourDatePicker from "@/components/booking/tour-date-picker";
-import TravelerSelection from "@/components/booking/traveler-selection";
-import { Button } from "@/components/ui/button";
+"use server";
+
 import { Tour } from "@/types/Tour";
-import { Clock, Luggage, MapPin, RotateCcw, ShoppingCart } from "lucide-react";
+import { Clock, Luggage, MapPin, RotateCcw } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import ActivitySelection from "@/components/booking/activity-selection";
-export default function TourDetailsCard({ tour }: { tour: Tour }) {
+import TourDetailsBooker from "./tour-details-booker";
+export default async function TourDetailsCard({ tour }: { tour: Tour }) {
   return (
     <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-sm w-full min-w-84 border border-gray-100">
       <h3 className="text-lg font-semibold ">Tour Details</h3>
@@ -30,27 +28,7 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
           <span>Returns: {tour.returnTime}</span>
         </div>
       </div>
-
-      <div className="flex flex-col gap-4">
-        <h2 className="text-lg font-semibold text-gray-900">Choose Date</h2>
-        <TourDatePicker />
-        <h2 className="text-lg font-semibold text-gray-900">Travelers</h2>
-        <TravelerSelection />
-        <h2 className="text-lg font-semibold text-gray-900">
-          Select Activities
-        </h2>
-        <ActivitySelection activities={tour.offeredActivities} />
-        <span className="text-lg font-semibold text-gray-900">
-          Total: <span className="text-red-500">{tour.basePrice} GEL</span>
-        </span>
-      </div>
-      <Button className="w-full" variant="outline">
-        <ShoppingCart className="size-4 mr-2" />
-        <p>Add to Cart</p>
-      </Button>
-      <Button className="w-full " variant="brandred">
-        Book Tour
-      </Button>
+      <TourDetailsBooker tour={tour} />
       <p className="text-center text-gray-500 text-sm ">
         Got any questions?
         <Link
