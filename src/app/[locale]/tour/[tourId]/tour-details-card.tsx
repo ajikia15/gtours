@@ -1,9 +1,10 @@
 "use client";
-import TourDatePicker from "@/components/booking/TourDatePicker";
+import TourDatePicker from "@/components/booking/tour-date-picker";
+import TravelerSelection from "@/components/booking/traveler-selection";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import { Tour } from "@/types/Tour";
 import { Clock, Luggage, MapPin, RotateCcw, ShoppingCart } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 export default function TourDetailsCard({ tour }: { tour: Tour }) {
   return (
     <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-sm w-full min-w-84 border border-gray-100">
@@ -36,8 +37,12 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
       </div>
 
       <div>
-        <h3>Choose Date</h3>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">
+          Choose Date
+        </h2>
         <TourDatePicker />
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Travelers</h2>
+        <TravelerSelection />
       </div>
 
       <Button className="w-full" variant="outline">
@@ -47,6 +52,15 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
       <Button className="w-full " variant="brandred">
         Book Tour
       </Button>
+      <p className="text-center text-gray-500 text-sm ">
+        Got any questions?
+        <Link
+          href="/contact"
+          className="hover:underline ml-1 text-brand-secondary font-semibold"
+        >
+          Contact us
+        </Link>
+      </p>
     </div>
   );
 }

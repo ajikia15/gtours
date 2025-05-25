@@ -3,7 +3,11 @@ import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
 
 export default function TourDatePicker() {
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
 
   const defaultMonth = new Date();
   defaultMonth.setDate(defaultMonth.getDate() + 1);
@@ -13,7 +17,7 @@ export default function TourDatePicker() {
       <Calendar
         mode="single"
         selected={date}
-        onSelect={setDate}
+        onSelect={(day) => setDate(day as Date)}
         initialFocus
         defaultMonth={defaultMonth}
         disabled={(date) =>
