@@ -47,3 +47,11 @@ export async function getTourById(tourId: string) {
   };
   return tourData as Tour;
 }
+
+export async function getToursById(tourIds: string[]) {
+  const tours = await firestore
+    .collection("tours")
+    .where("__name__", "in", tourIds)
+    .get();
+  return tours.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Tour[];
+}

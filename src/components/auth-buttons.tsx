@@ -66,14 +66,14 @@ export default function AuthButtons() {
             </DropdownMenuLabel>
             <DropdownMenuItem>{t("myAccount")}</DropdownMenuItem>
             {!!auth.customClaims?.admin && (
-              <DropdownMenuItem>
-                <Link href="/admin">{t("adminDashboard")}</Link>
-              </DropdownMenuItem>
+              <Link href="/admin">
+                <DropdownMenuItem>{t("adminDashboard")}</DropdownMenuItem>
+              </Link>
             )}
             {!auth.customClaims?.admin && (
-              <DropdownMenuItem>
-                <Link href="/admin">{t("myFavouriteTours")}</Link>
-              </DropdownMenuItem>
+              <Link href="/account/my-favourites">
+                <DropdownMenuItem>{t("myFavouriteTours")}</DropdownMenuItem>
+              </Link>
             )}
             <DropdownMenuItem
               onClick={async () => {
