@@ -27,7 +27,6 @@ export default function ToggleFavouriteButton({
           const tokenResult = await auth?.currentUser?.getIdTokenResult();
           if (!tokenResult) {
             setIsLoading(false);
-            console.log("No token, redirecting to login");
             router.push("/login");
             return;
           }
