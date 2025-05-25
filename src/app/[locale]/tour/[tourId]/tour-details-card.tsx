@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Tour } from "@/types/Tour";
 import { Clock, Luggage, MapPin, RotateCcw, ShoppingCart } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import ActivitySelection from "@/components/booking/activity-selection";
 export default function TourDetailsCard({ tour }: { tour: Tour }) {
   return (
     <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-sm w-full min-w-84 border border-gray-100">
-      <h3 className="text-xl font-semibold text-center">Tour Details</h3>
+      <h3 className="text-lg font-semibold ">Tour Details</h3>
       <div className="flex flex-col gap-3">
         {tour.title && ( // replace with location name later
           <div className="flex items-center gap-2 text-gray-700">
@@ -30,16 +31,16 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
         </div>
       </div>
 
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">
-          Choose Date
-        </h2>
+      <div className="flex flex-col gap-4">
+        <h2 className="text-lg font-semibold text-gray-900">Choose Date</h2>
         <TourDatePicker />
-        <h2 className="text-xl font-semibold text-gray-900 mb-6">Travelers</h2>
+        <h2 className="text-lg font-semibold text-gray-900">Travelers</h2>
         <TravelerSelection />
-      </div>
-      <div className=" flex justify-between items-center">
-        <span className="text-lg font-semibold">
+        <h2 className="text-lg font-semibold text-gray-900">
+          Select Activities
+        </h2>
+        <ActivitySelection activities={tour.offeredActivities} />
+        <span className="text-lg font-semibold text-gray-900">
           Total: <span className="text-red-500">{tour.basePrice} GEL</span>
         </span>
       </div>

@@ -50,7 +50,7 @@ export default function TravelerSelection() {
   }) => (
     <div className="flex items-center justify-between py-3 border-b border-gray-200">
       <div className="flex-1">
-        <h3 className="text-lg font-medium text-gray-900">{title}</h3>
+        <h3 className="font-medium text-gray-900">{title}</h3>
         <p className="text-sm text-gray-500">{subtitle}</p>
       </div>
       <div className="flex items-center gap-3">
