@@ -20,7 +20,6 @@ export default function TourDatePicker() {
         onSelect={(day) => setDate(day as Date)}
         initialFocus
         defaultMonth={defaultMonth}
-        className=""
         disabled={(date) =>
           date <= new Date(new Date().setHours(23, 59, 59, 999))
         }

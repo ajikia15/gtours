@@ -101,10 +101,12 @@ export default function TravelerSelection() {
         />
       </div>
 
-      <div className="pt-4 ">
-        <p className="text-sm text-gray-600 text-right">
-          Total travelers:{" "}
-          {travelers.adults + travelers.children + travelers.infants}
+      <div className="py-2 border-t border-gray-200">
+        <p className="text-xs text-gray-600">
+          <span className="font-semibold">
+            {travelers.adults + travelers.children + travelers.infants}{" "}
+          </span>
+          travelers
         </p>
       </div>
     </div>
