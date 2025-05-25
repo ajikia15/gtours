@@ -30,12 +30,6 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
         </div>
       </div>
 
-      <div className="mt-4 flex justify-between items-center">
-        <span className="text-lg font-semibold">
-          Total: <span className="text-red-500">{tour.basePrice} GEL</span>
-        </span>
-      </div>
-
       <div>
         <h2 className="text-xl font-semibold text-gray-900 mb-6">
           Choose Date
@@ -44,7 +38,11 @@ export default function TourDetailsCard({ tour }: { tour: Tour }) {
         <h2 className="text-xl font-semibold text-gray-900 mb-6">Travelers</h2>
         <TravelerSelection />
       </div>
-
+      <div className=" flex justify-between items-center">
+        <span className="text-lg font-semibold">
+          Total: <span className="text-red-500">{tour.basePrice} GEL</span>
+        </span>
+      </div>
       <Button className="w-full" variant="outline">
         <ShoppingCart className="size-4 mr-2" />
         <p>Add to Cart</p>

@@ -48,7 +48,7 @@ export default function TravelerSelection() {
     count: number;
     type: keyof TravelerCounts;
   }) => (
-    <div className="flex items-center justify-between py-4 border-b border-gray-200 last:border-b-0">
+    <div className="flex items-center justify-between py-3 border-b border-gray-200">
       <div className="flex-1">
         <h3 className="text-lg font-medium text-gray-900">{title}</h3>
         <p className="text-sm text-gray-500">{subtitle}</p>
@@ -101,8 +101,8 @@ export default function TravelerSelection() {
         />
       </div>
 
-      <div className="mt-6 pt-4 border-t border-gray-200">
-        <p className="text-sm text-gray-600">
+      <div className="pt-4 ">
+        <p className="text-sm text-gray-600 text-right">
           Total travelers:{" "}
           {travelers.adults + travelers.children + travelers.infants}
         </p>
