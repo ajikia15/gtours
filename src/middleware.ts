@@ -91,7 +91,7 @@ export async function middleware(request: NextRequest) {
     return createRedirectUrl(locale, "/", request);
   }
 
-  if (!token && pathname.startsWith(`/${locale}/favorites`)) {
+  if (!token && pathname.startsWith(`/${locale}/favourites`)) {
     return createRedirectUrl(locale, "/", request);
   }
 

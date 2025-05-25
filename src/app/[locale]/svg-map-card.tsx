@@ -1,17 +1,20 @@
+"use server";
 import { Tour } from "@/types/Tour";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
-import { useLocale } from "next-intl";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
-import ToggleFavoriteButton from "@/components/toggle-favorite-button";
-export default function MapTourCard({ tour }: { tour: Tour }) {
-  const locale = useLocale();
+import ToggleFavouriteButton from "@/components/toggle-favourite-button";
+import { getLocale, getTranslations } from "next-intl/server";
+export default async function MapTourCard({ tour }: { tour: Tour }) {
+  const t = await getTranslations("Homepage");
+  const locale = await getLocale();
+
   return (
     <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl">
       <div className="aspect-square w-full relative rounded-xl">
-        <ToggleFavoriteButton tourId={tour.id} />
+        <ToggleFavouriteButton tourId={tour.id} />
         {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}

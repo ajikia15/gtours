@@ -31,7 +31,7 @@ export default async function HomePage() {
       >
         <DisplayCardsSection />
       </Suspense>
-      <InteractiveMapSection />
+      {/* <InteractiveMapSection /> */}
     </div>
   );
 }

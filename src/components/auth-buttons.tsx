@@ -72,7 +72,7 @@ export default function AuthButtons() {
             )}
             {!auth.customClaims?.admin && (
               <DropdownMenuItem>
-                <Link href="/admin">{t("myFavoriteTours")}</Link>
+                <Link href="/admin">{t("myFavouriteTours")}</Link>
               </DropdownMenuItem>
             )}
             <DropdownMenuItem

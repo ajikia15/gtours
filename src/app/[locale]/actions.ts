@@ -2,7 +2,7 @@
 
 import { auth, firestore } from "@/firebase/server";
 
-export const addFavorite = async (tourId: string, authToken: string) => {
+export const addFavourite = async (tourId: string, authToken: string) => {
   const verifiedToken = await auth.verifyIdToken(authToken);
   if (!verifiedToken) {
     return {
