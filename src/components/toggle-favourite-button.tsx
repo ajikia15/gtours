@@ -1,11 +1,11 @@
 "use client";
 
-import { HeartIcon, HeartPlus } from "lucide-react";
+import { HeartIcon } from "lucide-react";
 import { addFavourite, removeFavourite } from "@/app/[locale]/actions";
 import { useAuth } from "@/context/auth";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
+import { toast } from "sonner";
 export default function ToggleFavouriteButton({
   tourId,
   isFavourite,
@@ -31,7 +31,6 @@ export default function ToggleFavouriteButton({
             return;
           }
 
-          // Optimistically update the UI
           const newFavouriteState = !optimisticFavourite;
           setOptimisticFavourite(newFavouriteState);
 
@@ -42,10 +41,16 @@ export default function ToggleFavouriteButton({
           }
 
           router.refresh();
+          toast.success(
+            newFavouriteState
+              ? "Added to favorites!"
+              : "Removed from favorites :("
+          );
           setIsLoading(false);
         } catch (error) {
           // Revert optimistic update on error
           setOptimisticFavourite(isFavourite);
+          toast.error("Failed to update favorites. Please try again.");
           setIsLoading(false);
           console.error("Error toggling favourite:", error);
         }
