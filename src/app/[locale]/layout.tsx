@@ -11,9 +11,11 @@ import { getLocale, getMessages } from "next-intl/server";
 
 export default async function LocaleLayout({
   children,
+  modal,
 }: // params,
 {
   children: React.ReactNode;
+  modal: React.ReactNode;
   // params: { locale: string };
 }) {
   const locale = await getLocale();
@@ -47,6 +49,7 @@ export default async function LocaleLayout({
             <Navbar />
             <div className="container mx-auto mt-20">
               {children}
+              {modal}
               <Toaster />
               <Footer />
             </div>

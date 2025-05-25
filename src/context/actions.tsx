@@ -3,9 +3,13 @@
 import { cookies } from "next/headers";
 import { auth } from "../firebase/server";
 export const removeToken = async () => {
-  const cookieStore = await cookies();
-  cookieStore.delete("firebaseAuthToken");
-  cookieStore.delete("firebaseAuthRefreshToken");
+  try {
+    const cookieStore = await cookies();
+    cookieStore.delete("firebaseAuthToken");
+    cookieStore.delete("firebaseAuthRefreshToken");
+  } catch (error) {
+    console.error("Error removing tokens:", error);
+  }
 };
 export const setToken = async ({
   token,
@@ -37,12 +41,12 @@ export const setToken = async ({
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
-    cookieStore.set("firebaseAuthRefreshToken", token, {
+    cookieStore.set("firebaseAuthRefreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
     });
   } catch (error) {
-    console.error(error);
+    console.error("Error in setToken:", error);
     throw new Error("Failed to verify token");
   }
 };

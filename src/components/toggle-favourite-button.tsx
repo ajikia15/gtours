@@ -17,7 +17,6 @@ export default function ToggleFavouriteButton({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [optimisticFavourite, setOptimisticFavourite] = useState(isFavourite);
-
   return (
     <button
       className="z-10 absolute bg-white/70 rounded-bl-md p-1 -top-0.5 -right-0.5 text-gray-800 border-gray-300 border-t border-r rounded-tr-lg"

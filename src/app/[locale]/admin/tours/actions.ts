@@ -7,13 +7,19 @@ export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,
   token: string
 ) => {
-  // const docRef = firestore.collection("tours").doc();
-
-  const verifiedToken = await auth.verifyIdToken(token);
-  if (!verifiedToken.admin) {
+  try {
+    const verifiedToken = await auth.verifyIdToken(token);
+    if (!verifiedToken.admin) {
+      return {
+        error: "Unauthorized",
+        message: "You are not privileged to save a new tour",
+      };
+    }
+  } catch (error) {
+    console.error("Error verifying token in saveNewTour:", error);
     return {
-      error: "Unauthorized",
-      message: "You are not privileged to save a new tour",
+      error: "Invalid token",
+      message: "Invalid or expired authentication token",
     };
   }
 
@@ -42,11 +48,19 @@ export const editTour = async (
   id: string,
   token: string
 ) => {
-  const verifiedToken = await auth.verifyIdToken(token);
-  if (!verifiedToken.admin) {
+  try {
+    const verifiedToken = await auth.verifyIdToken(token);
+    if (!verifiedToken.admin) {
+      return {
+        error: "Unauthorized",
+        message: "You are not privileged to save a new tour",
+      };
+    }
+  } catch (error) {
+    console.error("Error verifying token in editTour:", error);
     return {
-      error: "Unauthorized",
-      message: "You are not privileged to save a new tour",
+      error: "Invalid token",
+      message: "Invalid or expired authentication token",
     };
   }
 
@@ -78,11 +92,19 @@ export const saveTourImages = async (
   },
   token: string
 ) => {
-  const verifiedToken = await auth.verifyIdToken(token);
-  if (!verifiedToken.admin) {
+  try {
+    const verifiedToken = await auth.verifyIdToken(token);
+    if (!verifiedToken.admin) {
+      return {
+        error: "Unauthorized",
+        message: "You are not privileged to save a new tour",
+      };
+    }
+  } catch (error) {
+    console.error("Error verifying token in saveTourImages:", error);
     return {
-      error: "Unauthorized",
-      message: "You are not privileged to save a new tour",
+      error: "Invalid token",
+      message: "Invalid or expired authentication token",
     };
   }
 
