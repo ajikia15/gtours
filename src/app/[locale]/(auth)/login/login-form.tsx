@@ -101,8 +101,8 @@ export default function LoginForm() {
           {isSubmitting ? "Logging in..." : "Login"}
         </Button>
         <div className="text-center">or</div>
-        <ContinueWithGoogleButton />
       </form>
+      <ContinueWithGoogleButton />
     </Form>
   );
 }
