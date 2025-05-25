@@ -13,7 +13,7 @@ type getToursOptions = {
     pageSize?: number;
   };
 };
-export async function getTours(options: getToursOptions) {
+export async function getTours(options?: getToursOptions) {
   const page = options?.pagination?.page || 1;
   const pageSize = options?.pagination?.pageSize || 10;
   const { minPrice, maxPrice } = options?.filters || {};

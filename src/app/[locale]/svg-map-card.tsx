@@ -5,18 +5,19 @@ import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
-
+import ToggleFavoriteButton from "@/components/toggle-favorite-button";
 export default function MapTourCard({ tour }: { tour: Tour }) {
   const locale = useLocale();
   return (
     <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl">
       <div className="aspect-square w-full relative rounded-xl">
+        <ToggleFavoriteButton tourId={tour.id} />
         {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}
             alt={tour.title}
             fill
-            className="w-full h-full object-cover rounded-xl"
+            className="w-full h-full object-cover rounded-lg"
           />
         )}
       </div>

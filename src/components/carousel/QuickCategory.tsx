@@ -4,11 +4,11 @@ import { ActivityCarousel } from "./ActivityCarousel";
 import { activityTypes } from "@/data/activity-constants";
 import React from "react";
 
-type QuickCategoryProps = {
+type Props = {
   className?: string;
 };
 
-const QuickCategory = ({ className }: QuickCategoryProps) => {
+const QuickCategory = ({ className }: Props) => {
   const t = useTranslations("QuickCategory");
 
   // Use all available activity types

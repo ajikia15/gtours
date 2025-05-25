@@ -97,22 +97,6 @@ export default function InteractiveMapSection() {
 
   return (
     <>
-      <div className="w-full">
-        <div className="grid grid-cols-4 gap-4 p-4">
-          {isLoading
-            ? // Show 4 skeleton cards while loading
-              Array.from({ length: 4 }, (_, index) => (
-                <MapTourCardSkeleton key={`skeleton-${index}`} />
-              ))
-            : // Show first 4 tours
-              tours.slice(0, 4).map((tour) => (
-                <div key={tour.id}>
-                  <MapTourCard tour={tour} />
-                </div>
-              ))}
-        </div>
-      </div>
-
       <div className="flex">
         <div className="w-1/3 h-full p-4" ref={animationParent}>
           {isLoading ? (
