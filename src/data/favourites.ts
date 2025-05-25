@@ -4,7 +4,8 @@ import "server-only";
 
 export const getUserFavourites = async () => {
   const cookieStore = await cookies();
-  const token = cookieStore.get("FirebaseAuthToken");
+  const token = cookieStore.get("firebaseAuthToken");
+
   if (!token) {
     return {};
   }

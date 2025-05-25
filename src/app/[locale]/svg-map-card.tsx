@@ -7,14 +7,20 @@ import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
 import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { getLocale, getTranslations } from "next-intl/server";
-export default async function MapTourCard({ tour }: { tour: Tour }) {
+export default async function MapTourCard({
+  tour,
+  isFavourite,
+}: {
+  tour: Tour;
+  isFavourite: boolean;
+}) {
   const t = await getTranslations("Homepage");
   const locale = await getLocale();
 
   return (
     <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl">
       <div className="aspect-square w-full relative rounded-xl">
-        <ToggleFavouriteButton tourId={tour.id} />
+        <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} />
         {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}

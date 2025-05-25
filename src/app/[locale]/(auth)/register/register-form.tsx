@@ -35,7 +35,6 @@ export default function RegisterForm() {
   const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof registerUserSchema>) => {
-    console.log(data);
     const response = await registerUser(data);
     if (!!response?.error) {
       toast.error(response.error);
