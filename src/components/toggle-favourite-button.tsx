@@ -3,7 +3,7 @@
 import { HeartIcon } from "lucide-react";
 import { addFavourite, removeFavourite } from "@/app/[locale]/actions";
 import { useAuth } from "@/context/auth";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 export default function ToggleFavouriteButton({
@@ -27,6 +27,8 @@ export default function ToggleFavouriteButton({
           const tokenResult = await auth?.currentUser?.getIdTokenResult();
           if (!tokenResult) {
             setIsLoading(false);
+            console.log("No token, redirecting to login");
+            router.push("/login");
             return;
           }
 
