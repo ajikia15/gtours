@@ -87,12 +87,13 @@ export default function AuthButtons() {
         </DropdownMenu>
       ) : (
         <>
-          <Button className="">
-            <Link href="/register">{t("register")}</Link>
-          </Button>
-          <Button variant="brandred">
-            <Link href="/login">{t("signIn")}</Link>
-          </Button>
+          <Link href="/register">
+            <Button className="">{t("register")}</Button>
+          </Link>
+
+          <Link href="/login">
+            <Button variant="brandred">{t("signIn")}</Button>
+          </Link>
         </>
       )}
     </div>

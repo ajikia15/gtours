@@ -7,7 +7,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Suspense } from "react";
 import LoginForm from "./login-form";
+import LoginFormSkeleton from "./login-form-skeleton";
 
 export default function LoginPage() {
   return (
@@ -16,7 +18,9 @@ export default function LoginPage() {
         <CardTitle>Login</CardTitle>
       </CardHeader>
       <CardContent>
-        <LoginForm />
+        <Suspense fallback={<LoginFormSkeleton />}>
+          <LoginForm />
+        </Suspense>
       </CardContent>
       <CardFooter className="flex justify-center text-sm text-muted-foreground gap-1">
         <span>Dont have an account?</span>
@@ -24,7 +28,7 @@ export default function LoginPage() {
           href="/register"
           className="text-brand-secondary hover:underline font-medium"
         >
-          <Button variant="outline">Register</Button>
+          Register
         </Link>
       </CardFooter>
     </Card>
