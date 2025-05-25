@@ -21,6 +21,7 @@ export default async function TourPage({
   const locale = await getLocale();
   const { tourId } = await params;
   const tour = await getTourById(tourId);
+  // console.log(tour);
   return (
     <div>
       <Suspense fallback={<ImageSectionSkeleton />}>

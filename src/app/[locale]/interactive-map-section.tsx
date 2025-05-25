@@ -102,7 +102,11 @@ export default function InteractiveMapSection() {
           {isLoading ? (
             <MapTourCardSkeleton key={1} />
           ) : selectedTour ? (
-            <MapTourCard key={selectedTour.id} tour={selectedTour} />
+            <MapTourCard
+              key={selectedTour.id}
+              tour={selectedTour}
+              isFavourite={false}
+            />
           ) : null}
         </div>
         <div className="w-2/3 relative">

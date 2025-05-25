@@ -33,19 +33,48 @@ export async function getTours(options?: getToursOptions) {
     .offset((page - 1) * pageSize)
     .get();
 
-  const tours = toursSnapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  })) as Tour[];
+  const tours = toursSnapshot.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      title: data?.title || "",
+      descriptionEN: data?.descriptionEN || "",
+      descriptionGE: data?.descriptionGE || "",
+      descriptionRU: data?.descriptionRU || "",
+      basePrice: data?.basePrice || 0,
+      duration: data?.duration || 0,
+      leaveTime: data?.leaveTime || "",
+      returnTime: data?.returnTime || "",
+      coordinates: data?.coordinates || undefined,
+      status: data?.status || "draft",
+      images: data?.images || [],
+      offeredActivities: data?.offeredActivities || [],
+    };
+  }) as Tour[];
   return { data: tours, totalPages };
 }
 export async function getTourById(tourId: string) {
   const tour = await firestore.collection("tours").doc(tourId).get();
-  const tourData = {
+  const tourData = tour.data();
+
+  // Create a clean, serializable version of the tour data
+  const serializedTour = {
     id: tour.id,
-    ...tour.data(),
+    title: tourData?.title || "",
+    descriptionEN: tourData?.descriptionEN || "",
+    descriptionGE: tourData?.descriptionGE || "",
+    descriptionRU: tourData?.descriptionRU || "",
+    basePrice: tourData?.basePrice || 0,
+    duration: tourData?.duration || 0,
+    leaveTime: tourData?.leaveTime || "",
+    returnTime: tourData?.returnTime || "",
+    coordinates: tourData?.coordinates || undefined,
+    status: tourData?.status || "draft",
+    images: tourData?.images || [],
+    offeredActivities: tourData?.offeredActivities || [],
   };
-  return tourData as Tour;
+
+  return serializedTour as Tour;
 }
 
 export async function getToursById(tourIds: string[]) {
@@ -53,5 +82,22 @@ export async function getToursById(tourIds: string[]) {
     .collection("tours")
     .where("__name__", "in", tourIds)
     .get();
-  return tours.docs.map((doc) => ({ id: doc.id, ...doc.data() })) as Tour[];
+  return tours.docs.map((doc) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      title: data?.title || "",
+      descriptionEN: data?.descriptionEN || "",
+      descriptionGE: data?.descriptionGE || "",
+      descriptionRU: data?.descriptionRU || "",
+      basePrice: data?.basePrice || 0,
+      duration: data?.duration || 0,
+      leaveTime: data?.leaveTime || "",
+      returnTime: data?.returnTime || "",
+      coordinates: data?.coordinates || undefined,
+      status: data?.status || "draft",
+      images: data?.images || [],
+      offeredActivities: data?.offeredActivities || [],
+    };
+  }) as Tour[];
 }
