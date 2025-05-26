@@ -104,7 +104,6 @@ export default function EditBookingPageClient({
         tours={tours}
         mode="edit"
         editingItem={item}
-        usePopovers={false}
         onSuccess={handleSuccess}
       />
 

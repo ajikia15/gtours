@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "@/i18n/navigation";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { ShoppingCart, Plus } from "lucide-react";
 
 interface BookingPageClientProps {
@@ -75,7 +75,6 @@ export default function BookingPageClient({
               <BookingBar
                 tours={tours}
                 mode="add"
-                usePopovers={true}
                 onSuccess={handleQuickBookingSuccess}
                 className="border-0 shadow-none"
                 preselectedTour={preselectedTour || undefined}
@@ -104,51 +103,12 @@ export default function BookingPageClient({
           )}
         </div>
 
-        <Tabs defaultValue="normal" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 max-w-md mx-auto">
-            <TabsTrigger value="normal">Full Interface</TabsTrigger>
-            <TabsTrigger value="popover">Compact Popovers</TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="normal" className="space-y-4">
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Badge variant="outline">Full Interface Mode</Badge>
-                <span className="text-sm text-gray-600">
-                  All options displayed inline for detailed selection
-                </span>
-              </div>
-            </Card>
-
-            <BookingBar
-              tours={tours}
-              mode="add"
-              usePopovers={false}
-              onSuccess={handleSuccess}
-              preselectedTour={preselectedTour || undefined}
-            />
-          </TabsContent>
-
-          <TabsContent value="popover" className="space-y-4">
-            <Card className="p-4">
-              <div className="flex items-center gap-2 mb-4">
-                <Badge variant="outline">Popover Mode</Badge>
-                <span className="text-sm text-gray-600">
-                  Compact interface with popover selectors - perfect for headers
-                  or sidebars
-                </span>
-              </div>
-            </Card>
-
-            <BookingBar
-              tours={tours}
-              mode="add"
-              usePopovers={true}
-              onSuccess={handleSuccess}
-              preselectedTour={preselectedTour || undefined}
-            />
-          </TabsContent>
-        </Tabs>
+        <BookingBar
+          tours={tours}
+          mode="add"
+          onSuccess={handleSuccess}
+          preselectedTour={preselectedTour || undefined}
+        />
 
         {/* Quick Actions */}
         <Card className="p-6">
