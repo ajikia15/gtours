@@ -2,37 +2,36 @@
 "use client";
 import { OfferedActivity } from "@/types/Activity";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+
 import { getActivityIcon } from "@/lib/imageHelpers";
 
 interface ActivitySelectionProps {
   activities: OfferedActivity[];
+  selectedActivities: Set<string>;
+  setSelectedActivities: (selectedActivities: Set<string>) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
 }
 
 export default function ActivitySelection({
   activities,
+  selectedActivities,
+  setSelectedActivities,
   onSelectionChange,
 }: ActivitySelectionProps) {
   const quickCategory = useTranslations("QuickCategory");
-  const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
-    new Set()
-  );
 
   const handleActivityToggle = (activityId: string) => {
-    setSelectedActivities((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(activityId)) {
-        newSet.delete(activityId);
-      } else {
-        newSet.add(activityId);
-      }
+    const newSet = new Set(selectedActivities);
+    if (newSet.has(activityId)) {
+      newSet.delete(activityId);
+    } else {
+      newSet.add(activityId);
+    }
 
-      // Call the callback with the new selection
-      onSelectionChange?.(Array.from(newSet));
+    setSelectedActivities(newSet);
 
-      return newSet;
-    });
+    // Call the callback with the new selection
+    onSelectionChange?.(Array.from(newSet));
   };
 
   return (

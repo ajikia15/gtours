@@ -2,38 +2,31 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
+import { TravelerCounts } from "@/app/[locale]/tour/[tourId]/tour-details-booker";
 
-interface TravelerCounts {
-  adults: number;
-  children: number;
-  infants: number;
-}
-
-export default function TravelerSelection() {
-  const [travelers, setTravelers] = useState<TravelerCounts>({
-    adults: 2,
-    children: 0,
-    infants: 0,
-  });
-
+export default function TravelerSelection({
+  travelers,
+  setTravelers,
+}: {
+  travelers: TravelerCounts;
+  setTravelers: (travelers: TravelerCounts) => void;
+}) {
   const updateCount = (type: keyof TravelerCounts, increment: boolean) => {
-    setTravelers((prev) => {
-      const newCount = increment ? prev[type] + 1 : prev[type] - 1;
+    const newCount = increment ? travelers[type] + 1 : travelers[type] - 1;
 
-      // Enforce minimum of 2 adults
-      if (type === "adults" && newCount < 2) {
-        return prev;
-      }
+    // Enforce minimum of 2 adults
+    if (type === "adults" && newCount < 2) {
+      return;
+    }
 
-      // Prevent negative counts
-      if (newCount < 0) {
-        return prev;
-      }
+    // Prevent negative counts
+    if (newCount < 0) {
+      return;
+    }
 
-      return {
-        ...prev,
-        [type]: newCount,
-      };
+    setTravelers({
+      ...travelers,
+      [type]: newCount,
     });
   };
 

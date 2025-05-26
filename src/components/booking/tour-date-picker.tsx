@@ -2,13 +2,13 @@
 import { Calendar } from "@/components/ui/calendar";
 import { useState } from "react";
 
-export default function TourDatePicker() {
-  const [date, setDate] = useState<Date>(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow;
-  });
-
+export default function TourDatePicker({
+  date,
+  setDate,
+}: {
+  date: Date;
+  setDate: (date: Date) => void;
+}) {
   const defaultMonth = new Date();
   defaultMonth.setDate(defaultMonth.getDate() + 1);
 

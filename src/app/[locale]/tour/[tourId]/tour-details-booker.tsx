@@ -7,9 +7,29 @@ import { ShoppingCart, ChevronDown, ChevronUp } from "lucide-react";
 import { Tour } from "@/types/Tour";
 import { useState } from "react";
 
-export default function TourDetailsBooker({ tour }: { tour: Tour }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export type TravelerCounts = {
+  adults: number;
+  children: number;
+  infants: number;
+};
 
+export default function TourDetailsBooker({ tour }: { tour: Tour }) {
+  const [isExpanded, setIsExpanded] = useState(true);
+  const [date, setDate] = useState<Date>(() => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow;
+  });
+
+  const [travelers, setTravelers] = useState<TravelerCounts>({
+    adults: 2,
+    children: 0,
+    infants: 0,
+  });
+
+  const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
+    new Set()
+  );
   return (
     <>
       <div className="relative">
@@ -21,19 +41,25 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
           `}
         >
           <h2 className="text-lg font-semibold text-gray-900">Choose Date</h2>
-          <TourDatePicker />
+          <TourDatePicker date={date} setDate={setDate} />
           <h2 className="text-lg font-semibold text-gray-900">Travelers</h2>
-          <TravelerSelection />
+          <TravelerSelection
+            travelers={travelers}
+            setTravelers={setTravelers}
+          />
           <h2 className="text-lg font-semibold text-gray-900">
             Select Activities
           </h2>
-          <ActivitySelection activities={tour.offeredActivities} />
+          <ActivitySelection
+            activities={tour.offeredActivities}
+            selectedActivities={selectedActivities}
+            setSelectedActivities={setSelectedActivities}
+          />
           <span className="text-lg font-semibold text-gray-900">
             Total: <span className="text-red-500">{tour.basePrice} GEL</span>
           </span>
         </div>
 
-        {/* Gradient Overlay & Expand Button (only when collapsed) */}
         {!isExpanded && (
           <div className="absolute bottom-0 left-0 right-0">
             {/* Gradient fade */}
