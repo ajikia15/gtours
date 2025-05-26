@@ -9,6 +9,7 @@ import { format } from "date-fns";
 import { removeFromCart } from "@/data/cart";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 
 interface CartCardProps {
   item: CartItem;
@@ -16,6 +17,7 @@ interface CartCardProps {
 
 export default function CartCard({ item }: CartCardProps) {
   const [isRemoving, setIsRemoving] = useState(false);
+  const router = useRouter();
 
   const handleRemoveItem = async () => {
     setIsRemoving(true);
@@ -32,6 +34,10 @@ export default function CartCard({ item }: CartCardProps) {
     } finally {
       setIsRemoving(false);
     }
+  };
+
+  const handleEditItem = () => {
+    router.push(`/cart/edit/${item.id}`);
   };
 
   return (
@@ -59,6 +65,7 @@ export default function CartCard({ item }: CartCardProps) {
                 <Button
                   variant="ghost"
                   size="sm"
+                  onClick={handleEditItem}
                   className="text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full p-1"
                   title="Edit booking details"
                 >

@@ -34,6 +34,17 @@ export default function ActivitySelection({
     onSelectionChange?.(Array.from(newSet));
   };
 
+  // Handle case where activities might be undefined or empty
+  if (!activities || !Array.isArray(activities) || activities.length === 0) {
+    return (
+      <div className="space-y-3">
+        <div className="text-sm text-gray-400 p-4 border-2 border-dashed border-gray-200 rounded text-center">
+          No activities available
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap gap-1.5">

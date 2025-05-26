@@ -161,6 +161,15 @@ export const BookingProvider = ({
     tour: Tour,
     selectedActivityIds: string[]
   ): number => {
+    // Return 0 if tour or activities are not available
+    if (
+      !tour ||
+      !tour.offeredActivities ||
+      !Array.isArray(tour.offeredActivities)
+    ) {
+      return 0;
+    }
+
     return selectedActivityIds.reduce((total, activityId) => {
       const activity = tour.offeredActivities.find(
         (a) => a.activityTypeId === activityId
@@ -195,6 +204,11 @@ export const BookingProvider = ({
     travelers: TravelerCounts,
     selectedActivityIds: string[]
   ): number => {
+    // Return 0 if tour data is not available
+    if (!tour || typeof tour.basePrice !== "number") {
+      return 0;
+    }
+
     const totalPeople = getTotalPeople(travelers);
     const basePrice = tour.basePrice;
     const carCost = calculateCarCost(totalPeople);
@@ -218,6 +232,16 @@ export const BookingProvider = ({
     travelers: TravelerCounts,
     selectedActivityIds: string[]
   ): PricingBreakdown => {
+    // Return default breakdown if tour data is not available
+    if (!tour || typeof tour.basePrice !== "number") {
+      return {
+        basePrice: 0,
+        carCost: 0,
+        activityCost: 0,
+        totalPrice: 0,
+      };
+    }
+
     const totalPeople = getTotalPeople(travelers);
     const basePrice = tour.basePrice;
     const carCost = calculateCarCost(totalPeople);
