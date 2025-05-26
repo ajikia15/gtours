@@ -2,7 +2,7 @@
 
 ## Overview
 
-The shopping cart feature allows authenticated users to add tours to their cart, manage booking details, and proceed to checkout. The implementation uses Firebase Firestore for real-time data synchronization and includes comprehensive pricing calculations.
+The shopping cart feature allows authenticated users to add tours to their cart, manage booking details, and proceed to checkout. The implementation uses Firebase Firestore for real-time data synchronization, includes comprehensive pricing calculations, and integrates with the shared booking state system for seamless group travel planning.
 
 ## Architecture
 
@@ -15,16 +15,19 @@ src/
 ├── lib/cart-client.ts               # Client-side real-time subscriptions
 ├── context/cart.tsx                 # React context provider
 ├── components/shopping-cart.tsx     # Navigation cart icon component
+├── components/cart-card.tsx         # Individual cart item cards
+├── components/shared-booking-indicator.tsx  # Multi-tour guidance
 ├── app/[locale]/cart/page.tsx       # Cart page component
 └── app/[locale]/tour/[tourId]/tour-details-booker.tsx  # Add to cart integration
 ```
 
 ### Data Flow
 
-1. **User adds item to cart** → `addToCart()` server action
+1. **User adds item to cart** → `addToCart()` server action with shared state
 2. **Firestore updates** → Real-time listeners trigger
 3. **Context updates** → UI re-renders automatically
 4. **Cart badge updates** → Navigation shows current count
+5. **Shared state sync** → All cart items updated with shared travel details
 
 ## Features
 
@@ -32,10 +35,20 @@ src/
 
 - ✅ Add tours to cart with booking details
 - ✅ Real-time cart synchronization
+- ✅ Shared booking state integration
 - ✅ Complex pricing calculations
 - ✅ Cart item management (update/remove)
 - ✅ User authentication integration
-- ✅ Responsive cart page UI
+- ✅ Responsive cart page UI with modern card design
+
+### Shared State Integration
+
+The cart now integrates with the shared booking state system:
+
+- **Unified Travel Details**: Date and travelers synchronized across all tours
+- **Tour-Specific Activities**: Each tour maintains its own activity selections
+- **Automatic Updates**: Changes to shared state update all cart items
+- **Visual Indicators**: Clear UI showing shared vs. tour-specific details
 
 ### Pricing Logic
 
@@ -94,12 +107,12 @@ Adds a new item to the user's cart.
 
 #### `updateCartItem(itemId, updates)`
 
-Updates an existing cart item.
+Updates an existing cart item. Used for shared state synchronization.
 
 **Parameters:**
 
 - `itemId`: ID of the cart item to update
-- `updates`: Partial cart item data
+- `updates`: Partial cart item data (typically shared date/travelers)
 
 #### `removeFromCart(itemId)`
 
@@ -168,13 +181,13 @@ Individual cart items:
   tourTitle: string;
   tourBasePrice: number;
   tourImages?: string[];
-  selectedDate?: Date;
-  travelers: {
+  selectedDate?: Date;  // Synced with shared state
+  travelers: {          // Synced with shared state
     adults: number;
     children: number;
     infants: number;
   };
-  selectedActivities: string[];
+  selectedActivities: string[];  // Tour-specific
   totalPrice: number;
   activityPriceIncrement: number;
   carCost: number;
@@ -212,11 +225,14 @@ service cloud.firestore {
 ```tsx
 // app/layout.tsx
 import { CartProvider } from "@/context/cart";
+import { BookingProvider } from "@/context/booking";
 
 export default function RootLayout({ children }) {
   return (
     <AuthProvider>
-      <CartProvider>{children}</CartProvider>
+      <CartProvider>
+        <BookingProvider>{children}</BookingProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }
@@ -237,35 +253,82 @@ export default function SomeComponent() {
     <div>
       <p>Cart has {totalItems} items</p>
       {items.map((item) => (
-        <div key={item.id}>{item.tourTitle}</div>
+        <div key={item.id}>
+          {item.tourTitle}
+          {!item.selectedDate && (
+            <span className="text-amber-600">Date not selected</span>
+          )}
+        </div>
       ))}
     </div>
   );
 }
 ```
 
-### Adding Items to Cart
+### Adding Items to Cart (Modern Approach)
 
 ```tsx
 // components/TourBooking.tsx
-import { addToCart } from "@/data/cart";
+import { useBooking } from "@/context/booking";
 
-const handleAddToCart = async () => {
-  const result = await addToCart({
-    tourId: "tour-123",
-    tourTitle: "Amazing Tour",
-    tourBasePrice: 100,
-    selectedDate: new Date(),
-    travelers: { adults: 2, children: 0, infants: 0 },
-    selectedActivities: ["activity-1", "activity-2"],
-  });
+export default function TourBooking({ tour }) {
+  const booking = useBooking();
+  const [selectedActivities, setSelectedActivities] = useState([]);
 
-  if (result.success) {
-    toast.success("Added to cart!");
-  } else {
-    toast.error(result.message);
-  }
-};
+  const handleAddToCart = async () => {
+    // Uses shared state automatically
+    const result = await booking.addBookingToCart(tour, selectedActivities);
+
+    if (result.success) {
+      toast.success("Added to cart! All tours updated with travel details.");
+    } else {
+      toast.error(result.message);
+    }
+  };
+
+  return (
+    <div>
+      <SharedBookingIndicator />
+      {/* Date and travelers come from shared state */}
+      {/* Activities are tour-specific */}
+      <button onClick={handleAddToCart}>Add to Cart</button>
+    </div>
+  );
+}
+```
+
+### Cart Page with Shared State
+
+```tsx
+// app/[locale]/cart/page.tsx
+import { useCart } from "@/context/cart";
+import { useBooking } from "@/context/booking";
+import CartCard from "@/components/cart-card";
+
+export default function CartPage() {
+  const cart = useCart();
+  const booking = useBooking();
+
+  return (
+    <div>
+      {/* Show shared state indicator for multiple tours */}
+      {cart.items.length > 1 && <SharedBookingIndicator />}
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+          <div className="space-y-4">
+            {cart.items.map((item) => (
+              <CartCard key={item.id} item={item} />
+            ))}
+          </div>
+        </div>
+
+        {/* Cart summary */}
+        <div className="lg:col-span-1">{/* Order summary component */}</div>
+      </div>
+    </div>
+  );
+}
 ```
 
 ## Error Handling
@@ -278,18 +341,21 @@ The cart system includes comprehensive error handling:
 - Firestore operation errors
 - Data validation errors
 - Missing tour/activity data
+- Shared state synchronization errors
 
 ### Client-Side Errors
 
 - Real-time subscription failures
 - Network connectivity issues
 - Data parsing errors
+- Shared state conflicts
 
 ### User-Facing Errors
 
 - Toast notifications for failed operations
 - Loading states during operations
 - Graceful fallbacks for missing data
+- Clear indicators for incomplete bookings
 
 ## Performance Considerations
 
@@ -299,6 +365,7 @@ The cart system includes comprehensive error handling:
 - Automatic cleanup of subscriptions
 - Efficient Firestore queries with ordering
 - Minimal re-renders through proper context structure
+- Optimized shared state synchronization
 
 ### Best Practices
 
@@ -306,6 +373,7 @@ The cart system includes comprehensive error handling:
 - Implement proper loading states
 - Handle offline scenarios gracefully
 - Batch Firestore operations when possible
+- Minimize shared state updates
 
 ## Testing
 
@@ -314,16 +382,19 @@ The cart system includes comprehensive error handling:
 - Cart calculation functions
 - Data validation helpers
 - Error handling scenarios
+- Shared state synchronization
 
 ### Integration Tests
 
 - Cart operations with Firestore
 - Real-time subscription behavior
 - Authentication integration
+- Shared state integration
 
 ### E2E Tests
 
 - Complete cart workflow
+- Multi-tour shared state scenarios
 - Cross-browser compatibility
 - Mobile responsiveness
 
@@ -331,19 +402,21 @@ The cart system includes comprehensive error handling:
 
 ### Planned Features
 
-- [ ] Cart item editing (dates, travelers, activities)
+- [ ] Cart item editing (dates, travelers, activities) via dedicated page
 - [ ] Save for later functionality
 - [ ] Cart expiration handling
 - [ ] Bulk operations (select multiple items)
 - [ ] Cart sharing between users
 - [ ] Wishlist integration
+- [ ] Advanced shared state features (special requirements, etc.)
 
 ### Performance Improvements
 
 - [ ] Cart data caching
-- [ ] Optimistic updates
+- [ ] Optimistic updates for shared state
 - [ ] Background sync
 - [ ] Pagination for large carts
+- [ ] Advanced conflict resolution
 
 ## Troubleshooting
 
@@ -354,6 +427,12 @@ The cart system includes comprehensive error handling:
 - Check Firebase authentication status
 - Verify Firestore security rules
 - Ensure proper subscription cleanup
+
+#### Shared state not synchronizing
+
+- Check if BookingProvider is properly set up
+- Verify cart context is available
+- Review shared state update logic
 
 #### Pricing calculations incorrect
 
@@ -372,6 +451,7 @@ The cart system includes comprehensive error handling:
 ```typescript
 // Enable debug logging
 console.log("Cart state:", useCart());
+console.log("Shared booking state:", useBooking().sharedState);
 console.log("Auth state:", useAuth());
 ```
 
@@ -384,3 +464,29 @@ When contributing to the cart feature:
 3. Include error handling for all operations
 4. Write unit tests for new functions
 5. Update this documentation for new features
+6. Consider shared state implications
+7. Test multi-tour scenarios thoroughly
+
+## Integration with Shared Booking State
+
+The cart system is tightly integrated with the shared booking state:
+
+### Automatic Synchronization
+
+- When shared state changes, all cart items update automatically
+- Users see notifications about updates
+- Consistent travel details across all tours
+
+### Visual Indicators
+
+- Cart cards show "Date not selected" when appropriate
+- Shared booking indicator appears for multiple tours
+- Clear status badges for booking completeness
+
+### API Simplification
+
+- `addBookingToCart` now uses shared state automatically
+- Reduced complexity in tour components
+- Centralized state management
+
+This integration provides a seamless group travel planning experience while maintaining technical excellence.

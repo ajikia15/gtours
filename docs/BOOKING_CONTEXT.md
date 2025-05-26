@@ -2,15 +2,31 @@
 
 ## Overview
 
-The Booking Context provides a centralized system for managing booking-related functions across your Next.js application. It eliminates code duplication and ensures consistent pricing calculations, validation logic, and cart operations throughout your app.
+The Booking Context provides a centralized system for managing shared booking state and booking-related functions across your Next.js application. It implements a shared state system where travel details (date, travelers) are synchronized across all tours, while activities remain tour-specific.
 
 ## Key Benefits
 
-✅ **No State Collisions**: Functions are stateless - each component maintains its own booking state  
+✅ **Shared State Management**: Date and travelers synchronized across all tours  
+✅ **Tour-Specific Activities**: Each tour maintains its own activity selections  
+✅ **Automatic Synchronization**: Changes to shared details update all cart items  
 ✅ **Consistent Pricing**: Centralized calculations ensure accuracy across all components  
-✅ **Reusable Logic**: Use the same functions in tour details, cart, checkout, etc.  
 ✅ **Easy Validation**: Built-in booking validation with detailed error messages  
+✅ **Intuitive UX**: Natural group travel planning experience  
 ✅ **Type Safety**: Full TypeScript support with comprehensive type definitions
+
+## Shared State Concept
+
+```
+User books Tour A: 5 people, March 15th, hiking activity
+↓
+User goes to Tour B page: Pre-filled with 5 people, March 15th
+User adds photography activity → Add to cart
+↓
+User goes to Tour C page: Pre-filled with 5 people, March 15th
+User adds wine tasting → Add to cart
+↓
+All tours in cart: Same group, same start date, different activities
+```
 
 ## Architecture
 
@@ -18,14 +34,15 @@ The Booking Context provides a centralized system for managing booking-related f
 
 ```
 src/
-├── types/Booking.ts              # Centralized booking types
-├── context/booking.tsx           # Booking context provider
-├── components/booking/           # Booking-related components
-│   ├── booking-summary.tsx       # Example reusable component
-│   ├── tour-date-picker.tsx      # Date selection
-│   ├── traveler-selection.tsx    # Traveler counts
-│   └── activity-selection.tsx    # Activity selection
-└── app/[locale]/layout.tsx       # Provider setup
+├── types/Booking.ts                    # Centralized booking types
+├── context/booking.tsx                 # Booking context with shared state
+├── components/booking/                 # Booking-related components
+│   ├── booking-summary.tsx             # Example reusable component
+│   ├── tour-date-picker.tsx            # Date selection (supports undefined)
+│   ├── traveler-selection.tsx          # Traveler counts
+│   └── activity-selection.tsx          # Activity selection
+├── components/shared-booking-indicator.tsx  # Multi-tour guidance
+└── app/[locale]/layout.tsx             # Provider setup
 ```
 
 ### Provider Setup
@@ -42,6 +59,24 @@ The BookingProvider is already set up in your layout:
 ```
 
 ## Available Functions
+
+### Shared State Management
+
+```tsx
+const booking = useBooking();
+
+// Access shared state
+const { selectedDate, travelers } = booking.sharedState;
+
+// Update shared date (affects all tours)
+booking.updateSharedDate(new Date());
+
+// Update shared travelers (affects all tours)
+booking.updateSharedTravelers({ adults: 4, children: 1, infants: 0 });
+
+// Reset shared state to defaults
+booking.resetSharedState();
+```
 
 ### Pricing Calculations
 
@@ -76,7 +111,7 @@ const breakdown = booking.getPricingBreakdown(
 ### Validation
 
 ```tsx
-// Validate a booking
+// Validate a booking (uses shared state internally)
 const validation = booking.validateBooking({
   selectedDate: new Date(),
   travelers: { adults: 2, children: 0, infants: 0 },
@@ -92,14 +127,11 @@ const isReady = booking.isBookingComplete(bookingData);
 ### Cart Operations
 
 ```tsx
-// Add booking to cart (handles validation automatically)
-const result = await booking.addBookingToCart(tour, {
-  selectedDate: new Date(),
-  travelers: { adults: 2, children: 1, infants: 0 },
-  selectedActivities: ["hiking"],
-});
+// Add booking to cart using shared state (simplified API)
+const result = await booking.addBookingToCart(tour, ["hiking", "photography"]);
 
 // Returns: { success: boolean, message?: string }
+// Note: Uses shared date/travelers automatically, syncs all cart items
 ```
 
 ### Utility Functions
@@ -114,7 +146,7 @@ const payingPeople = booking.getPayingPeople(travelers);
 
 ## Usage Examples
 
-### 1. Basic Tour Booking Component
+### 1. Modern Tour Booking Component (Shared State)
 
 ```tsx
 "use client";
@@ -122,26 +154,25 @@ const payingPeople = booking.getPayingPeople(travelers);
 import { useState } from "react";
 import { useBooking } from "@/context/booking";
 import { Tour } from "@/types/Tour";
-import { TravelerCounts } from "@/types/Booking";
+import SharedBookingIndicator from "@/components/shared-booking-indicator";
 
 export default function TourBooking({ tour }: { tour: Tour }) {
   const booking = useBooking();
-  const [travelers, setTravelers] = useState<TravelerCounts>({
-    adults: 2,
-    children: 0,
-    infants: 0,
-  });
-  const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
-  // Calculate pricing using context
+  // Use shared state for date and travelers
+  const { selectedDate, travelers } = booking.sharedState;
+
+  // Tour-specific activities
+  const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
+
+  // Calculate pricing using shared state
   const totalPrice = booking.calculateTotalPrice(
     tour,
     travelers,
     selectedActivities
   );
 
-  // Validate booking
+  // Validate booking using shared state
   const validation = booking.validateBooking({
     selectedDate,
     travelers,
@@ -149,20 +180,32 @@ export default function TourBooking({ tour }: { tour: Tour }) {
   });
 
   const handleAddToCart = async () => {
-    const result = await booking.addBookingToCart(tour, {
-      selectedDate,
-      travelers,
-      selectedActivities,
-    });
+    // Simplified API - uses shared state automatically
+    const result = await booking.addBookingToCart(tour, selectedActivities);
 
     if (result.success) {
-      // Handle success (toast is shown automatically)
+      // Success! All cart items updated with shared details
     }
   };
 
   return (
     <div>
-      {/* Your booking form components */}
+      <SharedBookingIndicator />
+
+      {/* Date picker updates shared state */}
+      <TourDatePicker date={selectedDate} setDate={booking.updateSharedDate} />
+
+      {/* Traveler selection updates shared state */}
+      <TravelerSelection
+        travelers={travelers}
+        setTravelers={booking.updateSharedTravelers}
+      />
+
+      {/* Activities remain tour-specific */}
+      <ActivitySelection
+        activities={selectedActivities}
+        setActivities={setSelectedActivities}
+      />
 
       <div className="pricing-summary">
         <p>Total: {totalPrice} GEL</p>
@@ -185,27 +228,27 @@ export default function TourBooking({ tour }: { tour: Tour }) {
 }
 ```
 
-### 2. Reusable Pricing Display
+### 2. Reusable Pricing Display (Updated)
 
 ```tsx
 "use client";
 
 import { useBooking } from "@/context/booking";
 import { Tour } from "@/types/Tour";
-import { TravelerCounts } from "@/types/Booking";
 
 interface PricingDisplayProps {
   tour: Tour;
-  travelers: TravelerCounts;
   selectedActivities: string[];
 }
 
 export default function PricingDisplay({
   tour,
-  travelers,
   selectedActivities,
 }: PricingDisplayProps) {
   const booking = useBooking();
+
+  // Use shared travelers for pricing
+  const { travelers } = booking.sharedState;
 
   const breakdown = booking.getPricingBreakdown(
     tour,
@@ -238,41 +281,48 @@ export default function PricingDisplay({
 }
 ```
 
-### 3. Quick Booking Validation
+### 3. Shared State Monitoring
 
 ```tsx
 "use client";
 
 import { useBooking } from "@/context/booking";
-import { BookingSelection } from "@/types/Booking";
+import { useCart } from "@/context/cart";
 
-export default function BookingValidator({
-  booking: bookingData,
-}: {
-  booking: Partial<BookingSelection>;
-}) {
+export default function BookingStatus() {
   const booking = useBooking();
+  const cart = useCart();
 
-  const validation = booking.validateBooking(bookingData);
-
-  if (validation.isComplete) {
-    return <div className="text-green-600">✓ Booking is ready!</div>;
-  }
+  const { selectedDate, travelers } = booking.sharedState;
+  const hasMultipleTours = cart.items.length > 1;
 
   return (
-    <div className="text-amber-600">
-      <p>⚠ Booking incomplete:</p>
-      <ul className="ml-4">
-        {validation.errors.map((error, i) => (
-          <li key={i}>• {error}</li>
-        ))}
-      </ul>
+    <div className="booking-status">
+      {hasMultipleTours && (
+        <div className="shared-state-info">
+          <h3>Shared Trip Details</h3>
+          <p>Date: {selectedDate ? selectedDate.toDateString() : "Not set"}</p>
+          <p>
+            Travelers: {travelers.adults} adults, {travelers.children} children
+          </p>
+          <p>Applies to all {cart.items.length} tours in cart</p>
+        </div>
+      )}
     </div>
   );
 }
 ```
 
 ## Type Definitions
+
+### SharedBookingState
+
+```typescript
+type SharedBookingState = {
+  selectedDate: Date | undefined;
+  travelers: TravelerCounts;
+};
+```
 
 ### TravelerCounts
 
@@ -305,6 +355,27 @@ type PricingBreakdown = {
 };
 ```
 
+## State Management Flow
+
+### Initialization
+
+1. **Empty State**: Default travelers (2 adults), no date
+2. **From Cart**: If cart has items, load shared state from first item
+3. **Auto-Population**: Tour pages automatically use shared state
+
+### User Interactions
+
+1. **Date Change**: Updates shared state → syncs all cart items
+2. **Traveler Change**: Updates shared state → syncs all cart items
+3. **Activity Change**: Tour-specific, doesn't affect other tours
+4. **Add to Cart**: Uses shared state + tour activities
+
+### Cart Synchronization
+
+1. **Automatic**: When shared state changes, all cart items update
+2. **Notification**: User sees "All tours updated with travel details"
+3. **Consistency**: No conflicting dates/travelers across tours
+
 ## Pricing Logic
 
 ### Base Price
@@ -335,85 +406,94 @@ Total = Base Price + Car Costs + Activity Costs
 
 ## Best Practices
 
-### 1. Always Use Context Functions
+### 1. Always Use Shared State
 
 ```tsx
-// ✅ Good - Use context functions
-const totalPrice = booking.calculateTotalPrice(tour, travelers, activities);
+// ✅ Good - Use shared state
+const { selectedDate, travelers } = booking.sharedState;
 
-// ❌ Bad - Duplicate calculation logic
-const totalPrice = tour.basePrice + activities.reduce(...);
+// ❌ Bad - Local state for shared details
+const [date, setDate] = useState(new Date());
+const [travelers, setTravelers] = useState({...});
 ```
 
-### 2. Validate Before Cart Operations
+### 2. Use Simplified Cart API
 
 ```tsx
-// ✅ Good - Context handles validation automatically
-await booking.addBookingToCart(tour, bookingData);
+// ✅ Good - New simplified API
+await booking.addBookingToCart(tour, selectedActivities);
 
-// ❌ Bad - Manual validation
-if (bookingData.selectedDate && bookingData.travelers.adults >= 2) {
-  await addToCart(...);
-}
+// ❌ Bad - Old complex API
+await booking.addBookingToCart(tour, {
+  selectedDate,
+  travelers,
+  selectedActivities,
+});
 ```
 
-### 3. Use Type Definitions
+### 3. Show Shared State Indicators
 
 ```tsx
-// ✅ Good - Use centralized types
-import { TravelerCounts, BookingSelection } from "@/types/Booking";
+// ✅ Good - Show users when state is shared
+<SharedBookingIndicator />
 
-// ❌ Bad - Define types locally
-type LocalTravelers = { adults: number; children: number; infants: number };
+// ❌ Bad - No indication of shared behavior
 ```
 
-### 4. Leverage Utility Functions
+### 4. Handle Undefined Dates
 
 ```tsx
-// ✅ Good - Use utility functions
-const totalPeople = booking.getTotalPeople(travelers);
+// ✅ Good - Handle undefined dates properly
+<TourDatePicker
+  date={selectedDate} // Can be undefined
+  setDate={booking.updateSharedDate}
+/>
 
-// ❌ Bad - Manual calculation
-const totalPeople = travelers.adults + travelers.children + travelers.infants;
+// ❌ Bad - Assume date is always set
 ```
 
 ## Migration Guide
 
-If you have existing booking components, here's how to migrate:
+If upgrading from the old system:
 
-### 1. Update Imports
+### 1. Update Tour Components
 
 ```tsx
 // Before
-import { TravelerCounts } from "@/app/[locale]/tour/[tourId]/tour-details-booker";
+const [date, setDate] = useState(new Date());
+const [travelers, setTravelers] = useState({...});
 
 // After
-import { TravelerCounts } from "@/types/Booking";
-import { useBooking } from "@/context/booking";
+const { selectedDate, travelers } = booking.sharedState;
 ```
 
-### 2. Replace Local Functions
+### 2. Update Cart Operations
 
 ```tsx
 // Before
-const calculateTotalPrice = () => {
-  // Local calculation logic
-};
+await booking.addBookingToCart(tour, {
+  selectedDate: date,
+  travelers,
+  selectedActivities,
+});
 
 // After
-const booking = useBooking();
-const totalPrice = booking.calculateTotalPrice(tour, travelers, activities);
+await booking.addBookingToCart(tour, selectedActivities);
 ```
 
-### 3. Use Context for Cart Operations
+### 3. Add Shared State Indicators
 
 ```tsx
-// Before
-import { addToCart } from "@/data/cart";
-await addToCart({ tourId, tourTitle, ... });
+// Add to tour pages
+<SharedBookingIndicator />
+```
 
-// After
-await booking.addBookingToCart(tour, bookingSelection);
+### 4. Update Date Picker Interface
+
+```tsx
+// Update to handle undefined dates
+date: Date | undefined;
+setDate: (date: Date | undefined) => void;
 ```
 
 ## Troubleshooting
@@ -422,20 +502,29 @@ await booking.addBookingToCart(tour, bookingSelection);
 
 Make sure your component is wrapped by the BookingProvider in the layout.
 
-### Pricing Calculations Don't Match
+### Shared State Not Updating
 
-Ensure you're using the context functions instead of local calculations. The context ensures consistency with server-side pricing.
+- Check if cart context is available
+- Verify user authentication
+- Check browser console for errors
+
+### Cart Items Not Syncing
+
+- Ensure `updateCartItem` function is working
+- Check network connectivity
+- Verify Firestore permissions
 
 ### TypeScript Errors
 
-Import types from `@/types/Booking` instead of component-specific files.
+Import types from `@/types/Booking` and ensure components handle undefined dates.
 
 ## Future Enhancements
 
-The booking context is designed to be extensible. Future additions might include:
+The shared booking state system is designed to be extensible. Future additions might include:
 
-- Booking persistence (save incomplete bookings)
-- Multi-step booking flows
-- Booking templates/favorites
-- Group booking discounts
-- Dynamic pricing based on date/availability
+- Shared special requirements/notes
+- Trip duration calculation
+- Accommodation preferences
+- Transportation preferences
+- Group discount calculations
+- Advanced conflict resolution

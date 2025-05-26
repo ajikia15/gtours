@@ -39,7 +39,7 @@ export default function ShoppingCart() {
 
   return (
     <Link
-      href="/cart"
+      href="/account/cart"
       aria-label={`Shopping cart with ${cart.totalItems} items`}
     >
       <Button
