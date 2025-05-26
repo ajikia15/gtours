@@ -85,10 +85,15 @@ export default function CartCard({ item }: CartCardProps) {
 
             {/* Booking Details */}
             <div className="space-y-1 text-sm text-gray-600 mb-3">
-              {item.selectedDate && (
+              {item.selectedDate ? (
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 flex-shrink-0" />
                   <span>{format(item.selectedDate, "PPP")}</span>
+                </div>
+              ) : (
+                <div className="flex items-center gap-2 text-amber-600">
+                  <Calendar className="h-4 w-4 flex-shrink-0" />
+                  <span>Date not selected</span>
                 </div>
               )}
 

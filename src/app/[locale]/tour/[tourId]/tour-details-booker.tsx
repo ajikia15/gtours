@@ -8,23 +8,17 @@ import { Tour } from "@/types/Tour";
 import { TravelerCounts } from "@/types/Booking";
 import { useState } from "react";
 import { useBooking } from "@/context/booking";
+import SharedBookingIndicator from "@/components/shared-booking-indicator";
 
 export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   const booking = useBooking();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
-  const [date, setDate] = useState<Date>(() => {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    return tomorrow;
-  });
 
-  const [travelers, setTravelers] = useState<TravelerCounts>({
-    adults: 2,
-    children: 0,
-    infants: 0,
-  });
+  // Use shared state for date and travelers
+  const { selectedDate, travelers } = booking.sharedState;
 
+  // Tour-specific activities
   const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
     new Set()
   );
@@ -51,11 +45,10 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
     setIsAddingToCart(true);
 
     try {
-      const result = await booking.addBookingToCart(tour, {
-        selectedDate: date,
-        travelers,
-        selectedActivities: Array.from(selectedActivities),
-      });
+      const result = await booking.addBookingToCart(
+        tour,
+        Array.from(selectedActivities)
+      );
 
       // Success/error messages are handled by the booking context
     } catch (error) {
@@ -66,6 +59,7 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   };
   return (
     <>
+      <SharedBookingIndicator />
       <div className="relative">
         {/* Booking Content */}
         <div
@@ -75,11 +69,14 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
           `}
         >
           <h2 className="text-lg font-semibold text-gray-900">Choose Date</h2>
-          <TourDatePicker date={date} setDate={setDate} />
+          <TourDatePicker
+            date={selectedDate}
+            setDate={booking.updateSharedDate}
+          />
           <h2 className="text-lg font-semibold text-gray-900">Travelers</h2>
           <TravelerSelection
             travelers={travelers}
-            setTravelers={setTravelers}
+            setTravelers={booking.updateSharedTravelers}
           />
           <h2 className="text-lg font-semibold text-gray-900">
             Select Activities

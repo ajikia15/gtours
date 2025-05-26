@@ -3,12 +3,12 @@
 /**
  * Booking Context Provider
  *
- * This file provides a React context for managing booking-related functions across the application.
- * It centralizes pricing calculations, validation logic, and cart operations to ensure consistency
- * and reusability across different components.
+ * This file provides a React context for managing shared booking state across the application.
+ * It handles shared travel details (date, travelers) that persist across all tours,
+ * while keeping tour-specific details (activities) separate.
  */
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import { Tour } from "@/types/Tour";
 import {
   TravelerCounts,
@@ -16,14 +16,29 @@ import {
   PricingBreakdown,
   BookingValidation,
 } from "@/types/Booking";
-import { addToCart } from "@/data/cart";
+import { addToCart, updateCartItem } from "@/data/cart";
 import { useAuth } from "./auth";
+import { useCart } from "./cart";
 import { toast } from "sonner";
+
+/**
+ * Shared booking state that persists across all tours
+ */
+type SharedBookingState = {
+  selectedDate: Date | undefined;
+  travelers: TravelerCounts;
+};
 
 /**
  * Type definition for the booking context value
  */
 type BookingContextType = {
+  // Shared state management
+  sharedState: SharedBookingState;
+  updateSharedDate: (date: Date | undefined) => void;
+  updateSharedTravelers: (travelers: TravelerCounts) => void;
+  resetSharedState: () => void;
+
   // Pricing calculations
   calculateActivityPriceIncrement: (
     tour: Tour,
@@ -48,12 +63,12 @@ type BookingContextType = {
   // Cart operations
   addBookingToCart: (
     tour: Tour,
-    booking: BookingSelection
+    selectedActivities: string[]
   ) => Promise<{ success: boolean; message?: string }>;
 
   // Utility functions
   getTotalPeople: (travelers: TravelerCounts) => number;
-  getPayingPeople: (travelers: TravelerCounts) => number; // Adults + children (infants don't pay)
+  getPayingPeople: (travelers: TravelerCounts) => number;
 };
 
 /**
@@ -82,6 +97,59 @@ export const BookingProvider = ({
   children: React.ReactNode;
 }) => {
   const auth = useAuth();
+  const cart = useCart();
+
+  // Default shared state
+  const defaultSharedState: SharedBookingState = {
+    selectedDate: undefined,
+    travelers: { adults: 2, children: 0, infants: 0 },
+  };
+
+  // Shared booking state
+  const [sharedState, setSharedState] =
+    useState<SharedBookingState>(defaultSharedState);
+
+  // Initialize shared state from cart when cart loads
+  useEffect(() => {
+    if (cart.items.length > 0 && !cart.loading) {
+      const firstItem = cart.items[0];
+      setSharedState({
+        selectedDate: firstItem.selectedDate,
+        travelers: firstItem.travelers,
+      });
+    }
+  }, [cart.items, cart.loading]);
+
+  // Shared state management functions
+  const updateSharedDate = (date: Date | undefined) => {
+    setSharedState((prev) => ({ ...prev, selectedDate: date }));
+  };
+
+  const updateSharedTravelers = (travelers: TravelerCounts) => {
+    setSharedState((prev) => ({ ...prev, travelers }));
+  };
+
+  const resetSharedState = () => {
+    setSharedState(defaultSharedState);
+  };
+
+  // Sync cart items when shared state changes
+  const syncCartWithSharedState = async () => {
+    if (!auth?.currentUser || cart.items.length === 0) return;
+
+    try {
+      const updatePromises = cart.items.map((item) =>
+        updateCartItem(item.id, {
+          selectedDate: sharedState.selectedDate,
+          travelers: sharedState.travelers,
+        })
+      );
+
+      await Promise.all(updatePromises);
+    } catch (error) {
+      console.error("Failed to sync cart with shared state:", error);
+    }
+  };
 
   /**
    * Calculate the total price increment from selected activities
@@ -214,19 +282,26 @@ export const BookingProvider = ({
   };
 
   /**
-   * Add a booking to the user's cart
+   * Add a booking to the user's cart using shared state
    * @param tour - The tour object
-   * @param booking - Complete booking selection
+   * @param selectedActivities - Array of selected activity IDs for this tour
    * @returns Promise with success status and optional message
    */
   const addBookingToCart = async (
     tour: Tour,
-    booking: BookingSelection
+    selectedActivities: string[]
   ): Promise<{ success: boolean; message?: string }> => {
     if (!auth?.currentUser) {
       toast.error("Please sign in to add items to cart");
       return { success: false, message: "User not authenticated" };
     }
+
+    // Create booking from shared state and tour-specific activities
+    const booking: BookingSelection = {
+      selectedDate: sharedState.selectedDate!,
+      travelers: sharedState.travelers,
+      selectedActivities,
+    };
 
     // Validate booking before adding to cart
     const validation = validateBooking(booking);
@@ -250,7 +325,12 @@ export const BookingProvider = ({
       });
 
       if (result.success) {
-        toast.success("Tour added to cart!");
+        // Sync existing cart items with the new shared state
+        await syncCartWithSharedState();
+
+        toast.success(
+          "Tour added to cart! All tours updated with travel details."
+        );
         return { success: true };
       } else {
         toast.error(result.message || "Failed to add to cart");
@@ -282,13 +362,26 @@ export const BookingProvider = ({
   };
 
   const contextValue: BookingContextType = {
+    // Shared state management
+    sharedState,
+    updateSharedDate,
+    updateSharedTravelers,
+    resetSharedState,
+
+    // Pricing calculations
     calculateActivityPriceIncrement,
     calculateCarCost,
     calculateTotalPrice,
     getPricingBreakdown,
+
+    // Validation
     validateBooking,
     isBookingComplete,
+
+    // Cart operations
     addBookingToCart,
+
+    // Utility functions
     getTotalPeople,
     getPayingPeople,
   };

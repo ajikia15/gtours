@@ -1,13 +1,12 @@
 "use client";
 import { Calendar } from "@/components/ui/calendar";
-import { useState } from "react";
 
 export default function TourDatePicker({
   date,
   setDate,
 }: {
-  date: Date;
-  setDate: (date: Date) => void;
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
 }) {
   const defaultMonth = new Date();
   defaultMonth.setDate(defaultMonth.getDate() + 1);
@@ -17,7 +16,7 @@ export default function TourDatePicker({
       <Calendar
         mode="single"
         selected={date}
-        onSelect={(day) => setDate(day as Date)}
+        onSelect={(day) => setDate(day)}
         initialFocus
         defaultMonth={defaultMonth}
         disabled={(date) =>
