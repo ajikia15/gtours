@@ -3,40 +3,13 @@
 import { useCart } from "@/context/cart";
 import { useAuth } from "@/context/auth";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Trash2, Calendar, Users, MapPin } from "lucide-react";
-import { removeFromCart, updateCartItem } from "@/data/cart";
-import { toast } from "sonner";
-import { useState } from "react";
-import { getImageUrl } from "@/lib/imageHelpers";
-import Image from "next/image";
-import { format } from "date-fns";
+import { ShoppingCart } from "lucide-react";
 import { Link } from "@/i18n/navigation";
+import CartCard from "@/components/cart-card";
 
 export default function CartPage() {
   const auth = useAuth();
   const cart = useCart();
-  const [removingItems, setRemovingItems] = useState<Set<string>>(new Set());
-
-  const handleRemoveItem = async (itemId: string) => {
-    setRemovingItems((prev) => new Set(prev).add(itemId));
-
-    try {
-      const result = await removeFromCart(itemId);
-      if (result.success) {
-        toast.success("Item removed from cart");
-      } else {
-        toast.error(result.message || "Failed to remove item");
-      }
-    } catch (error) {
-      toast.error("Failed to remove item");
-    } finally {
-      setRemovingItems((prev) => {
-        const newSet = new Set(prev);
-        newSet.delete(itemId);
-        return newSet;
-      });
-    }
-  };
 
   if (!auth?.currentUser) {
     return (
@@ -95,99 +68,12 @@ export default function CartPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Cart Items */}
-        <div className="lg:col-span-2 space-y-4">
-          {cart.items.map((item) => (
-            <div
-              key={item.id}
-              className="bg-white rounded-lg shadow-sm border border-gray-200 p-6"
-            >
-              <div className="flex gap-4">
-                {/* Tour Image */}
-                <div className="flex-shrink-0">
-                  <Image
-                    src={getImageUrl(item.tourImages?.[0])}
-                    alt={item.tourTitle}
-                    width={120}
-                    height={80}
-                    className="rounded-lg object-cover"
-                  />
-                </div>
-
-                {/* Tour Details */}
-                <div className="flex-1">
-                  <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-lg font-semibold text-gray-900">
-                      {item.tourTitle}
-                    </h3>
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      onClick={() => handleRemoveItem(item.id)}
-                      disabled={removingItems.has(item.id)}
-                      className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
-                  </div>
-
-                  {/* Booking Details */}
-                  <div className="space-y-2 text-sm text-gray-600">
-                    {item.selectedDate && (
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        <span>{format(item.selectedDate, "PPP")}</span>
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-2">
-                      <Users className="h-4 w-4" />
-                      <span>
-                        {item.travelers.adults} adults
-                        {item.travelers.children > 0 &&
-                          `, ${item.travelers.children} children`}
-                        {item.travelers.infants > 0 &&
-                          `, ${item.travelers.infants} infants`}
-                      </span>
-                    </div>
-
-                    {item.selectedActivities.length > 0 && (
-                      <div className="flex items-center gap-2">
-                        <MapPin className="h-4 w-4" />
-                        <span>
-                          {item.selectedActivities.length} activities selected
-                        </span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Status Badge */}
-                  <div className="mt-3">
-                    <span
-                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
-                        item.status === "ready"
-                          ? "bg-green-100 text-green-800"
-                          : "bg-yellow-100 text-yellow-800"
-                      }`}
-                    >
-                      {item.status === "ready" ? "Ready to book" : "Incomplete"}
-                    </span>
-                  </div>
-
-                  {/* Price Breakdown */}
-                  <div className="mt-3 text-right">
-                    {item.activityPriceIncrement > 0 && (
-                      <div className="text-sm text-gray-600 mb-1">
-                        Activities: +{item.activityPriceIncrement} GEL
-                      </div>
-                    )}
-                    <span className="text-lg font-semibold text-gray-900">
-                      Total: {item.totalPrice} GEL
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="lg:col-span-2">
+          <div className="space-y-4">
+            {cart.items.map((item) => (
+              <CartCard key={item.id} item={item} />
+            ))}
+          </div>
         </div>
 
         {/* Cart Summary */}
