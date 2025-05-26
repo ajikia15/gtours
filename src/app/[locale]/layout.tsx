@@ -6,6 +6,7 @@ import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/auth";
 import { CartProvider } from "@/context/cart";
+import { BookingProvider } from "@/context/booking";
 import { Toaster } from "@/components/ui/sonner";
 import { roboto, notoSansGeorgian, openSans } from "./fonts";
 import { getLocale, getMessages } from "next-intl/server";
@@ -46,12 +47,14 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <CartProvider>
-              <Navbar />
-              <div className="container mx-auto mt-20">
-                {children}
-                <Toaster />
-                <Footer />
-              </div>
+              <BookingProvider>
+                <Navbar />
+                <div className="container mx-auto mt-20">
+                  {children}
+                  <Toaster />
+                  <Footer />
+                </div>
+              </BookingProvider>
             </CartProvider>
           </AuthProvider>
         </NextIntlClientProvider>

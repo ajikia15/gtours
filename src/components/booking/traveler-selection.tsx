@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
-import { TravelerCounts } from "@/app/[locale]/tour/[tourId]/tour-details-booker";
+import { TravelerCounts } from "@/types/Booking";
 
 export default function TravelerSelection({
   travelers,

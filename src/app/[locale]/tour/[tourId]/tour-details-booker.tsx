@@ -5,19 +5,12 @@ import { Button } from "@/components/ui/button";
 import ActivitySelection from "@/components/booking/activity-selection";
 import { ShoppingCart, ChevronDown, ChevronUp } from "lucide-react";
 import { Tour } from "@/types/Tour";
+import { TravelerCounts } from "@/types/Booking";
 import { useState } from "react";
-import { addToCart } from "@/data/cart";
-import { useAuth } from "@/context/auth";
-import { toast } from "sonner";
-
-export type TravelerCounts = {
-  adults: number;
-  children: number;
-  infants: number;
-};
+import { useBooking } from "@/context/booking";
 
 export default function TourDetailsBooker({ tour }: { tour: Tour }) {
-  const auth = useAuth();
+  const booking = useBooking();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [date, setDate] = useState<Date>(() => {
@@ -36,59 +29,37 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
     new Set()
   );
 
-  // Calculate activity price increment
+  // Calculate activity price increment using booking context
   const calculateActivityPriceIncrement = () => {
-    return Array.from(selectedActivities).reduce((total, activityId) => {
-      const activity = tour.offeredActivities.find(
-        (a) => a.activityTypeId === activityId
-      );
-      return total + (activity?.priceIncrement || 0);
-    }, 0);
+    return booking.calculateActivityPriceIncrement(
+      tour,
+      Array.from(selectedActivities)
+    );
   };
 
-  // Calculate total price
+  // Calculate total price using booking context
   const calculateTotalPrice = () => {
-    const basePrice = tour.basePrice;
-    const totalPeople = travelers.adults + travelers.children;
-
-    // Base price is fixed and includes 1 car cost (up to 6 people)
-    const baseCost = basePrice;
-
-    // Calculate additional car costs (every 6th tourist beyond the first 6 requires +200 GEL)
-    const additionalCars = Math.max(0, Math.floor((totalPeople - 1) / 6));
-    const carCost = additionalCars * 200;
-
-    const activityIncrement = calculateActivityPriceIncrement();
-    return baseCost + carCost + activityIncrement;
+    return booking.calculateTotalPrice(
+      tour,
+      travelers,
+      Array.from(selectedActivities)
+    );
   };
 
-  // Handle add to cart
+  // Handle add to cart using booking context
   const handleAddToCart = async () => {
-    if (!auth?.currentUser) {
-      toast.error("Please sign in to add items to cart");
-      return;
-    }
-
     setIsAddingToCart(true);
 
     try {
-      const result = await addToCart({
-        tourId: tour.id,
-        tourTitle: tour.title,
-        tourBasePrice: tour.basePrice,
-        tourImages: tour.images,
+      const result = await booking.addBookingToCart(tour, {
         selectedDate: date,
         travelers,
         selectedActivities: Array.from(selectedActivities),
       });
 
-      if (result.success) {
-        toast.success("Tour added to cart!");
-      } else {
-        toast.error(result.message || "Failed to add to cart");
-      }
+      // Success/error messages are handled by the booking context
     } catch (error) {
-      toast.error("Failed to add to cart");
+      console.error("Failed to add to cart:", error);
     } finally {
       setIsAddingToCart(false);
     }
