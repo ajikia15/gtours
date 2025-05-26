@@ -5,6 +5,7 @@ import Navbar from "../../components/layout/Navbar";
 import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
 import { AuthProvider } from "@/context/auth";
+import { CartProvider } from "@/context/cart";
 import { Toaster } from "@/components/ui/sonner";
 import { roboto, notoSansGeorgian, openSans } from "./fonts";
 import { getLocale, getMessages } from "next-intl/server";
@@ -44,12 +45,14 @@ export default async function LocaleLayout({
       <body className={`${fontClassName} antialiased `}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
-            <Navbar />
-            <div className="container mx-auto mt-20">
-              {children}
-              <Toaster />
-              <Footer />
-            </div>
+            <CartProvider>
+              <Navbar />
+              <div className="container mx-auto mt-20">
+                {children}
+                <Toaster />
+                <Footer />
+              </div>
+            </CartProvider>
           </AuthProvider>
         </NextIntlClientProvider>
       </body>

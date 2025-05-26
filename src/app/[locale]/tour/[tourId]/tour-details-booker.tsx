@@ -6,6 +6,9 @@ import ActivitySelection from "@/components/booking/activity-selection";
 import { ShoppingCart, ChevronDown, ChevronUp } from "lucide-react";
 import { Tour } from "@/types/Tour";
 import { useState } from "react";
+import { addToCart } from "@/data/cart";
+import { useAuth } from "@/context/auth";
+import { toast } from "sonner";
 
 export type TravelerCounts = {
   adults: number;
@@ -14,7 +17,9 @@ export type TravelerCounts = {
 };
 
 export default function TourDetailsBooker({ tour }: { tour: Tour }) {
+  const auth = useAuth();
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [date, setDate] = useState<Date>(() => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
@@ -30,6 +35,64 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
     new Set()
   );
+
+  // Calculate activity price increment
+  const calculateActivityPriceIncrement = () => {
+    return Array.from(selectedActivities).reduce((total, activityId) => {
+      const activity = tour.offeredActivities.find(
+        (a) => a.activityTypeId === activityId
+      );
+      return total + (activity?.priceIncrement || 0);
+    }, 0);
+  };
+
+  // Calculate total price
+  const calculateTotalPrice = () => {
+    const basePrice = tour.basePrice;
+    const totalPeople = travelers.adults + travelers.children;
+
+    // Base price is fixed and includes 1 car cost (up to 6 people)
+    const baseCost = basePrice;
+
+    // Calculate additional car costs (every 6th tourist beyond the first 6 requires +200 GEL)
+    const additionalCars = Math.max(0, Math.floor((totalPeople - 1) / 6));
+    const carCost = additionalCars * 200;
+
+    const activityIncrement = calculateActivityPriceIncrement();
+    return baseCost + carCost + activityIncrement;
+  };
+
+  // Handle add to cart
+  const handleAddToCart = async () => {
+    if (!auth?.currentUser) {
+      toast.error("Please sign in to add items to cart");
+      return;
+    }
+
+    setIsAddingToCart(true);
+
+    try {
+      const result = await addToCart({
+        tourId: tour.id,
+        tourTitle: tour.title,
+        tourBasePrice: tour.basePrice,
+        tourImages: tour.images,
+        selectedDate: date,
+        travelers,
+        selectedActivities: Array.from(selectedActivities),
+      });
+
+      if (result.success) {
+        toast.success("Tour added to cart!");
+      } else {
+        toast.error(result.message || "Failed to add to cart");
+      }
+    } catch (error) {
+      toast.error("Failed to add to cart");
+    } finally {
+      setIsAddingToCart(false);
+    }
+  };
   return (
     <>
       <div className="relative">
@@ -55,9 +118,15 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
             selectedActivities={selectedActivities}
             setSelectedActivities={setSelectedActivities}
           />
-          <span className="text-lg font-semibold text-gray-900">
-            Total: <span className="text-red-500">{tour.basePrice} GEL</span>
-          </span>
+          <div className="text-lg font-semibold text-gray-900">
+            {calculateActivityPriceIncrement() > 0 && (
+              <div className="text-sm text-gray-600 mb-1">
+                Activities: +{calculateActivityPriceIncrement()} GEL
+              </div>
+            )}
+            Total:{" "}
+            <span className="text-red-500">{calculateTotalPrice()} GEL</span>
+          </div>
         </div>
 
         {!isExpanded && (
@@ -93,9 +162,14 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
             Collapse
           </Button>
 
-          <Button className="w-full" variant="outline">
+          <Button
+            className="w-full"
+            variant="outline"
+            onClick={handleAddToCart}
+            disabled={isAddingToCart}
+          >
             <ShoppingCart className="size-4 mr-2" />
-            Add to Cart
+            {isAddingToCart ? "Adding..." : "Add to Cart"}
           </Button>
 
           <Button className="w-full" variant="brandred" size="lg">
