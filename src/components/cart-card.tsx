@@ -42,9 +42,9 @@ export default function CartCard({ item }: CartCardProps) {
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
-      <div className="flex">
+      <div className="flex h-40 sm:h-44 md:h-48">
         {/* Image Section */}
-        <div className="relative w-48 h-32 flex-shrink-0 bg-gray-100">
+        <div className="relative w-48 h-full flex-shrink-0 bg-gray-100">
           {item.tourImages?.[0] ? (
             <Image
               src={getImageUrl(item.tourImages[0])}
@@ -114,11 +114,6 @@ export default function CartCard({ item }: CartCardProps) {
           {/* Bottom Section with Price and Button */}
           <div className="flex justify-between items-center">
             <div className="text-right">
-              {item.activityPriceIncrement > 0 && (
-                <div className="text-xs text-gray-500 mb-1">
-                  +{item.activityPriceIncrement} GEL activities
-                </div>
-              )}
               <div className="text-xl font-bold text-red-600">
                 ₾{item.totalPrice}
               </div>

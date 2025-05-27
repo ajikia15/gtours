@@ -92,7 +92,7 @@ export default function ActivityDisplay({
                 }
                 ${
                   isSelected
-                    ? "bg-blue-500 text-white border-blue-500 shadow-md shadow-blue-200"
+                    ? "bg-gray-900 text-white border-gray-900 shadow-md"
                     : interactive
                     ? "bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100 hover:border-gray-300"
                     : "bg-gray-100 text-gray-600 border-gray-200"
