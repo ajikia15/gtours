@@ -52,7 +52,8 @@
     "signOut": "გასვლა",
     "register": "რეგისტრაცია",
     "signIn": "შესვლა",
-    "continueWithGoogle": "Google-ით გაგრძელება"
+    "continueWithGoogle": "Google-ით გაგრძელება",
+    "signUp": ""
   },
   "Admin": {
     "dashboard": {

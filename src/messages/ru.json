@@ -52,7 +52,8 @@
     "signOut": "Выйти",
     "register": "Регистрация",
     "signIn": "Войти",
-    "continueWithGoogle": "Продолжить с Google"
+    "continueWithGoogle": "Продолжить с Google",
+    "signUp": ""
   },
   "Admin": {
     "dashboard": {

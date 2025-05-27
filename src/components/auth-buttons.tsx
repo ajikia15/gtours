@@ -61,14 +61,16 @@ export default function AuthButtons() {
                 size="icon"
                 className="rounded-full w-10 h-10"
               >
-                <UserIcon className="h-10 w-10" />
+                <UserIcon className="h-10 w-10" size={10} />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuLabel className="font-medium">
                 {t("welcome")}, {auth.currentUser.displayName}
               </DropdownMenuLabel>
-              <DropdownMenuItem>{t("myAccount")}</DropdownMenuItem>
+              <Link href="/account">
+                <DropdownMenuItem>{t("myAccount")}</DropdownMenuItem>
+              </Link>
               {!!auth.customClaims?.admin ? (
                 <Link href="/admin">
                   <DropdownMenuItem>{t("adminDashboard")}</DropdownMenuItem>
