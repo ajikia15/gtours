@@ -434,11 +434,25 @@ See the following files for complete examples:
 
 ### Common Use Cases
 
-1. **Tour Detail Page**: Pre-select tour, allow activity/date/traveler selection
-2. **General Booking Page**: Full tour selection capability
+1. **Tour Detail Page**: Pre-select tour, allow activity/date/traveler selection (supports partial bookings)
+2. **General Booking Page**: Full tour selection capability (requires complete validation)
 3. **Cart Edit**: Modify existing bookings with tour locked
 4. **Quick Booking**: Compact header integration
 5. **Mobile Booking**: Responsive popover interface
+
+### Partial Booking Support
+
+The tour detail pages support partial bookings through the `addPartialBookingToCart` function:
+
+```tsx
+// In tour-details-booker.tsx
+const result = await booking.addPartialBookingToCart(
+  tour,
+  Array.from(selectedActivities)
+);
+```
+
+This allows users to add tours to cart without completing all required fields (date, travelers), which can be filled in later through the cart edit functionality.
 
 ## Related Documentation
 

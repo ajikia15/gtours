@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import CartCard from "@/components/cart-card";
+import CartOrderSummary from "@/components/cart-order-summary";
 
 export default function CartPage() {
   const auth = useAuth();
@@ -78,31 +79,7 @@ export default function CartPage() {
 
         {/* Cart Summary */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4">
-            <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
-
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between text-sm">
-                <span>Items ({cart.totalItems})</span>
-                <span>{cart.totalPrice} GEL</span>
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <div className="flex justify-between text-lg font-semibold">
-                <span>Total</span>
-                <span>{cart.totalPrice} GEL</span>
-              </div>
-            </div>
-
-            <Button className="w-full mt-6" size="lg">
-              Proceed to Checkout
-            </Button>
-
-            <p className="text-xs text-gray-500 mt-3 text-center">
-              Complete incomplete items to proceed with booking
-            </p>
-          </div>
+          <CartOrderSummary />
         </div>
       </div>
     </div>

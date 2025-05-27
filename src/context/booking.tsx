@@ -65,6 +65,10 @@ type BookingContextType = {
     tour: Tour,
     selectedActivities: string[]
   ) => Promise<{ success: boolean; message?: string }>;
+  addPartialBookingToCart: (
+    tour: Tour,
+    selectedActivities: string[]
+  ) => Promise<{ success: boolean; message?: string }>;
 
   // Utility functions
   getTotalPeople: (travelers: TravelerCounts) => number;
@@ -368,6 +372,63 @@ export const BookingProvider = ({
   };
 
   /**
+   * Add a partial booking to the user's cart (allows incomplete bookings)
+   * @param tour - The tour object
+   * @param selectedActivities - Array of selected activity IDs for this tour
+   * @returns Promise with success status and optional message
+   */
+  const addPartialBookingToCart = async (
+    tour: Tour,
+    selectedActivities: string[]
+  ): Promise<{ success: boolean; message?: string }> => {
+    if (!auth?.currentUser) {
+      toast.error("Please sign in to add items to cart");
+      return { success: false, message: "User not authenticated" };
+    }
+
+    try {
+      const result = await addToCart({
+        tourId: tour.id,
+        tourTitle: tour.title,
+        tourBasePrice: tour.basePrice,
+        tourImages: tour.images,
+        selectedDate: sharedState.selectedDate,
+        travelers: sharedState.travelers,
+        selectedActivities: selectedActivities,
+      });
+
+      if (result.success) {
+        // Sync existing cart items with the new shared state if any exist
+        if (cart.items.length > 0) {
+          await syncCartWithSharedState();
+        }
+
+        const validation = validateBooking({
+          selectedDate: sharedState.selectedDate,
+          travelers: sharedState.travelers,
+          selectedActivities,
+        });
+
+        if (validation.isComplete) {
+          toast.success("Tour added to cart!");
+        } else {
+          toast.success(
+            "Tour added to cart! Complete the booking details when ready."
+          );
+        }
+        return { success: true };
+      } else {
+        toast.error(result.message || "Failed to add to cart");
+        return { success: false, message: result.message };
+      }
+    } catch (error) {
+      const errorMessage = "Failed to add to cart";
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
+    }
+  };
+
+  /**
    * Get total number of people (adults + children + infants)
    * @param travelers - Traveler counts
    * @returns Total number of people
@@ -404,6 +465,7 @@ export const BookingProvider = ({
 
     // Cart operations
     addBookingToCart,
+    addPartialBookingToCart,
 
     // Utility functions
     getTotalPeople,

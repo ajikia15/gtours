@@ -12,42 +12,16 @@ import { CartItem } from "@/types/Cart";
 import { subscribeToCart, subscribeToCartSummary } from "@/lib/cart-client";
 import { useAuth } from "./auth";
 
-/**
- * Type definition for the cart context value
- */
 type CartContextType = {
-  /** Array of all cart items */
   items: CartItem[];
-  /** Total number of items in cart */
   totalItems: number;
-  /** Total price of all items in cart */
   totalPrice: number;
-  /** Whether cart data is currently loading */
   loading: boolean;
-  /** Error message if cart operations fail */
   error: string | null;
 };
 
-/**
- * React context for cart state
- */
 const CartContext = createContext<CartContextType | null>(null);
 
-/**
- * Cart Provider Component
- *
- * Wraps the application to provide cart state to all child components.
- * Automatically subscribes to cart updates when user is authenticated.
- *
- * @param children - React children to wrap with cart context
- *
- * @example
- * ```tsx
- * <CartProvider>
- *   <App />
- * </CartProvider>
- * ```
- */
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const auth = useAuth();
   const [items, setItems] = useState<CartItem[]>([]);
@@ -57,7 +31,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Reset cart state when user logs out
     if (!auth?.currentUser) {
       setItems([]);
       setTotalItems(0);
@@ -70,7 +43,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     setLoading(true);
     setError(null);
 
-    // Subscribe to real-time cart items updates
     const unsubscribeItems = subscribeToCart(
       auth.currentUser.uid,
       (cartItems) => {
@@ -84,7 +56,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // Subscribe to real-time cart summary updates
     const unsubscribeSummary = subscribeToCartSummary(
       auth.currentUser.uid,
       (summary) => {
@@ -97,7 +68,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       }
     );
 
-    // Cleanup subscriptions when component unmounts or user changes
     return () => {
       unsubscribeItems();
       unsubscribeSummary();
@@ -117,17 +87,6 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-/**
- * Hook to access cart context
- *
- * @returns CartContextType - The current cart state and methods
- * @throws Error if used outside of CartProvider
- *
- * @example
- * ```tsx
- * const { items, totalItems, loading } = useCart();
- * ```
- */
 export const useCart = (): CartContextType => {
   const context = useContext(CartContext);
   if (!context) {

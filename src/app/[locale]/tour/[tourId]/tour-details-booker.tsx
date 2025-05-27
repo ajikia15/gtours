@@ -8,7 +8,6 @@ import { Tour } from "@/types/Tour";
 import { TravelerCounts } from "@/types/Booking";
 import { useState } from "react";
 import { useBooking } from "@/context/booking";
-import SharedBookingIndicator from "@/components/shared-booking-indicator";
 
 export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   const booking = useBooking();
@@ -40,12 +39,12 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
     );
   };
 
-  // Handle add to cart using booking context
+  // Handle add to cart using booking context (allows partial bookings)
   const handleAddToCart = async () => {
     setIsAddingToCart(true);
 
     try {
-      const result = await booking.addBookingToCart(
+      const result = await booking.addPartialBookingToCart(
         tour,
         Array.from(selectedActivities)
       );
@@ -59,7 +58,6 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   };
   return (
     <>
-      <SharedBookingIndicator />
       <div className="relative">
         {/* Booking Content */}
         <div

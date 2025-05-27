@@ -34,17 +34,13 @@ const Separator = ({ className }: { className?: string }) => (
 );
 
 interface BookingBarProps {
-  /** Available tours to select from */
   tours: Tour[];
   /** Mode: 'add' for new booking, 'edit' for modifying existing */
   mode?: "add" | "edit";
   /** Cart item to edit (required when mode is 'edit') */
   editingItem?: CartItem;
-  /** Pre-selected tour (optional, for add mode) */
   preselectedTour?: Tour;
-  /** Callback when booking is successfully added/updated */
   onSuccess?: () => void;
-  /** Custom styling classes */
   className?: string;
 }
 

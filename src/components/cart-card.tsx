@@ -4,12 +4,12 @@ import { CartItem } from "@/types/Cart";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Button } from "@/components/ui/button";
-import { Trash2, Calendar, Users, MapPin, Pencil } from "lucide-react";
-import { format } from "date-fns";
+import { Trash2, MapPin, Pencil } from "lucide-react";
 import { removeFromCart } from "@/data/cart";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
+import CartActivityDisplay from "./cart-activity-display";
 
 interface CartCardProps {
   item: CartItem;
@@ -44,13 +44,20 @@ export default function CartCard({ item }: CartCardProps) {
     <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden hover:shadow-md transition-shadow">
       <div className="flex">
         {/* Image Section */}
-        <div className="relative w-48 h-32 flex-shrink-0">
-          <Image
-            src={getImageUrl(item.tourImages?.[0])}
-            alt={item.tourTitle}
-            fill
-            className="object-cover"
-          />
+        <div className="relative w-48 h-32 flex-shrink-0 bg-gray-100">
+          {item.tourImages?.[0] ? (
+            <Image
+              src={getImageUrl(item.tourImages[0])}
+              alt={item.tourTitle}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 192px"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gray-200">
+              <MapPin className="h-8 w-8 text-gray-400" />
+            </div>
+          )}
         </div>
 
         {/* Content Section */}
@@ -90,34 +97,15 @@ export default function CartCard({ item }: CartCardProps) {
               <span>Tbilisi, Georgia</span>
             </div>
 
-            {/* Booking Details */}
+            {/* Selected Activities */}
             <div className="space-y-1 text-sm text-gray-600 mb-3">
-              {item.selectedDate ? (
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 flex-shrink-0" />
-                  <span>{format(item.selectedDate, "PPP")}</span>
-                </div>
+              {item.selectedActivities.length > 0 ? (
+                <CartActivityDisplay
+                  selectedActivities={item.selectedActivities}
+                />
               ) : (
-                <div className="flex items-center gap-2 text-amber-600">
-                  <Calendar className="h-4 w-4 flex-shrink-0" />
-                  <span>Date not selected</span>
-                </div>
-              )}
-
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 flex-shrink-0" />
-                <span>
-                  {item.travelers.adults} adults
-                  {item.travelers.children > 0 &&
-                    `, ${item.travelers.children} children`}
-                  {item.travelers.infants > 0 &&
-                    `, ${item.travelers.infants} infants`}
-                </span>
-              </div>
-
-              {item.selectedActivities.length > 0 && (
-                <div className="text-gray-600">
-                  {item.selectedActivities.length} activities selected
+                <div className="text-gray-500 text-xs">
+                  No activities selected
                 </div>
               )}
             </div>
@@ -139,10 +127,13 @@ export default function CartCard({ item }: CartCardProps) {
             <Button
               variant="outline"
               size="sm"
+              onClick={
+                item.status === "incomplete" ? handleEditItem : undefined
+              }
               className={`${
                 item.status === "ready"
                   ? "bg-green-100 hover:bg-green-200 text-green-700 border-green-300"
-                  : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700 border-yellow-300"
+                  : "bg-yellow-100 hover:bg-yellow-200 text-yellow-700 border-yellow-300 cursor-pointer"
               }`}
             >
               {item.status === "ready" ? "Ready for booking" : "Finish booking"}
