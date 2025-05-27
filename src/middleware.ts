@@ -13,6 +13,14 @@ const handleI18nRouting = createMiddleware({
   defaultLocale,
 });
 
+// Helper function to clear auth tokens
+const clearAuthTokens = async () => {
+  const cookieStore = await cookies();
+  cookieStore.delete("firebaseAuthToken");
+  cookieStore.delete("firebaseAuthRefreshToken");
+  console.log("Cleared invalid tokens from middleware");
+};
+
 // Helper function to create redirect URL
 const createRedirectUrl = (
   locale: string,
@@ -36,6 +44,7 @@ const checkAdminAccess = async (
     const decodedToken = decodeJwt(token);
 
     if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      // Token expired - try to refresh
       return NextResponse.redirect(
         new URL(
           `/api/refresh-token?redirect=${encodeURIComponent(
@@ -51,7 +60,9 @@ const checkAdminAccess = async (
     }
     return null; // No redirect needed
   } catch (error) {
-    console.error(error);
+    console.error("Token validation error in middleware:", error);
+    // Clear invalid tokens
+    await clearAuthTokens();
     return createRedirectUrl(locale, "/", request);
   }
 };
@@ -63,13 +74,14 @@ const checkUserAuth = async (
   request: NextRequest
 ) => {
   if (!token) {
-    return createRedirectUrl(locale, "/", request);
+    return createRedirectUrl(locale, "/login", request);
   }
 
   try {
     const decodedToken = decodeJwt(token);
 
     if (decodedToken.exp && decodedToken.exp * 1000 < Date.now()) {
+      // Token expired - try to refresh
       return NextResponse.redirect(
         new URL(
           `/api/refresh-token?redirect=${encodeURIComponent(
@@ -82,8 +94,10 @@ const checkUserAuth = async (
 
     return null; // No redirect needed - user is authenticated
   } catch (error) {
-    console.error(error);
-    return createRedirectUrl(locale, "/", request);
+    console.error("Token validation error in middleware:", error);
+    // Clear invalid tokens
+    await clearAuthTokens();
+    return createRedirectUrl(locale, "/login", request);
   }
 };
 

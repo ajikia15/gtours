@@ -7,10 +7,11 @@
  * All functions require user authentication and handle Firestore operations.
  */
 
-import { auth, firestore } from "@/firebase/server";
+import { firestore } from "@/firebase/server";
 import { CartItem, CartItemStatus } from "@/types/Cart";
 import { cookies } from "next/headers";
 import { FieldValue } from "firebase-admin/firestore";
+import { verifyUserToken } from "@/lib/auth-utils";
 
 // ============================================================================
 // AUTHENTICATION & VALIDATION HELPERS
@@ -22,18 +23,7 @@ import { FieldValue } from "firebase-admin/firestore";
  * @throws Error if authentication fails
  */
 const verifyUser = async (): Promise<string> => {
-  const cookieStore = await cookies();
-  const token = cookieStore.get("firebaseAuthToken")?.value;
-
-  if (!token) {
-    throw new Error("No authentication token found");
-  }
-
-  const verifiedToken = await auth.verifyIdToken(token);
-  if (!verifiedToken) {
-    throw new Error("Invalid authentication token");
-  }
-
+  const verifiedToken = await verifyUserToken();
   return verifiedToken.uid;
 };
 

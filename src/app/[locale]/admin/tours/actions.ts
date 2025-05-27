@@ -1,25 +1,23 @@
 "use server";
 import { tourDataSchema } from "@/validation/tourSchema";
 import { z } from "zod";
-import { auth, firestore } from "@/firebase/server";
+import { firestore } from "@/firebase/server";
+import { verifyAdminToken } from "@/lib/auth-utils";
 
 export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,
   token: string
 ) => {
   try {
-    const verifiedToken = await auth.verifyIdToken(token);
-    if (!verifiedToken.admin) {
-      return {
-        error: "Unauthorized",
-        message: "You are not privileged to save a new tour",
-      };
-    }
+    await verifyAdminToken(token);
   } catch (error) {
-    console.error("Error verifying token in saveNewTour:", error);
+    console.error("Error verifying admin token in saveNewTour:", error);
     return {
-      error: "Invalid token",
-      message: "Invalid or expired authentication token",
+      error: "Unauthorized",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Invalid or expired authentication token",
     };
   }
 
@@ -49,18 +47,15 @@ export const editTour = async (
   token: string
 ) => {
   try {
-    const verifiedToken = await auth.verifyIdToken(token);
-    if (!verifiedToken.admin) {
-      return {
-        error: "Unauthorized",
-        message: "You are not privileged to save a new tour",
-      };
-    }
+    await verifyAdminToken(token);
   } catch (error) {
-    console.error("Error verifying token in editTour:", error);
+    console.error("Error verifying admin token in editTour:", error);
     return {
-      error: "Invalid token",
-      message: "Invalid or expired authentication token",
+      error: "Unauthorized",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Invalid or expired authentication token",
     };
   }
 
@@ -93,18 +88,15 @@ export const saveTourImages = async (
   token: string
 ) => {
   try {
-    const verifiedToken = await auth.verifyIdToken(token);
-    if (!verifiedToken.admin) {
-      return {
-        error: "Unauthorized",
-        message: "You are not privileged to save a new tour",
-      };
-    }
+    await verifyAdminToken(token);
   } catch (error) {
-    console.error("Error verifying token in saveTourImages:", error);
+    console.error("Error verifying admin token in saveTourImages:", error);
     return {
-      error: "Invalid token",
-      message: "Invalid or expired authentication token",
+      error: "Unauthorized",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Invalid or expired authentication token",
     };
   }
 
