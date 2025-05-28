@@ -12,17 +12,15 @@ export default function TourDatePicker({
   defaultMonth.setDate(defaultMonth.getDate() + 1);
 
   return (
-    <div>
-      <Calendar
-        mode="single"
-        selected={date}
-        onSelect={(day) => setDate(day)}
-        initialFocus
-        defaultMonth={defaultMonth}
-        disabled={(date) =>
-          date <= new Date(new Date().setHours(23, 59, 59, 999))
-        }
-      />
-    </div>
+    <Calendar
+      mode="single"
+      selected={date}
+      onSelect={(day) => setDate(day)}
+      initialFocus
+      defaultMonth={defaultMonth}
+      disabled={(date) =>
+        date <= new Date(new Date().setHours(23, 59, 59, 999))
+      }
+    />
   );
 }
