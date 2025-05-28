@@ -6,8 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import CartCard from "@/components/cart-card";
-import CartOrderSummary from "@/components/cart-order-summary";
-// import OrderSummary from "@/components/order-summary"; // Alternative: use the new reusable component
+import OrderSummary from "@/components/order-summary";
 
 export default function CartPage() {
   const auth = useAuth();
@@ -58,10 +57,6 @@ export default function CartPage() {
     );
   }
 
-  // const handleProceedToCheckout = () => {
-  //   router.push("/account/checkout");
-  // };
-
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-6">
@@ -82,15 +77,9 @@ export default function CartPage() {
           </div>
         </div>
 
-        {/* Cart Summary */}
+        {/* Cart Summary - Using the enhanced OrderSummary */}
         <div className="lg:col-span-1">
-          <CartOrderSummary />
-          {/* Alternative: Use the new reusable component
-          <OrderSummary 
-            mode="cart"
-            buttonAction={handleProceedToCheckout}
-          />
-          */}
+          <OrderSummary mode="cart" showDetailedBreakdown={true} />
         </div>
       </div>
     </div>
