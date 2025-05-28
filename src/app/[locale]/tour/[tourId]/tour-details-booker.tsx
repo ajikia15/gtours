@@ -148,13 +148,9 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   const toggleExpanded = () => setIsExpanded(!isExpanded);
 
   // Render Functions
+  // mark
   const renderPricingSummary = () => (
     <div className="text-lg font-semibold text-gray-900">
-      {calculateActivityPriceIncrement() > 0 && (
-        <div className="text-sm text-gray-600 mb-1">
-          Activities: +{calculateActivityPriceIncrement()} GEL
-        </div>
-      )}
       Total: <span className="text-red-500">{calculateTotalPrice()} GEL</span>
     </div>
   );
@@ -214,8 +210,16 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
         travelers={travelers}
         setTravelers={booking.updateSharedTravelers}
       />
-
-      <h2 className="text-lg font-semibold text-gray-900">Select Activities</h2>
+      <div className="flex flex-row justify-between items-center">
+        <h2 className="text-lg font-semibold text-gray-900">
+          Select Activities
+        </h2>
+        {calculateActivityPriceIncrement() > 0 && (
+          <p className="text-xs text-gray-600">
+            +{calculateActivityPriceIncrement()} GEL
+          </p>
+        )}
+      </div>
       <ActivitySelection
         activities={tour.offeredActivities}
         selectedActivities={selectedActivities}
@@ -228,8 +232,8 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
 
   const renderCollapsedOverlay = () => (
     <div className="absolute bottom-0 left-0 right-0">
-      <div className="h-16 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
-      <div className="bg-white pt-2">
+      <div className="h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
+      <div className="bg-white ">
         <Button
           onClick={toggleExpanded}
           className="w-full shadow-lg"
@@ -243,7 +247,12 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   );
 
   const renderActionButtons = () => (
-    <div className="space-y-3 mt-4">
+    <div className="space-y-3 ">
+      <Button className="w-full" variant="brandred" size="lg">
+        <Album className="size-4 " /> Book Tour Now
+      </Button>
+      {/* <p className="text-center text-gray-500 text-xs">Or</p> */}
+      {renderCartButton()}
       <Button
         onClick={toggleExpanded}
         variant="ghost"
@@ -251,14 +260,9 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
         size="sm"
       >
         <ChevronUp className="size-4" />
+        {/* TODO maybe remove */}
         Collapse
       </Button>
-
-      <Button className="w-full" variant="brandred" size="lg">
-        <Album className="size-4 " /> Book Tour Now
-      </Button>
-      <p className="text-center text-gray-500 text-xs">Or</p>
-      {renderCartButton()}
     </div>
   );
 

@@ -127,7 +127,7 @@ export default function ActivityDisplay({
       </div>
 
       {showCount && (
-        <div className="py-2 border-t border-gray-200">
+        <div className="pt-2 border-t border-gray-200">
           <p className="text-xs text-gray-600">
             <span className="font-semibold">
               {selectedSet.size > 0 ? selectedSet.size : "No"}
