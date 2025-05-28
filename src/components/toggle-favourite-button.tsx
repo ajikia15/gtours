@@ -6,6 +6,8 @@ import { useAuth } from "@/context/auth";
 import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
+import { getFreshToken } from "@/lib/client-auth-utils";
+
 export default function ToggleFavouriteButton({
   tourId,
   isFavourite,
@@ -17,6 +19,7 @@ export default function ToggleFavouriteButton({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [optimisticFavourite, setOptimisticFavourite] = useState(isFavourite);
+
   return (
     <button
       className="z-10 absolute bg-white/70 rounded-bl-md p-1 -top-0.5 -right-0.5 text-gray-800 border-gray-300 border-t border-r rounded-tr-lg"
@@ -24,11 +27,19 @@ export default function ToggleFavouriteButton({
       onClick={async () => {
         setIsLoading(true);
         try {
-          const tokenResult = await auth?.currentUser?.getIdTokenResult();
-          if (!tokenResult) {
+          if (!auth?.currentUser) {
             setIsLoading(false);
             router.push("/login");
             toast.info("Please log in to add to favorites");
+            return;
+          }
+
+          // Get a fresh token with built-in caching
+          const token = await getFreshToken();
+          if (!token) {
+            setIsLoading(false);
+            router.push("/login");
+            toast.error("Authentication expired. Please log in again.");
             return;
           }
 
@@ -36,9 +47,9 @@ export default function ToggleFavouriteButton({
           setOptimisticFavourite(newFavouriteState);
 
           if (optimisticFavourite) {
-            await removeFavourite(tourId, tokenResult.token);
+            await removeFavourite(tourId, token);
           } else {
-            await addFavourite(tourId, tokenResult.token);
+            await addFavourite(tourId, token);
           }
 
           router.refresh();
