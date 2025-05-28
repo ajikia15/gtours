@@ -4,7 +4,7 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ChevronDown, ChevronUp, Eye } from "lucide-react";
+import { ShoppingCart, ChevronDown, ChevronUp, Eye, Album } from "lucide-react";
 
 import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
@@ -172,7 +172,7 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
             "Updating..."
           ) : (
             <>
-              <ShoppingCart className="size-4 mr-2" />
+              <ShoppingCart className="size-4 " />
               Update in Cart
             </>
           )}
@@ -183,8 +183,8 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
     if (existingCartItem) {
       return (
         <Link href="/account/cart">
-          <Button className="w-full" variant="secondary">
-            <Eye className="size-4 mr-2" />
+          <Button className="w-full mb-3" variant="secondary">
+            <Eye className="size-4" />
             View in Cart
           </Button>
         </Link>
@@ -198,7 +198,7 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
         onClick={handleCartAction}
         disabled={isAddingToCart}
       >
-        <ShoppingCart className="size-4 mr-2" />
+        <ShoppingCart className="size-4 " />
         {isAddingToCart ? "Adding..." : "Add to Cart"}
       </Button>
     );
@@ -235,7 +235,7 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
           className="w-full shadow-lg"
           variant="brandred"
         >
-          <ChevronDown className="size-4 mr-2" />
+          <ChevronDown className="size-4" />
           Continue Booking
         </Button>
       </div>
@@ -250,15 +250,15 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
         className="w-full text-gray-500 hover:text-gray-700"
         size="sm"
       >
-        <ChevronUp className="size-4 mr-2" />
+        <ChevronUp className="size-4" />
         Collapse
       </Button>
 
-      {renderCartButton()}
-
       <Button className="w-full" variant="brandred" size="lg">
-        Book Tour Now
+        <Album className="size-4 " /> Book Tour Now
       </Button>
+      <p className="text-center text-gray-500 text-xs">Or</p>
+      {renderCartButton()}
     </div>
   );
 
