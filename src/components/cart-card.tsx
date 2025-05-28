@@ -30,7 +30,7 @@ export default function CartCard({ item }: CartCardProps) {
         toast.error(result.message || "Failed to remove item");
       }
     } catch (error) {
-      toast.error("Failed to remove item");
+      toast.error(`Failed to remove item: ${error}`);
     } finally {
       setIsRemoving(false);
     }

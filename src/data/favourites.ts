@@ -15,6 +15,7 @@ export const getUserFavourites = async () => {
   } catch (error) {
     // Token validation failed, return empty favourites
     // Middleware will handle token clearing and redirects
+    console.error("Error getting user favourites:", error);
     console.warn(
       "No valid token found for getUserFavourites, returning empty favourites"
     );

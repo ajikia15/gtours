@@ -8,9 +8,7 @@
  */
 
 import { firestore } from "@/firebase/server";
-import { CartItem, CartItemStatus } from "@/types/Cart";
-import { cookies } from "next/headers";
-import { FieldValue } from "firebase-admin/firestore";
+import { CartItem } from "@/types/Cart";
 import { verifyUserToken } from "@/lib/auth-utils";
 
 // ============================================================================

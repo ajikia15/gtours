@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCartIcon, LockIcon, CheckCircleIcon } from "lucide-react";
 import RequiredUserInfo from "@/components/required-user-info";
@@ -24,12 +23,8 @@ export default function CheckoutClient({
   const cart = useCart();
   const auth = useAuth();
   const router = useRouter();
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(
-    initialUserProfile
-  );
-  const [profileComplete, setProfileComplete] = useState(
-    initialProfileComplete
-  );
+  const [userProfile] = useState<UserProfile | null>(initialUserProfile);
+  const [profileComplete] = useState(initialProfileComplete);
 
   // Redirect to cart if empty
   useEffect(() => {

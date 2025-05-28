@@ -146,6 +146,7 @@ export default function RequiredUserInfo({
       form.setValue("verificationCode", "");
       startResendTimer();
     } catch (error) {
+      console.error("Error sending verification code:", error);
       toast.error("Failed to send verification code");
       setVerificationState("none");
     }
@@ -171,6 +172,7 @@ export default function RequiredUserInfo({
       toast.success("Phone verified!");
       setVerificationState("verified");
     } catch (error) {
+      console.error("Error verifying code:", error);
       toast.error("Failed to verify code");
       setVerificationState("sent");
     }

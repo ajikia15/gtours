@@ -13,7 +13,7 @@ export default async function FavouritesPage() {
           <h1 className="text-2xl font-bold mb-6">My Favourites</h1>
           <div className="text-center py-12">
             <p className="text-gray-500 text-lg">
-              You haven't added any tours to your favourites yet.
+              You haven&apos;t added any tours to your favourites yet.
             </p>
             <p className="text-gray-400 mt-2">
               Start exploring tours and add them to your favourites!

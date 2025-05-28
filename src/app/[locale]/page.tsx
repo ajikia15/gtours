@@ -1,6 +1,5 @@
 import Carousel from "@/components/carousel/Carousel";
 import QuickCategory from "@/components/carousel/QuickCategory";
-import InteractiveMapSection from "./interactive-map-section";
 import { getTranslations } from "next-intl/server";
 import DisplayCardsSection from "./display-cards-section";
 import { Suspense } from "react";

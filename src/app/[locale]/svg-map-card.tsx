@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
 import ToggleFavouriteButton from "@/components/toggle-favourite-button";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getLocale } from "next-intl/server";
 export default async function MapTourCard({
   tour,
   isFavourite,
@@ -14,7 +14,7 @@ export default async function MapTourCard({
   tour: Tour;
   isFavourite: boolean;
 }) {
-  const t = await getTranslations("Homepage");
+  // const t = await getTranslations("Homepage");
   const locale = await getLocale();
 
   return (

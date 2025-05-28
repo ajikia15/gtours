@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useBooking } from "@/context/booking";
-import { useCart } from "@/context/cart";
 import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
 import { Button } from "@/components/ui/button";
@@ -55,7 +54,6 @@ export default function BookingBar({
   className = "",
 }: BookingBarProps) {
   const booking = useBooking();
-  const cart = useCart();
 
   // Local state
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
@@ -87,7 +85,7 @@ export default function BookingBar({
       setSelectedTour(null);
       setSelectedActivities(new Set());
     }
-  }, [mode, editingItem, preselectedTour, tours]);
+  }, [mode, editingItem, preselectedTour, tours, booking]);
 
   // Get shared state
   const { selectedDate, travelers } = booking.sharedState;
@@ -165,7 +163,7 @@ export default function BookingBar({
       }
       onSuccess?.();
     } catch (error) {
-      console.error("Booking operation failed:", error);
+      console.error("operation failed:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsProcessing(false);

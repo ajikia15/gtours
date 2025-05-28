@@ -1,7 +1,6 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import {
   Calendar,
@@ -14,6 +13,7 @@ import {
 import { format } from "date-fns";
 import { useCart } from "@/context/cart";
 import { useBooking } from "@/context/booking";
+import { Link } from "@/i18n/navigation";
 
 // Type for simple order items (like on checkout page)
 export interface SimpleOrderItem {
@@ -72,7 +72,7 @@ export default function OrderSummary({
   const booking = useBooking();
 
   // Use cart data if in cart mode, otherwise use custom data
-  const items = mode === "cart" ? cart.items : customItems;
+  // const items = mode === "cart" ? cart.items : customItems;
   const isCartMode = mode === "cart";
 
   // Cart-specific data
@@ -94,10 +94,10 @@ export default function OrderSummary({
   const tax = customTax ?? (isCheckout ? subtotal * 0.18 : 0);
   const total = customTotal ?? subtotal + tax;
 
-  const getTotalPeople = () => {
-    if (!travelers) return 0;
-    return travelers.adults + travelers.children + travelers.infants;
-  };
+  // const getTotalPeople = () => {
+  //   if (!travelers) return 0;
+  //   return travelers.adults + travelers.children + travelers.infants;
+  // };
 
   const getDefaultButtonText = () => {
     if (isCheckout) {
@@ -347,9 +347,9 @@ export default function OrderSummary({
       <div className="mt-4 pt-4 border-t">
         <p className="text-xs text-gray-500 text-center">
           Need help?{" "}
-          <a href="/contact" className="text-blue-600 hover:underline">
+          <Link href="/contact" className="text-blue-600 hover:underline">
             Contact us
-          </a>
+          </Link>
         </p>
       </div>
     </div>

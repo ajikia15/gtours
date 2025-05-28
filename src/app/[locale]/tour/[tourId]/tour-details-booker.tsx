@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import ActivitySelection from "@/components/booking/activity-selection";
 import { ShoppingCart, ChevronDown, ChevronUp } from "lucide-react";
 import { Tour } from "@/types/Tour";
-import { TravelerCounts } from "@/types/Booking";
 import { useState } from "react";
 import { useBooking } from "@/context/booking";
 
@@ -44,7 +43,7 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
     setIsAddingToCart(true);
 
     try {
-      const result = await booking.addPartialBookingToCart(
+      await booking.addPartialBookingToCart(
         tour,
         Array.from(selectedActivities)
       );

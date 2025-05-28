@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import BookingBar from "@/components/booking-bar";
 import { useCart } from "@/context/cart";
 import { Tour } from "@/types/Tour";
@@ -50,7 +50,7 @@ export default function EditBookingPageClient({
         <Card className="p-8 text-center">
           <h1 className="text-2xl font-bold mb-4">Cart Item Not Found</h1>
           <p className="text-gray-600 mb-6">
-            The cart item you're trying to edit could not be found.
+            The cart item you&apos;re trying to edit could not be found.
           </p>
           <Button onClick={handleBack}>
             <ArrowLeft className="h-4 w-4 mr-2" />

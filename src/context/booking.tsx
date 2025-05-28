@@ -365,6 +365,7 @@ export const BookingProvider = ({
         return { success: false, message: result.message };
       }
     } catch (error) {
+      console.error("Error adding booking to cart:", error);
       const errorMessage = "Failed to add to cart";
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
@@ -422,6 +423,7 @@ export const BookingProvider = ({
         return { success: false, message: result.message };
       }
     } catch (error) {
+      console.error("Error adding partial booking to cart:", error);
       const errorMessage = "Failed to add to cart";
       toast.error(errorMessage);
       return { success: false, message: errorMessage };

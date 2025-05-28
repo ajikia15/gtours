@@ -3,10 +3,9 @@
 import { useCart } from "@/context/cart";
 import { useBooking } from "@/context/booking";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, AlertCircle, CheckCircle, Info } from "lucide-react";
 import { format } from "date-fns";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 
 export default function CartOrderSummary() {
   const cart = useCart();
@@ -20,9 +19,9 @@ export default function CartOrderSummary() {
   );
   const readyItems = cart.items.filter((item) => item.status === "ready");
 
-  const getTotalPeople = () => {
-    return travelers.adults + travelers.children + travelers.infants;
-  };
+  // const getTotalPeople = () => {
+  //   return travelers.adults + travelers.children + travelers.infants;
+  // };
 
   const handleProceedToCheckout = () => {
     router.push("/account/checkout");
@@ -187,9 +186,9 @@ export default function CartOrderSummary() {
       <div className="mt-4 pt-4 border-t">
         <p className="text-xs text-gray-500 text-center">
           Need help?{" "}
-          <a href="/contact" className="text-blue-600 hover:underline">
+          <Link href="/contact" className="text-blue-600 hover:underline">
             Contact us
-          </a>
+          </Link>
         </p>
       </div>
     </div>
