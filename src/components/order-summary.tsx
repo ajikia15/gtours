@@ -71,11 +71,8 @@ export default function OrderSummary({
   const cart = useCart();
   const booking = useBooking();
 
-  // Use cart data if in cart mode, otherwise use custom data
-  // const items = mode === "cart" ? cart.items : customItems;
   const isCartMode = mode === "cart";
 
-  // Cart-specific data
   const { selectedDate, travelers } = booking?.sharedState || {};
   const hasMultipleTours = isCartMode && cart.items.length > 1;
   const incompleteItems = isCartMode
@@ -107,7 +104,7 @@ export default function OrderSummary({
 
   const getDefaultButtonAction = () => {
     if (buttonAction) return buttonAction;
-    if (isCheckout) return () => {}; // Checkout action would be provided
+    if (isCheckout) return () => {};
     return () => (window.location.href = "/account/checkout");
   };
 

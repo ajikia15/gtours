@@ -3,6 +3,12 @@
 import { OfferedActivity } from "@/types/Activity";
 import { useTranslations } from "next-intl";
 import { getActivityIcon } from "@/lib/imageHelpers";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./ui/tooltip";
 
 interface ActivityDisplayProps {
   activities: OfferedActivity[];
@@ -76,14 +82,16 @@ export default function ActivityDisplay({
           const isSelected = selectedSet.has(activity.activityTypeId);
 
           return (
-            <button
-              key={activity.activityTypeId}
-              onClick={() => handleActivityClick(activity.activityTypeId)}
-              disabled={!interactive}
-              className={`
+            <TooltipProvider key={activity.activityTypeId}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <button
+                    onClick={() => handleActivityClick(activity.activityTypeId)}
+                    disabled={!interactive}
+                    className={`
                 flex items-center ${config.gap} ${
-                config.pill
-              } rounded-full font-medium
+                      config.pill
+                    } rounded-full font-medium
                 transition-all duration-200 border
                 ${
                   interactive
@@ -98,16 +106,22 @@ export default function ActivityDisplay({
                     : "bg-gray-100 text-gray-600 border-gray-200"
                 }
               `}
-            >
-              {getActivityIcon(
-                activity.activityTypeId,
-                isSelected,
-                config.icon
-              )}
-              <span className="whitespace-nowrap">
-                {quickCategory(activity.activityTypeId)}
-              </span>
-            </button>
+                  >
+                    {getActivityIcon(
+                      activity.activityTypeId,
+                      isSelected,
+                      config.icon
+                    )}
+                    <span className="whitespace-nowrap">
+                      {quickCategory(activity.activityTypeId)}
+                    </span>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{activity.specificDescription}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           );
         })}
       </div>
