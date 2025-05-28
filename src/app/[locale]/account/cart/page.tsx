@@ -4,13 +4,15 @@ import { useCart } from "@/context/cart";
 import { useAuth } from "@/context/auth";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 import CartCard from "@/components/cart-card";
 import CartOrderSummary from "@/components/cart-order-summary";
+// import OrderSummary from "@/components/order-summary"; // Alternative: use the new reusable component
 
 export default function CartPage() {
   const auth = useAuth();
   const cart = useCart();
+  const router = useRouter();
 
   if (!auth?.currentUser) {
     return (
@@ -57,6 +59,10 @@ export default function CartPage() {
     );
   }
 
+  const handleProceedToCheckout = () => {
+    router.push("/account/checkout");
+  };
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex items-center gap-3 mb-6">
@@ -80,6 +86,12 @@ export default function CartPage() {
         {/* Cart Summary */}
         <div className="lg:col-span-1">
           <CartOrderSummary />
+          {/* Alternative: Use the new reusable component
+          <OrderSummary 
+            mode="cart"
+            buttonAction={handleProceedToCheckout}
+          />
+          */}
         </div>
       </div>
     </div>

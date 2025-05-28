@@ -50,10 +50,9 @@
     "adminDashboard": "Панель администратора",
     "myFavouriteTours": "Мои любимые туры",
     "signOut": "Выйти",
-    "register": "Регистрация",
+    "signUp": "Регистрация",
     "signIn": "Войти",
-    "continueWithGoogle": "Продолжить с Google",
-    "signUp": ""
+    "continueWithGoogle": "Продолжить с Google"
   },
   "Admin": {
     "dashboard": {

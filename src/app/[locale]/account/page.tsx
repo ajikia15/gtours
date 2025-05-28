@@ -5,20 +5,23 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { verifyUserToken } from "@/lib/auth-utils";
-import { getUserProfile } from "@/data/userProfile";
+import { getUserProfile, isProfileComplete } from "@/data/userProfile";
 import { UserProfile } from "@/types/User";
 import { ShieldCheckIcon, PhoneIcon, UserIcon } from "lucide-react";
 import UserProfileForm from "@/components/user-profile-form";
+import RequiredUserInfo from "@/components/required-user-info";
 
 export default async function AccountPage() {
   const locale = await getLocale();
 
   let decodedToken: DecodedIdToken;
   let userProfile: UserProfile | null = null;
+  let profileComplete = false;
 
   try {
     decodedToken = await verifyUserToken();
     userProfile = await getUserProfile();
+    profileComplete = await isProfileComplete();
   } catch (e) {
     redirect({ href: "/login", locale: locale });
     throw e;
@@ -73,10 +76,23 @@ export default async function AccountPage() {
         </CardContent>
       </Card>
 
-      {/* Profile Form */}
+      {/* Required Information Section */}
+      {!profileComplete && (
+        <RequiredUserInfo
+          initialData={userProfile}
+          title="Complete Required Information"
+          description="Please fill out the required fields to complete your profile"
+        />
+      )}
+
+      {/* Complete Profile Form */}
       <Card>
         <CardHeader>
-          <CardTitle>Update Profile Information</CardTitle>
+          <CardTitle>
+            {profileComplete
+              ? "Update Profile Information"
+              : "Additional Profile Information"}
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <UserProfileForm initialData={userProfile} />

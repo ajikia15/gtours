@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Users, AlertCircle, CheckCircle, Info } from "lucide-react";
 import { format } from "date-fns";
+import { useRouter } from "@/i18n/navigation";
 
 export default function CartOrderSummary() {
   const cart = useCart();
   const booking = useBooking();
+  const router = useRouter();
 
   const { selectedDate, travelers } = booking.sharedState;
   const hasMultipleTours = cart.items.length > 1;
@@ -20,6 +22,10 @@ export default function CartOrderSummary() {
 
   const getTotalPeople = () => {
     return travelers.adults + travelers.children + travelers.infants;
+  };
+
+  const handleProceedToCheckout = () => {
+    router.push("/account/checkout");
   };
 
   return (
@@ -165,6 +171,7 @@ export default function CartOrderSummary() {
           className="w-full"
           size="lg"
           disabled={incompleteItems.length > 0}
+          onClick={handleProceedToCheckout}
         >
           Proceed to Checkout
         </Button>

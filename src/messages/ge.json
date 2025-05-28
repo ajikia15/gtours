@@ -50,10 +50,9 @@
     "adminDashboard": "ადმინისტრატორის პანელი",
     "myFavouriteTours": "ჩემი რჩეული ტურები",
     "signOut": "გასვლა",
-    "register": "რეგისტრაცია",
+    "signUp": "რეგისტრაცია",
     "signIn": "შესვლა",
-    "continueWithGoogle": "Google-ით გაგრძელება",
-    "signUp": ""
+    "continueWithGoogle": "Google-ით გაგრძელება"
   },
   "Admin": {
     "dashboard": {
