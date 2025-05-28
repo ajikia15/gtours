@@ -132,6 +132,67 @@ export default function RequiredUserInfo({
     const fullPhoneNumber = `+995${phoneNumber}`;
 
     try {
+      // Create a container for reCAPTCHA if it doesn't exist
+      let recaptchaContainer = document.getElementById("recaptcha-container");
+
+      if (!recaptchaContainer) {
+        recaptchaContainer = document.createElement("div");
+        recaptchaContainer.id = "recaptcha-container";
+
+        // Make it very visible with prominent styling
+        recaptchaContainer.style.cssText = `
+          margin: 20px 0;
+          padding: 15px;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          background-color: #f8fafc;
+          display: block;
+          width: 100%;
+          min-height: 80px;
+          position: relative;
+          z-index: 1000;
+        `;
+
+        // Add a clear label
+        const label = document.createElement("div");
+        label.textContent = "Please complete the reCAPTCHA verification:";
+        label.style.cssText =
+          "margin-bottom: 10px; font-weight: 500; color: #4b5563;";
+        recaptchaContainer.appendChild(label);
+
+        // Find a good place to insert it - right after the phone number field
+        const phoneField = document.querySelector("[name='phoneNumber']");
+        if (phoneField) {
+          const formItem =
+            phoneField.closest(".form-item") || phoneField.closest("div");
+          if (formItem && formItem.parentNode) {
+            formItem.parentNode.insertBefore(
+              recaptchaContainer,
+              formItem.nextSibling
+            );
+          } else {
+            // Fallback - append to body
+            document.body.appendChild(recaptchaContainer);
+          }
+        } else {
+          // Fallback - append to body in a fixed position
+          recaptchaContainer.style.position = "fixed";
+          recaptchaContainer.style.left = "50%";
+          recaptchaContainer.style.top = "50%";
+          recaptchaContainer.style.transform = "translate(-50%, -50%)";
+          recaptchaContainer.style.maxWidth = "400px";
+          recaptchaContainer.style.boxShadow =
+            "0 10px 15px -3px rgba(0, 0, 0, 0.1)";
+          document.body.appendChild(recaptchaContainer);
+        }
+      } else {
+        // Make sure the container is visible
+        recaptchaContainer.style.display = "block";
+        recaptchaContainer.innerHTML =
+          '<div style="margin-bottom: 10px; font-weight: 500; color: #4b5563;">Please complete the reCAPTCHA verification:</div>';
+      }
+
+      console.log("Sending verification code to:", fullPhoneNumber);
       const response = await sendFirebasePhoneVerification(fullPhoneNumber);
 
       if (response.error) {
@@ -145,10 +206,13 @@ export default function RequiredUserInfo({
       setVerificationState("sent");
       form.setValue("verificationCode", "");
       startResendTimer();
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error sending verification code:", error);
-      toast.error("Failed to send verification code");
+      toast.error(error.message || "Failed to send verification code");
       setVerificationState("none");
+
+      // Try to clean up if there was an error
+      cleanupRecaptcha();
     }
   };
 
@@ -161,20 +225,36 @@ export default function RequiredUserInfo({
     setVerificationState("verifying");
 
     try {
+      console.log("Verifying code:", verificationCode);
       const response = await verifyFirebasePhoneCode(verificationCode);
 
       if (response.error) {
+        console.error("Verification error:", response.message);
         toast.error(response.message);
         setVerificationState("sent");
         return;
       }
 
+      console.log("Verification successful");
       toast.success("Phone verified!");
       setVerificationState("verified");
-    } catch (error) {
+
+      // Clean up after successful verification
+      cleanupRecaptcha();
+    } catch (error: any) {
       console.error("Error verifying code:", error);
-      toast.error("Failed to verify code");
+      toast.error(error.message || "Failed to verify code");
       setVerificationState("sent");
+
+      // If there was a major error, reset the verification process
+      if (
+        error.code === "auth/captcha-check-failed" ||
+        error.message?.includes("captcha") ||
+        error.code === "auth/missing-verification-code"
+      ) {
+        toast.error("Verification failed. Please request a new code.");
+        resetVerification();
+      }
     }
   };
 

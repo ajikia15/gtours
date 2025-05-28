@@ -94,11 +94,6 @@ export default function OrderSummary({
   const tax = customTax ?? (isCheckout ? subtotal * 0.18 : 0);
   const total = customTotal ?? subtotal + tax;
 
-  // const getTotalPeople = () => {
-  //   if (!travelers) return 0;
-  //   return travelers.adults + travelers.children + travelers.infants;
-  // };
-
   const getDefaultButtonText = () => {
     if (isCheckout) {
       return disabled
