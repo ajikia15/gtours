@@ -49,7 +49,7 @@ export default async function TourPage({
           <Suspense fallback={<TourDetailsCardSkeleton />}>
             <TourDetailsCard tour={tour} />
           </Suspense>
-          <TourActivitiesSection activities={tour.offeredActivities} />
+          {/* <TourActivitiesSection activities={tour.offeredActivities} /> */}
         </div>
       </div>
     </div>
