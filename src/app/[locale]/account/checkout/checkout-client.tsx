@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCartIcon, LockIcon, CheckCircleIcon } from "lucide-react";
-import RequiredUserInfo from "@/components/required-user-info";
+import UserProfileForm from "@/components/user-profile-form";
 import OrderSummary from "@/components/order-summary";
 import { UserProfile } from "@/types/User";
 import { useCart } from "@/context/cart";
@@ -105,12 +105,12 @@ export default function CheckoutClient({
               )}
             </div>
 
-            <RequiredUserInfo
+            <UserProfileForm
               initialData={userProfile}
+              mode="required"
               onComplete={handleProfileComplete}
               showTitle={false}
-              title=""
-              description=""
+              showCard={true}
             />
           </div>
 

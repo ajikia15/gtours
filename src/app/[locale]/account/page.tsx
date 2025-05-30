@@ -9,7 +9,6 @@ import { getUserProfile, isProfileComplete } from "@/data/userProfile";
 import { UserProfile } from "@/types/User";
 import { ShieldCheckIcon, PhoneIcon, UserIcon } from "lucide-react";
 import UserProfileForm from "@/components/user-profile-form";
-import RequiredUserInfo from "@/components/required-user-info";
 
 export default async function AccountPage() {
   const locale = await getLocale();
@@ -76,28 +75,21 @@ export default async function AccountPage() {
         </CardContent>
       </Card>
 
-      {/* Required Information Section */}
-      {!profileComplete && (
-        <RequiredUserInfo
-          initialData={userProfile}
-          title="Complete Required Information"
-          description="Please fill out the required fields to complete your profile"
-        />
-      )}
-
-      {/* Complete Profile Form */}
-      <Card>
-        <CardHeader>
-          <CardTitle>
-            {profileComplete
-              ? "Update Profile Information"
-              : "Additional Profile Information"}
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <UserProfileForm initialData={userProfile} />
-        </CardContent>
-      </Card>
+      {/* Unified Profile Form */}
+      <UserProfileForm
+        initialData={userProfile}
+        mode={profileComplete ? "complete" : "required"}
+        title={
+          profileComplete
+            ? "Update Profile Information"
+            : "Complete Required Information"
+        }
+        description={
+          profileComplete
+            ? undefined
+            : "Please fill out the required fields to complete your profile"
+        }
+      />
     </div>
   );
 }

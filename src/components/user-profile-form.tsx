@@ -22,6 +22,7 @@ import {
   ShieldCheckIcon,
   SendIcon,
   CheckCircleIcon,
+  UserIcon,
 } from "lucide-react";
 import { UserProfile } from "@/types/User";
 import { saveUserProfile } from "@/data/userProfile";
@@ -32,25 +33,25 @@ import {
   cleanupRecaptcha,
 } from "@/lib/firebase-phone-auth";
 
-const profileSchema = z.object({
-  firstName: z.string().min(2, "First name must be at least 2 characters"),
-  lastName: z.string().min(2, "Last name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address").optional(),
-  phoneNumber: z
-    .string()
-    .optional()
-    .refine(
-      (val) => !val || /^[0-9]{9}$/.test(val),
-      "Please enter a 9-digit Georgian phone number"
-    ),
-  verificationCode: z.string().optional(),
-});
-
 interface UserProfileFormProps {
   initialData?: UserProfile | null;
+  mode?: "required" | "complete";
+  onComplete?: () => void;
+  showTitle?: boolean;
+  title?: string;
+  description?: string;
+  showCard?: boolean;
 }
 
-export default function UserProfileForm({ initialData }: UserProfileFormProps) {
+export default function UserProfileForm({
+  initialData,
+  mode = "complete",
+  onComplete,
+  showTitle = true,
+  title,
+  description,
+  showCard = true,
+}: UserProfileFormProps) {
   const auth = useAuth();
   const [verificationState, setVerificationState] = useState<
     "none" | "sending" | "sent" | "verifying" | "verified"
@@ -59,7 +60,39 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
   const [canResend, setCanResend] = useState(true);
   const [resendTimer, setResendTimer] = useState(0);
 
-  const form = useForm<z.infer<typeof profileSchema>>({
+  // Create a unified schema that adapts based on mode
+  const createSchema = () => {
+    return z.object({
+      firstName: z.string().min(2, "First name must be at least 2 characters"),
+      lastName: z.string().min(2, "Last name must be at least 2 characters"),
+      email:
+        mode === "complete"
+          ? z.string().email("Please enter a valid email address").optional()
+          : z.string().optional(),
+      phoneNumber:
+        mode === "required"
+          ? z
+              .string()
+              .min(9, "Please enter a 9-digit Georgian phone number")
+              .refine(
+                (val) => /^[0-9]{9}$/.test(val),
+                "Please enter a 9-digit Georgian phone number"
+              )
+          : z
+              .string()
+              .optional()
+              .refine(
+                (val) => !val || /^[0-9]{9}$/.test(val),
+                "Please enter a 9-digit Georgian phone number"
+              ),
+      verificationCode: z.string().optional(),
+    });
+  };
+
+  const profileSchema = createSchema();
+  type FormData = z.infer<typeof profileSchema>;
+
+  const form = useForm<FormData>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
       firstName: initialData?.firstName || "",
@@ -81,6 +114,29 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
     phoneNumber && `+995${phoneNumber}` !== initialData?.phoneNumber
   );
   const isPhoneVerified = initialData?.phoneVerified && !phoneChanged;
+
+  // Check if profile is complete (for required mode only)
+  const isComplete =
+    mode === "required" &&
+    !!(
+      initialData?.firstName &&
+      initialData?.lastName &&
+      initialData?.phoneNumber &&
+      initialData?.phoneVerified &&
+      !phoneChanged
+    );
+
+  // Get display title and description
+  const displayTitle =
+    title ||
+    (mode === "required"
+      ? "Complete Your Profile"
+      : "Update Profile Information");
+  const displayDescription =
+    description ||
+    (mode === "required"
+      ? "Please provide the required information to continue"
+      : undefined);
 
   const startResendTimer = () => {
     setCanResend(false);
@@ -240,7 +296,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
     }
   };
 
-  const onSubmit = async (data: z.infer<typeof profileSchema>) => {
+  const onSubmit = async (data: FormData) => {
     try {
       const token = await auth?.currentUser?.getIdToken();
       if (!token) {
@@ -258,7 +314,10 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
         lastName: data.lastName,
       };
 
-      if (data.email) profileData.email = data.email;
+      // Add email only if it exists and we're in complete mode
+      if (mode === "complete" && data.email) {
+        profileData.email = data.email;
+      }
 
       if (data.phoneNumber) {
         profileData.phoneNumber = `+995${data.phoneNumber}`;
@@ -276,28 +335,72 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
 
       toast.success("Profile saved successfully!");
       cleanupRecaptcha();
-      window.location.reload();
+
+      // Call onComplete callback if provided
+      if (onComplete) {
+        onComplete();
+      } else {
+        window.location.reload();
+      }
     } catch (error) {
       console.error("Error updating profile:", error);
       toast.error("Failed to update profile");
     }
   };
 
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Basic Information</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
+  // If profile is already complete in required mode, show success state
+  if (isComplete) {
+    const content = (
+      <CardContent className="pt-6">
+        <div className="flex items-center justify-center space-x-2 text-green-600">
+          <CheckCircleIcon className="h-5 w-5" />
+          <span className="font-medium">Profile Complete</span>
+        </div>
+        <div className="mt-4 space-y-2 text-sm text-gray-600">
+          <div>
+            Name: {initialData?.firstName} {initialData?.lastName}
+          </div>
+          <div className="flex items-center gap-2">
+            Phone: {initialData?.phoneNumber}
+            <Badge variant="default" className="text-xs">
+              <ShieldCheckIcon className="h-3 w-3 mr-1" />
+              Verified
+            </Badge>
+          </div>
+        </div>
+      </CardContent>
+    );
+
+    return showCard ? <Card>{content}</Card> : content;
+  }
+
+  const formContent = (
+    <>
+      {showTitle && showCard && (
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <UserIcon className="h-5 w-5" />
+            {displayTitle}
+          </CardTitle>
+          {displayDescription && (
+            <p className="text-sm text-muted-foreground">
+              {displayDescription}
+            </p>
+          )}
+        </CardHeader>
+      )}
+      <CardContent className={showCard ? undefined : "p-0"}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={form.control}
                 name="firstName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>First Name</FormLabel>
+                    <FormLabel>
+                      First Name {mode === "required" && "*"}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter your first name" {...field} />
                     </FormControl>
@@ -311,7 +414,9 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                 name="lastName"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Last Name</FormLabel>
+                    <FormLabel>
+                      Last Name {mode === "required" && "*"}
+                    </FormLabel>
                     <FormControl>
                       <Input placeholder="Enter your last name" {...field} />
                     </FormControl>
@@ -321,24 +426,26 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
               />
             </div>
 
-            {/* Email Field */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email Address</FormLabel>
-                  <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="Enter your email address"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Email Field - Only in complete mode */}
+            {mode === "complete" && (
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email Address</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Enter your email address"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
 
             {/* Phone Number */}
             <FormField
@@ -348,7 +455,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
                     <PhoneIcon className="h-4 w-4" />
-                    Phone Number
+                    Phone Number {mode === "required" && "*"}
                     {isPhoneVerified && (
                       <Badge variant="default" className="text-xs">
                         <ShieldCheckIcon className="h-3 w-3 mr-1" />
@@ -373,6 +480,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                       <Input
                         placeholder="555123456"
                         {...field}
+                        value={field.value || ""}
                         onChange={(e) => {
                           const value = e.target.value.replace(/\D/g, "");
                           if (value.length <= 9) {
@@ -395,7 +503,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                         onClick={handleSendCode}
                         disabled={
                           !phoneNumber ||
-                          phoneNumber.length !== 9 ||
+                          (phoneNumber as string)?.length !== 9 ||
                           verificationState === "sending" ||
                           (verificationState === "sent" && !canResend) ||
                           verificationState === "verified"
@@ -424,7 +532,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
               )}
             />
 
-            {/* Verification Code - Always visible */}
+            {/* Verification Code */}
             <FormField
               control={form.control}
               name="verificationCode"
@@ -436,6 +544,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                       <Input
                         placeholder="Enter 6-digit code"
                         {...field}
+                        value={field.value || ""}
                         onChange={(e) => {
                           const value = e.target.value.replace(/\D/g, "");
                           if (value.length <= 6) {
@@ -456,7 +565,7 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                           verificationState === "none" ||
                           verificationState === "verified" ||
                           !verificationCode ||
-                          verificationCode.length !== 6 ||
+                          (verificationCode as string)?.length !== 6 ||
                           verificationState === "verifying"
                         }
                       >
@@ -487,19 +596,26 @@ export default function UserProfileForm({ initialData }: UserProfileFormProps) {
                 </FormItem>
               )}
             />
-          </CardContent>
-        </Card>
 
-        <Button
-          type="submit"
-          className="w-full"
-          disabled={
-            isSubmitting || (phoneChanged && verificationState !== "verified")
-          }
-        >
-          {isSubmitting ? "Saving..." : "Save Profile"}
-        </Button>
-      </form>
-    </Form>
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={
+                isSubmitting ||
+                (phoneChanged && verificationState !== "verified")
+              }
+            >
+              {isSubmitting
+                ? "Saving..."
+                : mode === "required"
+                ? "Save Required Information"
+                : "Save Profile"}
+            </Button>
+          </form>
+        </Form>
+      </CardContent>
+    </>
   );
+
+  return showCard ? <Card>{formContent}</Card> : <div>{formContent}</div>;
 }
