@@ -29,7 +29,6 @@ export default function ToggleFavouriteButton({
         try {
           if (!auth?.currentUser) {
             setIsLoading(false);
-            router.push("/login");
             toast.info("Please log in to add to favorites");
             return;
           }
@@ -38,8 +37,8 @@ export default function ToggleFavouriteButton({
           const token = await getFreshToken();
           if (!token) {
             setIsLoading(false);
-            router.push("/login");
             toast.error("Authentication expired. Please log in again.");
+            window.location.href = "/account";
             return;
           }
 

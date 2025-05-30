@@ -22,37 +22,25 @@ export default function AuthButtons() {
   const router = useRouter();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
-  const [wasAuthenticated, setWasAuthenticated] = useState<boolean | null>(
-    null
-  );
   const t = useTranslations("Auth");
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Monitor authentication state changes for logout redirect
+  // Handle logout redirect if user is on protected page
   useEffect(() => {
-    if (auth && !auth.loading) {
-      const isCurrentlyAuthenticated = !!auth.currentUser;
+    if (auth && !auth.loading && !auth.currentUser) {
+      const protectedPaths = ["/account", "/admin", "/profile", "/checkout"];
+      const isOnProtectedPage = protectedPaths.some((path) =>
+        pathname.startsWith(path)
+      );
 
-      // If user was authenticated but now isn't (logout)
-      if (wasAuthenticated === true && !isCurrentlyAuthenticated) {
-        // Check if user is on a protected page and redirect to home
-        const protectedPaths = ["/account", "/admin", "/profile", "/checkout"];
-        const isOnProtectedPage = protectedPaths.some((path) =>
-          pathname.startsWith(path)
-        );
-
-        if (isOnProtectedPage) {
-          router.replace("/");
-        }
-        router.refresh(); // Ensure server state is synced
+      if (isOnProtectedPage) {
+        router.replace("/");
       }
-
-      setWasAuthenticated(isCurrentlyAuthenticated);
     }
-  }, [auth?.currentUser, auth?.loading, router, pathname, wasAuthenticated]);
+  }, [auth?.currentUser, auth?.loading, router, pathname]);
 
   const initialSkeleton = (
     <div className="flex items-center gap-4">
@@ -110,7 +98,7 @@ export default function AuthButtons() {
               <DropdownMenuItem
                 onClick={async () => {
                   await auth.logout();
-                  // Redirect and refresh will be handled automatically by useEffect
+                  // Redirect will be handled by useEffect if on protected page
                 }}
               >
                 {t("signOut")}

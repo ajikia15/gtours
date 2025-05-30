@@ -18,7 +18,6 @@ import { registerUser } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { useAuth } from "@/context/auth";
-import { useEffect } from "react";
 
 export default function RegisterForm() {
   const router = useRouter();
@@ -36,13 +35,6 @@ export default function RegisterForm() {
   });
 
   const { isSubmitting } = form.formState;
-
-  // Redirect authenticated users away from register page
-  useEffect(() => {
-    if (auth && !auth.loading && auth.currentUser) {
-      router.replace("/");
-    }
-  }, [auth?.currentUser, auth?.loading, router]);
 
   const onSubmit = async (data: z.infer<typeof registerUserSchema>) => {
     const response = await registerUser(data);

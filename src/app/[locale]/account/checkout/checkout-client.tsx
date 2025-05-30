@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCartIcon, LockIcon, CheckCircleIcon } from "lucide-react";
@@ -25,13 +25,6 @@ export default function CheckoutClient({
   const router = useRouter();
   const [userProfile] = useState<UserProfile | null>(initialUserProfile);
   const [profileComplete] = useState(initialProfileComplete);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!auth?.currentUser) {
-      router.push("/login");
-    }
-  }, [auth?.currentUser, router]);
 
   const handleProfileComplete = () => {
     // Refresh the page to get updated profile data

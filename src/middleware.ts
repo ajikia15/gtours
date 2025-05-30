@@ -135,10 +135,13 @@ export async function middleware(request: NextRequest) {
     if (userAuthRedirect) return userAuthRedirect;
   }
 
+  // Redirect authenticated users away from auth pages (login/register)
+  // This handles redirects at the server level, avoiding client-side useEffect redirects
   if (
     token &&
     (pathname.startsWith(`/${locale}/login`) ||
-      pathname.startsWith(`/${locale}/register`))
+      pathname.startsWith(`/${locale}/register`) ||
+      pathname.startsWith(`/${locale}/forgot-password`))
   ) {
     return createRedirectUrl(locale, "/", request);
   }
@@ -147,5 +150,10 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/", "/(en|ge|ru)/:path*"],
+  matcher: [
+    "/",
+    "/(en|ge|ru)/:path*",
+    // Exclude static files and API routes from middleware
+    "/((?!api|_next/static|_next/image|favicon.ico|.*\\..*$).*)",
+  ],
 };
