@@ -35,9 +35,11 @@ export default async function CheckoutPage() {
   }
 
   return (
-    <CheckoutClient
-      initialUserProfile={userProfile}
-      initialProfileComplete={profileComplete}
-    />
+    <>
+      <CheckoutClient
+        initialUserProfile={userProfile}
+        initialProfileComplete={profileComplete}
+      />
+    </>
   );
 }

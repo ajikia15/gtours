@@ -9,7 +9,7 @@ import OrderSummary from "@/components/order-summary";
 import { UserProfile } from "@/types/User";
 import { useCart } from "@/context/cart";
 import { useAuth } from "@/context/auth";
-import { useRouter } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
 
 interface CheckoutClientProps {
   initialUserProfile: UserProfile | null;
@@ -25,13 +25,6 @@ export default function CheckoutClient({
   const router = useRouter();
   const [userProfile] = useState<UserProfile | null>(initialUserProfile);
   const [profileComplete] = useState(initialProfileComplete);
-
-  // Redirect to cart if empty
-  useEffect(() => {
-    if (!cart.loading && cart.items.length === 0) {
-      router.push("/account/cart");
-    }
-  }, [cart.loading, cart.items.length, router]);
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -68,9 +61,24 @@ export default function CheckoutClient({
     );
   }
 
-  // Don't render if cart is empty (will redirect)
+  // Guard: Show empty cart message instead of redirecting
   if (cart.items.length === 0) {
-    return null;
+    return (
+      <div className="max-w-screen-lg mx-auto p-6">
+        <div className="text-center space-y-4">
+          <ShoppingCartIcon className="h-16 w-16 mx-auto text-gray-400" />
+          <h1 className="text-2xl font-bold">Your cart is empty</h1>
+          <p className="text-gray-600">
+            Add some tours to your cart before checkout
+          </p>
+          <Link href="/account/cart">
+            <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
+              Go to Cart
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (

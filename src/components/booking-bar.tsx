@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/navigation";
 import { useBooking } from "@/context/booking";
 import { useCart } from "@/context/cart";
 import { updateCartItem } from "@/data/cart";
