@@ -191,20 +191,54 @@ const COOKIE_CONFIG = {
 
 ## Usage Examples
 
-### Server-side Token Verification
+### Server-side Authentication Patterns
+
+**For Protected Routes (Required Auth):**
 
 ```typescript
-import { verifyUserToken } from "@/lib/auth-utils";
+import { requireUserAuth } from "@/lib/auth-utils";
 
-export async function serverFunction() {
+export async function protectedServerAction() {
   try {
-    const decodedToken = await verifyUserToken();
-    // Token is valid, proceed with logic
+    const decodedToken = await requireUserAuth();
+    // User is authenticated, proceed with logic
     return { userId: decodedToken.uid };
   } catch (error) {
-    // Token invalid or expired, user needs to log in
-    return { error: "Authentication required" };
+    // User not authenticated, redirect to login
+    redirect("/login");
   }
+}
+```
+
+**For Optional Auth (Public Pages with Personalization):**
+
+```typescript
+import { getCurrentUserToken } from "@/lib/auth-utils";
+
+export async function publicPageWithAuth() {
+  const user = await getCurrentUserToken();
+
+  if (user) {
+    // Show personalized content
+    const favourites = await getUserFavourites();
+    return { user, favourites };
+  } else {
+    // Show public content
+    return { user: null, favourites: [] };
+  }
+}
+```
+
+**Deprecated Pattern (Don't Use):**
+
+```typescript
+// ❌ OLD WAY - Don't use, throws errors for normal non-authenticated states
+import { verifyUserToken } from "@/lib/auth-utils";
+
+try {
+  const user = await verifyUserToken(); // Throws even when user simply isn't logged in
+} catch (error) {
+  // This runs even for users who are simply not logged in (normal state)
 }
 ```
 
@@ -233,7 +267,7 @@ export default function MyComponent() {
 import { useAuth } from "@/context/auth";
 
 export default function MyComponent() {
-  const { currentUser, loading, customClaims } = useAuth();
+  const { currentUser, loading, customClaims, ensureTokenSync } = useAuth();
 
   if (loading) return <div>Loading...</div>;
   if (!currentUser) return <div>Please log in</div>;
@@ -244,11 +278,11 @@ export default function MyComponent() {
 
 ## Error Handling
 
-The system uses standard JavaScript `Error` objects with descriptive messages:
+The system uses standard JavaScript `Error` objects with improved, context-appropriate messages:
 
-- `"No authentication token found"` - User needs to log in
-- `"Invalid token format"` - Token is malformed
-- `"Invalid or expired token"` - Token needs refresh or user needs to log in
+- `"Authentication required"` - User needs to log in (for protected routes)
+- `"Invalid authentication token"` - Token is malformed
+- `"Authentication required - please log in"` - Token needs refresh or user needs to log in
 - `"Admin privileges required"` - User lacks admin access
 
 ## Configuration

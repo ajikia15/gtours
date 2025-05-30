@@ -20,6 +20,7 @@ type AuthContextType = {
   loginWithEmail: (email: string, password: string) => Promise<void>;
   customClaims: ParsedToken | null;
   loading: boolean;
+  ensureTokenSync: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -161,12 +162,29 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const loginWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const result = await signInWithPopup(auth, provider);
+
+    // Wait for auth state to update and token to sync
+    if (result.user) {
+      await refreshAndSetToken(result.user, true);
+    }
   };
 
   const loginWithEmail = async (email: string, password: string) => {
-    await signInWithEmailAndPassword(auth, email, password);
+    const result = await signInWithEmailAndPassword(auth, email, password);
+
+    // Wait for auth state to update and token to sync
+    if (result.user) {
+      await refreshAndSetToken(result.user, true);
+    }
   };
+
+  // Method to ensure current user's token is synced to server
+  const ensureTokenSync = useCallback(async () => {
+    if (currentUser) {
+      await refreshAndSetToken(currentUser, true);
+    }
+  }, [currentUser, refreshAndSetToken]);
 
   return (
     <AuthContext.Provider
@@ -177,6 +195,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         loginWithEmail,
         customClaims,
         loading,
+        ensureTokenSync,
       }}
     >
       {children}

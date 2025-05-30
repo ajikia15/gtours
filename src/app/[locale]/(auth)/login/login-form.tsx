@@ -36,8 +36,11 @@ export default function LoginForm() {
   const onSubmit = async (data: z.infer<typeof loginUserSchema>) => {
     try {
       await auth?.loginWithEmail(data.email, data.password);
+
       toast.success("Logged in successfully");
-      router.replace("/");
+
+      // Use window.location.href for a full page redirect to ensure middleware runs
+      window.location.href = "/";
     } catch (e: any) {
       if (e.code === "auth/invalid-credential") {
         toast.error("Invalid email or password");

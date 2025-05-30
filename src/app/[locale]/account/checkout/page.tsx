@@ -1,6 +1,6 @@
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
-import { verifyUserToken } from "@/lib/auth-utils";
+import { requireUserAuth } from "@/lib/auth-utils";
 import { getUserProfile, isProfileComplete } from "@/data/userProfile";
 import { getUserCart } from "@/data/cart";
 import { UserProfile } from "@/types/User";
@@ -14,14 +14,14 @@ export default async function CheckoutPage() {
   let hasCartItems = false;
 
   try {
-    await verifyUserToken();
+    await requireUserAuth();
     userProfile = await getUserProfile();
     profileComplete = await isProfileComplete();
 
     // Check if user has items in cart
     const cartResult = await getUserCart();
     if (cartResult.success && cartResult.cart) {
-      hasCartItems = cartResult.cart.items.length > 0;
+      hasCartItems = cartResult.cart.length > 0;
     }
   } catch (e) {
     redirect({ href: "/login", locale: locale });

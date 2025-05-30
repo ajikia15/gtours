@@ -9,7 +9,7 @@
 
 import { firestore } from "@/firebase/server";
 import { CartItem } from "@/types/Cart";
-import { verifyUserToken } from "@/lib/auth-utils";
+import { requireUserAuth } from "@/lib/auth-utils";
 
 // ============================================================================
 // AUTHENTICATION & VALIDATION HELPERS
@@ -21,7 +21,7 @@ import { verifyUserToken } from "@/lib/auth-utils";
  * @throws Error if authentication fails
  */
 const verifyUser = async (): Promise<string> => {
-  const verifiedToken = await verifyUserToken();
+  const verifiedToken = await requireUserAuth();
   return verifiedToken.uid;
 };
 
@@ -299,15 +299,19 @@ export const removeFromCart = async (itemId: string) => {
 
 /**
  * Retrieves the user's complete cart
- * @returns Promise<{success: boolean, cart?: Cart, error?: boolean, message?: string}>
+ * @returns Promise<{success: boolean, cart?: CartItem[], error?: string}>
  */
-export const getUserCart = async () => {
+export const getUserCart = async (): Promise<{
+  success: boolean;
+  cart?: CartItem[];
+  error?: string;
+}> => {
   try {
-    const userId = await verifyUser();
+    const verifiedToken = await requireUserAuth();
 
     const cartItemsSnapshot = await firestore
       .collection("carts")
-      .doc(userId)
+      .doc(verifiedToken.uid)
       .collection("items")
       .orderBy("createdAt", "desc")
       .get();
@@ -321,24 +325,15 @@ export const getUserCart = async () => {
       selectedDate: doc.data().selectedDate?.toDate() || undefined,
     })) as CartItem[];
 
-    const totalItems = items.length;
-    const totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
-
     return {
       success: true,
-      cart: {
-        userId,
-        items,
-        totalItems,
-        totalPrice,
-        updatedAt: new Date(),
-      },
+      cart: items,
     };
   } catch (error) {
-    console.error("Error getting cart:", error);
+    console.error("Error getting user cart:", error);
     return {
-      error: true,
-      message: error instanceof Error ? error.message : "Failed to get cart",
+      success: false,
+      error: error instanceof Error ? error.message : "Failed to get cart",
     };
   }
 };

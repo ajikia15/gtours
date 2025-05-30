@@ -4,7 +4,7 @@ import { DecodedIdToken } from "firebase-admin/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { verifyUserToken } from "@/lib/auth-utils";
+import { requireUserAuth } from "@/lib/auth-utils";
 import { getUserProfile, isProfileComplete } from "@/data/userProfile";
 import { UserProfile } from "@/types/User";
 import { ShieldCheckIcon, PhoneIcon, UserIcon } from "lucide-react";
@@ -19,7 +19,7 @@ export default async function AccountPage() {
   let profileComplete = false;
 
   try {
-    decodedToken = await verifyUserToken();
+    decodedToken = await requireUserAuth();
     userProfile = await getUserProfile();
     profileComplete = await isProfileComplete();
   } catch (e) {

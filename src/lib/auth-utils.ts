@@ -116,10 +116,60 @@ const clearAuthTokens = async () => {
 };
 
 /**
- * Centralized token verification utility with automatic refresh
- * Returns the verified token or throws an error
+ * Gets the current user's auth token from cookies without throwing errors
+ * Returns null if no token is found (user not logged in)
  */
-export const verifyUserToken = async (
+export const getCurrentUserToken = async (): Promise<DecodedIdToken | null> => {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("firebaseAuthToken")?.value;
+
+    if (!token) {
+      return null; // User not logged in - this is normal
+    }
+
+    // Basic JWT format validation
+    if (typeof token !== "string" || token.split(".").length !== 3) {
+      console.warn("Invalid token format found in cookies");
+      await clearAuthTokens();
+      return null;
+    }
+
+    try {
+      const verifiedToken = await auth.verifyIdToken(token);
+      return verifiedToken;
+    } catch (error) {
+      console.log("Token verification failed, attempting refresh...");
+
+      // Try to refresh the token
+      const refreshedToken = await refreshFirebaseToken();
+      if (refreshedToken) {
+        try {
+          const verifiedRefreshedToken = await auth.verifyIdToken(
+            refreshedToken
+          );
+          console.log("Successfully verified refreshed token");
+          return verifiedRefreshedToken;
+        } catch (refreshError) {
+          console.error("Failed to verify refreshed token:", refreshError);
+        }
+      }
+
+      // Clear invalid tokens
+      await clearAuthTokens();
+      return null;
+    }
+  } catch (error) {
+    console.error("Error getting current user token:", error);
+    return null;
+  }
+};
+
+/**
+ * Verifies that a user is authenticated - throws error if not
+ * Use this for protected routes/actions that require authentication
+ */
+export const requireUserAuth = async (
   token?: string
 ): Promise<DecodedIdToken> => {
   let tokenToVerify = token;
@@ -130,7 +180,7 @@ export const verifyUserToken = async (
   }
 
   if (!tokenToVerify) {
-    throw new Error("No authentication token found");
+    throw new Error("Authentication required");
   }
 
   // Basic JWT format validation
@@ -138,7 +188,7 @@ export const verifyUserToken = async (
     typeof tokenToVerify !== "string" ||
     tokenToVerify.split(".").length !== 3
   ) {
-    throw new Error("Invalid token format");
+    throw new Error("Invalid authentication token");
   }
 
   try {
@@ -173,8 +223,21 @@ export const verifyUserToken = async (
 
     // If refresh failed or refreshed token is also invalid, clear tokens
     await clearAuthTokens();
-    throw new Error("Invalid or expired token");
+    throw new Error("Authentication required - please log in");
   }
+};
+
+/**
+ * @deprecated Use getCurrentUserToken() or requireUserAuth() instead
+ * Kept for backwards compatibility but will be removed in future versions
+ */
+export const verifyUserToken = async (
+  token?: string
+): Promise<DecodedIdToken> => {
+  console.warn(
+    "verifyUserToken is deprecated. Use requireUserAuth() for protected routes or getCurrentUserToken() for optional auth checks."
+  );
+  return requireUserAuth(token);
 };
 
 /**
@@ -183,7 +246,7 @@ export const verifyUserToken = async (
 export const verifyAdminToken = async (
   token?: string
 ): Promise<DecodedIdToken> => {
-  const verifiedToken = await verifyUserToken(token);
+  const verifiedToken = await requireUserAuth(token);
 
   if (!verifiedToken.admin) {
     throw new Error("Admin privileges required");

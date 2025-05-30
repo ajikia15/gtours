@@ -45,13 +45,15 @@ src/
 
 ## 🔧 Key Functions
 
-| Function             | Location               | Purpose                                          |
-| -------------------- | ---------------------- | ------------------------------------------------ |
-| `verifyUserToken()`  | `auth-utils.ts`        | Server-side token verification with auto-refresh |
-| `verifyAdminToken()` | `auth-utils.ts`        | Admin token verification                         |
-| `getFreshToken()`    | `client-auth-utils.ts` | Get valid client token with caching              |
-| `isAuthenticated()`  | `client-auth-utils.ts` | Quick auth check                                 |
-| `useAuth()`          | `auth.tsx`             | React hook for auth state                        |
+| Function                | Location               | Purpose                                                |
+| ----------------------- | ---------------------- | ------------------------------------------------------ |
+| `getCurrentUserToken()` | `auth-utils.ts`        | Get current user token (returns null if not logged in) |
+| `requireUserAuth()`     | `auth-utils.ts`        | Server-side token verification (throws if not authed)  |
+| `verifyUserToken()`     | `auth-utils.ts`        | ⚠️ **DEPRECATED** - Use requireUserAuth() instead      |
+| `verifyAdminToken()`    | `auth-utils.ts`        | Admin token verification                               |
+| `getFreshToken()`       | `client-auth-utils.ts` | Get valid client token with caching                    |
+| `isAuthenticated()`     | `client-auth-utils.ts` | Quick auth check                                       |
+| `useAuth()`             | `auth.tsx`             | React hook for auth state + ensureTokenSync()          |
 
 ## ⚡ Performance Features
 
@@ -85,12 +87,12 @@ All auth cookies use consistent settings:
 
 ## ❌ Error Messages
 
-| Error                             | Meaning                  | Action                                 |
-| --------------------------------- | ------------------------ | -------------------------------------- |
-| `"No authentication token found"` | User not logged in       | Redirect to login                      |
-| `"Invalid token format"`          | Malformed token          | Clear session, redirect to login       |
-| `"Invalid or expired token"`      | Token expired/invalid    | Auto-refresh attempted, may need login |
-| `"Admin privileges required"`     | Insufficient permissions | Show access denied                     |
+| Error                                       | Meaning                  | Action                                 |
+| ------------------------------------------- | ------------------------ | -------------------------------------- |
+| `"Authentication required"`                 | User not logged in       | Redirect to login                      |
+| `"Invalid authentication token"`            | Malformed token          | Clear session, redirect to login       |
+| `"Authentication required - please log in"` | Token expired/invalid    | Auto-refresh attempted, may need login |
+| `"Admin privileges required"`               | Insufficient permissions | Show access denied                     |
 
 ## 🧪 Testing Patterns
 
@@ -183,6 +185,38 @@ console.error("Token verification error:", error);
 - Force refresh tokens too frequently
 - Ignore authentication errors
 - Store tokens in localStorage
+
+## 🔄 New Auth Function Usage
+
+### When to Use Each Function
+
+**`getCurrentUserToken()`** - For optional auth checks:
+
+```typescript
+const user = await getCurrentUserToken();
+if (user) {
+  // Show personalized content
+} else {
+  // Show public content
+}
+```
+
+**`requireUserAuth()`** - For protected routes/actions:
+
+```typescript
+// In server components or actions that REQUIRE authentication
+const user = await requireUserAuth(); // Throws if not authenticated
+```
+
+**`verifyUserToken()`** - ⚠️ **Deprecated**:
+
+```typescript
+// OLD (deprecated) - will show console warning
+const user = await verifyUserToken();
+
+// NEW (recommended)
+const user = await requireUserAuth();
+```
 
 ## 📝 Environment Variables
 

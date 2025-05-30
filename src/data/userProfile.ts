@@ -1,7 +1,7 @@
 "use server";
 
 import { firestore } from "@/firebase/server";
-import { verifyUserToken } from "@/lib/auth-utils";
+import { requireUserAuth } from "@/lib/auth-utils";
 import { UserProfile } from "@/types/User";
 
 /**
@@ -12,7 +12,7 @@ export const saveUserProfile = async (
   authToken?: string
 ) => {
   try {
-    const verifiedToken = await verifyUserToken(authToken);
+    const verifiedToken = await requireUserAuth(authToken);
     const userId = verifiedToken.uid;
 
     // Get existing profile to preserve certain fields
@@ -57,7 +57,7 @@ export const getUserProfile = async (
   authToken?: string
 ): Promise<UserProfile | null> => {
   try {
-    const verifiedToken = await verifyUserToken(authToken);
+    const verifiedToken = await requireUserAuth(authToken);
     const userId = verifiedToken.uid;
 
     const profileDoc = await firestore
@@ -69,12 +69,21 @@ export const getUserProfile = async (
       return null;
     }
 
-    const data = profileDoc.data();
+    const profileData = profileDoc.data() as UserProfile;
+
+    // Helper to convert Firestore timestamps to Date objects
+    const convertTimestamp = (timestamp: any): Date => {
+      if (timestamp && typeof timestamp.toDate === "function") {
+        return timestamp.toDate();
+      }
+      return timestamp instanceof Date ? timestamp : new Date();
+    };
+
     return {
-      ...data,
-      createdAt: data?.createdAt?.toDate(),
-      updatedAt: data?.updatedAt?.toDate(),
-    } as UserProfile;
+      ...profileData,
+      createdAt: convertTimestamp(profileData.createdAt),
+      updatedAt: convertTimestamp(profileData.updatedAt),
+    };
   } catch (error) {
     console.error("Error getting user profile:", error);
     return null;

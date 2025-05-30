@@ -14,7 +14,10 @@ export default async function DisplayCardsSection() {
     <div className="grid grid-cols-4 gap-4 p-4">
       {data.slice(0, 4).map((tour) => (
         <div key={tour.id}>
-          <MapTourCard tour={tour} isFavourite={userFavourites[tour.id]} />
+          <MapTourCard
+            tour={tour}
+            isFavourite={userFavourites.includes(tour.id)}
+          />
         </div>
       ))}
     </div>
