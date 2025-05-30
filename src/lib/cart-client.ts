@@ -63,6 +63,15 @@ export const subscribeToCart = (
           };
         }) as CartItem[];
 
+        // Simple sort: order field first, then by creation date
+        items.sort((a, b) => {
+          if (a.order !== undefined && b.order !== undefined) {
+            return a.order - b.order;
+          }
+          // Fallback to creation date for items without order
+          return b.createdAt.getTime() - a.createdAt.getTime();
+        });
+
         onCartUpdate(items);
       } catch (error) {
         console.error("Error processing cart items:", error);

@@ -4,17 +4,19 @@ import { CartItem } from "@/types/Cart";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Button } from "@/components/ui/button";
-import { Trash2, MapPin, Pencil, Activity } from "lucide-react";
+import { Trash2, MapPin, Pencil, Activity, GripVertical } from "lucide-react";
 import { removeFromCart } from "@/data/cart";
 import { toast } from "sonner";
 import { useState } from "react";
 import { useRouter } from "@/i18n/navigation";
+import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 interface CartCardProps {
   item: CartItem;
+  dragHandleProps?: DraggableProvidedDragHandleProps | null;
 }
 
-export default function CartCard({ item }: CartCardProps) {
+export default function CartCard({ item, dragHandleProps }: CartCardProps) {
   const [isRemoving, setIsRemoving] = useState(false);
   const router = useRouter();
 
@@ -126,22 +128,26 @@ export default function CartCard({ item }: CartCardProps) {
             <div>
               <Button
                 size="sm"
-                onClick={
-                  item.status === "incomplete" ? handleEditItem : undefined
-                }
-                disabled={item.status === "ready"}
+                onClick={!item.isComplete ? handleEditItem : undefined}
+                disabled={item.isComplete}
                 className={`${
-                  item.status === "ready"
+                  item.isComplete
                     ? "bg-gray-400 text-gray-600 cursor-not-allowed hover:bg-gray-400"
                     : "bg-black text-white hover:bg-gray-800"
                 }`}
               >
-                {item.status === "ready"
-                  ? "Booking finished"
-                  : "Finish booking"}
+                {item.isComplete ? "Booking finished" : "Finish booking"}
               </Button>
             </div>
           </div>
+        </div>
+
+        {/* Drag Handle */}
+        <div
+          {...dragHandleProps}
+          className="flex items-center justify-center w-8 bg-gray-50 border-l border-gray-200 cursor-grab active:cursor-grabbing"
+        >
+          <GripVertical className="h-5 w-5 text-gray-400" />
         </div>
       </div>
     </div>

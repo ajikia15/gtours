@@ -377,6 +377,44 @@ export const clearCart = async () => {
   }
 };
 
+/**
+ * Reorders cart items by updating their order field
+ * @param itemIds - Array of cart item IDs in the desired order
+ * @returns Promise<{success: boolean, error?: boolean, message?: string}>
+ */
+export const reorderCartItems = async (itemIds: string[]) => {
+  try {
+    const userId = await verifyUser();
+
+    const batch = firestore.batch();
+
+    // Update each item with its new order index
+    itemIds.forEach((itemId, index) => {
+      const itemRef = firestore
+        .collection("carts")
+        .doc(userId)
+        .collection("items")
+        .doc(itemId);
+
+      batch.update(itemRef, {
+        order: index,
+        updatedAt: new Date(),
+      });
+    });
+
+    await batch.commit();
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error reordering cart items:", error);
+    return {
+      error: true,
+      message:
+        error instanceof Error ? error.message : "Failed to reorder items",
+    };
+  }
+};
+
 // ============================================================================
 // INTERNAL HELPERS
 // ============================================================================

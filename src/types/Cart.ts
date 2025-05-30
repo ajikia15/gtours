@@ -30,6 +30,9 @@ export type CartItem = {
   createdAt: Date;
   updatedAt: Date;
 
+  /** Custom order for drag and drop reordering */
+  order?: number;
+
   /** Whether the cart item has all required fields for booking */
   isComplete: boolean;
 };
