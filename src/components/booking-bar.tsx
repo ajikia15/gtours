@@ -1,7 +1,10 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useBooking } from "@/context/booking";
+import { useCart } from "@/context/cart";
+import { updateCartItem } from "@/data/cart";
 import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
 import { Button } from "@/components/ui/button";
@@ -12,38 +15,28 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import TourDatePicker from "@/components/booking/tour-date-picker";
-import TravelerSelection from "@/components/booking/traveler-selection";
-import ActivitySelection from "@/components/booking/activity-selection";
 import {
   CalendarDays,
   Users,
   MapPin,
-  ShoppingCart,
-  Edit3,
-  ChevronDown,
   Activity,
+  Edit3,
+  ShoppingCart,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-
-// Simple separator component
-const Separator = ({ className }: { className?: string }) => (
-  <div className={cn("h-px bg-border", className)} />
-);
+import TourDatePicker from "@/components/booking/tour-date-picker";
+import TravelerSelection from "@/components/booking/traveler-selection";
+import ActivitySelection from "@/components/booking/activity-selection";
 
 interface BookingBarProps {
   tours: Tour[];
-  /** Mode: 'add' for new booking, 'edit' for modifying existing */
   mode?: "add" | "edit";
-  /** Cart item to edit (required when mode is 'edit') */
   editingItem?: CartItem;
   preselectedTour?: Tour;
   onSuccess?: () => void;
   className?: string;
 }
-
-type PopoverType = "tour" | "activities" | "date" | "travelers";
 
 export default function BookingBar({
   tours,
@@ -53,122 +46,84 @@ export default function BookingBar({
   onSuccess,
   className = "",
 }: BookingBarProps) {
+  const router = useRouter();
   const booking = useBooking();
+  const cart = useCart();
 
-  // Destructure specific functions to avoid reference issues
-  const {
-    sharedState,
-    updateSharedDate,
-    updateSharedTravelers,
-    calculateTotalPrice,
-    getPricingBreakdown,
-    validateBooking,
-    addBookingToCart,
-    resetSharedState,
-    getTotalPeople,
-  } = booking;
+  // Use shared state only in edit mode
+  const { selectedDate: sharedDate, travelers: sharedTravelers } =
+    booking.sharedState;
 
-  // Local state
-  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
-  const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
-    new Set()
-  );
-  const [isProcessing, setIsProcessing] = useState(false);
-  const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
-
-  // Track initialization to prevent infinite loops
-  const hasInitialized = useRef(false);
-  const lastEditingItemId = useRef<string | null>(null);
-
-  // Popover management
-  const openPopover = (popover: PopoverType) => setActivePopover(popover);
-  const closePopover = () => setActivePopover(null);
-  const isPopoverOpen = (popover: PopoverType) => activePopover === popover;
-
-  // Initialize state based on mode
-  useEffect(() => {
+  // Local state for both modes
+  const [selectedTour, setSelectedTour] = useState<Tour | null>(() => {
     if (mode === "edit" && editingItem) {
-      // Only initialize if we haven't done so for this item, or if the item changed
-      if (
-        !hasInitialized.current ||
-        lastEditingItemId.current !== editingItem.id
-      ) {
-        const tour = tours.find((t) => t.id === editingItem.tourId);
-        if (tour) {
-          setSelectedTour(tour);
-          setSelectedActivities(new Set(editingItem.selectedActivities));
-          updateSharedDate(editingItem.selectedDate);
-          updateSharedTravelers(editingItem.travelers);
-          hasInitialized.current = true;
-          lastEditingItemId.current = editingItem.id;
-        }
-      }
-    } else if (mode === "add" && preselectedTour) {
-      if (!hasInitialized.current) {
-        setSelectedTour(preselectedTour);
-        setSelectedActivities(new Set());
-        hasInitialized.current = true;
-      }
-    } else if (mode === "add" && !preselectedTour) {
-      if (!hasInitialized.current) {
-        setSelectedTour(null);
-        setSelectedActivities(new Set());
-        hasInitialized.current = true;
-      }
+      return tours.find((t) => t.id === editingItem.tourId) || null;
     }
-  }, [mode, editingItem, preselectedTour, tours]);
-
-  // Reset initialization flag when mode or key props change
-  useEffect(() => {
-    hasInitialized.current = false;
-    lastEditingItemId.current = null;
-  }, [mode, editingItem?.id, preselectedTour?.id]);
-
-  // Get shared state
-  const { selectedDate, travelers } = sharedState;
-
-  // Calculate pricing
-  const totalPrice =
-    selectedTour && selectedTour.basePrice !== undefined
-      ? calculateTotalPrice(
-          selectedTour,
-          travelers,
-          Array.from(selectedActivities)
-        )
-      : 0;
-
-  const pricingBreakdown =
-    selectedTour && selectedTour.basePrice !== undefined
-      ? getPricingBreakdown(
-          selectedTour,
-          travelers,
-          Array.from(selectedActivities)
-        )
-      : null;
-
-  // Validate current selection
-  const validation = validateBooking({
-    selectedDate,
-    travelers,
-    selectedActivities: Array.from(selectedActivities),
+    return preselectedTour || null;
   });
 
-  // Handlers
-  const handleTourSelect = (tourId: string) => {
-    const tour = tours.find((t) => t.id === tourId);
-    if (tour) {
-      setSelectedTour(tour);
-      setSelectedActivities(new Set());
+  const [selectedActivities, setSelectedActivities] = useState<string[]>(() => {
+    if (mode === "edit" && editingItem) {
+      return editingItem.selectedActivities;
     }
-    closePopover();
+    return [];
+  });
+
+  // Local state for add mode (independent of shared state)
+  const [localDate, setLocalDate] = useState<Date | undefined>(
+    mode === "edit" && editingItem ? editingItem.selectedDate : undefined
+  );
+
+  const [localTravelers, setLocalTravelers] = useState(() => {
+    if (mode === "edit" && editingItem) {
+      return editingItem.travelers;
+    }
+    return { adults: 2, children: 0, infants: 0 };
+  });
+
+  const [isProcessing, setIsProcessing] = useState(false);
+
+  // Use appropriate state based on mode
+  const selectedDate = mode === "edit" ? sharedDate : localDate;
+  const travelers = mode === "edit" ? sharedTravelers : localTravelers;
+
+  // Simple derived state
+  const totalPrice = selectedTour
+    ? booking.calculateTotalPrice(selectedTour, travelers, selectedActivities)
+    : 0;
+
+  const validation = booking.validateBooking({
+    selectedDate,
+    travelers,
+    selectedActivities,
+  });
+
+  const isComplete = validation.isComplete && selectedTour;
+
+  // Handlers
+  const handleTourSelect = (tour: Tour) => {
+    setSelectedTour(tour);
+    setSelectedActivities([]); // Reset activities when tour changes
   };
 
-  const handleActivitySelectionChange = (selectedIds: string[]) => {
-    setSelectedActivities(new Set(selectedIds));
+  const handleDateChange = (date: Date | undefined) => {
+    if (mode === "edit") {
+      booking.updateSharedDate(date);
+    } else {
+      setLocalDate(date);
+    }
+  };
+
+  const handleTravelersChange = (newTravelers: typeof travelers) => {
+    if (mode === "edit") {
+      booking.updateSharedTravelers(newTravelers);
+    } else {
+      setLocalTravelers(newTravelers);
+    }
   };
 
   const handleSubmit = async () => {
-    if (!selectedTour || !validation.isComplete) {
+    if (!selectedTour || !isComplete) {
       toast.error("Please complete all required fields");
       return;
     }
@@ -177,72 +132,88 @@ export default function BookingBar({
 
     try {
       if (mode === "edit" && editingItem) {
-        const { updateCartItem } = await import("@/data/cart");
+        // Edit mode: only update activities (shared state updates affect all tours automatically)
         await updateCartItem(editingItem.id, {
-          selectedDate,
-          travelers,
-          selectedActivities: Array.from(selectedActivities),
+          selectedActivities,
           totalPrice,
-          activityPriceIncrement: pricingBreakdown?.activityCost || 0,
-          carCost: pricingBreakdown?.carCost || 0,
         });
         toast.success("Booking updated successfully!");
+
+        // Always go back to cart in edit mode
+        router.push("/cart");
+        onSuccess?.();
       } else {
-        const result = await addBookingToCart(
-          selectedTour,
-          Array.from(selectedActivities)
-        );
-        if (!result.success) {
+        // Add mode: add directly to cart without shared state
+        const { addToCart } = await import("@/data/cart");
+
+        const result = await addToCart({
+          tourId: selectedTour.id,
+          tourTitle: selectedTour.title,
+          tourBasePrice: selectedTour.basePrice,
+          tourImages: selectedTour.images,
+          selectedDate: selectedDate!,
+          travelers: travelers,
+          selectedActivities: selectedActivities,
+        });
+
+        if (result.success) {
+          toast.success("Added to cart successfully!");
+
+          // Navigate based on cart state
+          if (cart.items.length > 0) {
+            // Already have items, go to cart
+            router.push("/cart");
+          } else {
+            // No existing items, go directly to checkout
+            // TODO: redirect to checkout when implemented
+            router.push("/cart"); // For now, go to cart
+          }
+
+          onSuccess?.();
+        } else {
           toast.error(result.message || "Failed to add to cart");
           return;
         }
-        toast.success("Added to cart successfully!");
       }
-      onSuccess?.();
     } catch (error) {
-      console.error("operation failed:", error);
+      console.error("Booking operation failed:", error);
       toast.error("Something went wrong. Please try again.");
     } finally {
       setIsProcessing(false);
     }
   };
 
-  const handleReset = () => {
-    setSelectedTour(preselectedTour || null);
-    setSelectedActivities(new Set());
-    resetSharedState();
-  };
-
-  // Summary helpers
-  const getTourSummary = () => {
+  // Section content helpers
+  const getTourDisplay = () => {
     if (!selectedTour) return "Select tour";
     return selectedTour.title;
   };
 
-  const getActivitiesSummary = () => {
-    if (selectedActivities.size === 0) return "Select activities";
-    return `${selectedActivities.size} activit${
-      selectedActivities.size !== 1 ? "ies" : "y"
+  const getActivitiesDisplay = () => {
+    if (!selectedTour) return "Select tour first";
+    if (selectedActivities.length === 0) return "Select activities";
+    return `${selectedActivities.length} activit${
+      selectedActivities.length !== 1 ? "ies" : "y"
     }`;
   };
 
-  const getDateSummary = () => {
+  const getDateDisplay = () => {
     if (!selectedDate) return "Select date";
     return selectedDate.toLocaleDateString();
   };
 
-  const getTravelersSummary = () => {
-    const total = getTotalPeople(travelers);
+  const getTravelersDisplay = () => {
+    const total = booking.getTotalPeople(travelers);
     if (total === 0) return "Select travelers";
     return `${total} traveler${total !== 1 ? "s" : ""}`;
   };
 
   return (
-    <Card className={cn("p-6", className)}>
-      <div className="space-y-6">
-        {/* Header */}
+    <Card className={cn("overflow-hidden", className)}>
+      {/* Header */}
+      <div className="p-4 border-b">
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-semibold flex items-center gap-2">
+          <h2 className="text-lg font-semibold flex items-center gap-2">
             {mode === "edit" ? (
               <>
                 <Edit3 className="h-5 w-5" />
@@ -259,212 +230,214 @@ export default function BookingBar({
             <Badge variant="secondary">Editing: {editingItem?.tourTitle}</Badge>
           )}
         </div>
+      </div>
 
-        {/* Booking Bar with Popovers */}
-        <div className="flex flex-wrap gap-4 items-center">
-          {/* Tour Selection */}
-          <Popover
-            open={isPopoverOpen("tour")}
-            onOpenChange={(open) =>
-              open ? openPopover("tour") : closePopover()
-            }
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "min-w-48 justify-between",
-                  !selectedTour && "text-muted-foreground"
-                )}
-                disabled={mode === "edit" || !!preselectedTour}
-              >
-                <div className="flex items-center gap-2">
-                  <MapPin className="h-4 w-4" />
-                  {getTourSummary()}
-                </div>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="start">
-              <div className="space-y-3">
-                <h4 className="font-medium">Select Tour</h4>
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {tours.map((tour) => (
-                    <Button
-                      key={tour.id}
-                      variant={
-                        selectedTour?.id === tour.id ? "default" : "ghost"
-                      }
-                      className="w-full justify-start h-auto p-3"
-                      onClick={() => handleTourSelect(tour.id)}
-                    >
-                      <div className="text-left">
-                        <div className="font-medium">{tour.title}</div>
-                        <div className="text-sm text-muted-foreground">
-                          {tour.basePrice} GEL • {tour.duration} days
-                        </div>
-                      </div>
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
-
-          {/* Activities Selection */}
-          <Popover
-            open={isPopoverOpen("activities")}
-            onOpenChange={(open) =>
-              open ? openPopover("activities") : closePopover()
-            }
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="min-w-48 justify-between"
-                disabled={!selectedTour}
-              >
-                <div className="flex items-center gap-2">
-                  <Activity className="h-4 w-4" />
-                  {selectedTour ? getActivitiesSummary() : "Select tour first"}
-                </div>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="start">
-              <div className="space-y-3">
-                <h4 className="font-medium">Select Activities</h4>
-                {selectedTour ? (
-                  <ActivitySelection
-                    activities={selectedTour.offeredActivities || []}
-                    selectedActivities={selectedActivities}
-                    setSelectedActivities={setSelectedActivities}
-                    onSelectionChange={handleActivitySelectionChange}
-                  />
-                ) : (
-                  <p className="text-sm text-gray-500">
-                    Please select a tour first
-                  </p>
-                )}
-              </div>
-            </PopoverContent>
-          </Popover>
-
-          {/* Date Selection */}
-          <Popover
-            open={isPopoverOpen("date")}
-            onOpenChange={(open) =>
-              open ? openPopover("date") : closePopover()
-            }
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className={cn(
-                  "min-w-48 justify-between",
-                  !selectedDate && "text-muted-foreground"
-                )}
-              >
-                <div className="flex items-center gap-2">
-                  <CalendarDays className="h-4 w-4" />
-                  {getDateSummary()}
-                </div>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="start">
-              <TourDatePicker date={selectedDate} setDate={updateSharedDate} />
-            </PopoverContent>
-          </Popover>
-
-          {/* Travelers Selection */}
-          <Popover
-            open={isPopoverOpen("travelers")}
-            onOpenChange={(open) =>
-              open ? openPopover("travelers") : closePopover()
-            }
-          >
-            <PopoverTrigger asChild>
-              <Button variant="outline" className="min-w-48 justify-between">
-                <div className="flex items-center gap-2">
-                  <Users className="h-4 w-4" />
-                  {getTravelersSummary()}
-                </div>
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="start">
-              <div className="space-y-3">
-                <h4 className="font-medium">Select Travelers</h4>
-                <TravelerSelection
-                  travelers={travelers}
-                  setTravelers={updateSharedTravelers}
-                />
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        {/* Pricing Summary */}
-        {selectedTour && pricingBreakdown && (
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <h3 className="font-medium mb-3">Pricing Breakdown</h3>
-            <div className="space-y-2 text-sm">
-              <div className="flex justify-between">
-                <span>Base Price:</span>
-                <span>{pricingBreakdown.basePrice} GEL</span>
-              </div>
-              {pricingBreakdown.activityCost > 0 && (
-                <div className="flex justify-between">
-                  <span>Activities:</span>
-                  <span>+{pricingBreakdown.activityCost} GEL</span>
-                </div>
+      {/* Search Bar Style Main Bar */}
+      <div className="flex divide-x">
+        {/* Tour Section */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              disabled={mode === "edit" || !!preselectedTour}
+              className={cn(
+                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                (mode === "edit" || !!preselectedTour) &&
+                  "opacity-50 cursor-not-allowed",
+                !selectedTour && "text-gray-500"
               )}
-              <Separator className="my-2" />
-              <div className="flex justify-between font-semibold text-base">
-                <span>Total:</span>
-                <span className="text-red-600">{totalPrice} GEL</span>
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <MapPin className="h-4 w-4" />
+                <span className="text-xs font-medium text-gray-600">Tour</span>
               </div>
+              <div className="text-sm font-medium truncate">
+                {getTourDisplay()}
+              </div>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80" align="start">
+            <div className="space-y-3">
+              <h4 className="font-medium">Select Tour</h4>
+              <TourSelectionContent
+                tours={tours}
+                selectedTour={selectedTour}
+                onTourSelect={handleTourSelect}
+              />
             </div>
-          </div>
-        )}
+          </PopoverContent>
+        </Popover>
 
-        {/* Validation Errors */}
-        {!validation.isComplete && validation.errors.length > 0 && (
-          <div className="bg-red-50 border border-red-200 p-3 rounded">
-            <h4 className="text-sm font-medium text-red-800 mb-2">
-              Please complete the following:
-            </h4>
-            <ul className="text-sm text-red-700 space-y-1">
-              {validation.errors.map((error, index) => (
-                <li key={index}>• {error}</li>
-              ))}
-            </ul>
-          </div>
-        )}
+        {/* Activities Section */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              disabled={!selectedTour}
+              className={cn(
+                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                !selectedTour && "opacity-50 cursor-not-allowed",
+                selectedActivities.length === 0 && "text-gray-500"
+              )}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Activity className="h-4 w-4" />
+                <span className="text-xs font-medium text-gray-600">
+                  Activities
+                </span>
+              </div>
+              <div className="text-sm font-medium truncate">
+                {getActivitiesDisplay()}
+              </div>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80" align="start">
+            <div className="space-y-3">
+              <h4 className="font-medium">Select Activities</h4>
+              {selectedTour ? (
+                <ActivitySelection
+                  activities={selectedTour.offeredActivities || []}
+                  selectedActivities={new Set(selectedActivities)}
+                  setSelectedActivities={(activities) =>
+                    setSelectedActivities(Array.from(activities))
+                  }
+                  onSelectionChange={setSelectedActivities}
+                />
+              ) : (
+                <p className="text-sm text-gray-500">
+                  Please select a tour first
+                </p>
+              )}
+            </div>
+          </PopoverContent>
+        </Popover>
 
-        {/* Action Buttons */}
-        <div className="flex gap-3 justify-end">
-          <Button
-            variant="outline"
-            onClick={handleReset}
-            disabled={isProcessing}
-          >
-            Reset
-          </Button>
+        {/* Date Section */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              className={cn(
+                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                !selectedDate && "text-gray-500"
+              )}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <CalendarDays className="h-4 w-4" />
+                <span className="text-xs font-medium text-gray-600">Date</span>
+              </div>
+              <div className="text-sm font-medium truncate">
+                {getDateDisplay()}
+              </div>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0" align="start">
+            <TourDatePicker date={selectedDate} setDate={handleDateChange} />
+          </PopoverContent>
+        </Popover>
+
+        {/* Travelers Section */}
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              className={cn(
+                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                booking.getTotalPeople(travelers) === 0 && "text-gray-500"
+              )}
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <Users className="h-4 w-4" />
+                <span className="text-xs font-medium text-gray-600">
+                  Travelers
+                </span>
+              </div>
+              <div className="text-sm font-medium truncate">
+                {getTravelersDisplay()}
+              </div>
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-80" align="start">
+            <div className="space-y-3">
+              <h4 className="font-medium">Select Travelers</h4>
+              <TravelerSelection
+                travelers={travelers}
+                setTravelers={handleTravelersChange}
+              />
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        {/* Submit Section */}
+        <div className="flex-shrink-0">
           <Button
             onClick={handleSubmit}
-            disabled={!validation.isComplete || isProcessing}
-            className="min-w-32"
+            disabled={!isComplete || isProcessing}
+            className="h-full rounded-none px-6"
+            size="lg"
           >
             {isProcessing
               ? "Processing..."
               : mode === "edit"
-              ? "Update Booking"
-              : "Add to Cart"}
+              ? "Update"
+              : "Book Now"}
           </Button>
         </div>
       </div>
+
+      {/* Pricing Summary */}
+      {selectedTour && (
+        <div className="p-4 border-t bg-gray-50">
+          <div className="flex justify-between items-center">
+            <span className="font-medium">Total Price:</span>
+            <span className="text-lg font-bold text-primary">
+              {totalPrice} GEL
+            </span>
+          </div>
+        </div>
+      )}
+
+      {/* Validation Errors */}
+      {!validation.isComplete && validation.errors.length > 0 && (
+        <div className="p-4 border-t bg-red-50">
+          <div className="text-sm text-red-700 space-y-1">
+            {validation.errors.map((error, index) => (
+              <div key={index}>• {error}</div>
+            ))}
+          </div>
+        </div>
+      )}
     </Card>
+  );
+}
+
+// Tour Selection Content Component
+interface TourSelectionContentProps {
+  tours: Tour[];
+  selectedTour: Tour | null;
+  onTourSelect: (tour: Tour) => void;
+}
+
+function TourSelectionContent({
+  tours,
+  selectedTour,
+  onTourSelect,
+}: TourSelectionContentProps) {
+  return (
+    <div className="space-y-2 max-h-60 overflow-y-auto">
+      {tours.map((tour) => (
+        <button
+          key={tour.id}
+          onClick={() => onTourSelect(tour)}
+          className={cn(
+            "w-full p-3 text-left rounded-lg border transition-colors",
+            selectedTour?.id === tour.id
+              ? "border-blue-500 bg-blue-50"
+              : "border-gray-200 hover:border-gray-300"
+          )}
+        >
+          <div className="font-medium">{tour.title}</div>
+          <div className="text-sm text-gray-500">
+            {tour.basePrice} GEL • {tour.duration} days
+          </div>
+        </button>
+      ))}
+    </div>
   );
 }
