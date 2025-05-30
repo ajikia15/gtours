@@ -15,12 +15,10 @@ import { z } from "zod";
 import ContinueWithGoogleButton from "@/components/continue-with-google-button";
 import { loginUserSchema } from "@/validation/loginUser";
 import { toast } from "sonner";
-import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/context/auth";
 
 export default function LoginForm() {
-  const router = useRouter();
   const auth = useAuth();
 
   const form = useForm<z.infer<typeof loginUserSchema>>({

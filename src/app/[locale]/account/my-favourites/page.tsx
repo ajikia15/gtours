@@ -6,8 +6,8 @@ export default async function FavouritesPage() {
   try {
     const favourites = await getUserFavourites();
 
-    // Guard: Check if favourites exist and has keys
-    if (!favourites || Object.keys(favourites).length === 0) {
+    // Guard: Check if favourites exist and has items
+    if (!favourites || favourites.length === 0) {
       return (
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-2xl font-bold mb-6">My Favourites</h1>
@@ -23,8 +23,7 @@ export default async function FavouritesPage() {
       );
     }
 
-    const tourIds = Object.keys(favourites);
-    const tours = await getToursById(tourIds);
+    const tours = await getToursById(favourites);
 
     // Guard: Check if tours were successfully fetched
     if (!tours || tours.length === 0) {
@@ -52,7 +51,7 @@ export default async function FavouritesPage() {
             <MapTourCard
               key={tour.id}
               tour={tour}
-              isFavourite={favourites[tour.id]}
+              isFavourite={favourites.includes(tour.id)}
             />
           ))}
         </div>

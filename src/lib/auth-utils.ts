@@ -139,7 +139,7 @@ export const getCurrentUserToken = async (): Promise<DecodedIdToken | null> => {
       const verifiedToken = await auth.verifyIdToken(token);
       return verifiedToken;
     } catch (error) {
-      console.log("Token verification failed, attempting refresh...");
+      console.log("Token verification failed, attempting refresh...", error);
 
       // Try to refresh the token
       const refreshedToken = await refreshFirebaseToken();
