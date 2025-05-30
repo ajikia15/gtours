@@ -12,20 +12,20 @@ export default function CartPage() {
   const auth = useAuth();
   const cart = useCart();
 
-  if (!auth?.currentUser) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="text-center">
-          <ShoppingCart className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Your Cart</h1>
-          <p className="text-gray-600 mb-4">Please sign in to view your cart</p>
-          <Link href="/login">
-            <Button>Sign In</Button>
-          </Link>
-        </div>
-      </div>
-    );
-  }
+  // if (!auth?.currentUser) {
+  //   return (
+  //     <div className="container mx-auto px-4 py-8">
+  //       <div className="text-center">
+  //         <ShoppingCart className="mx-auto h-16 w-16 text-gray-400 mb-4" />
+  //         <h1 className="text-2xl font-bold text-gray-900 mb-2">Your Cart</h1>
+  //         <p className="text-gray-600 mb-4">Please sign in to view your cart</p>
+  //         <Link href="/login">
+  //           <Button>Sign In</Button>
+  //         </Link>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   if (cart.loading) {
     return (
