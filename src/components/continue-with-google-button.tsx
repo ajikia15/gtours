@@ -14,7 +14,7 @@ export default function ContinueWithGoogleButton() {
       onClick={async () => {
         try {
           await auth?.loginWithGoogle();
-          router.refresh();
+          // Redirect will be handled by parent component's auth state listener
         } catch (e) {
           console.error(e);
         }

@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/context/auth";
+import { useEffect } from "react";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -33,11 +34,18 @@ export default function LoginForm() {
 
   const { isSubmitting } = form.formState;
 
+  // Redirect authenticated users away from login page
+  useEffect(() => {
+    if (auth && !auth.loading && auth.currentUser) {
+      router.replace("/");
+    }
+  }, [auth?.currentUser, auth?.loading, router]);
+
   const onSubmit = async (data: z.infer<typeof loginUserSchema>) => {
     try {
       await auth?.loginWithEmail(data.email, data.password);
       toast.success("Logged in successfully");
-      router.push("/");
+      // The useEffect above will handle the redirect
     } catch (e: any) {
       if (e.code === "auth/invalid-credential") {
         toast.error("Invalid email or password");

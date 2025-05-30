@@ -10,7 +10,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useRouter } from "@/i18n/navigation";
+import { useRouter, usePathname } from "@/i18n/navigation";
 import { Skeleton } from "./ui/skeleton";
 import LocaleSwitcher from "./layout/LocaleSwitcher";
 import { useEffect, useState } from "react";
@@ -20,12 +20,39 @@ import ShoppingCart from "./shopping-cart";
 export default function AuthButtons() {
   const auth = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
+  const [wasAuthenticated, setWasAuthenticated] = useState<boolean | null>(
+    null
+  );
   const t = useTranslations("Auth");
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Monitor authentication state changes for logout redirect
+  useEffect(() => {
+    if (auth && !auth.loading) {
+      const isCurrentlyAuthenticated = !!auth.currentUser;
+
+      // If user was authenticated but now isn't (logout)
+      if (wasAuthenticated === true && !isCurrentlyAuthenticated) {
+        // Check if user is on a protected page and redirect to home
+        const protectedPaths = ["/account", "/admin", "/profile", "/checkout"];
+        const isOnProtectedPage = protectedPaths.some((path) =>
+          pathname.startsWith(path)
+        );
+
+        if (isOnProtectedPage) {
+          router.replace("/");
+        }
+        router.refresh(); // Ensure server state is synced
+      }
+
+      setWasAuthenticated(isCurrentlyAuthenticated);
+    }
+  }, [auth?.currentUser, auth?.loading, router, pathname, wasAuthenticated]);
 
   const initialSkeleton = (
     <div className="flex items-center gap-4">
@@ -83,7 +110,7 @@ export default function AuthButtons() {
               <DropdownMenuItem
                 onClick={async () => {
                   await auth.logout();
-                  router.refresh();
+                  // Redirect and refresh will be handled automatically by useEffect
                 }}
               >
                 {t("signOut")}

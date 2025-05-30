@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useBooking } from "@/context/booking";
 import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
@@ -55,6 +55,19 @@ export default function BookingBar({
 }: BookingBarProps) {
   const booking = useBooking();
 
+  // Destructure specific functions to avoid reference issues
+  const {
+    sharedState,
+    updateSharedDate,
+    updateSharedTravelers,
+    calculateTotalPrice,
+    getPricingBreakdown,
+    validateBooking,
+    addBookingToCart,
+    resetSharedState,
+    getTotalPeople,
+  } = booking;
+
   // Local state
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
@@ -62,6 +75,10 @@ export default function BookingBar({
   );
   const [isProcessing, setIsProcessing] = useState(false);
   const [activePopover, setActivePopover] = useState<PopoverType | null>(null);
+
+  // Track initialization to prevent infinite loops
+  const hasInitialized = useRef(false);
+  const lastEditingItemId = useRef<string | null>(null);
 
   // Popover management
   const openPopover = (popover: PopoverType) => setActivePopover(popover);
@@ -71,29 +88,49 @@ export default function BookingBar({
   // Initialize state based on mode
   useEffect(() => {
     if (mode === "edit" && editingItem) {
-      const tour = tours.find((t) => t.id === editingItem.tourId);
-      if (tour) {
-        setSelectedTour(tour);
-        setSelectedActivities(new Set(editingItem.selectedActivities));
-        booking.updateSharedDate(editingItem.selectedDate);
-        booking.updateSharedTravelers(editingItem.travelers);
+      // Only initialize if we haven't done so for this item, or if the item changed
+      if (
+        !hasInitialized.current ||
+        lastEditingItemId.current !== editingItem.id
+      ) {
+        const tour = tours.find((t) => t.id === editingItem.tourId);
+        if (tour) {
+          setSelectedTour(tour);
+          setSelectedActivities(new Set(editingItem.selectedActivities));
+          updateSharedDate(editingItem.selectedDate);
+          updateSharedTravelers(editingItem.travelers);
+          hasInitialized.current = true;
+          lastEditingItemId.current = editingItem.id;
+        }
       }
     } else if (mode === "add" && preselectedTour) {
-      setSelectedTour(preselectedTour);
-      setSelectedActivities(new Set());
-    } else {
-      setSelectedTour(null);
-      setSelectedActivities(new Set());
+      if (!hasInitialized.current) {
+        setSelectedTour(preselectedTour);
+        setSelectedActivities(new Set());
+        hasInitialized.current = true;
+      }
+    } else if (mode === "add" && !preselectedTour) {
+      if (!hasInitialized.current) {
+        setSelectedTour(null);
+        setSelectedActivities(new Set());
+        hasInitialized.current = true;
+      }
     }
-  }, [mode, editingItem, preselectedTour, tours, booking]);
+  }, [mode, editingItem, preselectedTour, tours]);
+
+  // Reset initialization flag when mode or key props change
+  useEffect(() => {
+    hasInitialized.current = false;
+    lastEditingItemId.current = null;
+  }, [mode, editingItem?.id, preselectedTour?.id]);
 
   // Get shared state
-  const { selectedDate, travelers } = booking.sharedState;
+  const { selectedDate, travelers } = sharedState;
 
   // Calculate pricing
   const totalPrice =
     selectedTour && selectedTour.basePrice !== undefined
-      ? booking.calculateTotalPrice(
+      ? calculateTotalPrice(
           selectedTour,
           travelers,
           Array.from(selectedActivities)
@@ -102,7 +139,7 @@ export default function BookingBar({
 
   const pricingBreakdown =
     selectedTour && selectedTour.basePrice !== undefined
-      ? booking.getPricingBreakdown(
+      ? getPricingBreakdown(
           selectedTour,
           travelers,
           Array.from(selectedActivities)
@@ -110,7 +147,7 @@ export default function BookingBar({
       : null;
 
   // Validate current selection
-  const validation = booking.validateBooking({
+  const validation = validateBooking({
     selectedDate,
     travelers,
     selectedActivities: Array.from(selectedActivities),
@@ -151,7 +188,7 @@ export default function BookingBar({
         });
         toast.success("Booking updated successfully!");
       } else {
-        const result = await booking.addBookingToCart(
+        const result = await addBookingToCart(
           selectedTour,
           Array.from(selectedActivities)
         );
@@ -173,7 +210,7 @@ export default function BookingBar({
   const handleReset = () => {
     setSelectedTour(preselectedTour || null);
     setSelectedActivities(new Set());
-    booking.resetSharedState();
+    resetSharedState();
   };
 
   // Summary helpers
@@ -195,7 +232,7 @@ export default function BookingBar({
   };
 
   const getTravelersSummary = () => {
-    const total = booking.getTotalPeople(travelers);
+    const total = getTotalPeople(travelers);
     if (total === 0) return "Select travelers";
     return `${total} traveler${total !== 1 ? "s" : ""}`;
   };
@@ -336,10 +373,7 @@ export default function BookingBar({
               </Button>
             </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
-              <TourDatePicker
-                date={selectedDate}
-                setDate={booking.updateSharedDate}
-              />
+              <TourDatePicker date={selectedDate} setDate={updateSharedDate} />
             </PopoverContent>
           </Popover>
 
@@ -364,7 +398,7 @@ export default function BookingBar({
                 <h4 className="font-medium">Select Travelers</h4>
                 <TravelerSelection
                   travelers={travelers}
-                  setTravelers={booking.updateSharedTravelers}
+                  setTravelers={updateSharedTravelers}
                 />
               </div>
             </PopoverContent>
