@@ -7,6 +7,7 @@ interface ActivitySelectionProps {
   selectedActivities: Set<string>;
   setSelectedActivities: (selectedActivities: Set<string>) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
+  disableTooltips?: boolean;
 }
 
 export default function ActivitySelection({
@@ -14,6 +15,7 @@ export default function ActivitySelection({
   selectedActivities,
   setSelectedActivities,
   onSelectionChange,
+  disableTooltips = false,
 }: ActivitySelectionProps) {
   const handleActivityToggle = (activityId: string) => {
     const newSet = new Set(selectedActivities);
@@ -37,6 +39,7 @@ export default function ActivitySelection({
       onActivityToggle={handleActivityToggle}
       showCount={true}
       size="md"
+      disableTooltips={disableTooltips}
     />
   );
 }

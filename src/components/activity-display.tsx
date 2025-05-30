@@ -17,6 +17,7 @@ interface ActivityDisplayProps {
   onActivityToggle?: (activityId: string) => void;
   showCount?: boolean;
   size?: "sm" | "md" | "lg";
+  disableTooltips?: boolean;
 }
 
 export default function ActivityDisplay({
@@ -26,6 +27,7 @@ export default function ActivityDisplay({
   onActivityToggle,
   showCount = true,
   size = "md",
+  disableTooltips = false,
 }: ActivityDisplayProps) {
   const quickCategory = useTranslations("QuickCategory");
 
@@ -81,17 +83,14 @@ export default function ActivityDisplay({
         {activities.map((activity) => {
           const isSelected = selectedSet.has(activity.activityTypeId);
 
-          return (
-            <TooltipProvider key={activity.activityTypeId}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <button
-                    onClick={() => handleActivityClick(activity.activityTypeId)}
-                    disabled={!interactive}
-                    className={`
+          const activityButton = (
+            <button
+              onClick={() => handleActivityClick(activity.activityTypeId)}
+              disabled={!interactive}
+              className={`
                 flex items-center ${config.gap} ${
-                      config.pill
-                    } rounded-full font-medium
+                config.pill
+              } rounded-full font-medium
                 transition-all duration-200 border
                 ${
                   interactive
@@ -106,17 +105,24 @@ export default function ActivityDisplay({
                     : "bg-gray-100 text-gray-600 border-gray-200"
                 }
               `}
-                  >
-                    {getActivityIcon(
-                      activity.activityTypeId,
-                      isSelected,
-                      config.icon
-                    )}
-                    <span className="whitespace-nowrap">
-                      {quickCategory(activity.activityTypeId)}
-                    </span>
-                  </button>
-                </TooltipTrigger>
+            >
+              {getActivityIcon(
+                activity.activityTypeId,
+                isSelected,
+                config.icon
+              )}
+              <span className="whitespace-nowrap">
+                {quickCategory(activity.activityTypeId)}
+              </span>
+            </button>
+          );
+
+          return disableTooltips ? (
+            <div key={activity.activityTypeId}>{activityButton}</div>
+          ) : (
+            <TooltipProvider key={activity.activityTypeId}>
+              <Tooltip>
+                <TooltipTrigger asChild>{activityButton}</TooltipTrigger>
                 <TooltipContent>
                   <p>{activity.specificDescription}</p>
                 </TooltipContent>
