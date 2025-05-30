@@ -78,14 +78,8 @@ export default function BookingBar({
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Use shared state in edit mode, local state in add mode (like tour-details-booker)
   const selectedDate = mode === "edit" ? sharedDate : localDate;
   const travelers = mode === "edit" ? sharedTravelers : localTravelers;
-
-  // Simple derived state
-  // const totalPrice = selectedTour
-  //   ? booking.calculateTotalPrice(selectedTour, travelers, selectedActivities)
-  //   : 0;
 
   const validation = booking.validateBooking({
     selectedDate,
@@ -214,7 +208,7 @@ export default function BookingBar({
   };
 
   return (
-    <Card className={cn("overflow-hidden", className)}>
+    <Card className={cn("overflow-hidden rounded-none py-0", className)}>
       {/* Search Bar Style Main Bar */}
       <div className="flex divide-x">
         {/* Tour Section */}
@@ -223,7 +217,7 @@ export default function BookingBar({
             <button
               disabled={mode === "edit" || !!preselectedTour}
               className={cn(
-                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer",
                 (mode === "edit" || !!preselectedTour) &&
                   "opacity-50 cursor-not-allowed",
                 !selectedTour && "text-gray-500"
@@ -256,7 +250,7 @@ export default function BookingBar({
             <button
               disabled={!selectedTour}
               className={cn(
-                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer",
                 !selectedTour && "opacity-50 cursor-not-allowed",
                 selectedActivities.length === 0 && "text-gray-500"
               )}
@@ -299,7 +293,7 @@ export default function BookingBar({
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer rounded-none ",
                 !selectedDate && "text-gray-500"
               )}
             >
@@ -322,7 +316,7 @@ export default function BookingBar({
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "flex-1 p-4 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer",
                 booking.getTotalPeople(travelers) === 0 && "text-gray-500"
               )}
             >
@@ -349,11 +343,11 @@ export default function BookingBar({
         </Popover>
 
         {/* Submit Section */}
-        <div className="flex-shrink-0">
+        <div className="px-8 flex items-center">
           <Button
             onClick={handleSubmit}
             disabled={!isComplete || isProcessing}
-            className="h-full rounded-none px-6"
+            className="rounded-none px-6 py-3"
             size="lg"
           >
             {isProcessing
