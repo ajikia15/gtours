@@ -223,28 +223,6 @@ export default function BookingBar({
 
   return (
     <Card className={cn("overflow-hidden", className)}>
-      {/* Header */}
-      <div className="p-4 border-b">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-semibold flex items-center gap-2">
-            {mode === "edit" ? (
-              <>
-                <Edit3 className="h-5 w-5" />
-                Edit Booking
-              </>
-            ) : (
-              <>
-                <ShoppingCart className="h-5 w-5" />
-                Create Booking
-              </>
-            )}
-          </h2>
-          {mode === "edit" && (
-            <Badge variant="secondary">Editing: {editingItem?.tourTitle}</Badge>
-          )}
-        </div>
-      </div>
-
       {/* Search Bar Style Main Bar */}
       <div className="flex divide-x">
         {/* Tour Section */}
@@ -394,29 +372,6 @@ export default function BookingBar({
           </Button>
         </div>
       </div>
-
-      {/* Pricing Summary */}
-      {selectedTour && (
-        <div className="p-4 border-t bg-gray-50">
-          <div className="flex justify-between items-center">
-            <span className="font-medium">Total Price:</span>
-            <span className="text-lg font-bold text-primary">
-              {totalPrice} GEL
-            </span>
-          </div>
-        </div>
-      )}
-
-      {/* Validation Errors */}
-      {!validation.isComplete && validation.errors.length > 0 && (
-        <div className="p-4 border-t bg-red-50">
-          <div className="text-sm text-red-700 space-y-1">
-            {validation.errors.map((error, index) => (
-              <div key={index}>• {error}</div>
-            ))}
-          </div>
-        </div>
-      )}
     </Card>
   );
 }
