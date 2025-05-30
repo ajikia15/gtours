@@ -38,7 +38,7 @@ export default function CartCard({ item, dragHandleProps }: CartCardProps) {
   };
 
   const handleEditItem = () => {
-    router.push(`/account/cart/edit/${item.id}`);
+    router.push(`/cart/edit/${item.id}`);
   };
 
   return (

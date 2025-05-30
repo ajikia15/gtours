@@ -50,7 +50,7 @@ export default function BookingBar({
   const booking = useBooking();
   const cart = useCart();
 
-  // Use shared state only in edit mode
+  // Use shared state only in edit mode (like tour-details-booker)
   const { selectedDate: sharedDate, travelers: sharedTravelers } =
     booking.sharedState;
 
@@ -69,26 +69,26 @@ export default function BookingBar({
     return [];
   });
 
-  // Local state - always used, no shared state in edit mode for individual items
+  // Local state for add mode only
   const [localDate, setLocalDate] = useState<Date | undefined>(() => {
-    if (mode === "edit" && editingItem) {
-      return editingItem.selectedDate;
+    if (mode === "add") {
+      return undefined;
     }
-    return undefined;
+    return editingItem?.selectedDate;
   });
 
   const [localTravelers, setLocalTravelers] = useState(() => {
-    if (mode === "edit" && editingItem) {
-      return editingItem.travelers;
+    if (mode === "add") {
+      return { adults: 2, children: 0, infants: 0 };
     }
-    return { adults: 2, children: 0, infants: 0 };
+    return editingItem?.travelers || { adults: 2, children: 0, infants: 0 };
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  // Always use local state for individual item editing
-  const selectedDate = localDate;
-  const travelers = localTravelers;
+  // Use shared state in edit mode, local state in add mode (like tour-details-booker)
+  const selectedDate = mode === "edit" ? sharedDate : localDate;
+  const travelers = mode === "edit" ? sharedTravelers : localTravelers;
 
   // Simple derived state
   const totalPrice = selectedTour
@@ -110,11 +110,19 @@ export default function BookingBar({
   };
 
   const handleDateChange = (date: Date | undefined) => {
-    setLocalDate(date);
+    if (mode === "edit") {
+      booking.updateSharedDate(date);
+    } else {
+      setLocalDate(date);
+    }
   };
 
   const handleTravelersChange = (newTravelers: typeof travelers) => {
-    setLocalTravelers(newTravelers);
+    if (mode === "edit") {
+      booking.updateSharedTravelers(newTravelers);
+    } else {
+      setLocalTravelers(newTravelers);
+    }
   };
 
   const handleSubmit = async () => {
@@ -127,23 +135,26 @@ export default function BookingBar({
 
     try {
       if (mode === "edit" && editingItem) {
-        // Edit mode: update cart item with current local state values
-        const result = await updateCartItem(editingItem.id, {
-          selectedDate: selectedDate!,
-          travelers: travelers,
+        // Edit mode: update ALL cart items with shared state + individual activities
+
+        // First update this specific item's activities
+        await updateCartItem(editingItem.id, {
           selectedActivities,
-          totalPrice,
         });
 
-        if (result.success) {
-          toast.success("Booking updated successfully!");
-          // Always go back to cart in edit mode
-          router.push("/account/cart");
-          onSuccess?.();
-        } else {
-          toast.error(result.message || "Failed to update booking");
-          return;
-        }
+        // Then sync ALL cart items with current shared state
+        const updatePromises = cart.items.map((item) =>
+          updateCartItem(item.id, {
+            selectedDate,
+            travelers,
+          })
+        );
+
+        await Promise.all(updatePromises);
+
+        toast.success("All bookings updated successfully!");
+        router.push("/account/cart");
+        onSuccess?.();
       } else {
         // Add mode: add directly to cart without shared state
         const { addToCart } = await import("@/data/cart");
@@ -154,8 +165,8 @@ export default function BookingBar({
           tourBasePrice: selectedTour.basePrice,
           tourImages: selectedTour.images,
           selectedDate: selectedDate!,
-          travelers: travelers,
-          selectedActivities: selectedActivities,
+          travelers,
+          selectedActivities,
         });
 
         if (result.success) {

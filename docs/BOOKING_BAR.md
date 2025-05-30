@@ -19,10 +19,10 @@ The `BookingBar` component is a search-bar style booking interface that provides
 
 **Edit Mode:**
 
-- Uses local state for individual item editing (no shared state interference)
-- Only affects the specific cart item being edited
-- Activities remain tour-specific as intended
-- Updates cart item with current local state values (date, travelers, activities)
+- Uses shared state from booking context (affects ALL tours in cart)
+- Date and traveler changes update ALL cart items via shared state
+- Activities remain tour-specific for the individual item being edited
+- Updates all cart items with current shared state values (date, travelers)
 - Always navigates back to cart after success
 
 **Add Mode:**
@@ -121,13 +121,13 @@ export default function EditBookingPage({ itemId }: { itemId: string }) {
 ### Edit Mode Behavior
 
 ```typescript
-// Uses local state for individual item editing - no shared state interference
-const [localDate, setLocalDate] = useState(editingItem.selectedDate);
-const [localTravelers, setLocalTravelers] = useState(editingItem.travelers);
+// Uses shared state - affects all tours
+const { selectedDate: sharedDate, travelers: sharedTravelers } =
+  booking.sharedState;
 
-// Updates local state only for this specific item
+// Updates via booking context
 const handleDateChange = (date) => {
-  setLocalDate(date); // Only affects this cart item
+  booking.updateSharedDate(date); // Updates all cart items
 };
 ```
 

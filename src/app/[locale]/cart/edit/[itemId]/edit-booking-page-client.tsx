@@ -25,11 +25,11 @@ export default function EditBookingPageClient({
 
   const handleSuccess = () => {
     // Redirect back to cart after successful update
-    router.push("/cart");
+    router.push("/account/cart");
   };
 
   const handleBack = () => {
-    router.push("/cart");
+    router.push("/account/cart");
   };
 
   if (cart.loading) {
@@ -113,8 +113,7 @@ export default function EditBookingPageClient({
         <ul className="text-sm text-blue-800 space-y-1">
           <li>• You cannot change the tour when editing an existing booking</li>
           <li>
-            • Date and traveler changes will affect all tours in your cart
-            (shared state)
+            • Date and traveler changes will only affect this specific booking
           </li>
           <li>• Activity selections are specific to this tour only</li>
           <li>• Pricing will be recalculated automatically</li>
