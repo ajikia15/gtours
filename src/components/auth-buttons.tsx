@@ -10,7 +10,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
-import { useRouter, usePathname } from "@/i18n/navigation";
 import { Skeleton } from "./ui/skeleton";
 import LocaleSwitcher from "./layout/LocaleSwitcher";
 import { useEffect, useState } from "react";
@@ -19,28 +18,12 @@ import ShoppingCart from "./shopping-cart";
 
 export default function AuthButtons() {
   const auth = useAuth();
-  const router = useRouter();
-  const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const t = useTranslations("Auth");
 
   useEffect(() => {
     setMounted(true);
   }, []);
-
-  // Handle logout redirect if user is on protected page
-  useEffect(() => {
-    if (auth && !auth.loading && !auth.currentUser) {
-      const protectedPaths = ["/account", "/admin", "/profile", "/checkout"];
-      const isOnProtectedPage = protectedPaths.some((path) =>
-        pathname.startsWith(path)
-      );
-
-      if (isOnProtectedPage) {
-        router.replace("/");
-      }
-    }
-  }, [auth?.currentUser, auth?.loading, router, pathname]);
 
   const initialSkeleton = (
     <div className="flex items-center gap-4">
@@ -98,7 +81,7 @@ export default function AuthButtons() {
               <DropdownMenuItem
                 onClick={async () => {
                   await auth.logout();
-                  // Redirect will be handled by useEffect if on protected page
+                  // Middleware will handle redirects if user tries to access protected routes
                 }}
               >
                 {t("signOut")}

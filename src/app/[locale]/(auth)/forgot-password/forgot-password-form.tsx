@@ -56,11 +56,11 @@ export default function ForgotPasswordForm() {
           ✓ Email Sent!
         </div>
         <p className="text-gray-600">
-          We've sent a password reset link to your email address. Please check
-          your inbox and follow the instructions to reset your password.
+          We&apos;ve sent a password reset link to your email address. Please
+          check your inbox and follow the instructions to reset your password.
         </p>
         <p className="text-sm text-gray-500">
-          Didn't receive the email? Check your spam folder or try again.
+          Didn&apos;t receive the email? Check your spam folder or try again.
         </p>
       </div>
     );
@@ -71,8 +71,8 @@ export default function ForgotPasswordForm() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="text-center mb-4">
           <p className="text-gray-600 text-sm">
-            Enter your email address and we'll send you a link to reset your
-            password.
+            Enter your email address and we&apos;ll send you a link to reset
+            your password.
           </p>
         </div>
 

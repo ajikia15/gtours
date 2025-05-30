@@ -1,7 +1,14 @@
 "use client";
 
 import { ParsedToken, signInWithEmailAndPassword, User } from "firebase/auth";
-import { createContext, useContext, useEffect, useState, useRef } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  useRef,
+  useCallback,
+} from "react";
 import { auth } from "../firebase/client";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { removeToken, setToken } from "./actions";
@@ -24,58 +31,61 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const tokenRefreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   // Simple token refresh function that doesn't call server actions unnecessarily
-  const refreshAndSetToken = async (
-    user: User,
-    forceRefresh: boolean = false
-  ) => {
-    try {
-      const tokenResult = await user.getIdTokenResult(forceRefresh);
-      const token = tokenResult.token;
-      const refreshToken = user.refreshToken;
-      const claims = tokenResult.claims;
+  const refreshAndSetToken = useCallback(
+    async (user: User, forceRefresh: boolean = false) => {
+      try {
+        const tokenResult = await user.getIdTokenResult(forceRefresh);
+        const token = tokenResult.token;
+        const refreshToken = user.refreshToken;
+        const claims = tokenResult.claims;
 
-      setCustomClaims(claims ?? null);
+        setCustomClaims(claims ?? null);
 
-      // Only update server cookies on initial auth or forced refresh
-      if (token && refreshToken && forceRefresh) {
-        await setToken({ token, refreshToken });
-        console.log("Token refreshed and updated in cookies");
+        // Only update server cookies on initial auth or forced refresh
+        if (token && refreshToken && forceRefresh) {
+          await setToken({ token, refreshToken });
+          console.log("Token refreshed and updated in cookies");
+        }
+      } catch (error) {
+        console.error("Error refreshing token:", error);
       }
-    } catch (error) {
-      console.error("Error refreshing token:", error);
-    }
-  };
+    },
+    []
+  );
 
   // Set up less aggressive token refresh - only when needed
-  const setupTokenRefresh = (user: User) => {
-    // Clear any existing interval
-    if (tokenRefreshIntervalRef.current) {
-      clearInterval(tokenRefreshIntervalRef.current);
-    }
+  const setupTokenRefresh = useCallback(
+    (user: User) => {
+      // Clear any existing interval
+      if (tokenRefreshIntervalRef.current) {
+        clearInterval(tokenRefreshIntervalRef.current);
+      }
 
-    // Check token every 45 minutes and only refresh if needed
-    tokenRefreshIntervalRef.current = setInterval(async () => {
-      if (user && !loading) {
-        try {
-          const tokenResult = await user.getIdTokenResult(false);
-          // Only refresh if token expires in the next 10 minutes
-          const tenMinutesFromNow = new Date(Date.now() + 10 * 60 * 1000);
+      // Check token every 45 minutes and only refresh if needed
+      tokenRefreshIntervalRef.current = setInterval(async () => {
+        if (user && !loading) {
+          try {
+            const tokenResult = await user.getIdTokenResult(false);
+            // Only refresh if token expires in the next 10 minutes
+            const tenMinutesFromNow = new Date(Date.now() + 10 * 60 * 1000);
 
-          if (
-            tokenResult.expirationTime &&
-            new Date(tokenResult.expirationTime) <= tenMinutesFromNow
-          ) {
-            console.log("Token expires soon, performing refresh");
+            if (
+              tokenResult.expirationTime &&
+              new Date(tokenResult.expirationTime) <= tenMinutesFromNow
+            ) {
+              console.log("Token expires soon, performing refresh");
+              await refreshAndSetToken(user, true);
+            }
+          } catch {
+            // If token check fails, force refresh
+            console.log("Token check failed, performing refresh");
             await refreshAndSetToken(user, true);
           }
-        } catch {
-          // If token check fails, force refresh
-          console.log("Token check failed, performing refresh");
-          await refreshAndSetToken(user, true);
         }
-      }
-    }, 45 * 60 * 1000); // Check every 45 minutes
-  };
+      }, 45 * 60 * 1000); // Check every 45 minutes
+    },
+    [loading, refreshAndSetToken]
+  );
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged(async (user) => {
@@ -106,7 +116,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         clearInterval(tokenRefreshIntervalRef.current);
       }
     };
-  }, []);
+  }, [refreshAndSetToken, setupTokenRefresh]);
 
   // Only refresh on focus if token is close to expiry
   useEffect(() => {
@@ -139,7 +149,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return () => {
       window.removeEventListener("focus", handleFocus);
     };
-  }, [currentUser, loading]);
+  }, [currentUser, loading, refreshAndSetToken]);
 
   const logout = async () => {
     if (tokenRefreshIntervalRef.current) {

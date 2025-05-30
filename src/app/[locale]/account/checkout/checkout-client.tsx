@@ -8,8 +8,7 @@ import RequiredUserInfo from "@/components/required-user-info";
 import OrderSummary from "@/components/order-summary";
 import { UserProfile } from "@/types/User";
 import { useCart } from "@/context/cart";
-import { useAuth } from "@/context/auth";
-import { Link, useRouter } from "@/i18n/navigation";
+import { Link } from "@/i18n/navigation";
 
 interface CheckoutClientProps {
   initialUserProfile: UserProfile | null;
@@ -21,8 +20,6 @@ export default function CheckoutClient({
   initialProfileComplete,
 }: CheckoutClientProps) {
   const cart = useCart();
-  const auth = useAuth();
-  const router = useRouter();
   const [userProfile] = useState<UserProfile | null>(initialUserProfile);
   const [profileComplete] = useState(initialProfileComplete);
 

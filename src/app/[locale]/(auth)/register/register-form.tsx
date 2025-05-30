@@ -17,11 +17,9 @@ import { registerUserSchema } from "@/validation/registerUser";
 import { registerUser } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
-import { useAuth } from "@/context/auth";
 
 export default function RegisterForm() {
   const router = useRouter();
-  const auth = useAuth();
 
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),

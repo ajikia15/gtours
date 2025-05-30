@@ -12,7 +12,6 @@ import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import { getLocale } from "next-intl/server";
 import TourMapSection from "@/components/map/tour-map-section";
 import TourSuggestions from "./tour-suggestions";
-import TourActivitiesSection from "./tour-activities-section";
 export default async function TourPage({
   params,
 }: {

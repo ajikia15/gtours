@@ -9,20 +9,12 @@ import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {
-  CalendarDays,
-  Users,
-  MapPin,
-  Activity,
-  Edit3,
-  ShoppingCart,
-} from "lucide-react";
+import { CalendarDays, Users, MapPin, Activity } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import TourDatePicker from "@/components/booking/tour-date-picker";
@@ -91,9 +83,9 @@ export default function BookingBar({
   const travelers = mode === "edit" ? sharedTravelers : localTravelers;
 
   // Simple derived state
-  const totalPrice = selectedTour
-    ? booking.calculateTotalPrice(selectedTour, travelers, selectedActivities)
-    : 0;
+  // const totalPrice = selectedTour
+  //   ? booking.calculateTotalPrice(selectedTour, travelers, selectedActivities)
+  //   : 0;
 
   const validation = booking.validateBooking({
     selectedDate,

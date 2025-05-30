@@ -91,7 +91,7 @@ export const shouldRefreshToken = async (): Promise<boolean> => {
 /**
  * Utility for making authenticated API calls with automatic token handling
  */
-export const makeAuthenticatedRequest = async <T>(
+export const makeAuthenticatedRequest = async (
   url: string,
   options: RequestInit = {}
 ): Promise<Response> => {

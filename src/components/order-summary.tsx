@@ -1,25 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import {
-  Calendar,
-  Users,
-  AlertCircle,
-  CheckCircle,
-  Info,
-  LockIcon,
-  MapPin,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+
 import { format } from "date-fns";
 import { useCart } from "@/context/cart";
 import { useBooking } from "@/context/booking";
 import { Link, useRouter } from "@/i18n/navigation";
-import { useState } from "react";
-import { useTranslations } from "next-intl";
-import { getActivityIcon } from "@/lib/imageHelpers";
 
 // Type for simple order items (like on checkout page)
 export interface SimpleOrderItem {
@@ -67,19 +53,14 @@ export default function OrderSummary({
   isCheckout = false,
   disabled = false,
   disabledReason,
-  buttonText,
   buttonAction,
   showButton = true,
   title = "Order Summary",
-  showTripDetails = true,
-  showBookingStatus = true,
-  showDetailedBreakdown = true,
   className = "",
 }: OrderSummaryProps) {
   const cart = useCart();
   const booking = useBooking();
   const router = useRouter();
-  const quickCategory = useTranslations("QuickCategory");
 
   const isCartMode = mode === "cart";
   const { selectedDate, travelers } = booking?.sharedState || {};
