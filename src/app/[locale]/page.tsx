@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 import BookingBar from "@/components/booking-bar";
 import { getTours } from "@/data/tours";
+import InteractiveMapSection from "./interactive-map-section";
 
 export default async function HomePage() {
   // const t = useTranslations("Homepage");
@@ -44,7 +45,7 @@ export default async function HomePage() {
       >
         <DisplayCardsSection />
       </Suspense>
-      {/* <InteractiveMapSection /> */}
+      <InteractiveMapSection tours={tours} />
     </div>
   );
 }

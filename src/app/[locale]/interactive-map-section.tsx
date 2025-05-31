@@ -15,8 +15,7 @@ import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useTranslations } from "next-intl";
 
-export default function InteractiveMapSection() {
-  const [tours, setTours] = useState<Tour[]>([]);
+export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const testMode = true;
   const [testMarkerCoords, setTestMarkerCoords] = useState<[number, number]>([
@@ -28,25 +27,6 @@ export default function InteractiveMapSection() {
   const t = useTranslations("Map");
 
   // Fetch tours data directly in the client component
-  useEffect(() => {
-    async function fetchTours() {
-      try {
-        const response = await fetch("/api/tours");
-        const data = await response.json();
-        setTours(data);
-        if (data.length > 0) {
-          setSelectedTour(data[0]);
-        }
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching tours:", error);
-        setIsLoading(false);
-      }
-    }
-
-    fetchTours();
-  }, []);
-
   const handleCopyToClipboard = () => {
     const textToCopy = `${testMarkerCoords[1].toFixed(
       4
@@ -88,12 +68,6 @@ export default function InteractiveMapSection() {
     setSelectedTour(tour);
   }
   const [animationParent] = useAutoAnimate();
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex justify-center py-10">{t("loadingMapData")}</div>
-  //   );
-  // }
 
   return (
     <>
