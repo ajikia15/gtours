@@ -1,6 +1,6 @@
 "use server";
 import { getUserFavourites } from "@/data/favourites";
-import MapTourCard from "./tour-card";
+import MapTourCard from "../../components/tour-card";
 import { getTours } from "@/data/tours";
 import FakeTimeoutForSkeletons from "@/lib/fakeTimeoutForSkeletons";
 

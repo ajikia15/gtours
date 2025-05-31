@@ -10,7 +10,7 @@ import {
 import geoData from "@/../public/gadm41_GEO_1.json";
 import MapPinIcon from "@/components/map-pin-icon";
 import { Tour } from "@/types/Tour";
-import MapTourCard from "./tour-card";
+import MapTourCard from "./map-tour-card";
 import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useTranslations } from "next-intl";
@@ -26,6 +26,10 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [isLoading, setIsLoading] = useState(true);
   const t = useTranslations("Map");
 
+  useEffect(() => {
+    setSelectedTour(tours[0]);
+    setIsLoading(false);
+  }, [tours]);
   // Fetch tours data directly in the client component
   const handleCopyToClipboard = () => {
     const textToCopy = `${testMarkerCoords[1].toFixed(
