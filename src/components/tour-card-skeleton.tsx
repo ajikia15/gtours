@@ -1,8 +1,10 @@
 import React from "react";
 
-export default function MapTourCardSkeleton() {
+export default function TourCardSkeleton(props: { className?: string }) {
   return (
-    <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl animate-pulse">
+    <div
+      className={`flex flex-col h-full border border-gray-300 shadow-sm rounded-xl animate-pulse ${props.className}`}
+    >
       {/* Image skeleton */}
       <div className="aspect-square w-full relative rounded-xl bg-gray-300 dark:bg-gray-700" />
       <div className="flex flex-col gap-2 p-6">

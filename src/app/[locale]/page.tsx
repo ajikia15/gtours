@@ -3,16 +3,15 @@ import QuickCategory from "@/components/carousel/QuickCategory";
 import { getTranslations } from "next-intl/server";
 import DisplayCardsSection from "./display-cards-section";
 import { Suspense } from "react";
-import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 import BookingBar from "@/components/booking-bar";
 import { getTours } from "@/data/tours";
 import InteractiveMapSection from "./interactive-map-section";
+import TourCardSkeleton from "@/components/tour-card-skeleton";
 
 export default async function HomePage() {
   // const t = useTranslations("Homepage");
   const t = await getTranslations("Homepage");
 
-  // Fetch tours for the BookingBar
   const { data: tours } = await getTours({
     pagination: { page: 1, pageSize: 20 }, // Get more tours for selection
   });
@@ -38,7 +37,7 @@ export default async function HomePage() {
         fallback={
           <div className="grid grid-cols-4 gap-4 p-4">
             {Array.from({ length: 4 }, (_, index) => (
-              <MapTourCardSkeleton key={`skeleton-${index}`} />
+              <TourCardSkeleton key={`skeleton-${index}`} />
             ))}
           </div>
         }

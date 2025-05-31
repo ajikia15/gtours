@@ -11,7 +11,7 @@ import geoData from "@/../public/gadm41_GEO_1.json";
 import MapPinIcon from "@/components/map-pin-icon";
 import { Tour } from "@/types/Tour";
 import MapTourCard from "./map-tour-card";
-import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
+import TourCardSkeleton from "@/components/tour-card-skeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useTranslations } from "next-intl";
 
@@ -30,7 +30,6 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
     setSelectedTour(tours[0]);
     setIsLoading(false);
   }, [tours]);
-  // Fetch tours data directly in the client component
   const handleCopyToClipboard = () => {
     const textToCopy = `${testMarkerCoords[1].toFixed(
       4
@@ -78,7 +77,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
       <div className="flex">
         <div className="w-1/3 h-full p-4" ref={animationParent}>
           {isLoading ? (
-            <MapTourCardSkeleton key={1} />
+            <TourCardSkeleton key={1} className="mr-10" />
           ) : selectedTour ? (
             <MapTourCard
               key={selectedTour.id}

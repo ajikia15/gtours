@@ -18,10 +18,10 @@ export default async function TourCard({
   const locale = await getLocale();
 
   return (
-    <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl">
+    <div className="flex flex-col h-full border border-gray-300 shadow-sm rounded-xl">
       <Link
         href={`/tour/${tour.id}`}
-        className="aspect-square w-full relative rounded-xl cursor-pointer"
+        className="aspect-square w-full relative cursor-pointer"
       >
         {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
         {tour.images && (
