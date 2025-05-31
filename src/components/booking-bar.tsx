@@ -78,6 +78,11 @@ export default function BookingBar({
 
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // Popover state management
+  const [openPopover, setOpenPopover] = useState<string | null>(null);
+  const [tourOpenedFromActivities, setTourOpenedFromActivities] =
+    useState(false);
+
   const selectedDate = mode === "edit" ? sharedDate : localDate;
   const travelers = mode === "edit" ? sharedTravelers : localTravelers;
 
@@ -189,7 +194,7 @@ export default function BookingBar({
   };
 
   const getActivitiesDisplay = () => {
-    if (!selectedTour) return "Select tour first";
+    if (!selectedTour) return "Select activities";
     if (selectedActivities.length === 0) return "Select activities";
     return `${selectedActivities.length} activit${
       selectedActivities.length !== 1 ? "ies" : "y"
@@ -214,7 +219,15 @@ export default function BookingBar({
       {/* Search Bar Style Main Bar */}
       <div className="flex divide-x divide-zinc-700">
         {/* Tour Section */}
-        <Popover>
+        <Popover
+          open={openPopover === "tour"}
+          onOpenChange={(open) => {
+            setOpenPopover(open ? "tour" : null);
+            if (!open) {
+              setTourOpenedFromActivities(false);
+            }
+          }}
+        >
           <PopoverTrigger asChild>
             <button
               disabled={mode === "edit" || !!preselectedTour}
@@ -235,24 +248,45 @@ export default function BookingBar({
           </PopoverTrigger>
           <PopoverContent className="w-80" align="start">
             <div className="space-y-3">
+              {tourOpenedFromActivities && (
+                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Select a tour first</strong> to choose activities
+                    for your trip.
+                  </p>
+                </div>
+              )}
               <h4 className="font-medium">Select Tour</h4>
               <TourSelectionContent
                 tours={tours}
                 selectedTour={selectedTour}
-                onTourSelect={handleTourSelect}
+                onTourSelect={(tour) => {
+                  handleTourSelect(tour);
+                  setTourOpenedFromActivities(false);
+                  setOpenPopover(null);
+                }}
               />
             </div>
           </PopoverContent>
         </Popover>
 
         {/* Activities Section */}
-        <Popover>
+        <Popover
+          open={openPopover === "activities"}
+          onOpenChange={(open) => {
+            if (open && !selectedTour) {
+              // Redirect to tour selection if no tour is selected
+              setTourOpenedFromActivities(true);
+              setOpenPopover("tour");
+            } else {
+              setOpenPopover(open ? "activities" : null);
+            }
+          }}
+        >
           <PopoverTrigger asChild>
             <button
-              disabled={!selectedTour}
               className={cn(
-                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
-                !selectedTour && "opacity-50 cursor-not-allowed"
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -289,7 +323,10 @@ export default function BookingBar({
         </Popover>
 
         {/* Date Section */}
-        <Popover>
+        <Popover
+          open={openPopover === "date"}
+          onOpenChange={(open) => setOpenPopover(open ? "date" : null)}
+        >
           <PopoverTrigger asChild>
             <button
               className={cn(
@@ -311,7 +348,10 @@ export default function BookingBar({
         </Popover>
 
         {/* Travelers Section */}
-        <Popover>
+        <Popover
+          open={openPopover === "travelers"}
+          onOpenChange={(open) => setOpenPopover(open ? "travelers" : null)}
+        >
           <PopoverTrigger asChild>
             <button
               className={cn(
