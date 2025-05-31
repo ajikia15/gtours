@@ -10,7 +10,7 @@ import {
 import geoData from "@/../public/gadm41_GEO_1.json";
 import MapPinIcon from "@/components/map-pin-icon";
 import { Tour } from "@/types/Tour";
-import MapTourCard from "./svg-map-card";
+import MapTourCard from "./tour-card";
 import MapTourCardSkeleton from "@/components/ui/MapTourCardSkeleton";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useTranslations } from "next-intl";

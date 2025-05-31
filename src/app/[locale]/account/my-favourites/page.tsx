@@ -1,6 +1,6 @@
 import { getUserFavourites } from "@/data/favourites";
 import { getToursById } from "@/data/tours";
-import MapTourCard from "../../svg-map-card";
+import MapTourCard from "../../tour-card";
 
 export default async function FavouritesPage() {
   try {

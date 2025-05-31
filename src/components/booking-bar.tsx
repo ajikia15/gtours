@@ -208,26 +208,27 @@ export default function BookingBar({
   };
 
   return (
-    <Card className={cn("overflow-hidden rounded-none py-0", className)}>
+    <Card
+      className={cn("overflow-hidden rounded-none py-0 bg-zinc-900", className)}
+    >
       {/* Search Bar Style Main Bar */}
-      <div className="flex divide-x">
+      <div className="flex divide-x divide-zinc-700">
         {/* Tour Section */}
         <Popover>
           <PopoverTrigger asChild>
             <button
               disabled={mode === "edit" || !!preselectedTour}
               className={cn(
-                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer",
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
                 (mode === "edit" || !!preselectedTour) &&
-                  "opacity-50 cursor-not-allowed",
-                !selectedTour && "text-gray-500"
+                  "opacity-50 cursor-not-allowed"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
-                <MapPin className="h-4 w-4" />
-                <span className="text-xs font-medium text-gray-600">Tour</span>
+                <MapPin className="h-4 w-4 text-zinc-300" />
+                <span className="text-sm font-medium text-gray-100">Tour</span>
               </div>
-              <div className="text-sm font-medium truncate">
+              <div className="text-xs truncate text-gray-300">
                 {getTourDisplay()}
               </div>
             </button>
@@ -250,18 +251,17 @@ export default function BookingBar({
             <button
               disabled={!selectedTour}
               className={cn(
-                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer",
-                !selectedTour && "opacity-50 cursor-not-allowed",
-                selectedActivities.length === 0 && "text-gray-500"
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                !selectedTour && "opacity-50 cursor-not-allowed"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
-                <Activity className="h-4 w-4" />
-                <span className="text-xs font-medium text-gray-600">
+                <Activity className="h-4 w-4 text-zinc-300" />
+                <span className="text-sm font-medium text-gray-100">
                   Activities
                 </span>
               </div>
-              <div className="text-sm font-medium truncate">
+              <div className="text-xs truncate text-gray-300">
                 {getActivitiesDisplay()}
               </div>
             </button>
@@ -293,15 +293,14 @@ export default function BookingBar({
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer rounded-none ",
-                !selectedDate && "text-gray-500"
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer rounded-none text-white bg-zinc-900"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
-                <CalendarDays className="h-4 w-4" />
-                <span className="text-xs font-medium text-gray-600">Date</span>
+                <CalendarDays className="h-4 w-4 text-zinc-300" />
+                <span className="text-sm font-medium text-gray-100">Date</span>
               </div>
-              <div className="text-sm font-medium truncate">
+              <div className="text-xs truncate text-gray-300">
                 {getDateDisplay()}
               </div>
             </button>
@@ -316,17 +315,16 @@ export default function BookingBar({
           <PopoverTrigger asChild>
             <button
               className={cn(
-                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-gray-50 cursor-pointer",
-                booking.getTotalPeople(travelers) === 0 && "text-gray-500"
+                "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900"
               )}
             >
               <div className="flex items-center gap-2 mb-1">
-                <Users className="h-4 w-4" />
-                <span className="text-xs font-medium text-gray-600">
+                <Users className="h-4 w-4 text-zinc-300" />
+                <span className="text-sm font-medium text-gray-100">
                   Travelers
                 </span>
               </div>
-              <div className="text-sm font-medium truncate">
+              <div className="text-xs truncate text-gray-300">
                 {getTravelersDisplay()}
               </div>
             </button>
@@ -347,7 +345,7 @@ export default function BookingBar({
           <Button
             onClick={handleSubmit}
             disabled={!isComplete || isProcessing}
-            className="rounded-none px-6 py-3"
+            className="rounded-none px-6 py-3 bg-brand-secondary hover:bg-brand-secondary/90"
             size="lg"
           >
             {isProcessing

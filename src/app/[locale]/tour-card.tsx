@@ -5,7 +5,7 @@ import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
 import { getLocalizedDescription } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
-import ToggleFavouriteButton from "@/components/toggle-favourite-button";
+// import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { getLocale } from "next-intl/server";
 export default async function MapTourCard({
   tour,
@@ -19,8 +19,11 @@ export default async function MapTourCard({
 
   return (
     <div className="flex flex-col h-full mr-10 border-2 border-gray-300 rounded-xl">
-      <div className="aspect-square w-full relative rounded-xl">
-        <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} />
+      <Link
+        href={`/tour/${tour.id}`}
+        className="aspect-square w-full relative rounded-xl cursor-pointer"
+      >
+        {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
         {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}
@@ -29,7 +32,7 @@ export default async function MapTourCard({
             className="w-full h-full object-cover rounded-lg"
           />
         )}
-      </div>
+      </Link>
       <div className="flex flex-col gap-2 p-6">
         <h3 className="text-lg font-bold">{tour.title}</h3>
         <div className="text-sm text-gray-500 line-clamp-3 mr-10">
