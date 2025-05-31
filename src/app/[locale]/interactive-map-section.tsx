@@ -79,7 +79,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
             <MapTourCard
               key={selectedTour.id}
               tour={selectedTour}
-              isFavourite={false}
+              // isFavourite={false}
             />
           ) : null}
         </div>

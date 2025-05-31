@@ -16,7 +16,7 @@ export default async function DisplayCardsSection() {
         <div key={tour.id}>
           <MapTourCard
             tour={tour}
-            isFavourite={userFavourites.includes(tour.id)}
+            // isFavourite={userFavourites.includes(tour.id)}
           />
         </div>
       ))}

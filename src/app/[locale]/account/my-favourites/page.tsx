@@ -51,7 +51,7 @@ export default async function FavouritesPage() {
             <MapTourCard
               key={tour.id}
               tour={tour}
-              isFavourite={favourites.includes(tour.id)}
+              // isFavourite={favourites.includes(tour.id)}
             />
           ))}
         </div>

@@ -9,10 +9,10 @@ import ReactMarkdown from "react-markdown";
 import { getLocale } from "next-intl/server";
 export default async function MapTourCard({
   tour,
-  isFavourite,
-}: {
+}: // isFavourite,
+{
   tour: Tour;
-  isFavourite: boolean;
+  // isFavourite: boolean;
 }) {
   // const t = await getTranslations("Homepage");
   const locale = await getLocale();
