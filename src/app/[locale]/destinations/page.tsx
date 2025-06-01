@@ -3,8 +3,9 @@ import Header from "../header";
 import { getTours } from "@/data/tours";
 import { Suspense } from "react";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
-import TourCard from "@/components/tour-card";
 import ShortTourCard from "@/components/short-tour-card";
+import QuickCategory from "@/components/carousel/QuickCategory";
+import BookingBar from "@/components/booking-bar";
 export default async function DestinationsPage() {
   const t = await getTranslations("Pages.destinations");
   const { data: tours } = await getTours({
@@ -13,23 +14,22 @@ export default async function DestinationsPage() {
   return (
     <>
       <Header title={t("title")} />
-      <Suspense
-        fallback={
-          <div className="grid grid-cols-4 gap-4 mt-4">
-            {Array.from({ length: 4 }, (_, index) => (
-              <TourCardSkeleton key={`skeleton-${index}`} />
-            ))}
-          </div>
-        }
-      >
-        <div className="grid grid-cols-4 gap-12 mt-4">
+      <h2 className="text-2xl font-bold my-8 text-center">Activities</h2>
+      <QuickCategory />
+      <BookingBar tours={tours} />
+      <section className="grid grid-cols-4 gap-4 mt-4">
+        <Suspense
+          fallback={Array.from({ length: 4 }, (_, index) => (
+            <TourCardSkeleton key={`skeleton-${index}`} />
+          ))}
+        >
           {tours.map((tour) => (
             <div key={tour.id}>
               <ShortTourCard tour={tour} />
             </div>
           ))}
-        </div>
-      </Suspense>
+        </Suspense>
+      </section>
     </>
   );
 }

@@ -14,7 +14,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarDays, Users, MapPin, Activity } from "lucide-react";
+import {
+  CalendarDays,
+  Users,
+  MapPin,
+  Activity,
+  ChevronDown,
+} from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import TourDatePicker from "@/components/booking/tour-date-picker";
@@ -214,11 +220,9 @@ export default function BookingBar({
 
   return (
     <Card
-      className={cn("overflow-hidden rounded-none py-0 bg-zinc-900", className)}
+      className={cn("overflow-hidden rounded-sm py-0 bg-zinc-900", className)}
     >
-      {/* Search Bar Style Main Bar */}
       <div className="flex divide-x divide-zinc-700">
-        {/* Tour Section */}
         <Popover
           open={openPopover === "tour"}
           onOpenChange={(open) => {
@@ -240,6 +244,7 @@ export default function BookingBar({
               <div className="flex items-center gap-2 mb-1">
                 <MapPin className="h-4 w-4 text-zinc-300" />
                 <span className="text-sm font-medium text-gray-100">Tour</span>
+                <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
               <div className="text-xs truncate text-gray-300">
                 {getTourDisplay()}
@@ -294,6 +299,7 @@ export default function BookingBar({
                 <span className="text-sm font-medium text-gray-100">
                   Activities
                 </span>
+                <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
               <div className="text-xs truncate text-gray-300">
                 {getActivitiesDisplay()}
@@ -336,6 +342,7 @@ export default function BookingBar({
               <div className="flex items-center gap-2 mb-1">
                 <CalendarDays className="h-4 w-4 text-zinc-300" />
                 <span className="text-sm font-medium text-gray-100">Date</span>
+                <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
               <div className="text-xs truncate text-gray-300">
                 {getDateDisplay()}
@@ -363,6 +370,7 @@ export default function BookingBar({
                 <span className="text-sm font-medium text-gray-100">
                   Travelers
                 </span>
+                <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
               <div className="text-xs truncate text-gray-300">
                 {getTravelersDisplay()}
