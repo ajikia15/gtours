@@ -18,7 +18,7 @@ export default async function TourCard({
   const locale = await getLocale();
 
   return (
-    <div className="flex flex-col h-full border border-gray-300 shadow-sm rounded-xl">
+    <div className="flex flex-col h-full border border-gray-300 shadow-xs rounded-xl">
       <Link
         href={`/tour/${tour.id}`}
         className="aspect-square w-full relative cursor-pointer"

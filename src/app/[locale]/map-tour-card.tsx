@@ -19,7 +19,7 @@ export default function MapTourCard({
   const locale = useLocale();
 
   return (
-    <div className="flex flex-col h-full mr-10 border border-gray-300 shadow-sm rounded-xl">
+    <div className="flex flex-col h-full mr-10 border border-gray-300 shadow-xs rounded-xl">
       <Link
         href={`/tour/${tour.id}`}
         className="aspect-square w-full relative cursor-pointer"

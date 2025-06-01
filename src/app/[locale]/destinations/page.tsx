@@ -22,7 +22,7 @@ export default async function DestinationsPage() {
           </div>
         }
       >
-        <div className="grid grid-cols-4 gap-4 mt-4">
+        <div className="grid grid-cols-4 gap-12 mt-4">
           {tours.map((tour) => (
             <div key={tour.id}>
               <ShortTourCard tour={tour} />
