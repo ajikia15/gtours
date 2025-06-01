@@ -18,17 +18,11 @@ export default async function HomePage() {
 
   return (
     <div className="space-y-10 mb-10">
-      <Carousel />
+      <Carousel tours={tours} />
       <h1 className="text-center my-8 text-2xl font-bold">{t("activities")}</h1>
       <QuickCategory />
 
       {/* BookingBar for testing */}
-      <div className="max-w-4xl mx-auto px-4">
-        <h2 className="text-xl font-semibold mb-4 text-center">
-          Book Your Adventure
-        </h2>
-        <BookingBar tours={tours} mode="add" />
-      </div>
 
       <h1 className="text-center my-8 text-2xl font-bold">
         {t("discover-georgia")}

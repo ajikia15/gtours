@@ -14,9 +14,8 @@ export default async function DestinationsPage() {
   return (
     <>
       <Header title={t("title")} />
-      <h2 className="text-2xl font-bold my-8 text-center">Activities</h2>
-      <QuickCategory />
-      <BookingBar tours={tours} />
+      <h2 className="text-2xl font-bold my-8 text-center">მოძებნე</h2>
+      <BookingBar tours={tours} className="my-8 max-w-4xl" />
       <section className="grid grid-cols-4 gap-4 mt-4">
         <Suspense
           fallback={Array.from({ length: 4 }, (_, index) => (

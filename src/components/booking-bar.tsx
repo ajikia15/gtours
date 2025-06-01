@@ -220,7 +220,10 @@ export default function BookingBar({
 
   return (
     <Card
-      className={cn("overflow-hidden rounded-sm py-0 bg-zinc-900", className)}
+      className={cn(
+        "overflow-hidden rounded-sm border-0 py-0 bg-zinc-900",
+        className
+      )}
     >
       <div className="flex divide-x divide-zinc-700">
         <Popover
