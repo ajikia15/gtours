@@ -48,7 +48,7 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
         </Link> */}
         <div className="flex gap-2">
           <Button>Book Now</Button>
-          <AddToCartButton tour={tour} className="w-full" variant="outline" />
+          <AddToCartButton tour={tour} variant="ghost" text={false} />
         </div>
       </div>
     </div>

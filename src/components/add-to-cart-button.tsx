@@ -32,6 +32,7 @@ interface AddToCartButtonProps {
     initialized: boolean;
   };
   onUpdateSuccess?: () => void; // Callback after successful update
+  text?: boolean;
 }
 
 export default function AddToCartButton({
@@ -44,6 +45,7 @@ export default function AddToCartButton({
   detectChanges = false,
   initialState,
   onUpdateSuccess,
+  text = true,
 }: AddToCartButtonProps) {
   const booking = useBooking();
   const cart = useCart();
@@ -139,7 +141,7 @@ export default function AddToCartButton({
     return (
       <Link href="/cart">
         <Button className={cn("", className)} variant="secondary" size={size}>
-          {showIcon && <Eye className="size-4 mr-2" />}
+          {showIcon && <Eye className="size-4" />}
           View in Cart
         </Button>
       </Link>
@@ -154,8 +156,8 @@ export default function AddToCartButton({
       onClick={handleCartAction}
       disabled={isAddingToCart}
     >
-      {showIcon && <ShoppingCart className="size-4 mr-2" />}
-      {isAddingToCart ? "Adding..." : "Add to Cart"}
+      {showIcon && <ShoppingCart className={`size-4 ${text ? "mr-2" : ""}`} />}
+      {isAddingToCart ? "Adding..." : text ? "Add to Cart" : ""}
     </Button>
   );
 }
