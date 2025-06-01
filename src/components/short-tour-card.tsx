@@ -6,8 +6,10 @@ import { Link } from "@/i18n/navigation";
 import ReactMarkdown from "react-markdown";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { getLocale } from "next-intl/server";
-import { MapPinIcon, ShoppingCart } from "lucide-react";
+import { MapPinIcon } from "lucide-react";
 import { Button } from "./ui/button";
+import AddToCartButton from "./add-to-cart-button";
+
 export default async function ShortTourCard({ tour }: { tour: Tour }) {
   return (
     <div className="flex flex-col h-full border border-gray-300 shadow-sm rounded-xl">
@@ -46,15 +48,7 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
         </Link> */}
         <div className="flex gap-2">
           <Button>Book Now</Button>
-          <Button
-            className="w-full"
-            variant="outline"
-            // onClick={handleCartAction}
-            // disabled={isAddingToCart}
-          >
-            <ShoppingCart className="size-4 " />
-            Add to Cart
-          </Button>
+          <AddToCartButton tour={tour} className="w-full" variant="outline" />
         </div>
       </div>
     </div>

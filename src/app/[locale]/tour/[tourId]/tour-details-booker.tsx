@@ -4,25 +4,18 @@ import { useState, useEffect, useMemo, useRef } from "react";
 import { useRouter } from "@/i18n/navigation";
 
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, ChevronDown, ChevronUp, Eye, Album } from "lucide-react";
+import { ChevronDown, ChevronUp, Album } from "lucide-react";
 
 import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
+import AddToCartButton from "@/components/add-to-cart-button";
 
 import { useBooking } from "@/context/booking";
 import { useCart } from "@/context/cart";
-import { updateCartItem } from "@/data/cart";
-import { Link } from "@/i18n/navigation";
+import { useCartChanges } from "@/hooks/use-cart-changes";
 
 import { Tour } from "@/types/Tour";
-
-interface InitialState {
-  selectedDate: Date | undefined;
-  travelers: { adults: number; children: number; infants: number };
-  selectedActivities: Set<string>;
-  initialized: boolean;
-}
 
 export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   // Hooks
@@ -32,22 +25,20 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
 
   // Local State
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isAddingToCart, setIsAddingToCart] = useState(false);
   const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
     new Set()
   );
 
-  // Refs
-  const initialState = useRef<InitialState>({
-    selectedDate: undefined,
-    travelers: { adults: 0, children: 0, infants: 0 },
-    selectedActivities: new Set(),
-    initialized: false,
-  });
-
   // Computed Values
   const existingCartItem = cart.items.find((item) => item.tourId === tour.id);
   const { selectedDate, travelers } = booking.sharedState;
+
+  // Change detection hook
+  const { initialState, resetInitialState } = useCartChanges({
+    selectedDate,
+    travelers,
+    selectedActivities: Array.from(selectedActivities),
+  });
 
   // Effects
   useEffect(() => {
@@ -55,42 +46,6 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
       setSelectedActivities(new Set(existingCartItem.selectedActivities));
     }
   }, [existingCartItem]);
-
-  useEffect(() => {
-    if (
-      !initialState.current.initialized &&
-      selectedDate !== undefined &&
-      travelers.adults > 0
-    ) {
-      initialState.current = {
-        selectedDate: selectedDate,
-        travelers: { ...travelers },
-        selectedActivities: new Set(selectedActivities),
-        initialized: true,
-      };
-    }
-  }, [selectedDate, travelers, selectedActivities]);
-
-  // Check if user has made changes from initial page load
-  const hasUserMadeChanges = useMemo(() => {
-    if (!initialState.current.initialized) return false;
-
-    const initial = initialState.current;
-
-    const dateChanged =
-      initial.selectedDate?.getTime() !== selectedDate?.getTime();
-    const travelersChanged =
-      initial.travelers.adults !== travelers.adults ||
-      initial.travelers.children !== travelers.children ||
-      initial.travelers.infants !== travelers.infants;
-    const activitiesChanged =
-      initial.selectedActivities.size !== selectedActivities.size ||
-      !Array.from(initial.selectedActivities).every((activity) =>
-        selectedActivities.has(activity)
-      );
-
-    return dateChanged || travelersChanged || activitiesChanged;
-  }, [selectedDate, travelers, selectedActivities]);
 
   // Calculation Functions
   const calculateActivityPriceIncrement = () => {
@@ -109,96 +64,14 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   };
 
   // Event Handlers
-  const handleCartAction = async () => {
-    setIsAddingToCart(true);
-
-    try {
-      if (existingCartItem && hasUserMadeChanges) {
-        // Update existing cart item
-        const result = await updateCartItem(existingCartItem.id, {
-          selectedDate,
-          travelers,
-          selectedActivities: Array.from(selectedActivities),
-        });
-
-        if (result?.success !== false) {
-          // Reset initial state after successful update
-          initialState.current = {
-            selectedDate: selectedDate,
-            travelers: { ...travelers },
-            selectedActivities: new Set(selectedActivities),
-            initialized: true,
-          };
-          router.push("/cart");
-        }
-      } else if (!existingCartItem) {
-        // Add new item to cart
-        await booking.addPartialBookingToCart(
-          tour,
-          Array.from(selectedActivities)
-        );
-      }
-    } catch (error) {
-      console.error("Failed to handle cart action:", error);
-    } finally {
-      setIsAddingToCart(false);
-    }
-  };
-
   const toggleExpanded = () => setIsExpanded(!isExpanded);
 
   // Render Functions
-  // mark
   const renderPricingSummary = () => (
     <div className="text-lg font-semibold text-gray-900">
       Total: <span className="text-red-500">{calculateTotalPrice()} GEL</span>
     </div>
   );
-
-  const renderCartButton = () => {
-    if (existingCartItem && hasUserMadeChanges) {
-      return (
-        <Button
-          className="w-full"
-          variant="outline"
-          onClick={handleCartAction}
-          disabled={isAddingToCart}
-        >
-          {isAddingToCart ? (
-            "Updating..."
-          ) : (
-            <>
-              <ShoppingCart className="size-4 " />
-              Update in Cart
-            </>
-          )}
-        </Button>
-      );
-    }
-
-    if (existingCartItem) {
-      return (
-        <Link href="/account/cart">
-          <Button className="w-full mb-3" variant="secondary">
-            <Eye className="size-4" />
-            View in Cart
-          </Button>
-        </Link>
-      );
-    }
-
-    return (
-      <Button
-        className="w-full"
-        variant="outline"
-        onClick={handleCartAction}
-        disabled={isAddingToCart}
-      >
-        <ShoppingCart className="size-4 " />
-        {isAddingToCart ? "Adding..." : "Add to Cart"}
-      </Button>
-    );
-  };
 
   const renderBookingContent = () => (
     <div className="flex flex-col gap-4">
@@ -251,8 +124,15 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
       <Button className="w-full" variant="brandred" size="lg">
         <Album className="size-4 " /> Book Tour Now
       </Button>
-      {/* <p className="text-center text-gray-500 text-xs">Or</p> */}
-      {renderCartButton()}
+      <AddToCartButton
+        tour={tour}
+        selectedActivities={Array.from(selectedActivities)}
+        className="w-full"
+        variant="outline"
+        detectChanges={true}
+        initialState={initialState}
+        onUpdateSuccess={resetInitialState}
+      />
       <Button
         onClick={toggleExpanded}
         variant="ghost"
