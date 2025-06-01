@@ -3,7 +3,8 @@ import Header from "../header";
 import { getTours } from "@/data/tours";
 import { Suspense } from "react";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
-import MapTourCard from "../map-tour-card";
+import TourCard from "@/components/tour-card";
+import ShortTourCard from "@/components/short-tour-card";
 export default async function DestinationsPage() {
   const t = await getTranslations("Pages.destinations");
   const { data: tours } = await getTours({
@@ -14,20 +15,17 @@ export default async function DestinationsPage() {
       <Header title={t("title")} />
       <Suspense
         fallback={
-          <div className="grid grid-cols-4 gap-4 p-4">
+          <div className="grid grid-cols-4 gap-4 mt-4">
             {Array.from({ length: 4 }, (_, index) => (
               <TourCardSkeleton key={`skeleton-${index}`} />
             ))}
           </div>
         }
       >
-        <div className="grid grid-cols-4 gap-4 p-4">
+        <div className="grid grid-cols-4 gap-4 mt-4">
           {tours.map((tour) => (
             <div key={tour.id}>
-              <MapTourCard
-                tour={tour}
-                // isFavourite={userFavourites.includes(tour.id)}
-              />
+              <ShortTourCard tour={tour} />
             </div>
           ))}
         </div>
