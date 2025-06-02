@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCartIcon, LockIcon, CheckCircleIcon } from "lucide-react";
@@ -8,7 +9,8 @@ import UserProfileForm from "@/components/user-profile-form";
 import OrderSummary from "@/components/order-summary";
 import { UserProfile } from "@/types/User";
 import { useCart } from "@/context/cart";
-import { Link } from "@/i18n/navigation";
+import { Link, useRouter } from "@/i18n/navigation";
+import { processCheckout } from "@/data/checkout";
 
 interface CheckoutClientProps {
   initialUserProfile: UserProfile | null;
@@ -20,20 +22,38 @@ export default function CheckoutClient({
   initialProfileComplete,
 }: CheckoutClientProps) {
   const cart = useCart();
+  const router = useRouter();
   const [userProfile] = useState<UserProfile | null>(initialUserProfile);
   const [profileComplete] = useState(initialProfileComplete);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleProfileComplete = () => {
     // Refresh the page to get updated profile data
     window.location.reload();
   };
+  const handleCompleteCheckout = async () => {
+    try {
+      setIsProcessing(true);
 
-  const handleCompleteCheckout = () => {
-    // Handle the actual checkout process
-    console.log("Processing checkout with cart items:", cart.items);
-    console.log("Total amount:", cart.totalPrice, "GEL");
-    // This would typically integrate with payment processing
-    // Could call a server action to process the payment and create order
+      // Process checkout and create invoice
+      const result = await processCheckout();
+
+      if (result.success) {
+        // Show success message
+        toast.success(result.message || "Checkout completed successfully!");
+
+        // Redirect to success page with invoice details
+        router.push(`/account/orders?invoice=${result.invoiceId}`);
+      } else {
+        // Show error message
+        toast.error(result.message || "Checkout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("An unexpected error occurred. Please try again.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   // Show loading state
@@ -212,13 +232,16 @@ export default function CheckoutClient({
 
         {/* Right Column - Order Summary */}
         <div className="lg:col-span-1">
+          {" "}
           <OrderSummary
             mode="cart"
             isCheckout={true}
-            disabled={!profileComplete}
+            disabled={!profileComplete || isProcessing}
             buttonAction={handleCompleteCheckout}
             buttonText={
-              profileComplete
+              isProcessing
+                ? "Processing..."
+                : profileComplete
                 ? `Complete Purchase - ${cart.totalPrice} GEL`
                 : undefined
             }
