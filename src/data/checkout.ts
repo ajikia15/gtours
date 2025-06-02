@@ -21,57 +21,51 @@ import { getUserProfile } from "@/data/userProfile";
 /**
  * Interface for invoice document that will be created in Firebase
  * Compatible with @https://extensions.dev/extensions/pdfplum/firestore-pdf-generator
+ * 
+ * PDFPlum extension passes the entire document (except _pdfplum_config) to Handlebars template.
+ * Template variables should be at the root level of the document.
  */
 export interface InvoiceDocument {
+  // Template data (at root level for Handlebars access)
+  invoiceNumber: string;
+  invoiceDate: string;
+  customer: {
+    name: string;
+    email: string;
+    phone?: string;
+  };
+  summary: {
+    tours: number;
+    toursPrice: number;
+    startDate: string;
+    tourists: number;
+    touristsPrice: number;
+    activities: number;
+    activitiesPrice: number;
+    locations: string;
+    totalPrice: number;
+    currency: string;
+  };
+  tourDetails: {
+    tourTitle: string;
+    selectedDate: string;
+    travelers: string;
+    activities: string[];
+    price: number;
+  }[];
+
   // PDF Extension required fields
   output: {
     location: string;
     name: string;
   };
-  data: {
-    // Invoice metadata
-    invoiceNumber: string;
-    invoiceDate: string;
-
-    // Customer information (simple)
-    customer: {
-      name: string;
-      email: string;
-      phone?: string;
-    };
-
-    // Order summary data (matching the OrderSummary component)
-    summary: {
-      tours: number;
-      toursPrice: number;
-      startDate: string;
-      tourists: number;
-      touristsPrice: number;
-      activities: number;
-      activitiesPrice: number;
-      locations: string;
-      totalPrice: number;
-      currency: string;
-    };
-
-    // Simple tour details
-    tourDetails: {
-      tourTitle: string;
-      selectedDate: string;
-      travelers: string;
-      activities: string[];
-      price: number;
-    }[];
-  };
-
-  // Extension will populate these fields
   status?: "pending" | "processing" | "completed" | "error";
   downloadURL?: string;
   createdAt?: Date;
   completedAt?: Date;
   error?: string;
 
-  // Our custom fields
+  // Our custom metadata fields
   userId: string;
   userEmail: string;
   orderItems: CartItem[];
@@ -196,35 +190,32 @@ export async function processCheckout(
         item.travelers.infants,
       activities: item.selectedActivities || [],
       price: item.totalPrice || 0,
-    })); // Create the invoice document with the structure expected by the PDF extension
+    }));    // Create the invoice document with the structure expected by the PDF extension
+    // PDFPlum passes the entire document (except _pdfplum_config) to Handlebars
     const invoiceDoc = await firestore.collection("invoices").add({
-      // PDF Extension required fields
-      status: "pending", // Extension will update this
-
-      // Template data (this gets passed to your HTML template)
-      data: {
-        invoiceNumber,
-        invoiceDate: now.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "long",
-          day: "numeric",
-        }),
-        customer: {
-          name: `${userProfile.firstName} ${userProfile.lastName}`,
-          email: userProfile.email,
-          phone: userProfile.phoneNumber || null,
-        },
-        summary,
-        tourDetails,
+      // Template data at root level for Handlebars (these become {{variableName}})
+      invoiceNumber,
+      invoiceDate: now.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }),
+      customer: {
+        name: `${userProfile.firstName} ${userProfile.lastName}`,
+        email: userProfile.email,
+        phone: userProfile.phoneNumber || undefined, // undefined removes the field
       },
+      summary,
+      tourDetails,
 
-      // Output configuration - where to save the PDF
+      // PDF Extension metadata (not passed to template)
+      status: "pending", // Extension will update this
       output: {
         location: `invoices/${userId}`, // Folder in Firebase Storage
         name: `invoice-${invoiceNumber}.pdf`, // PDF filename
       },
 
-      // Additional metadata
+      // Additional metadata for our app (not passed to template)
       userId,
       userEmail,
       orderItems: cartResult.cart,
@@ -324,17 +315,21 @@ export async function getInvoiceStatus(
         success: false,
         error: "Unauthorized access to invoice",
       };
-    }
-
-    // Serialize the data to handle Firebase Timestamps
-    const serializedData = serializeFirestoreData(invoiceData?.data);
+    }    // Serialize the invoice data to handle Firebase Timestamps
+    const serializedInvoiceData = serializeFirestoreData(invoiceData);
 
     return {
       success: true,
       invoice: {
         status: invoiceData.status || "pending",
         downloadURL: invoiceData.downloadURL, // Set by the extension when PDF is ready
-        data: serializedData,
+        data: {
+          invoiceNumber: serializedInvoiceData?.invoiceNumber,
+          invoiceDate: serializedInvoiceData?.invoiceDate,
+          customer: serializedInvoiceData?.customer,
+          summary: serializedInvoiceData?.summary,
+          tourDetails: serializedInvoiceData?.tourDetails,
+        },
         error: invoiceData.error, // Set by extension if there's an error
       },
     };
