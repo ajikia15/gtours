@@ -202,7 +202,12 @@ export async function processCheckout(
       price: item.totalPrice || 0,
     }));    // Create the invoice document with the structure expected by the PDF extension
     // PDFPlum passes the entire document (except _pdfplum_config) to Handlebars
-    const invoiceDoc = await firestore.collection("invoices").add({
+    // Since PDFs are stored as {documentId}.pdf, we can generate the document first,
+    // then use its ID for the email content
+    const tempInvoiceDoc = await firestore.collection("invoices").doc();
+    const invoiceId = tempInvoiceDoc.id;
+
+    await tempInvoiceDoc.set({
       // Template data at root level for Handlebars (these become {{variableName}})
       invoiceNumber,
       invoiceDate: now.toLocaleDateString("en-US", {
@@ -225,20 +230,20 @@ export async function processCheckout(
         html: generateInvoiceEmailHtml(
           `${userProfile.firstName} ${userProfile.lastName}`,
           invoiceNumber,
-          "PLACEHOLDER_ID" // Will be replaced after document creation
+          invoiceId // Use the actual document ID
         ),
         text: generateInvoiceEmailText(
           `${userProfile.firstName} ${userProfile.lastName}`,
           invoiceNumber,
-          "PLACEHOLDER_ID" // Will be replaced after document creation
+          invoiceId // Use the actual document ID
         ),
       },
 
       // PDF Extension metadata (not passed to template)
       status: "pending", // Extension will update this
       output: {
-        location: `invoices/${userId}`, // Folder in Firebase Storage
-        name: `invoice-${invoiceNumber}.pdf`, // PDF filename
+        location: `invoices`, // Folder in Firebase Storage
+        name: `${invoiceId}.pdf`, // PDF filename matches document ID
       },
 
       // Additional metadata for our app (not passed to template)
@@ -246,23 +251,7 @@ export async function processCheckout(
       userEmail,
       orderItems: cartResult.cart,
       createdAt: now,
-    });
-
-    // Update the email content with the actual invoice ID
-    await invoiceDoc.update({
-      "message.html": generateInvoiceEmailHtml(
-        `${userProfile.firstName} ${userProfile.lastName}`,
-        invoiceNumber,
-        invoiceDoc.id
-      ),
-      "message.text": generateInvoiceEmailText(
-        `${userProfile.firstName} ${userProfile.lastName}`,
-        invoiceNumber,
-        invoiceDoc.id
-      ),
-    });
-
-    // Clear the user's cart after successful checkout
+    });    // Clear the user's cart after successful checkout
     const clearResult = await clearCart();
     if (!clearResult.success) {
       console.warn("Failed to clear cart after checkout:", clearResult.error);
@@ -270,7 +259,7 @@ export async function processCheckout(
 
     return {
       success: true,
-      invoiceId: invoiceDoc.id,
+      invoiceId: invoiceId,
       invoiceNumber,
       message:
         "Checkout completed successfully! You will receive an email with your invoice shortly.",
@@ -391,8 +380,8 @@ function generateInvoiceEmailHtml(
   invoiceNumber: string,
   invoiceId: string
 ): string {
-  // Link to the orders page where they can check status and download when ready
-  const orderViewUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://gtours-fcd56.web.app'}/en/account/orders?invoice=${invoiceId}`;
+  // Direct link to PDF in Firebase Storage
+  const pdfDownloadUrl = `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`;
   
   return `
 <!DOCTYPE html>
@@ -422,9 +411,9 @@ function generateInvoiceEmailHtml(
             padding: 30px;
             border-radius: 0 0 8px 8px;
         }
-        .view-button {
+        .download-button {
             display: inline-block;
-            background: #2563eb;
+            background: #16a34a;
             color: white;
             padding: 12px 24px;
             text-decoration: none;
@@ -449,15 +438,13 @@ function generateInvoiceEmailHtml(
     <div class="content">
         <h2>Hello ${customerName}!</h2>
         
-        <p>Thank you for booking with Georgia Tours! Your invoice <strong>${invoiceNumber}</strong> is being generated.</p>
-        
-        <p>You can view your order status and download your invoice PDF once it's ready by clicking the link below:</p>
+        <p>Thank you for booking with Georgia Tours! Your invoice <strong>${invoiceNumber}</strong> has been generated and is ready for download.</p>
         
         <div style="text-align: center;">
-            <a href="${orderViewUrl}" class="view-button">View Your Order</a>
+            <a href="${pdfDownloadUrl}" class="download-button">Download Invoice PDF</a>
         </div>
         
-        <p><strong>Note:</strong> Your invoice PDF will be available for download within a few minutes. You'll be able to download it directly from your order page.</p>
+        <p><strong>Note:</strong> If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.</p>
         
         <p>We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.</p>
         
@@ -482,16 +469,17 @@ function generateInvoiceEmailText(
   invoiceNumber: string,
   invoiceId: string
 ): string {
-  const orderViewUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://gtours-fcd56.web.app'}/en/account/orders?invoice=${invoiceId}`;
+  // Direct link to PDF download
+  const pdfDownloadUrl = `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`;
   
   return `
 Hello ${customerName}!
 
-Thank you for booking with Georgia Tours! Your invoice ${invoiceNumber} is being generated.
+Thank you for booking with Georgia Tours! Your invoice ${invoiceNumber} has been generated and is ready for download.
 
-You can view your order status and download your invoice PDF once it's ready by visiting this link: ${orderViewUrl}
+You can download your invoice PDF directly from this link: ${pdfDownloadUrl}
 
-Your invoice PDF will be available for download within a few minutes. You'll be able to download it directly from your order page.
+Note: If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.
 
 We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.
 
