@@ -21,9 +21,12 @@ import { getUserProfile } from "@/data/userProfile";
 /**
  * Interface for invoice document that will be created in Firebase
  * Compatible with @https://extensions.dev/extensions/pdfplum/firestore-pdf-generator
+ * and @https://extensions.dev/extensions/firebase/firestore-send-email
  * 
  * PDFPlum extension passes the entire document (except _pdfplum_config) to Handlebars template.
  * Template variables should be at the root level of the document.
+ * 
+ * Email extension looks for "to" and "message" fields to send emails.
  */
 export interface InvoiceDocument {
   // Template data (at root level for Handlebars access)
@@ -45,14 +48,21 @@ export interface InvoiceDocument {
     locations: string;
     totalPrice: number;
     currency: string;
-  };
-  tourDetails: {
+  };  tourDetails: {
     tourTitle: string;
     selectedDate: string;
     travelers: string;
     activities: string[];
     price: number;
   }[];
+
+  // Email Extension fields (will trigger email sending)
+  to: string[];
+  message: {
+    subject: string;
+    text: string;
+    html: string;
+  };
 
   // PDF Extension required fields
   output: {
@@ -208,6 +218,22 @@ export async function processCheckout(
       summary,
       tourDetails,
 
+      // Email Extension fields (will trigger email sending immediately)
+      to: [userProfile.email],
+      message: {
+        subject: `Your Georgia Tours Invoice - ${invoiceNumber}`,
+        html: generateInvoiceEmailHtml(
+          `${userProfile.firstName} ${userProfile.lastName}`,
+          invoiceNumber,
+          "PLACEHOLDER_ID" // Will be replaced after document creation
+        ),
+        text: generateInvoiceEmailText(
+          `${userProfile.firstName} ${userProfile.lastName}`,
+          invoiceNumber,
+          "PLACEHOLDER_ID" // Will be replaced after document creation
+        ),
+      },
+
       // PDF Extension metadata (not passed to template)
       status: "pending", // Extension will update this
       output: {
@@ -220,6 +246,20 @@ export async function processCheckout(
       userEmail,
       orderItems: cartResult.cart,
       createdAt: now,
+    });
+
+    // Update the email content with the actual invoice ID
+    await invoiceDoc.update({
+      "message.html": generateInvoiceEmailHtml(
+        `${userProfile.firstName} ${userProfile.lastName}`,
+        invoiceNumber,
+        invoiceDoc.id
+      ),
+      "message.text": generateInvoiceEmailText(
+        `${userProfile.firstName} ${userProfile.lastName}`,
+        invoiceNumber,
+        invoiceDoc.id
+      ),
     });
 
     // Clear the user's cart after successful checkout
@@ -341,4 +381,125 @@ export async function getInvoiceStatus(
         error instanceof Error ? error.message : "Failed to get invoice status",
     };
   }
+}
+
+/**
+ * Generates HTML email content for invoice notification
+ */
+function generateInvoiceEmailHtml(
+  customerName: string,
+  invoiceNumber: string,
+  invoiceId: string
+): string {
+  // Link to the orders page where they can check status and download when ready
+  const orderViewUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://gtours-fcd56.web.app'}/en/account/orders?invoice=${invoiceId}`;
+  
+  return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Georgia Tours Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .header {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+        }
+        .view-button {
+            display: inline-block;
+            background: #2563eb;
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            color: #64748b;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Georgia Tours</h1>
+        <p>Your Georgian Adventure Awaits</p>
+    </div>
+    
+    <div class="content">
+        <h2>Hello ${customerName}!</h2>
+        
+        <p>Thank you for booking with Georgia Tours! Your invoice <strong>${invoiceNumber}</strong> is being generated.</p>
+        
+        <p>You can view your order status and download your invoice PDF once it's ready by clicking the link below:</p>
+        
+        <div style="text-align: center;">
+            <a href="${orderViewUrl}" class="view-button">View Your Order</a>
+        </div>
+        
+        <p><strong>Note:</strong> Your invoice PDF will be available for download within a few minutes. You'll be able to download it directly from your order page.</p>
+        
+        <p>We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.</p>
+        
+        <p>Best regards,<br>
+        The Georgia Tours Team</p>
+    </div>
+    
+    <div class="footer">
+        <p>Georgia Tours | Email: info@georgiatours.ge</p>
+        <p>This is an automated email. Please do not reply to this message.</p>
+    </div>
+</body>
+</html>
+  `.trim();
+}
+
+/**
+ * Generates plain text email content for invoice notification
+ */
+function generateInvoiceEmailText(
+  customerName: string,
+  invoiceNumber: string,
+  invoiceId: string
+): string {
+  const orderViewUrl = `${process.env.NEXT_PUBLIC_SITE_URL || 'https://gtours-fcd56.web.app'}/en/account/orders?invoice=${invoiceId}`;
+  
+  return `
+Hello ${customerName}!
+
+Thank you for booking with Georgia Tours! Your invoice ${invoiceNumber} is being generated.
+
+You can view your order status and download your invoice PDF once it's ready by visiting this link: ${orderViewUrl}
+
+Your invoice PDF will be available for download within a few minutes. You'll be able to download it directly from your order page.
+
+We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.
+
+Best regards,
+The Georgia Tours Team
+
+---
+Georgia Tours | Email: info@georgiatours.ge
+This is an automated email. Please do not reply to this message.
+  `.trim();
 }
