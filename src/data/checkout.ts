@@ -9,7 +9,12 @@
  * Template Configuration:
  * The PDF template is configured at the Firebase extension level and should point
  * to the template stored in Firebase Storage at `/templates/gtours-invoice/index.html`.
- * The template name is not specified dynamically but is configured in the extension settings.
+ * The template name is not specified dynamically but is configure            <div className="invoice-info">
+                <h3>📄 Invoice Details</h3>
+                <p><strong>Invoice ID:</strong> ${invoiceNumber}</p>
+                <p><strong>Status:</strong> Ready for Download</p>
+                <p><strong>Expected Guest Date:</strong> ${summary.startDate}</p>
+            </div>the extension settings.
  */
 
 import { firestore } from "@/firebase/server";
@@ -146,11 +151,7 @@ export async function processCheckout(
         error: "Incomplete booking details",
         message: "Please complete all booking details for your tours",
       };
-    }
-
-    // Generate unique invoice number and ID
-    const invoiceNumber = `INV-${Date.now()}`;
-    const now = new Date();
+    }    const now = new Date();
     // Calculate summary from cart
     const summary = {
       tours: cartResult.cart.length,
@@ -209,7 +210,7 @@ export async function processCheckout(
 
     await tempInvoiceDoc.set({
       // Template data at root level for Handlebars (these become {{variableName}})
-      invoiceNumber,
+      invoiceNumber: invoiceId, // Use document ID as invoice number
       invoiceDate: now.toLocaleDateString("en-US", {
         year: "numeric",
         month: "long",
@@ -226,21 +227,21 @@ export async function processCheckout(
       // Email Extension fields (will trigger email sending immediately)
       to: [userProfile.email],
       message: {
-        subject: `Your Georgia Tours Invoice - ${invoiceNumber}`,
-        html: generateInvoiceEmailHtml(
+        subject: `Your Georgia Tours Invoice - ${invoiceId}`,        html: generateInvoiceEmailHtml(
           `${userProfile.firstName} ${userProfile.lastName}`,
-          invoiceNumber,
-          invoiceId // Use the actual document ID
+          invoiceId,
+          invoiceId, // Use the actual document ID
+          summary // Pass summary for guest date
         ),
         text: generateInvoiceEmailText(
           `${userProfile.firstName} ${userProfile.lastName}`,
-          invoiceNumber,
-          invoiceId // Use the actual document ID
+          invoiceId,
+          invoiceId, // Use the actual document ID
+          summary // Pass summary for guest date
         ),
       },
 
       // PDF Extension metadata (not passed to template)
-      status: "pending", // Extension will update this
       output: {
         location: `invoices`, // Folder in Firebase Storage
         name: `${invoiceId}.pdf`, // PDF filename matches document ID
@@ -251,16 +252,14 @@ export async function processCheckout(
       userEmail,
       orderItems: cartResult.cart,
       createdAt: now,
-    });    // Clear the user's cart after successful checkout
+    });// Clear the user's cart after successful checkout
     const clearResult = await clearCart();
     if (!clearResult.success) {
       console.warn("Failed to clear cart after checkout:", clearResult.error);
-    }
-
-    return {
+    }    return {
       success: true,
       invoiceId: invoiceId,
-      invoiceNumber,
+      invoiceNumber: invoiceId, // Use the same ID
       message:
         "Checkout completed successfully! You will receive an email with your invoice shortly.",
     };
@@ -345,13 +344,11 @@ export async function getInvoiceStatus(
         error: "Unauthorized access to invoice",
       };
     }    // Serialize the invoice data to handle Firebase Timestamps
-    const serializedInvoiceData = serializeFirestoreData(invoiceData);
-
-    return {
+    const serializedInvoiceData = serializeFirestoreData(invoiceData);    return {
       success: true,
       invoice: {
-        status: invoiceData.status || "pending",
-        downloadURL: invoiceData.downloadURL, // Set by the extension when PDF is ready
+        status: "completed", // Always completed since we create PDFs immediately
+        downloadURL: `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`, // Direct PDF link
         data: {
           invoiceNumber: serializedInvoiceData?.invoiceNumber,
           invoiceDate: serializedInvoiceData?.invoiceDate,
@@ -359,7 +356,7 @@ export async function getInvoiceStatus(
           summary: serializedInvoiceData?.summary,
           tourDetails: serializedInvoiceData?.tourDetails,
         },
-        error: invoiceData.error, // Set by extension if there's an error
+        error: invoiceData.error, // Keep error handling if needed
       },
     };
   } catch (error) {
@@ -378,7 +375,8 @@ export async function getInvoiceStatus(
 function generateInvoiceEmailHtml(
   customerName: string,
   invoiceNumber: string,
-  invoiceId: string
+  invoiceId: string,
+  summary: any
 ): string {
   // Direct link to PDF in Firebase Storage
   const pdfDownloadUrl = `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`;
@@ -398,63 +396,134 @@ function generateInvoiceEmailHtml(
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
+            background-color: #f9fafb;
+        }
+        .email-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             color: white;
-            padding: 30px;
+            padding: 40px 30px;
             text-align: center;
-            border-radius: 8px 8px 0 0;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .header p {
+            margin: 0;
+            font-size: 16px;
+            opacity: 0.9;
         }
         .content {
-            background: #f8fafc;
-            padding: 30px;
-            border-radius: 0 0 8px 8px;
+            padding: 40px 30px;
+        }
+        .content h2 {
+            color: #1f2937;
+            margin: 0 0 20px 0;
+            font-size: 24px;
+        }
+        .invoice-info {
+            background: #f3f4f6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #dc2626;
+        }
+        .invoice-info h3 {
+            margin: 0 0 10px 0;
+            color: #dc2626;
+            font-size: 18px;
+        }
+        .download-section {
+            text-align: center;
+            margin: 30px 0;
+            padding: 25px;
+            background: #fef2f2;
+            border-radius: 8px;
+            border: 1px solid #fecaca;
         }
         .download-button {
             display: inline-block;
-            background: #16a34a;
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
             color: white;
-            padding: 12px 24px;
+            padding: 15px 30px;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
             font-weight: bold;
+            font-size: 16px;
+            margin: 10px 0;
+            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
+            transition: all 0.3s ease;
+        }
+        .download-button:hover {
+            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
+            transform: translateY(-1px);
+        }
+        .note {
+            background: #fffbeb;
+            border: 1px solid #fed7aa;
+            border-radius: 6px;
+            padding: 15px;
             margin: 20px 0;
+            color: #92400e;
         }
         .footer {
+            background: #f9fafb;
+            padding: 30px;
             text-align: center;
-            margin-top: 30px;
-            color: #64748b;
+            color: #6b7280;
             font-size: 14px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .footer p {
+            margin: 5px 0;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Georgia Tours</h1>
-        <p>Your Georgian Adventure Awaits</p>
-    </div>
-    
-    <div class="content">
-        <h2>Hello ${customerName}!</h2>
-        
-        <p>Thank you for booking with Georgia Tours! Your invoice <strong>${invoiceNumber}</strong> has been generated and is ready for download.</p>
-        
-        <div style="text-align: center;">
-            <a href="${pdfDownloadUrl}" class="download-button">Download Invoice PDF</a>
+    <div class="email-container">
+        <div class="header">
+            <h1>🏔️ Georgia Tours</h1>
+            <p>Your Georgian Adventure Awaits</p>
         </div>
         
-        <p><strong>Note:</strong> If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.</p>
+        <div class="content">
+            <h2>Hello ${customerName}!</h2>
+            
+            <p>Thank you for booking with Georgia Tours! Your invoice has been generated and is ready for download.</p>
+              <div class="invoice-info">
+                <h3>📄 Invoice Details</h3>
+                <p><strong>Invoice ID:</strong> ${invoiceNumber}</p>
+                <p><strong>Status:</strong> Ready for Download</p>
+                <p><strong>Expected Guest Date:</strong> ${summary.startDate}</p>
+            </div>
+            
+            <div class="download-section">
+                <p><strong>Your invoice PDF is ready!</strong></p>
+                <a href="${pdfDownloadUrl}" class="download-button">📥 Download Invoice PDF</a>
+                <p style="font-size: 14px; color: #6b7280; margin-top: 15px;">Click the button above to download your invoice</p>
+            </div>
+              <div class="note">
+                <p><strong>📝 Note:</strong> If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.</p>
+                <p><strong>📧 Important:</strong> If you don't see this email in your inbox, please check your spam/junk folder. Sometimes emails with attachments or download links may be filtered.</p>
+            </div>
+            
+            <p>We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.</p>
+            
+            <p>Best regards,<br>
+            <strong>The Georgia Tours Team</strong></p>
+        </div>
         
-        <p>We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.</p>
-        
-        <p>Best regards,<br>
-        The Georgia Tours Team</p>
-    </div>
-    
-    <div class="footer">
-        <p>Georgia Tours | Email: info@georgiatours.ge</p>
-        <p>This is an automated email. Please do not reply to this message.</p>
+        <div class="footer">
+            <p><strong>Georgia Tours</strong> | Email: info@georgiatours.ge</p>
+            <p>This is an automated email. Please do not reply to this message.</p>
+        </div>
     </div>
 </body>
 </html>
@@ -467,19 +536,30 @@ function generateInvoiceEmailHtml(
 function generateInvoiceEmailText(
   customerName: string,
   invoiceNumber: string,
-  invoiceId: string
+  invoiceId: string,
+  summary: any
 ): string {
   // Direct link to PDF download
   const pdfDownloadUrl = `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`;
   
   return `
+🏔️ GEORGIA TOURS - Invoice Ready
+
 Hello ${customerName}!
 
-Thank you for booking with Georgia Tours! Your invoice ${invoiceNumber} has been generated and is ready for download.
+Thank you for booking with Georgia Tours! Your invoice has been generated and is ready for download.
 
-You can download your invoice PDF directly from this link: ${pdfDownloadUrl}
+📄 INVOICE DETAILS:
+- Invoice ID: ${invoiceNumber}
+- Status: Ready for Download
+- Expected Guest Date: ${summary.startDate}
 
-Note: If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.
+📥 DOWNLOAD YOUR INVOICE:
+${pdfDownloadUrl}
+
+📝 Note: If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.
+
+📧 Important: If you don't see this email in your inbox, please check your spam/junk folder. Sometimes emails with attachments or download links may be filtered.
 
 We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.
 
