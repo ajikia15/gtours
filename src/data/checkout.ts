@@ -11,11 +11,16 @@
  * - PDF template is configured at the Firebase extension level
  * - Email template uses SendGrid Dynamic Templates with templateId and dynamicTemplateData
  * - SendGrid template ID: d-a6b05232823142619e447d18f23e0d42
+ *
+ * Key Features:
+ * - Simplified invoice status (always "completed")
+ * - Direct PDF download links
+ * - Clean interface without legacy fields
+ * - Proper date formatting for all templates
  */
 
 import { firestore } from "@/firebase/server";
 import { requireUserAuth } from "@/lib/auth-utils";
-import { CartItem } from "@/types/Cart";
 import { getUserCart, clearCart } from "@/data/cart";
 import { getUserProfile } from "@/data/userProfile";
 
@@ -64,7 +69,6 @@ export interface InvoiceDocument {
     templateId: string; // SendGrid Dynamic Template ID
     dynamicTemplateData: any; // Data to populate template
   };
-
   // PDF Extension required fields
   output: {
     location: string;
@@ -73,8 +77,6 @@ export interface InvoiceDocument {
 
   // Our custom metadata fields
   userId: string;
-  userEmail: string;
-  orderItems: CartItem[];
   createdAt?: Date;
 }
 
@@ -96,11 +98,9 @@ export interface CheckoutResult {
 export async function processCheckout(
   authToken?: string
 ): Promise<CheckoutResult> {
-  try {
-    // Verify authentication
+  try {    // Verify authentication
     const verifiedToken = await requireUserAuth(authToken);
     const userId = verifiedToken.uid;
-    const userEmail = verifiedToken.email || "";
 
     // Get user profile
     const userProfile = await getUserProfile(authToken);
@@ -247,8 +247,6 @@ export async function processCheckout(
         name: `${invoiceId}.pdf`, // PDF filename matches document ID
       },      // Additional metadata for our app (not passed to template)
       userId,
-      userEmail,
-      orderItems: cartResult.cart,
       createdAt: now, // Keep as Date for Firestore
     });// Clear the user's cart after successful checkout
     const clearResult = await clearCart();
@@ -304,7 +302,7 @@ function serializeFirestoreData(data: any): any {
 }
 
 /**
- * Gets invoice status by ID (for checking PDF generation progress)
+ * Gets invoice status by ID - always returns completed since PDFs are generated immediately
  */
 export async function getInvoiceStatus(
   invoiceId: string,
@@ -315,7 +313,6 @@ export async function getInvoiceStatus(
     status: string;
     downloadURL?: string;
     data?: any;
-    error?: string;
   };
   error?: string;
 }> {
@@ -345,8 +342,7 @@ export async function getInvoiceStatus(
     } // Serialize the invoice data to handle Firebase Timestamps
     const serializedInvoiceData = serializeFirestoreData(invoiceData);
     return {
-      success: true,
-      invoice: {
+      success: true,      invoice: {
         status: "completed", // Always completed since we create PDFs immediately
         downloadURL: `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`, // Direct PDF link
         data: {
@@ -356,7 +352,6 @@ export async function getInvoiceStatus(
           summary: serializedInvoiceData?.summary,
           tourDetails: serializedInvoiceData?.tourDetails,
         },
-        error: invoiceData.error, // Keep error handling if needed
       },
     };
   } catch (error) {
