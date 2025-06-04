@@ -4,7 +4,6 @@ import { getTours } from "@/data/tours";
 import { Suspense } from "react";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
 import ShortTourCard from "@/components/short-tour-card";
-import QuickCategory from "@/components/carousel/QuickCategory";
 import BookingBar from "@/components/booking-bar";
 export default async function DestinationsPage() {
   const t = await getTranslations("Pages.destinations");

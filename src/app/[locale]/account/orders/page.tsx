@@ -7,7 +7,7 @@ import { CheckCircleIcon, DownloadIcon, AlertCircleIcon } from "lucide-react";
 import { redirect } from "@/i18n/navigation";
 
 interface OrdersPageProps {
-  searchParams: { invoice?: string };
+  searchParams: Promise<{ invoice?: string }>;
 }
 
 async function OrderContent({ invoiceId }: { invoiceId?: string }) {
@@ -174,7 +174,10 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
   );
 }
 
-export default function OrdersPage({ searchParams }: OrdersPageProps) {
+export default async function OrdersPage({ searchParams }: OrdersPageProps) {
+  // Await the searchParams promise
+  const resolvedSearchParams = await searchParams;
+  
   return (
     <Suspense
       fallback={
@@ -186,7 +189,7 @@ export default function OrdersPage({ searchParams }: OrdersPageProps) {
         </div>
       }
     >
-      <OrderContent invoiceId={searchParams.invoice} />
+      <OrderContent invoiceId={resolvedSearchParams.invoice} />
     </Suspense>
   );
 }

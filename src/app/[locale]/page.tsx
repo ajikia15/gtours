@@ -3,7 +3,6 @@ import QuickCategory from "@/components/carousel/QuickCategory";
 import { getTranslations } from "next-intl/server";
 import DisplayCardsSection from "./display-cards-section";
 import { Suspense } from "react";
-import BookingBar from "@/components/booking-bar";
 import { getTours } from "@/data/tours";
 import InteractiveMapSection from "./interactive-map-section";
 import TourCardSkeleton from "@/components/tour-card-skeleton";

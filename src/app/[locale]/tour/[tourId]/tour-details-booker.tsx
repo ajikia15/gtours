@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { useState, useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Album } from "lucide-react";
@@ -21,7 +20,6 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   // Hooks
   const booking = useBooking();
   const cart = useCart();
-  const router = useRouter();
 
   // Local State
   const [isExpanded, setIsExpanded] = useState(false);
