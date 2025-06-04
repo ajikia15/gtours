@@ -143,8 +143,18 @@ export async function processCheckout(
         error: "Incomplete booking details",
         message: "Please complete all booking details for your tours",
       };
-    }
-    const now = new Date();
+    }    const now = new Date();
+    // Format dates as simple strings for templates
+    const invoiceDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    const startDate = cartResult.cart[0]?.selectedDate || "TBD";
+    // Format start date - handle both string and Date types
+    const formattedStartDate = startDate === "TBD" 
+      ? "TBD" 
+      : (() => {
+          const date = startDate instanceof Date ? startDate : new Date(startDate);
+          return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+        })();
+
     // Calculate summary from cart
     const summary = {
       tours: cartResult.cart.length,
@@ -152,7 +162,7 @@ export async function processCheckout(
         (sum, item) => sum + (item.tourBasePrice || 0),
         0
       ),
-      startDate: cartResult.cart[0]?.selectedDate || "TBD",
+      startDate: formattedStartDate,
       tourists: cartResult.cart.reduce(
         (sum, item) =>
           sum +
@@ -184,38 +194,43 @@ export async function processCheckout(
         0
       ),
       currency: "GEL",
-    }; // Prepare tour details for template
-    const tourDetails = cartResult.cart.map((item) => ({
-      tourTitle: item.tourTitle || "Unknown Tour",
-      selectedDate: item.selectedDate || "TBD",
-      travelers:
-        item.travelers.adults +
-        item.travelers.children +
-        item.travelers.infants,
-      activities: item.selectedActivities || [],
-      price: item.totalPrice || 0,
-    })); // Create the invoice document with the structure expected by the PDF extension
+    };    // Prepare tour details for template
+    const tourDetails = cartResult.cart.map((item) => {
+      const tourDate = item.selectedDate || "TBD";
+      // Format tour date - handle both string and Date types
+      const formattedTourDate = tourDate === "TBD"
+        ? "TBD"
+        : (() => {
+            const date = tourDate instanceof Date ? tourDate : new Date(tourDate);
+            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+          })();
+
+      return {
+        tourTitle: item.tourTitle || "Unknown Tour",
+        selectedDate: formattedTourDate,
+        travelers:
+          item.travelers.adults +
+          item.travelers.children +
+          item.travelers.infants,
+        activities: item.selectedActivities || [],
+        price: item.totalPrice || 0,
+      };
+    });// Create the invoice document with the structure expected by the PDF extension
     // PDFPlum passes the entire document (except _pdfplum_config) to Handlebars
     // Since PDFs are stored as {documentId}.pdf, we can generate the document first,
     // then use its ID for the email content
     const tempInvoiceDoc = await firestore.collection("invoices").doc();
-    const invoiceId = tempInvoiceDoc.id;
-
-    await tempInvoiceDoc.set({
+    const invoiceId = tempInvoiceDoc.id;    await tempInvoiceDoc.set({
       // Template data at root level for Handlebars (these become {{variableName}})
       invoiceNumber: invoiceId, // Use document ID as invoice number
-      invoiceDate: now.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }),
+      invoiceDate: invoiceDate, // Use formatted date string
       customer: {
         name: `${userProfile.firstName} ${userProfile.lastName}`,
         email: userProfile.email,
         phone: userProfile.phoneNumber || undefined, // undefined removes the field
       },
       summary,
-      tourDetails,      // Email Extension fields (will trigger email sending immediately)
+      tourDetails,// Email Extension fields (will trigger email sending immediately)
       to: [userProfile.email],
       sendGrid: {
         templateId: "d-a6b05232823142619e447d18f23e0d42", // SendGrid Dynamic Template ID
@@ -230,14 +245,12 @@ export async function processCheckout(
       output: {
         location: `invoices`, // Folder in Firebase Storage
         name: `${invoiceId}.pdf`, // PDF filename matches document ID
-      },
-
-      // Additional metadata for our app (not passed to template)
+      },      // Additional metadata for our app (not passed to template)
       userId,
       userEmail,
       orderItems: cartResult.cart,
-      createdAt: now,
-    }); // Clear the user's cart after successful checkout
+      createdAt: now, // Keep as Date for Firestore
+    });// Clear the user's cart after successful checkout
     const clearResult = await clearCart();
     if (!clearResult.success) {
       console.warn("Failed to clear cart after checkout:", clearResult.error);
@@ -369,7 +382,7 @@ function generateSendGridTemplateData(
   return {
     customerName,
     invoiceId,
-    startDate: summary.startDate,
+    startDate: summary.startDate, // This is now a formatted string like "25/5/2025"
     pdfDownloadUrl,
     totalPrice: summary.totalPrice,
     currency: summary.currency,
