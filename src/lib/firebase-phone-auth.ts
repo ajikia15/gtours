@@ -26,7 +26,7 @@ export const cleanupRecaptcha = () => {
 };
 
 /**
- * Initialize basic reCAPTCHA (not Enterprise)
+ * Initialize reCAPTCHA verifier following Firebase docs
  */
 const initializeRecaptcha = async (): Promise<RecaptchaVerifier> => {
   cleanupRecaptcha();
@@ -36,21 +36,24 @@ const initializeRecaptcha = async (): Promise<RecaptchaVerifier> => {
   if (!container) {
     container = document.createElement("div");
     container.id = "recaptcha-container";
+    container.style.display = "none"; // Hide the container for invisible reCAPTCHA
     document.body.appendChild(container);
-  }
-
-  // Create the most basic reCAPTCHA verifier
+  }  // Create reCAPTCHA verifier exactly as shown in Firebase docs
   recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha-container", {
     size: "invisible",
-    callback: () => console.log("reCAPTCHA solved"),
+    callback: () => {
+      console.log("reCAPTCHA solved");
+    },
+    "expired-callback": () => {
+      console.log("reCAPTCHA expired");
+    }
   });
 
-  await recaptchaVerifier.render();
   return recaptchaVerifier;
 };
 
 /**
- * Send verification code to phone number
+ * Send verification code to phone number for linking to existing account
  */
 export const sendFirebasePhoneVerification = async (
   phoneNumber: string
@@ -68,9 +71,9 @@ export const sendFirebasePhoneVerification = async (
       return { error: true, message: "Invalid Georgian phone number" };
     }
 
-    console.log("Sending code to:", formattedPhone);
-
-    const recaptcha = await initializeRecaptcha();
+    console.log("Sending code to:", formattedPhone);    const recaptcha = await initializeRecaptcha();
+    
+    // Use linkWithPhoneNumber to link phone to existing email account
     confirmationResult = await linkWithPhoneNumber(
       auth.currentUser,
       formattedPhone,
@@ -91,6 +94,13 @@ export const sendFirebasePhoneVerification = async (
       };
     }
 
+    if (error.code === "auth/captcha-check-failed") {
+      return {
+        error: true,
+        message: "reCAPTCHA verification failed. Please try again.",
+      };
+    }
+
     if (error.code === "auth/provider-already-linked") {
       return {
         error: true,
@@ -105,12 +115,22 @@ export const sendFirebasePhoneVerification = async (
       };
     }
 
+    // Reset reCAPTCHA on error as per Firebase docs
+    if (recaptchaVerifier) {
+      try {
+        recaptchaVerifier.clear();
+        recaptchaVerifier = null;
+      } catch (e) {
+        console.log("Error clearing reCAPTCHA:", e);
+      }
+    }
+
     return { error: true, message: error.message || "Failed to send code" };
   }
 };
 
 /**
- * Verify the SMS code
+ * Verify the SMS code and link phone number to existing account
  */
 export const verifyFirebasePhoneCode = async (
   code: string
@@ -125,11 +145,14 @@ export const verifyFirebasePhoneCode = async (
       return { error: true, message: "No verification in progress" };
     }
 
+    if (!auth.currentUser) {
+      return { error: true, message: "You must be logged in" };
+    }
+
     const cleanCode = code.replace(/\D/g, "");
     if (cleanCode.length !== 6) {
       return { error: true, message: "Enter a 6-digit code" };
-    }
-
+    }    // Confirm the verification code to complete phone linking
     const result = await confirmationResult.confirm(cleanCode);
     cleanupRecaptcha();
 
@@ -147,6 +170,14 @@ export const verifyFirebasePhoneCode = async (
 
     if (error.code === "auth/code-expired") {
       return { error: true, message: "Code expired. Request a new one" };
+    }
+
+    if (error.code === "auth/credential-already-in-use") {
+      return { error: true, message: "Phone number already linked to another account" };
+    }
+
+    if (error.code === "auth/provider-already-linked") {
+      return { error: true, message: "Phone number already linked to your account" };
     }
 
     return { error: true, message: error.message || "Verification failed" };

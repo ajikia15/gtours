@@ -98,7 +98,8 @@ export interface CheckoutResult {
 export async function processCheckout(
   authToken?: string
 ): Promise<CheckoutResult> {
-  try {    // Verify authentication
+  try {
+    // Verify authentication
     const verifiedToken = await requireUserAuth(authToken);
     const userId = verifiedToken.uid;
 
@@ -143,17 +144,24 @@ export async function processCheckout(
         error: "Incomplete booking details",
         message: "Please complete all booking details for your tours",
       };
-    }    const now = new Date();
+    }
+    const now = new Date();
     // Format dates as simple strings for templates
-    const invoiceDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+    const invoiceDate = `${now.getDate()}/${
+      now.getMonth() + 1
+    }/${now.getFullYear()}`;
     const startDate = cartResult.cart[0]?.selectedDate || "TBD";
     // Format start date - handle both string and Date types
-    const formattedStartDate = startDate === "TBD" 
-      ? "TBD" 
-      : (() => {
-          const date = startDate instanceof Date ? startDate : new Date(startDate);
-          return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-        })();
+    const formattedStartDate =
+      startDate === "TBD"
+        ? "TBD"
+        : (() => {
+            const date =
+              startDate instanceof Date ? startDate : new Date(startDate);
+            return `${date.getDate()}/${
+              date.getMonth() + 1
+            }/${date.getFullYear()}`;
+          })();
 
     // Calculate summary from cart
     const summary = {
@@ -194,16 +202,20 @@ export async function processCheckout(
         0
       ),
       currency: "GEL",
-    };    // Prepare tour details for template
+    }; // Prepare tour details for template
     const tourDetails = cartResult.cart.map((item) => {
       const tourDate = item.selectedDate || "TBD";
       // Format tour date - handle both string and Date types
-      const formattedTourDate = tourDate === "TBD"
-        ? "TBD"
-        : (() => {
-            const date = tourDate instanceof Date ? tourDate : new Date(tourDate);
-            return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
-          })();
+      const formattedTourDate =
+        tourDate === "TBD"
+          ? "TBD"
+          : (() => {
+              const date =
+                tourDate instanceof Date ? tourDate : new Date(tourDate);
+              return `${date.getDate()}/${
+                date.getMonth() + 1
+              }/${date.getFullYear()}`;
+            })();
 
       return {
         tourTitle: item.tourTitle || "Unknown Tour",
@@ -215,12 +227,13 @@ export async function processCheckout(
         activities: item.selectedActivities || [],
         price: item.totalPrice || 0,
       };
-    });// Create the invoice document with the structure expected by the PDF extension
+    }); // Create the invoice document with the structure expected by the PDF extension
     // PDFPlum passes the entire document (except _pdfplum_config) to Handlebars
     // Since PDFs are stored as {documentId}.pdf, we can generate the document first,
     // then use its ID for the email content
     const tempInvoiceDoc = await firestore.collection("invoices").doc();
-    const invoiceId = tempInvoiceDoc.id;    await tempInvoiceDoc.set({
+    const invoiceId = tempInvoiceDoc.id;
+    await tempInvoiceDoc.set({
       // Template data at root level for Handlebars (these become {{variableName}})
       invoiceNumber: invoiceId, // Use document ID as invoice number
       invoiceDate: invoiceDate, // Use formatted date string
@@ -230,7 +243,7 @@ export async function processCheckout(
         phone: userProfile.phoneNumber || undefined, // undefined removes the field
       },
       summary,
-      tourDetails,// Email Extension fields (will trigger email sending immediately)
+      tourDetails, // Email Extension fields (will trigger email sending immediately)
       to: [userProfile.email],
       sendGrid: {
         templateId: "d-a6b05232823142619e447d18f23e0d42", // SendGrid Dynamic Template ID
@@ -245,10 +258,10 @@ export async function processCheckout(
       output: {
         location: `invoices`, // Folder in Firebase Storage
         name: `${invoiceId}.pdf`, // PDF filename matches document ID
-      },      // Additional metadata for our app (not passed to template)
+      }, // Additional metadata for our app (not passed to template)
       userId,
       createdAt: now, // Keep as Date for Firestore
-    });// Clear the user's cart after successful checkout
+    }); // Clear the user's cart after successful checkout
     const clearResult = await clearCart();
     if (!clearResult.success) {
       console.warn("Failed to clear cart after checkout:", clearResult.error);
@@ -342,7 +355,8 @@ export async function getInvoiceStatus(
     } // Serialize the invoice data to handle Firebase Timestamps
     const serializedInvoiceData = serializeFirestoreData(invoiceData);
     return {
-      success: true,      invoice: {
+      success: true,
+      invoice: {
         status: "completed", // Always completed since we create PDFs immediately
         downloadURL: `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`, // Direct PDF link
         data: {

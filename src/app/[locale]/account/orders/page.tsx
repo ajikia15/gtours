@@ -177,7 +177,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
 export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   // Await the searchParams promise
   const resolvedSearchParams = await searchParams;
-  
+
   return (
     <Suspense
       fallback={
