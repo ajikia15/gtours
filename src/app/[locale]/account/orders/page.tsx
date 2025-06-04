@@ -3,11 +3,7 @@ import { getCurrentUserToken } from "@/lib/auth-utils";
 import { getInvoiceStatus } from "@/data/checkout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  CheckCircleIcon,
-  DownloadIcon,
-  AlertCircleIcon,
-} from "lucide-react";
+import { CheckCircleIcon, DownloadIcon, AlertCircleIcon } from "lucide-react";
 import { redirect } from "@/i18n/navigation";
 
 interface OrdersPageProps {
@@ -53,18 +49,21 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center">
           <CheckCircleIcon className="h-16 w-16 text-green-500" />
-        </div>        <h1 className="text-3xl font-bold">Order Completed!</h1>
+        </div>{" "}
+        <h1 className="text-3xl font-bold">Order Completed!</h1>
         <p className="text-gray-600">
-          Your invoice has been generated and is ready for download. We&apos;ve also sent a copy to your email address.
+          Your invoice has been generated and is ready for download. We&apos;ve
+          also sent a copy to your email address.
         </p>
-
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-4">
           <p className="text-sm text-amber-800">
-            <strong>📧 Email Note:</strong> Please check your spam/junk folder if you don&apos;t see the invoice email in your inbox. 
-            Sometimes emails with download links may be filtered by email providers.
+            <strong>📧 Email Note:</strong> Please check your spam/junk folder
+            if you don&apos;t see the invoice email in your inbox. Sometimes
+            emails with download links may be filtered by email providers.
           </p>
         </div>
-      </div><Card>
+      </div>
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
             <span>Order Details</span>
@@ -84,9 +83,12 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
             <div>
               <p className="text-sm text-gray-600">Customer</p>
               <p className="font-semibold">{invoice.data?.customer?.name}</p>
-            </div>            <div>
+            </div>{" "}
+            <div>
               <p className="text-sm text-gray-600">Expected Guest Date</p>
-              <p className="font-semibold">{invoice.data?.summary?.startDate}</p>
+              <p className="font-semibold">
+                {invoice.data?.summary?.startDate}
+              </p>
             </div>
             <div>
               <p className="text-sm text-gray-600">Total Amount</p>

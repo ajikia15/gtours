@@ -4,17 +4,13 @@
  * Checkout Server Actions
  *
  * This file contains server-side functions for processing checkout operations.
- * It creates invoice documents in Firebase that trigger the PDF generation extension.
+ * It creates invoice documents in Firebase that trigger the PDF generation extension
+ * and sends email notifications using SendGrid Dynamic Templates.
  *
  * Template Configuration:
- * The PDF template is configured at the Firebase extension level and should point
- * to the template stored in Firebase Storage at `/templates/gtours-invoice/index.html`.
- * The template name is not specified dynamically but is configure            <div className="invoice-info">
-                <h3>📄 Invoice Details</h3>
-                <p><strong>Invoice ID:</strong> ${invoiceNumber}</p>
-                <p><strong>Status:</strong> Ready for Download</p>
-                <p><strong>Expected Guest Date:</strong> ${summary.startDate}</p>
-            </div>the extension settings.
+ * - PDF template is configured at the Firebase extension level
+ * - Email template uses SendGrid Dynamic Templates with templateId and dynamicTemplateData
+ * - SendGrid template ID: d-a6b05232823142619e447d18f23e0d42
  */
 
 import { firestore } from "@/firebase/server";
@@ -27,11 +23,11 @@ import { getUserProfile } from "@/data/userProfile";
  * Interface for invoice document that will be created in Firebase
  * Compatible with @https://extensions.dev/extensions/pdfplum/firestore-pdf-generator
  * and @https://extensions.dev/extensions/firebase/firestore-send-email
- * 
+ *
  * PDFPlum extension passes the entire document (except _pdfplum_config) to Handlebars template.
  * Template variables should be at the root level of the document.
- * 
- * Email extension looks for "to" and "message" fields to send emails.
+ *
+ * Email extension looks for "to" and "sendGrid" fields for SendGrid Dynamic Templates.
  */
 export interface InvoiceDocument {
   // Template data (at root level for Handlebars access)
@@ -53,7 +49,8 @@ export interface InvoiceDocument {
     locations: string;
     totalPrice: number;
     currency: string;
-  };  tourDetails: {
+  };
+  tourDetails: {
     tourTitle: string;
     selectedDate: string;
     travelers: string;
@@ -63,10 +60,9 @@ export interface InvoiceDocument {
 
   // Email Extension fields (will trigger email sending)
   to: string[];
-  message: {
-    subject: string;
-    text: string;
-    html: string;
+  sendGrid: {
+    templateId: string; // SendGrid Dynamic Template ID
+    dynamicTemplateData: any; // Data to populate template
   };
 
   // PDF Extension required fields
@@ -74,16 +70,12 @@ export interface InvoiceDocument {
     location: string;
     name: string;
   };
-  status?: "pending" | "processing" | "completed" | "error";
-  downloadURL?: string;
-  createdAt?: Date;
-  completedAt?: Date;
-  error?: string;
 
   // Our custom metadata fields
   userId: string;
   userEmail: string;
   orderItems: CartItem[];
+  createdAt?: Date;
 }
 
 /**
@@ -151,7 +143,8 @@ export async function processCheckout(
         error: "Incomplete booking details",
         message: "Please complete all booking details for your tours",
       };
-    }    const now = new Date();
+    }
+    const now = new Date();
     // Calculate summary from cart
     const summary = {
       tours: cartResult.cart.length,
@@ -201,7 +194,7 @@ export async function processCheckout(
         item.travelers.infants,
       activities: item.selectedActivities || [],
       price: item.totalPrice || 0,
-    }));    // Create the invoice document with the structure expected by the PDF extension
+    })); // Create the invoice document with the structure expected by the PDF extension
     // PDFPlum passes the entire document (except _pdfplum_config) to Handlebars
     // Since PDFs are stored as {documentId}.pdf, we can generate the document first,
     // then use its ID for the email content
@@ -222,22 +215,14 @@ export async function processCheckout(
         phone: userProfile.phoneNumber || undefined, // undefined removes the field
       },
       summary,
-      tourDetails,
-
-      // Email Extension fields (will trigger email sending immediately)
+      tourDetails,      // Email Extension fields (will trigger email sending immediately)
       to: [userProfile.email],
-      message: {
-        subject: `Your Georgia Tours Invoice - ${invoiceId}`,        html: generateInvoiceEmailHtml(
+      sendGrid: {
+        templateId: "d-a6b05232823142619e447d18f23e0d42", // SendGrid Dynamic Template ID
+        dynamicTemplateData: generateSendGridTemplateData(
           `${userProfile.firstName} ${userProfile.lastName}`,
           invoiceId,
-          invoiceId, // Use the actual document ID
-          summary // Pass summary for guest date
-        ),
-        text: generateInvoiceEmailText(
-          `${userProfile.firstName} ${userProfile.lastName}`,
-          invoiceId,
-          invoiceId, // Use the actual document ID
-          summary // Pass summary for guest date
+          summary
         ),
       },
 
@@ -252,11 +237,12 @@ export async function processCheckout(
       userEmail,
       orderItems: cartResult.cart,
       createdAt: now,
-    });// Clear the user's cart after successful checkout
+    }); // Clear the user's cart after successful checkout
     const clearResult = await clearCart();
     if (!clearResult.success) {
       console.warn("Failed to clear cart after checkout:", clearResult.error);
-    }    return {
+    }
+    return {
       success: true,
       invoiceId: invoiceId,
       invoiceNumber: invoiceId, // Use the same ID
@@ -343,8 +329,9 @@ export async function getInvoiceStatus(
         success: false,
         error: "Unauthorized access to invoice",
       };
-    }    // Serialize the invoice data to handle Firebase Timestamps
-    const serializedInvoiceData = serializeFirestoreData(invoiceData);    return {
+    } // Serialize the invoice data to handle Firebase Timestamps
+    const serializedInvoiceData = serializeFirestoreData(invoiceData);
+    return {
       success: true,
       invoice: {
         status: "completed", // Always completed since we create PDFs immediately
@@ -370,204 +357,23 @@ export async function getInvoiceStatus(
 }
 
 /**
- * Generates HTML email content for invoice notification
+ * Generates SendGrid template data for invoice notification
  */
-function generateInvoiceEmailHtml(
+function generateSendGridTemplateData(
   customerName: string,
-  invoiceNumber: string,
   invoiceId: string,
   summary: any
-): string {
-  // Direct link to PDF in Firebase Storage
+): any {
   const pdfDownloadUrl = `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`;
-  
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Georgia Tours Invoice</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f9fafb;
-        }
-        .email-container {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-        .header {
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        .header h1 {
-            margin: 0 0 10px 0;
-            font-size: 28px;
-            font-weight: bold;
-        }
-        .header p {
-            margin: 0;
-            font-size: 16px;
-            opacity: 0.9;
-        }
-        .content {
-            padding: 40px 30px;
-        }
-        .content h2 {
-            color: #1f2937;
-            margin: 0 0 20px 0;
-            font-size: 24px;
-        }
-        .invoice-info {
-            background: #f3f4f6;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-            border-left: 4px solid #dc2626;
-        }
-        .invoice-info h3 {
-            margin: 0 0 10px 0;
-            color: #dc2626;
-            font-size: 18px;
-        }
-        .download-section {
-            text-align: center;
-            margin: 30px 0;
-            padding: 25px;
-            background: #fef2f2;
-            border-radius: 8px;
-            border: 1px solid #fecaca;
-        }
-        .download-button {
-            display: inline-block;
-            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-            font-size: 16px;
-            margin: 10px 0;
-            box-shadow: 0 2px 4px rgba(220, 38, 38, 0.2);
-            transition: all 0.3s ease;
-        }
-        .download-button:hover {
-            background: linear-gradient(135deg, #b91c1c 0%, #991b1b 100%);
-            transform: translateY(-1px);
-        }
-        .note {
-            background: #fffbeb;
-            border: 1px solid #fed7aa;
-            border-radius: 6px;
-            padding: 15px;
-            margin: 20px 0;
-            color: #92400e;
-        }
-        .footer {
-            background: #f9fafb;
-            padding: 30px;
-            text-align: center;
-            color: #6b7280;
-            font-size: 14px;
-            border-top: 1px solid #e5e7eb;
-        }
-        .footer p {
-            margin: 5px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="email-container">
-        <div class="header">
-            <h1>🏔️ Georgia Tours</h1>
-            <p>Your Georgian Adventure Awaits</p>
-        </div>
-        
-        <div class="content">
-            <h2>Hello ${customerName}!</h2>
-            
-            <p>Thank you for booking with Georgia Tours! Your invoice has been generated and is ready for download.</p>
-              <div class="invoice-info">
-                <h3>📄 Invoice Details</h3>
-                <p><strong>Invoice ID:</strong> ${invoiceNumber}</p>
-                <p><strong>Status:</strong> Ready for Download</p>
-                <p><strong>Expected Guest Date:</strong> ${summary.startDate}</p>
-            </div>
-            
-            <div class="download-section">
-                <p><strong>Your invoice PDF is ready!</strong></p>
-                <a href="${pdfDownloadUrl}" class="download-button">📥 Download Invoice PDF</a>
-                <p style="font-size: 14px; color: #6b7280; margin-top: 15px;">Click the button above to download your invoice</p>
-            </div>
-              <div class="note">
-                <p><strong>📝 Note:</strong> If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.</p>
-                <p><strong>📧 Important:</strong> If you don't see this email in your inbox, please check your spam/junk folder. Sometimes emails with attachments or download links may be filtered.</p>
-            </div>
-            
-            <p>We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.</p>
-            
-            <p>Best regards,<br>
-            <strong>The Georgia Tours Team</strong></p>
-        </div>
-        
-        <div class="footer">
-            <p><strong>Georgia Tours</strong> | Email: info@georgiatours.ge</p>
-            <p>This is an automated email. Please do not reply to this message.</p>
-        </div>
-    </div>
-</body>
-</html>
-  `.trim();
-}
 
-/**
- * Generates plain text email content for invoice notification
- */
-function generateInvoiceEmailText(
-  customerName: string,
-  invoiceNumber: string,
-  invoiceId: string,
-  summary: any
-): string {
-  // Direct link to PDF download
-  const pdfDownloadUrl = `https://storage.googleapis.com/gtours-fcd56.firebasestorage.app/invoices/${invoiceId}.pdf`;
-  
-  return `
-🏔️ GEORGIA TOURS - Invoice Ready
-
-Hello ${customerName}!
-
-Thank you for booking with Georgia Tours! Your invoice has been generated and is ready for download.
-
-📄 INVOICE DETAILS:
-- Invoice ID: ${invoiceNumber}
-- Status: Ready for Download
-- Expected Guest Date: ${summary.startDate}
-
-📥 DOWNLOAD YOUR INVOICE:
-${pdfDownloadUrl}
-
-📝 Note: If the PDF download doesn't work immediately, please wait a few minutes for the file to be fully processed, then try again.
-
-📧 Important: If you don't see this email in your inbox, please check your spam/junk folder. Sometimes emails with attachments or download links may be filtered.
-
-We're excited to help you explore the beautiful country of Georgia. If you have any questions about your booking, please don't hesitate to contact us.
-
-Best regards,
-The Georgia Tours Team
-
----
-Georgia Tours | Email: info@georgiatours.ge
-This is an automated email. Please do not reply to this message.
-  `.trim();
+  return {
+    customerName,
+    invoiceId,
+    startDate: summary.startDate,
+    pdfDownloadUrl,
+    totalPrice: summary.totalPrice,
+    currency: summary.currency,
+    tours: summary.tours,
+    tourists: summary.tourists,
+  };
 }
