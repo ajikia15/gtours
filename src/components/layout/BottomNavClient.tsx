@@ -3,14 +3,14 @@
 import { useAuth } from "@/context/auth";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { 
-  UserCircleIcon, 
+import {
+  UserCircleIcon,
   GlobeIcon,
   ShoppingCartIcon,
   LogOutIcon,
   SettingsIcon,
   HeartIcon,
-  ArrowLeftIcon
+  ArrowLeftIcon,
 } from "lucide-react";
 import {
   Drawer,
@@ -33,7 +33,7 @@ export default function BottomNavClient() {
   const cart = useCart();
   const [mounted, setMounted] = useState(false);
   const tAuth = useTranslations("Auth");
-  const tNav = useTranslations("Navigation");
+  const tNav = useTranslations("Navbar");
 
   useEffect(() => {
     setMounted(true);
@@ -125,9 +125,9 @@ function LocaleSwitcherBottomNav() {
   return (
     <Drawer open={languageDrawerOpen} onOpenChange={setLanguageDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="sm" 
+        <Button
+          variant="ghost"
+          size="sm"
           className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors"
         >
           <GlobeIcon className="h-6 w-6 mb-1" />
@@ -157,9 +157,7 @@ function LocaleSwitcherBottomNav() {
                   onClick={() => handleLocaleChange(loc)}
                   size="lg"
                 >
-                  <span className="mr-3 text-lg">
-                    {loc.toUpperCase()}
-                  </span>
+                  <span className="mr-3 text-lg">{loc.toUpperCase()}</span>
                   <span className="text-sm text-muted-foreground">
                     {getLanguageName(loc)}
                   </span>
@@ -193,9 +191,9 @@ function UserDrawerBottomNav() {
   return (
     <Drawer open={userDrawerOpen} onOpenChange={setUserDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button 
-          variant="ghost" 
-          size="sm" 
+        <Button
+          variant="ghost"
+          size="sm"
           className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors"
         >
           <UserCircleIcon className="h-6 w-6 mb-1" />

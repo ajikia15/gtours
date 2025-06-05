@@ -4,7 +4,7 @@ import { routing } from "@/i18n/routing";
 import Navbar from "../../components/layout/Navbar";
 import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
-import BottomNavigation from "@/components/layout/BottomNavigation";
+import BottomNavigation from "@/components/layout/BottomNavbar";
 import { AuthProvider } from "@/context/auth";
 import { CartProvider } from "@/context/cart";
 import { BookingProvider } from "@/context/booking";
@@ -48,7 +48,9 @@ export default async function LocaleLayout({
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AuthProvider>
             <CartProvider>
-              <BookingProvider>                <Navbar />
+              <BookingProvider>
+                {" "}
+                <Navbar />
                 <div className="container mx-auto mt-20">
                   {children}
                   <Toaster />

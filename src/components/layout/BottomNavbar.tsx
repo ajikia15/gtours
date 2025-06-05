@@ -4,8 +4,8 @@ import { HomeIcon } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import BottomNavClient from "./BottomNavClient";
 
-export default async function BottomNavigation() {
-  const t = await getTranslations("Navigation");
+export default async function BottomNavbar() {
+  const t = await getTranslations("Navbar");
 
   return (
     <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-background border-t shadow-lg backdrop-blur-md">
