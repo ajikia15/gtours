@@ -122,10 +122,10 @@ export const MobileImageSection: React.FC<MobileImageSectionProps> = ({
               <button
                 key={index}
                 onClick={() => scrollTo(index)}
-                className={`h-0.5 transition-all duration-300 ${
+                className={`h-0.5 rounded-full transition-all duration-300 ${
                   index === selectedIndex
                     ? "bg-gray-800 w-8"
-                    : "bg-gray-400 hover:bg-gray-600 w-6"
+                    : "bg-gray-300 hover:bg-gray-600 w-6"
                 }`}
                 aria-label={`Go to image ${index + 1}`}
               />
