@@ -86,7 +86,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
             />
           ) : null}
         </div>
-        <div className="w-2/3 relative">
+        <div className="w-2/3 relative ">
           {testMode && (
             <div
               className={`flex flex-col items-center mt-4 absolute top-0 right-0 bg-white dark:bg-gray-800 rounded-lg shadow-sm z-10 mr-4 border border-gray-200 dark:border-gray-700 ${

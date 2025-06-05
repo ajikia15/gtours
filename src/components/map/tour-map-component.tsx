@@ -148,19 +148,21 @@ TourMapSectionProps) {
   };
 
   return (
-    <div className="w-full h-80 rounded-xl overflow-hidden shadow-lg">
+    <div className="w-full h-80 rounded-xl overflow-hidden shadow-lg ">
       <MapContainer
         center={mapCenter}
         zoom={calculateZoom()}
         style={{ height: "100%", width: "100%" }}
         zoomControl={true}
         scrollWheelZoom={true}
+        className="z-0"
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Tiles style by <a href="https://www.hotosm.org/" target="_blank">Humanitarian OpenStreetMap Team</a> hosted by <a href="https://openstreetmap.fr/" target="_blank">OpenStreetMap France</a>'
           url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
           minZoom={0}
           maxZoom={19}
+          className=" z-10"
         />
 
         {/* Activity markers */}

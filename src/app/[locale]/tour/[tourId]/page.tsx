@@ -68,7 +68,7 @@ export default async function TourPage({
               description={getLocalizedDescription(tour, locale)}
             />
           </Suspense>
-          <div className="w-full h-80">
+          <div className="w-full h-80 my-10 md:my-0">
             <TourMapSection
               tourCoordinates={tour.coordinates}
               activities={tour.offeredActivities}
