@@ -14,7 +14,7 @@ import TourMapSection from "@/components/map/tour-map-section";
 import TourSuggestions from "./tour-suggestions";
 import { isMobile } from "@/lib/isMobile";
 import { headers } from "next/headers";
-import MobileImageSection from "./mobile-image-section";
+import { MobileImageSection } from "./mobile-image-section";
 export default async function TourPage({
   params,
 }: {
@@ -42,11 +42,7 @@ export default async function TourPage({
       {mobile && (
         <div className="flex flex-col gap-4 my-2  md:my-10">
           <Suspense fallback={<ImageSectionSkeleton />}>
-            <MobileImageSection
-              images={tour.images}
-              tourId={tourId}
-              tourTitle={tour.title}
-            />
+            <MobileImageSection images={tour.images} tourTitle={tour.title} />
           </Suspense>
         </div>
       )}
