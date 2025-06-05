@@ -138,14 +138,14 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   );
   const renderActionButtons = () => (
     <div className="space-y-3 ">
-      <Button 
-        className="w-full" 
-        variant="brandred" 
+      <Button
+        className="w-full"
+        variant="brandred"
         size="lg"
         onClick={handleBookTourNow}
         disabled={isBookingNow}
       >
-        <Album className="size-4 " /> 
+        <Album className="size-4 " />
         {isBookingNow ? "Processing..." : "Book Tour Now"}
       </Button>
       <AddToCartButton

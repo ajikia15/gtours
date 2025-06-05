@@ -38,7 +38,8 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
           className="w-fit font-bold hover:underline"
         >
           View Tour
-        </Link> */}        <div className="flex gap-2 mt-2 mb-2">
+        </Link> */}{" "}
+        <div className="flex gap-2 mt-2 mb-2">
           <BookNowButton tour={tour} />
           <AddToCartButton tour={tour} variant="ghost" text={false} />
         </div>

@@ -7,14 +7,17 @@ import { UserProfile } from "@/types/User";
 import CheckoutClient from "./checkout-client";
 
 interface CheckoutPageProps {
-  searchParams: {
+  searchParams: Promise<{
     directTour?: string;
-  };
+  }>;
 }
 
-export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
+export default async function CheckoutPage({
+  searchParams,
+}: CheckoutPageProps) {
   const locale = await getLocale();
-  const directTourId = searchParams.directTour;
+  const resolvedSearchParams = await searchParams;
+  const directTourId = resolvedSearchParams.directTour;
 
   let userProfile: UserProfile | null = null;
   let profileComplete = false;

@@ -33,24 +33,38 @@ export default function CheckoutClient({
   const isDirectTourMode = Boolean(directTourId);
   const relevantCartItems = useMemo(() => {
     if (!isDirectTourMode) return cart.items;
-    return cart.items.filter(item => item.tourId === directTourId);
+    return cart.items.filter((item) => item.tourId === directTourId);
   }, [cart.items, directTourId, isDirectTourMode]);
   // Calculate totals for the relevant items
   const totalItems = relevantCartItems.length;
-  const totalPrice = relevantCartItems.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
+  const totalPrice = relevantCartItems.reduce(
+    (sum, item) => sum + (item.totalPrice || 0),
+    0
+  );
   // Create custom order items for direct tour mode
-  const customOrderItems = relevantCartItems.map(item => ({
+  const customOrderItems = relevantCartItems.map((item) => ({
     id: item.id,
     name: item.tourTitle,
     price: item.totalPrice || 0,
     quantity: 1,
-    description: `${item.selectedDate ? (item.selectedDate instanceof Date ? item.selectedDate.toLocaleDateString() : new Date(item.selectedDate).toLocaleDateString()) : 'Date TBD'} • ${(item.travelers?.adults || 0) + (item.travelers?.children || 0) + (item.travelers?.infants || 0)} travelers`
+    description: `${
+      item.selectedDate
+        ? item.selectedDate instanceof Date
+          ? item.selectedDate.toLocaleDateString()
+          : new Date(item.selectedDate).toLocaleDateString()
+        : "Date TBD"
+    } • ${
+      (item.travelers?.adults || 0) +
+      (item.travelers?.children || 0) +
+      (item.travelers?.infants || 0)
+    } travelers`,
   }));
 
   const handleProfileComplete = () => {
     // Refresh the page to get updated profile data
     window.location.reload();
-  };  const handleCompleteCheckout = async () => {
+  };
+  const handleCompleteCheckout = async () => {
     try {
       setIsProcessing(true);
 
@@ -101,7 +115,7 @@ export default function CheckoutClient({
             {isDirectTourMode ? "Tour not found in cart" : "Your cart is empty"}
           </h1>
           <p className="text-gray-600">
-            {isDirectTourMode 
+            {isDirectTourMode
               ? "The requested tour could not be found. Please try booking again."
               : "Add some tours to your cart before checkout"}
           </p>
@@ -116,7 +130,9 @@ export default function CheckoutClient({
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto space-y-6">      <div className="flex items-center gap-2 mb-6">
+    <div className="max-w-screen-lg mx-auto space-y-6">
+      {" "}
+      <div className="flex items-center gap-2 mb-6">
         <ShoppingCartIcon className="h-6 w-6" />
         <h1 className="text-2xl font-bold">
           {isDirectTourMode ? "Book Tour" : "Checkout"}
@@ -125,7 +141,6 @@ export default function CheckoutClient({
           {totalItems} {totalItems === 1 ? "item" : "items"}
         </span>
       </div>
-
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left Column - User Info and Payment */}
         <div className="lg:col-span-2 space-y-6">
@@ -253,7 +268,8 @@ export default function CheckoutClient({
               </CardContent>
             </Card>
           </div>
-        </div>        {/* Right Column - Order Summary */}
+        </div>{" "}
+        {/* Right Column - Order Summary */}
         <div className="lg:col-span-1">
           <OrderSummary
             mode={isDirectTourMode ? "custom" : "cart"}

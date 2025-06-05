@@ -453,20 +453,22 @@ export const BookingProvider = ({
 
     try {
       // Check if tour already exists in cart
-      const existingCartItem = cart.items.find(item => item.tourId === tour.id);
+      const existingCartItem = cart.items.find(
+        (item) => item.tourId === tour.id
+      );
 
       let cartResult;
-      
+
       if (existingCartItem) {
         // Update existing cart item instead of adding duplicate
         const { updateCartItem } = await import("@/data/cart");
-        
+
         cartResult = await updateCartItem(existingCartItem.id, {
           selectedDate: sharedState.selectedDate,
           travelers: sharedState.travelers,
           selectedActivities: selectedActivities,
         });
-        
+
         if (cartResult.success) {
           toast.success("Tour updated and proceeding to checkout...");
         }
@@ -476,9 +478,9 @@ export const BookingProvider = ({
       }
 
       if (!cartResult.success) {
-        return { 
-          success: false, 
-          message: cartResult.message || "Failed to prepare tour for checkout" 
+        return {
+          success: false,
+          message: cartResult.message || "Failed to prepare tour for checkout",
         };
       }
 
