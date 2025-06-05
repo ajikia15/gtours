@@ -52,10 +52,16 @@ export default async function TourPage({
       )}
 
       <div className="flex flex-row md:gap-10 items-start px-6 md:px-0">
-        <div className="flex flex-col gap-8 h-full w-full">
-          <h1 className="text-3xl text-center md:hidden font-bold text-gray-900">
-            {tour.title}
-          </h1>
+        <div className="flex flex-col gap-4 md:gap-8 h-full w-full">
+          <div className="md:hidden">
+            <h1 className="text-3xl text-center mb-1 font-bold text-gray-900">
+              {tour.title}
+            </h1>
+            <h3 className="text-xl text-center text-gray-700 mb-1">
+              Explore wonders of {tour.title}
+            </h3>
+            <div className="w-full mt-8 mb-2 h-px bg-gray-300"></div>
+          </div>
           <Suspense fallback={<TextSectionSkeleton />}>
             <TextSection
               mobile={mobile}
