@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -15,11 +15,13 @@ import { processCheckout } from "@/data/checkout";
 interface CheckoutClientProps {
   initialUserProfile: UserProfile | null;
   initialProfileComplete: boolean;
+  directTourId?: string;
 }
 
 export default function CheckoutClient({
   initialUserProfile,
   initialProfileComplete,
+  directTourId,
 }: CheckoutClientProps) {
   const cart = useCart();
   const router = useRouter();
@@ -27,15 +29,34 @@ export default function CheckoutClient({
   const [profileComplete] = useState(initialProfileComplete);
   const [isProcessing, setIsProcessing] = useState(false);
 
+  // In direct tour mode, filter cart to show only the specific tour
+  const isDirectTourMode = Boolean(directTourId);
+  const relevantCartItems = useMemo(() => {
+    if (!isDirectTourMode) return cart.items;
+    return cart.items.filter(item => item.tourId === directTourId);
+  }, [cart.items, directTourId, isDirectTourMode]);
+  // Calculate totals for the relevant items
+  const totalItems = relevantCartItems.length;
+  const totalPrice = relevantCartItems.reduce((sum, item) => sum + (item.totalPrice || 0), 0);
+  // Create custom order items for direct tour mode
+  const customOrderItems = relevantCartItems.map(item => ({
+    id: item.id,
+    name: item.tourTitle,
+    price: item.totalPrice || 0,
+    quantity: 1,
+    description: `${item.selectedDate ? (item.selectedDate instanceof Date ? item.selectedDate.toLocaleDateString() : new Date(item.selectedDate).toLocaleDateString()) : 'Date TBD'} • ${(item.travelers?.adults || 0) + (item.travelers?.children || 0) + (item.travelers?.infants || 0)} travelers`
+  }));
+
   const handleProfileComplete = () => {
     // Refresh the page to get updated profile data
     window.location.reload();
-  };
-  const handleCompleteCheckout = async () => {
+  };  const handleCompleteCheckout = async () => {
     try {
       setIsProcessing(true);
 
       // Process checkout and create invoice
+      // In direct tour mode, we could modify this to process only the specific tour
+      // For now, we'll process the full cart but the user only sees the relevant tour
       const result = await processCheckout();
 
       if (result.success) {
@@ -70,20 +91,23 @@ export default function CheckoutClient({
       </div>
     );
   }
-
   // Guard: Show empty cart message instead of redirecting
-  if (cart.items.length === 0) {
+  if (relevantCartItems.length === 0) {
     return (
       <div className="max-w-screen-lg mx-auto p-6">
         <div className="text-center space-y-4">
           <ShoppingCartIcon className="h-16 w-16 mx-auto text-gray-400" />
-          <h1 className="text-2xl font-bold">Your cart is empty</h1>
+          <h1 className="text-2xl font-bold">
+            {isDirectTourMode ? "Tour not found in cart" : "Your cart is empty"}
+          </h1>
           <p className="text-gray-600">
-            Add some tours to your cart before checkout
+            {isDirectTourMode 
+              ? "The requested tour could not be found. Please try booking again."
+              : "Add some tours to your cart before checkout"}
           </p>
-          <Link href="/account/cart">
+          <Link href={isDirectTourMode ? "/" : "/account/cart"}>
             <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-              Go to Cart
+              {isDirectTourMode ? "Browse Tours" : "Go to Cart"}
             </button>
           </Link>
         </div>
@@ -92,12 +116,13 @@ export default function CheckoutClient({
   }
 
   return (
-    <div className="max-w-screen-lg mx-auto space-y-6">
-      <div className="flex items-center gap-2 mb-6">
+    <div className="max-w-screen-lg mx-auto space-y-6">      <div className="flex items-center gap-2 mb-6">
         <ShoppingCartIcon className="h-6 w-6" />
-        <h1 className="text-2xl font-bold">Checkout</h1>
+        <h1 className="text-2xl font-bold">
+          {isDirectTourMode ? "Book Tour" : "Checkout"}
+        </h1>
         <span className="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
-          {cart.totalItems} {cart.totalItems === 1 ? "item" : "items"}
+          {totalItems} {totalItems === 1 ? "item" : "items"}
         </span>
       </div>
 
@@ -228,13 +253,13 @@ export default function CheckoutClient({
               </CardContent>
             </Card>
           </div>
-        </div>
-
-        {/* Right Column - Order Summary */}
+        </div>        {/* Right Column - Order Summary */}
         <div className="lg:col-span-1">
-          {" "}
           <OrderSummary
-            mode="cart"
+            mode={isDirectTourMode ? "custom" : "cart"}
+            customItems={isDirectTourMode ? customOrderItems : undefined}
+            customSubtotal={isDirectTourMode ? totalPrice : undefined}
+            customTotal={isDirectTourMode ? totalPrice : undefined}
             isCheckout={true}
             disabled={!profileComplete || isProcessing}
             buttonAction={handleCompleteCheckout}
@@ -242,9 +267,10 @@ export default function CheckoutClient({
               isProcessing
                 ? "Processing..."
                 : profileComplete
-                ? `Complete Purchase - ${cart.totalPrice} GEL`
+                ? `Complete Purchase - ${totalPrice} GEL`
                 : undefined
             }
+            title={isDirectTourMode ? "Tour Summary" : "Order Summary"}
           />
         </div>
       </div>

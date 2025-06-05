@@ -70,6 +70,12 @@ type BookingContextType = {
     selectedActivities: string[]
   ) => Promise<{ success: boolean; message?: string }>;
 
+  // Direct checkout functionality
+  proceedToDirectCheckout: (
+    tour: Tour,
+    selectedActivities: string[]
+  ) => Promise<{ success: boolean; checkoutUrl?: string; message?: string }>;
+
   // Utility functions
   getTotalPeople: (travelers: TravelerCounts) => number;
   getPayingPeople: (travelers: TravelerCounts) => number;
@@ -429,6 +435,68 @@ export const BookingProvider = ({
       return { success: false, message: errorMessage };
     }
   };
+  /**
+   * Proceed directly to checkout with a single tour
+   * This checks if tour exists in cart and updates it, or adds it if not present
+   * @param tour - The tour object
+   * @param selectedActivities - Array of selected activity IDs for this tour
+   * @returns Promise with success status, checkout URL, and optional message
+   */
+  const proceedToDirectCheckout = async (
+    tour: Tour,
+    selectedActivities: string[]
+  ): Promise<{ success: boolean; checkoutUrl?: string; message?: string }> => {
+    if (!auth?.currentUser) {
+      toast.error("Please sign in to continue");
+      return { success: false, message: "User not authenticated" };
+    }
+
+    try {
+      // Check if tour already exists in cart
+      const existingCartItem = cart.items.find(item => item.tourId === tour.id);
+
+      let cartResult;
+      
+      if (existingCartItem) {
+        // Update existing cart item instead of adding duplicate
+        const { updateCartItem } = await import("@/data/cart");
+        
+        cartResult = await updateCartItem(existingCartItem.id, {
+          selectedDate: sharedState.selectedDate,
+          travelers: sharedState.travelers,
+          selectedActivities: selectedActivities,
+        });
+        
+        if (cartResult.success) {
+          toast.success("Tour updated and proceeding to checkout...");
+        }
+      } else {
+        // Add new item to cart
+        cartResult = await addPartialBookingToCart(tour, selectedActivities);
+      }
+
+      if (!cartResult.success) {
+        return { 
+          success: false, 
+          message: cartResult.message || "Failed to prepare tour for checkout" 
+        };
+      }
+
+      // Generate checkout URL with the specific tour item
+      const checkoutUrl = `/account/checkout?directTour=${tour.id}`;
+
+      return {
+        success: true,
+        checkoutUrl,
+        message: "Redirecting to checkout...",
+      };
+    } catch (error) {
+      console.error("Error in direct checkout:", error);
+      const errorMessage = "Failed to proceed to checkout";
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
+    }
+  };
 
   /**
    * Get total number of people (adults + children + infants)
@@ -468,6 +536,9 @@ export const BookingProvider = ({
     // Cart operations
     addBookingToCart,
     addPartialBookingToCart,
+
+    // Direct checkout functionality
+    proceedToDirectCheckout,
 
     // Utility functions
     getTotalPeople,

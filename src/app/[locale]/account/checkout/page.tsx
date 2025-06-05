@@ -6,8 +6,15 @@ import { getUserCart } from "@/data/cart";
 import { UserProfile } from "@/types/User";
 import CheckoutClient from "./checkout-client";
 
-export default async function CheckoutPage() {
+interface CheckoutPageProps {
+  searchParams: {
+    directTour?: string;
+  };
+}
+
+export default async function CheckoutPage({ searchParams }: CheckoutPageProps) {
   const locale = await getLocale();
+  const directTourId = searchParams.directTour;
 
   let userProfile: UserProfile | null = null;
   let profileComplete = false;
@@ -28,17 +35,18 @@ export default async function CheckoutPage() {
     throw e;
   }
 
-  // Redirect to cart if no items
-  if (!hasCartItems) {
+  // For direct tour checkout, we allow proceeding even if cart appears empty
+  // since the tour should have been added to cart in the proceedToDirectCheckout function
+  if (!hasCartItems && !directTourId) {
     redirect({ href: "/account/cart", locale: locale });
     throw new Error("No items in cart");
   }
-
   return (
     <>
       <CheckoutClient
         initialUserProfile={userProfile}
         initialProfileComplete={profileComplete}
+        directTourId={directTourId}
       />
     </>
   );

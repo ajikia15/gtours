@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "@/i18n/navigation";
 
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp, Album } from "lucide-react";
@@ -20,12 +21,14 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
   // Hooks
   const booking = useBooking();
   const cart = useCart();
+  const router = useRouter();
 
   // Local State
   const [isExpanded, setIsExpanded] = useState(false);
   const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
     new Set()
   );
+  const [isBookingNow, setIsBookingNow] = useState(false);
 
   // Computed Values
   const existingCartItem = cart.items.find((item) => item.tourId === tour.id);
@@ -60,9 +63,26 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
       Array.from(selectedActivities)
     );
   };
-
   // Event Handlers
   const toggleExpanded = () => setIsExpanded(!isExpanded);
+
+  const handleBookTourNow = async () => {
+    setIsBookingNow(true);
+    try {
+      const result = await booking.proceedToDirectCheckout(
+        tour,
+        Array.from(selectedActivities)
+      );
+
+      if (result.success && result.checkoutUrl) {
+        router.push(result.checkoutUrl);
+      }
+    } catch (error) {
+      console.error("Error in Book Tour Now:", error);
+    } finally {
+      setIsBookingNow(false);
+    }
+  };
 
   // Render Functions
   const renderPricingSummary = () => (
@@ -116,11 +136,17 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
       </div>
     </div>
   );
-
   const renderActionButtons = () => (
     <div className="space-y-3 ">
-      <Button className="w-full" variant="brandred" size="lg">
-        <Album className="size-4 " /> Book Tour Now
+      <Button 
+        className="w-full" 
+        variant="brandred" 
+        size="lg"
+        onClick={handleBookTourNow}
+        disabled={isBookingNow}
+      >
+        <Album className="size-4 " /> 
+        {isBookingNow ? "Processing..." : "Book Tour Now"}
       </Button>
       <AddToCartButton
         tour={tour}
