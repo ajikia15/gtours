@@ -1,5 +1,4 @@
-import Image from "next/image";
-import { getImageUrl } from "@/lib/imageHelpers";
+import { MobileImageCarouselWithBars } from "@/components/carousel/MobileImageCarouselWithBars";
 
 export default async function MobileImageSection({
   images,
@@ -9,18 +8,10 @@ export default async function MobileImageSection({
   tourId: string;
   tourTitle: string;
 }) {
-  const mainImage = getImageUrl(
-    images && images.length > 0 ? images[0] : undefined
-  );
   return (
-    <div className="w-full min-h-[40vh] relative">
-      <Image
-        src={images && images.length > 0 ? getImageUrl(images[0]) : mainImage}
-        alt={tourTitle}
-        fill
-        className="object-cover "
-      />
-      <div className="absolute bottom-0 inset-x-0 bg-white h-6 rounded-t-4xl  z-10" />
-    </div>
+    <MobileImageCarouselWithBars
+      images={images}
+      tourTitle={tourTitle}
+    />
   );
 }
