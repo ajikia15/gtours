@@ -28,7 +28,7 @@ export default async function HomePage() {
       </h1>
       <Suspense
         fallback={
-          <div className="grid grid-cols-4 gap-4 p-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
             {Array.from({ length: 4 }, (_, index) => (
               <TourCardSkeleton key={`skeleton-${index}`} />
             ))}

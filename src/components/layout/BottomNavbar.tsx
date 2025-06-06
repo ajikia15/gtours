@@ -8,7 +8,7 @@ export default async function BottomNavbar() {
   const t = await getTranslations("Navbar");
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t shadow-lg backdrop-blur-md">
+    <div className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t shadow-xl">
       <div className="flex items-center justify-around py-3 px-4 safe-area-bottom">
         {/* Home */}
         <Link href="/" className="flex flex-col items-center">

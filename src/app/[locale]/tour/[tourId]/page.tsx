@@ -18,6 +18,7 @@ import TourSuggestions from "./tour-suggestions";
 import { isMobile } from "@/lib/isMobile";
 import { headers } from "next/headers";
 import { MobileImageSection } from "./mobile-image-section";
+import MobileTourBooker from "./mobile-tour-booker";
 export default async function TourPage({
   params,
 }: {
@@ -32,7 +33,7 @@ export default async function TourPage({
 
   // console.log(tour);
   return (
-    <div>
+    <div className="relative">
       {!mobile && (
         <Suspense fallback={<ImageSectionSkeleton />}>
           <ImageSection
@@ -89,6 +90,7 @@ export default async function TourPage({
           {/* <TourActivitiesSection activities={tour.offeredActivities} /> */}
         </div>
       </div>
+      {mobile && <MobileTourBooker tour={tour} />}
     </div>
   );
 }

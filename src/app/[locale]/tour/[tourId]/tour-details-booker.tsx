@@ -17,14 +17,19 @@ import { useCartChanges } from "@/hooks/use-cart-changes";
 
 import { Tour } from "@/types/Tour";
 
-export default function TourDetailsBooker({ tour }: { tour: Tour }) {
+export default function TourDetailsBooker({
+  tour,
+  collapseAble = true,
+}: {
+  tour: Tour;
+  collapseAble?: boolean;
+}) {
   // Hooks
   const booking = useBooking();
   const cart = useCart();
   const router = useRouter();
-
   // Local State
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(!collapseAble);
   const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
     new Set()
   );
@@ -157,16 +162,18 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
         initialState={initialState}
         onUpdateSuccess={resetInitialState}
       />
-      <Button
-        onClick={toggleExpanded}
-        variant="ghost"
-        className="w-full text-gray-500 hover:text-gray-700"
-        size="sm"
-      >
-        <ChevronUp className="size-4" />
-        {/* TODO maybe remove */}
-        Collapse
-      </Button>
+      {collapseAble && (
+        <Button
+          onClick={toggleExpanded}
+          variant="ghost"
+          className="w-full text-gray-500 hover:text-gray-700"
+          size="sm"
+        >
+          <ChevronUp className="size-4" />
+          {/* TODO maybe remove */}
+          Collapse
+        </Button>
+      )}
     </div>
   );
 
@@ -174,20 +181,19 @@ export default function TourDetailsBooker({ tour }: { tour: Tour }) {
     <>
       {/* Main Booking Section */}
       <div className="relative">
+        {" "}
         <div
           className={`
             transition-all duration-500 ease-in-out overflow-hidden
-            ${isExpanded ? "max-h-none" : "max-h-128"}
+            ${isExpanded || !collapseAble ? "max-h-none" : "max-h-128"}
           `}
         >
           {renderBookingContent()}
         </div>
-
-        {!isExpanded && renderCollapsedOverlay()}
-      </div>
-
+        {!isExpanded && collapseAble && renderCollapsedOverlay()}
+      </div>{" "}
       {/* Action Buttons */}
-      {isExpanded && renderActionButtons()}
+      {(isExpanded || !collapseAble) && renderActionButtons()}
     </>
   );
 }
