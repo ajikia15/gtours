@@ -109,7 +109,7 @@ export default function TourMapComponent({
 }: // tourTitle,
 TourMapSectionProps) {
   const locale = useLocale();
-  
+
   // Default center (Tbilisi, Georgia) if no coordinates provided
   const defaultCenter: LatLngExpression = [41.7151, 44.8271];
 
@@ -192,7 +192,8 @@ TourMapSectionProps) {
                     <h3 className="font-bold text-lg">
                       {activity.nameSnapshot}
                     </h3>
-                  </div>                  <p className="text-sm text-gray-600 mb-2">
+                  </div>{" "}
+                  <p className="text-sm text-gray-600 mb-2">
                     {getLocalizedActivityDescription(activity, locale)}
                   </p>
                   {activity.priceIncrement > 0 && (

@@ -18,11 +18,11 @@ type getToursOptions = {
 function migrateTourData(data: any): Partial<Tour> {
   // Helper function to migrate activity descriptions
   const migrateActivities = (activities: any[]) => {
-    return activities.map(activity => ({
+    return activities.map((activity) => ({
       ...activity,
       specificDescription: Array.isArray(activity.specificDescription)
         ? activity.specificDescription
-        : [activity.specificDescription || "", "", ""] // Convert old string to array
+        : [activity.specificDescription || "", "", ""], // Convert old string to array
     }));
   };
 

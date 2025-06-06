@@ -17,7 +17,10 @@ export const offeredActivitySchema = z.object({
   coordinates: coordinatesSchema,
   specificDescription: z
     .array(z.string().min(1, "Specific description is required"))
-    .length(3, "Specific description must have 3 language versions [EN, GE, RU]"),
+    .length(
+      3,
+      "Specific description must have 3 language versions [EN, GE, RU]"
+    ),
 });
 
 export const tourDataSchema = z.object({

@@ -58,7 +58,8 @@ export default function ActivityManager({ control, disabled = false }: Props) {
     const activityType = activityTypes.find(
       (at) => at.id === selectedActivityType
     );
-    if (!activityType) return;    append({
+    if (!activityType) return;
+    append({
       activityTypeId: selectedActivityType,
       nameSnapshot: activityType.name,
       priceIncrement: 0,
@@ -285,20 +286,23 @@ function ActivityFields({
             <FormMessage />
           </FormItem>
         )}
-      />      <FormField
+      />{" "}
+      <FormField
         control={control}
         name={`offeredActivities.${index}.specificDescription.0`}
         render={({ field }) => (
           <FormItem>
             <FormLabel>Specific Description (English)</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Tour-specific details in English..." />
+              <Input
+                {...field}
+                placeholder="Tour-specific details in English..."
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-
       <FormField
         control={control}
         name={`offeredActivities.${index}.specificDescription.1`}
@@ -306,13 +310,15 @@ function ActivityFields({
           <FormItem>
             <FormLabel>Specific Description (Georgian)</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Tour-specific details in Georgian..." />
+              <Input
+                {...field}
+                placeholder="Tour-specific details in Georgian..."
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-
       <FormField
         control={control}
         name={`offeredActivities.${index}.specificDescription.2`}
@@ -320,13 +326,15 @@ function ActivityFields({
           <FormItem>
             <FormLabel>Specific Description (Russian)</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Tour-specific details in Russian..." />
+              <Input
+                {...field}
+                placeholder="Tour-specific details in Russian..."
+              />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
-
       <FormField
         control={control}
         name={`offeredActivities.${index}.coordinates.0`}
@@ -351,7 +359,6 @@ function ActivityFields({
           </FormItem>
         )}
       />
-
       <FormField
         control={control}
         name={`offeredActivities.${index}.coordinates.1`}

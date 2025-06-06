@@ -2,8 +2,6 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import AuthButtons from "../auth-buttons";
 import NavLinks from "./NavLinks";
-import MobileNavbar from "./MobileNavbar";
-
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
   return (
@@ -28,9 +26,6 @@ export default async function Navbar() {
           <div className="hidden md:flex items-center space-x-4">
             <AuthButtons />
           </div>
-
-          {/* Mobile Navigation - Hidden on desktop */}
-          <MobileNavbar />
         </div>
       </div>
     </nav>

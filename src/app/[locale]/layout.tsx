@@ -11,6 +11,9 @@ import { BookingProvider } from "@/context/booking";
 import { Toaster } from "@/components/ui/sonner";
 import { roboto, notoSansGeorgian, openSans } from "./fonts";
 import { getLocale, getMessages } from "next-intl/server";
+import { headers } from "next/headers";
+import { isMobile } from "@/lib/isMobile";
+import MobileNavbar from "@/components/layout/MobileNavbar";
 
 export default async function LocaleLayout({
   children,
@@ -42,6 +45,9 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
 
+  const userAgent = (await headers()).get("user-agent") || "";
+  const mobile = isMobile(userAgent);
+
   return (
     <html lang={locale}>
       <body className={`${fontClassName} antialiased `}>
@@ -49,7 +55,8 @@ export default async function LocaleLayout({
           <AuthProvider>
             <CartProvider>
               <BookingProvider>
-                <Navbar />
+                {!mobile && <Navbar />}
+                {mobile && <MobileNavbar />}
                 <div className="container mx-auto mt-20">
                   {children}
                   <Toaster />

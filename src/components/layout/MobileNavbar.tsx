@@ -24,7 +24,10 @@ export default function MobileNavbar() {
   ];
 
   return (
-    <div className="md:hidden">
+    <div className="fixed top-0 inset-x-0 flex items-center justify-between bg-white w-full z-50 p-3">
+      <Link href="/" className="flex items-center space-x-2">
+        <span className="font-bold text-xl text-primary">{t("logo")}</span>
+      </Link>
       <Sheet>
         <SheetTrigger asChild>
           <Button
