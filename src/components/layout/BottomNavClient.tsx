@@ -5,7 +5,6 @@ import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
 import {
   UserCircleIcon,
-  GlobeIcon,
   ShoppingCartIcon,
   LogOutIcon,
   SettingsIcon,
@@ -22,39 +21,19 @@ import {
 } from "@/components/ui/drawer";
 import { useTranslations } from "next-intl";
 import { useCart } from "@/context/cart";
-import { useState, useEffect } from "react";
-import { Skeleton } from "@/components/ui/skeleton";
-import { useLocale, Locale } from "next-intl";
-import { useRouter, usePathname } from "@/i18n/navigation";
-import { routing } from "@/i18n/routing";
+import LocaleSwitcher from "./LocaleSwitcher";
 
 export default function BottomNavClient() {
   const auth = useAuth();
   const cart = useCart();
-  const [mounted, setMounted] = useState(false);
   const tAuth = useTranslations("Auth");
   const tNav = useTranslations("Navbar");
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Show skeleton loading state if not mounted yet
-  if (!mounted) {
-    return (
-      <>
-        <Skeleton className="h-14 w-14 rounded-xl" />
-        <Skeleton className="h-14 w-14 rounded-xl" />
-        <Skeleton className="h-14 w-14 rounded-xl" />
-      </>
-    );
-  }
 
   return (
     <>
       {/* Shopping Cart (if authenticated) */}
       {auth?.currentUser && (
-        <Link href="/cart" className="flex flex-col items-center">
+        <Link href="/account/cart" className="flex flex-col items-center">
           <Button
             variant="ghost"
             size="sm"
@@ -72,9 +51,7 @@ export default function BottomNavClient() {
       )}
 
       {/* Locale Switcher */}
-      <div className="flex flex-col items-center">
-        <LocaleSwitcherBottomNav />
-      </div>
+      <LocaleSwitcher variant="mobile" />
 
       {/* User Profile / Auth */}
       <div className="flex flex-col items-center">
@@ -97,85 +74,10 @@ export default function BottomNavClient() {
   );
 }
 
-// Locale switcher with drawer (similar to mobile navbar)
-function LocaleSwitcherBottomNav() {
-  const [languageDrawerOpen, setLanguageDrawerOpen] = useState(false);
-  const locale = useLocale();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const getLanguageName = (locale: string) => {
-    switch (locale) {
-      case "en":
-        return "English";
-      case "ge":
-        return "ქართული";
-      case "ru":
-        return "Русский";
-      default:
-        return locale.toUpperCase();
-    }
-  };
-
-  const handleLocaleChange = (nextLocale: string) => {
-    router.replace({ pathname }, { locale: nextLocale as Locale });
-    setLanguageDrawerOpen(false);
-  };
-
-  return (
-    <Drawer open={languageDrawerOpen} onOpenChange={setLanguageDrawerOpen}>
-      <DrawerTrigger asChild>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors"
-        >
-          <GlobeIcon className="h-6 w-6 mb-1" />
-          <span className="text-xs font-medium">Language</span>
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <div className="flex items-center gap-2">
-            <DrawerClose asChild>
-              <Button variant="ghost" size="icon">
-                <ArrowLeftIcon className="h-4 w-4" />
-              </Button>
-            </DrawerClose>
-            <DrawerTitle>Language / ენა / Язык</DrawerTitle>
-          </div>
-        </DrawerHeader>
-        <div className="px-4 pb-8">
-          <div className="flex flex-col space-y-2">
-            {routing.locales.map((loc: string) => {
-              const isActive = locale === loc;
-              return (
-                <Button
-                  key={loc}
-                  variant={isActive ? "secondary" : "ghost"}
-                  className="w-full justify-start text-left"
-                  onClick={() => handleLocaleChange(loc)}
-                  size="lg"
-                >
-                  <span className="mr-3 text-lg">{loc.toUpperCase()}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {getLanguageName(loc)}
-                  </span>
-                </Button>
-              );
-            })}
-          </div>
-        </div>
-      </DrawerContent>
-    </Drawer>
-  );
-}
-
 // User drawer for bottom nav (similar to mobile navbar)
 function UserDrawerBottomNav() {
   const auth = useAuth();
   const t = useTranslations("Auth");
-  const [userDrawerOpen, setUserDrawerOpen] = useState(false);
 
   if (!auth?.currentUser) return null;
 
@@ -184,12 +86,11 @@ function UserDrawerBottomNav() {
       if (action) {
         await action();
       }
-      setUserDrawerOpen(false);
     };
   };
 
   return (
-    <Drawer open={userDrawerOpen} onOpenChange={setUserDrawerOpen}>
+    <Drawer>
       <DrawerTrigger asChild>
         <Button
           variant="ghost"
@@ -228,12 +129,7 @@ function UserDrawerBottomNav() {
 
             {/* Menu Items */}
             <div className="flex flex-col space-y-2">
-              <Link
-                href="/account"
-                onClick={() => {
-                  setUserDrawerOpen(false);
-                }}
-              >
+              <Link href="/account">
                 <Button
                   variant="ghost"
                   className="w-full justify-start"
@@ -245,12 +141,7 @@ function UserDrawerBottomNav() {
               </Link>
 
               {auth.customClaims?.admin ? (
-                <Link
-                  href="/admin"
-                  onClick={() => {
-                    setUserDrawerOpen(false);
-                  }}
-                >
+                <Link href="/admin">
                   <Button
                     variant="ghost"
                     className="w-full justify-start"
@@ -261,12 +152,7 @@ function UserDrawerBottomNav() {
                   </Button>
                 </Link>
               ) : (
-                <Link
-                  href="/account/my-favourites"
-                  onClick={() => {
-                    setUserDrawerOpen(false);
-                  }}
-                >
+                <Link href="/account/my-favourites">
                   <Button
                     variant="ghost"
                     className="w-full justify-start"

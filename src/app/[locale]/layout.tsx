@@ -62,7 +62,7 @@ export default async function LocaleLayout({
                   <Toaster />
                   <Footer />
                 </div>
-                <BottomNavigation />
+                {mobile && <BottomNavigation />}
               </BookingProvider>
             </CartProvider>
           </AuthProvider>
