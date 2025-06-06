@@ -80,6 +80,7 @@ export default function ActivityDisplay({
   };
 
   return (
+    // TODO https://platejs.org/docs/multi-select
     <div className="space-y-3">
       <div className={`flex flex-wrap ${config.wrapper}`}>
         {activities.map((activity) => {

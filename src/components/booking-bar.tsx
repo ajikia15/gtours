@@ -158,7 +158,7 @@ export default function BookingBar({
 
         const result = await addToCart({
           tourId: selectedTour.id,
-          tourTitle: selectedTour.title,
+          tourTitle: selectedTour.title[0], // TODO
           tourBasePrice: selectedTour.basePrice,
           tourImages: selectedTour.images,
           selectedDate: selectedDate!,
