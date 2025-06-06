@@ -3,7 +3,10 @@ import { Tour } from "@/types/Tour";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
-import { getLocalizedTitle, getLocalizedDescription } from "@/lib/localizationHelpers";
+import {
+  getLocalizedTitle,
+  getLocalizedDescription,
+} from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { getLocale } from "next-intl/server";
@@ -23,7 +26,8 @@ export default async function TourCard({
         href={`/tour/${tour.id}`}
         className="aspect-square w-full relative cursor-pointer"
       >
-        {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}        {tour.images && (
+        {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
+        {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}
             alt={tour.title[0]}

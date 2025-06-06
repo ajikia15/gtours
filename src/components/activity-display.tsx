@@ -1,8 +1,9 @@
 "use client";
 
 import { OfferedActivity } from "@/types/Activity";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { getActivityIcon } from "@/lib/imageHelpers";
+import { getLocalizedActivityDescription } from "@/lib/localizationHelpers";
 import {
   Tooltip,
   TooltipContent,
@@ -30,6 +31,7 @@ export default function ActivityDisplay({
   disableTooltips = false,
 }: ActivityDisplayProps) {
   const quickCategory = useTranslations("QuickCategory");
+  const locale = useLocale();
 
   // Convert selectedActivities to Set if it's an array
   const selectedSet = Array.isArray(selectedActivities)
@@ -124,7 +126,7 @@ export default function ActivityDisplay({
               <Tooltip>
                 <TooltipTrigger asChild>{activityButton}</TooltipTrigger>
                 <TooltipContent>
-                  <p>{activity.specificDescription}</p>
+                  <p>{getLocalizedActivityDescription(activity, locale)}</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>

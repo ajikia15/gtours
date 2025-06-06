@@ -12,7 +12,7 @@ import { getLocale } from "next-intl/server";
 
 export default async function ShortTourCard({ tour }: { tour: Tour }) {
   const locale = await getLocale();
-  
+
   return (
     <div className="flex flex-col h-full border border-gray-300 shadow-xs rounded-xl">
       <Link
@@ -31,18 +31,21 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
       </Link>
       <div className="flex flex-col gap-2 px-4 py-3">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold">{getLocalizedTitle(tour, locale)}</h3>
+          <h3 className="text-lg font-bold">
+            {getLocalizedTitle(tour, locale)}
+          </h3>
           <p className=" font-bold text-brand-secondary">₾{tour.basePrice}</p>
         </div>
         <div className="text-sm text-gray-500 flex items-center gap-1">
-          <MapPinIcon size={14} /> {getLocalizedTitle(tour, locale)}, საკარტველოუ
+          <MapPinIcon size={14} /> {getLocalizedTitle(tour, locale)},
+          საკარტველოუ
         </div>
         {/* <Link
           href={`/tour/${tour.id}`}
           className="w-fit font-bold hover:underline"
         >
           View Tour
-        </Link> */}{" "}
+        </Link> */}
         <div className="flex gap-2 mt-2 mb-2">
           <BookNowButton tour={tour} />
           <AddToCartButton tour={tour} variant="ghost" text={false} />

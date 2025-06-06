@@ -12,6 +12,8 @@ import Image from "next/image";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { getActivityIcon } from "@/lib/imageHelpers";
+import { getLocalizedActivityDescription } from "@/lib/localizationHelpers";
+import { useLocale } from "next-intl";
 
 // Fix for default markers
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -106,6 +108,8 @@ export default function TourMapComponent({
   activities,
 }: // tourTitle,
 TourMapSectionProps) {
+  const locale = useLocale();
+  
   // Default center (Tbilisi, Georgia) if no coordinates provided
   const defaultCenter: LatLngExpression = [41.7151, 44.8271];
 
@@ -188,9 +192,8 @@ TourMapSectionProps) {
                     <h3 className="font-bold text-lg">
                       {activity.nameSnapshot}
                     </h3>
-                  </div>
-                  <p className="text-sm text-gray-600 mb-2">
-                    {activity.specificDescription}
+                  </div>                  <p className="text-sm text-gray-600 mb-2">
+                    {getLocalizedActivityDescription(activity, locale)}
                   </p>
                   {activity.priceIncrement > 0 && (
                     <p className="text-sm font-semibold text-green-600">

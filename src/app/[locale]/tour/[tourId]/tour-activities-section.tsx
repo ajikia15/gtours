@@ -1,5 +1,5 @@
 import { OfferedActivity } from "@/types/Activity";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import {
   Accordion,
   AccordionContent,
@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { getActivityIcon } from "@/lib/imageHelpers";
+import { getLocalizedActivityDescription } from "@/lib/localizationHelpers";
 
 export default function TourActivitiesSection({
   activities,
@@ -14,6 +15,7 @@ export default function TourActivitiesSection({
   activities: OfferedActivity[];
 }) {
   const quickCategory = useTranslations("QuickCategory");
+  const locale = useLocale();
   return (
     <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-sm min-w-84 border border-gray-100 w-full mt-4">
       <h2 className="text-xl font-bold text-center">Activities</h2>
@@ -31,7 +33,7 @@ export default function TourActivitiesSection({
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                {activity.specificDescription}
+                {getLocalizedActivityDescription(activity, locale)}
               </AccordionContent>
             </AccordionItem>
           ))}

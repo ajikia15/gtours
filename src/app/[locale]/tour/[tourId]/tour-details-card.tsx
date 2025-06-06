@@ -9,7 +9,7 @@ import { getLocale } from "next-intl/server";
 
 export default async function TourDetailsCard({ tour }: { tour: Tour }) {
   const locale = await getLocale();
-  
+
   return (
     <div className="flex flex-col gap-4 px-6 pb-6 pt-3 bg-white rounded-xl shadow-sm w-full min-w-84 border border-gray-100">
       <h3 className="text-lg font-semibold ">Tour Details</h3>

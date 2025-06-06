@@ -16,6 +16,16 @@ type getToursOptions = {
 
 // Helper function to migrate old tour data structure to new array structure
 function migrateTourData(data: any): Partial<Tour> {
+  // Helper function to migrate activity descriptions
+  const migrateActivities = (activities: any[]) => {
+    return activities.map(activity => ({
+      ...activity,
+      specificDescription: Array.isArray(activity.specificDescription)
+        ? activity.specificDescription
+        : [activity.specificDescription || "", "", ""] // Convert old string to array
+    }));
+  };
+
   // Check if data is already in new format (arrays)
   if (Array.isArray(data?.title)) {
     return {
@@ -29,26 +39,26 @@ function migrateTourData(data: any): Partial<Tour> {
       coordinates: data.coordinates || undefined,
       status: data.status || "draft",
       images: data.images || [],
-      offeredActivities: data.offeredActivities || [],
+      offeredActivities: migrateActivities(data.offeredActivities || []),
     };
   }
-  
+
   // Convert old format to new format
   return {
     title: [
       data?.title || data?.titleEN || "",
       data?.titleGE || "",
-      data?.titleRU || ""
+      data?.titleRU || "",
     ],
     subtitle: [
       data?.subtitleEN || "",
       data?.subtitleGE || "",
-      data?.subtitleRU || ""
+      data?.subtitleRU || "",
     ],
     description: [
       data?.descriptionEN || "",
       data?.descriptionGE || "",
-      data?.descriptionRU || ""
+      data?.descriptionRU || "",
     ],
     basePrice: data?.basePrice || 0,
     duration: data?.duration || 0,
@@ -57,7 +67,7 @@ function migrateTourData(data: any): Partial<Tour> {
     coordinates: data?.coordinates || undefined,
     status: data?.status || "draft",
     images: data?.images || [],
-    offeredActivities: data?.offeredActivities || [],
+    offeredActivities: migrateActivities(data?.offeredActivities || []),
   };
 }
 
@@ -97,7 +107,7 @@ export async function getTourById(tourId: string) {
   const tourData = tour.data();
 
   const migratedData = migrateTourData(tourData);
-  
+
   // Create a clean, serializable version of the tour data
   const serializedTour = {
     id: tour.id,

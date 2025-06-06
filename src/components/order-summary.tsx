@@ -102,7 +102,7 @@ export default function OrderSummary({
                 {cart.items.reduce(
                   (sum, item) => sum + (item.tourBasePrice || 0),
                   0
-                )}{" "}
+                )}
                 GEL
               </span>
             </div>
@@ -120,14 +120,14 @@ export default function OrderSummary({
             {/* Amount of tourists */}
             <div className="flex justify-between text-sm">
               <span>
-                <span className="font-bold">Tourists</span> -{" "}
+                <span className="font-bold">Tourists</span> -
                 {(travelers?.adults ?? 0) +
                   (travelers?.children ?? 0) +
                   (travelers?.infants ?? 0)}
               </span>
               <span>
                 +
-                {cart.items.reduce((sum, item) => sum + (item.carCost || 0), 0)}{" "}
+                {cart.items.reduce((sum, item) => sum + (item.carCost || 0), 0)}
                 GEL
               </span>
             </div>
@@ -135,7 +135,7 @@ export default function OrderSummary({
             {/* Amount of activities */}
             <div className="flex justify-between text-sm">
               <span>
-                <span className="font-bold">Activities</span> -{" "}
+                <span className="font-bold">Activities</span> -
                 {cart.items.reduce(
                   (total, item) =>
                     total + (item.selectedActivities?.length || 0),
@@ -147,7 +147,7 @@ export default function OrderSummary({
                 {cart.items.reduce(
                   (sum, item) => sum + (item.activityPriceIncrement || 0),
                   0
-                )}{" "}
+                )}
                 GEL
               </span>
             </div>
@@ -226,7 +226,7 @@ export default function OrderSummary({
       {/* Help Text */}
       <div className="mt-4 pt-4 border-t">
         <p className="text-xs text-gray-500 text-center">
-          Need help?{" "}
+          Need help?
           <Link
             href="/contact"
             className="font-semibold text-red-600 hover:underline"

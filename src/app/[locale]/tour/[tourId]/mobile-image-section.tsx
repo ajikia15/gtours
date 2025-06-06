@@ -113,7 +113,7 @@ export const MobileImageSection: React.FC<MobileImageSectionProps> = ({
         >
           <ChevronRight className="h-5 w-5 text-gray-800" />
         </button>
-      )}{" "}
+      )}
       {/* Bottom overlay with thin bars */}
       <div className="absolute bottom-0 inset-x-0 bg-white h-6 rounded-t-4xl z-10 flex justify-center items-center w-full">
         {showNavigation ? (

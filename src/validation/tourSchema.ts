@@ -15,13 +15,21 @@ export const offeredActivitySchema = z.object({
   nameSnapshot: z.string().min(1, "Activity name snapshot is required"),
   priceIncrement: z.coerce.number().min(0),
   coordinates: coordinatesSchema,
-  specificDescription: z.string().min(1, "Specific description is required"),
+  specificDescription: z
+    .array(z.string().min(1, "Specific description is required"))
+    .length(3, "Specific description must have 3 language versions [EN, GE, RU]"),
 });
 
 export const tourDataSchema = z.object({
-  title: z.array(z.string().min(1, "Title is required")).length(3, "Title must have 3 language versions [EN, GE, RU]"),
-  subtitle: z.array(z.string().min(1, "Subtitle is required")).length(3, "Subtitle must have 3 language versions [EN, GE, RU]"),
-  description: z.array(z.string().min(1, "Description is required")).length(3, "Description must have 3 language versions [EN, GE, RU]"),
+  title: z
+    .array(z.string().min(1, "Title is required"))
+    .length(3, "Title must have 3 language versions [EN, GE, RU]"),
+  subtitle: z
+    .array(z.string().min(1, "Subtitle is required"))
+    .length(3, "Subtitle must have 3 language versions [EN, GE, RU]"),
+  description: z
+    .array(z.string().min(1, "Description is required"))
+    .length(3, "Description must have 3 language versions [EN, GE, RU]"),
   basePrice: z.coerce.number().min(1, "Base price is required"),
   duration: z.coerce
     .number()

@@ -58,14 +58,12 @@ export default function ActivityManager({ control, disabled = false }: Props) {
     const activityType = activityTypes.find(
       (at) => at.id === selectedActivityType
     );
-    if (!activityType) return;
-
-    append({
+    if (!activityType) return;    append({
       activityTypeId: selectedActivityType,
       nameSnapshot: activityType.name,
       priceIncrement: 0,
       coordinates: [0, 0] as [number, number],
-      specificDescription: "",
+      specificDescription: ["", "", ""], // [EN, GE, RU]
     });
 
     setSelectedActivityType("");
@@ -287,16 +285,42 @@ function ActivityFields({
             <FormMessage />
           </FormItem>
         )}
+      />      <FormField
+        control={control}
+        name={`offeredActivities.${index}.specificDescription.0`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Specific Description (English)</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Tour-specific details in English..." />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
       />
 
       <FormField
         control={control}
-        name={`offeredActivities.${index}.specificDescription`}
+        name={`offeredActivities.${index}.specificDescription.1`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Specific Description</FormLabel>
+            <FormLabel>Specific Description (Georgian)</FormLabel>
             <FormControl>
-              <Input {...field} placeholder="Tour-specific details..." />
+              <Input {...field} placeholder="Tour-specific details in Georgian..." />
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        )}
+      />
+
+      <FormField
+        control={control}
+        name={`offeredActivities.${index}.specificDescription.2`}
+        render={({ field }) => (
+          <FormItem>
+            <FormLabel>Specific Description (Russian)</FormLabel>
+            <FormControl>
+              <Input {...field} placeholder="Tour-specific details in Russian..." />
             </FormControl>
             <FormMessage />
           </FormItem>

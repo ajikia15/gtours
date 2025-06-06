@@ -62,7 +62,8 @@ export default async function ToursTable({
               <TableHead>{t("table.actions")}</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>            {data.map((tour) => (
+          <TableBody>
+            {data.map((tour) => (
               <TableRow key={tour.id}>
                 <TableCell>{getLocalizedTitle(tour, locale)}</TableCell>
                 <TableCell>

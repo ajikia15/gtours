@@ -26,7 +26,8 @@ export default async function EditTour({
         <CardHeader>
           <CardTitle>Edit Tour - {getLocalizedTitle(tour, locale)}</CardTitle>
         </CardHeader>
-        <CardContent>          <EditTourForm
+        <CardContent>
+          <EditTourForm
             id={tour.id}
             title={tour.title}
             subtitle={tour.subtitle}

@@ -88,16 +88,22 @@ export default function BookingPageClient({
       </div>
 
       <div className="container mx-auto py-8 space-y-8">
-        <div className="text-center space-y-4">          <h1 className="text-3xl font-bold">
+        <div className="text-center space-y-4">
+          <h1 className="text-3xl font-bold">
             {preselectedTour
               ? `Book ${getLocalizedTitle(preselectedTour, locale)}`
               : "Create New Booking"}
-          </h1>          <p className="text-gray-600 max-w-2xl mx-auto">
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
             {preselectedTour
-              ? `Complete your booking for ${getLocalizedTitle(preselectedTour, locale)}. Select your activities, date, and travelers.`
+              ? `Complete your booking for ${getLocalizedTitle(
+                  preselectedTour,
+                  locale
+                )}. Select your activities, date, and travelers.`
               : "Select your tour, activities, date, and travelers to create a new booking. You can choose between the full interface or compact popover mode."}
           </p>
-          {preselectedTour && (            <Badge variant="secondary" className="text-sm">
+          {preselectedTour && (
+            <Badge variant="secondary" className="text-sm">
               Tour preselected: {getLocalizedTitle(preselectedTour, locale)}
             </Badge>
           )}

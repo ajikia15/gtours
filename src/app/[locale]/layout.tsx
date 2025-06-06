@@ -49,7 +49,6 @@ export default async function LocaleLayout({
           <AuthProvider>
             <CartProvider>
               <BookingProvider>
-                {" "}
                 <Navbar />
                 <div className="container mx-auto mt-20">
                   {children}

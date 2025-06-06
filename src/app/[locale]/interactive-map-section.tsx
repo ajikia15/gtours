@@ -103,7 +103,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                 <>
                   <div className="p-3 border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-750 mb-4 flex items-center w-full justify-between text-sm text-gray-700 dark:text-gray-300">
                     <span>
-                      {t("coordinates")}: {testMarkerCoords[1].toFixed(4)},{" "}
+                      {t("coordinates")}: {testMarkerCoords[1].toFixed(4)},
                       {testMarkerCoords[0].toFixed(4)}
                     </span>
                     <button

@@ -131,7 +131,6 @@ export default function CheckoutClient({
 
   return (
     <div className="max-w-screen-lg mx-auto space-y-6">
-      {" "}
       <div className="flex items-center gap-2 mb-6">
         <ShoppingCartIcon className="h-6 w-6" />
         <h1 className="text-2xl font-bold">
@@ -268,7 +267,7 @@ export default function CheckoutClient({
               </CardContent>
             </Card>
           </div>
-        </div>{" "}
+        </div>
         {/* Right Column - Order Summary */}
         <div className="lg:col-span-1">
           <OrderSummary

@@ -96,7 +96,7 @@ export default function TravelerSelection({
       <div className="py-2 border-t border-gray-200">
         <p className="text-xs text-gray-600">
           <span className="font-semibold">
-            {travelers.adults + travelers.children + travelers.infants}{" "}
+            {travelers.adults + travelers.children + travelers.infants}
           </span>
           travelers
         </p>

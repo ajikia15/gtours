@@ -8,7 +8,10 @@ import TextSection from "./text-section";
 
 import TourDetailsCard from "./tour-details-card";
 import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
-import { getLocalizedTitle, getLocalizedDescription } from "@/lib/localizationHelpers";
+import {
+  getLocalizedTitle,
+  getLocalizedDescription,
+} from "@/lib/localizationHelpers";
 import { getLocale } from "next-intl/server";
 import TourMapSection from "@/components/map/tour-map-section";
 import TourSuggestions from "./tour-suggestions";
@@ -30,7 +33,8 @@ export default async function TourPage({
   // console.log(tour);
   return (
     <div>
-      {!mobile && (        <Suspense fallback={<ImageSectionSkeleton />}>
+      {!mobile && (
+        <Suspense fallback={<ImageSectionSkeleton />}>
           <ImageSection
             images={tour.images}
             tourId={tourId}
@@ -41,7 +45,10 @@ export default async function TourPage({
       {mobile && (
         <div className="flex flex-col gap-4 my-2  md:my-10">
           <Suspense fallback={<ImageSectionSkeleton />}>
-            <MobileImageSection images={tour.images} tourTitle={tour.title[0]} />
+            <MobileImageSection
+              images={tour.images}
+              tourTitle={tour.title[0]}
+            />
           </Suspense>
         </div>
       )}

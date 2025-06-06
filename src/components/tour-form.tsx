@@ -79,7 +79,8 @@ export default function TourForm({
             <p className="text-sm text-gray-500">
               {t("sections.basicInformationDesc")}
             </p>
-          </div>          {/* Title Fields */}
+          </div>
+          {/* Title Fields */}
           <div className="space-y-4">
             <FormField
               control={form.control}
@@ -130,7 +131,6 @@ export default function TourForm({
               )}
             />
           </div>
-
           {/* Subtitle Fields */}
           <div className="space-y-4">
             <FormField
@@ -182,7 +182,6 @@ export default function TourForm({
               )}
             />
           </div>
-
           {/* Description Fields */}
           <div className="space-y-4">
             <FormField
@@ -408,7 +407,7 @@ export default function TourForm({
             <div className="flex items-start">
               <div className="text-blue-500 mr-2">💡</div>
               <div className="text-sm text-blue-700">
-                <strong>{t("help.coordinatesTip")}</strong>{" "}
+                <strong>{t("help.coordinatesTip")}</strong>
                 {t("help.coordinatesDesc")}
               </div>
             </div>

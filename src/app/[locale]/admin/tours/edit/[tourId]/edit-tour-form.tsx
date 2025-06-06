@@ -80,7 +80,8 @@ export default function EditTourForm({
             <PencilIcon className="size-4" />
             Update Tour
           </>
-        }        defaultValues={{
+        }
+        defaultValues={{
           title,
           subtitle,
           description,
@@ -98,8 +99,7 @@ export default function EditTourForm({
           images: images.map((image) => ({
             id: image,
             url: image,
-          })),
-          offeredActivities: offeredActivities.map((activity) => ({
+          })),          offeredActivities: offeredActivities.map((activity) => ({
             activityTypeId: activity.activityTypeId,
             nameSnapshot: activity.nameSnapshot,
             priceIncrement: activity.priceIncrement,
@@ -109,7 +109,9 @@ export default function EditTourForm({
                 (activity as any).latitude || 0,
                 (activity as any).longitude || 0,
               ] as [number, number]),
-            specificDescription: activity.specificDescription || "",
+            specificDescription: Array.isArray(activity.specificDescription)
+              ? activity.specificDescription
+              : [activity.specificDescription || "", "", ""], // Convert old format to new
           })),
         }}
       />

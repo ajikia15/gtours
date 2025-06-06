@@ -49,7 +49,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
       <div className="text-center space-y-4">
         <div className="flex items-center justify-center">
           <CheckCircleIcon className="h-16 w-16 text-green-500" />
-        </div>{" "}
+        </div>
         <h1 className="text-3xl font-bold">Order Completed!</h1>
         <p className="text-gray-600">
           Your invoice has been generated and is ready for download. We&apos;ve
@@ -69,7 +69,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
             <span>Order Details</span>
             <Badge variant="default">completed</Badge>
           </CardTitle>
-        </CardHeader>{" "}
+        </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -83,7 +83,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
             <div>
               <p className="text-sm text-gray-600">Customer</p>
               <p className="font-semibold">{invoice.data?.customer?.name}</p>
-            </div>{" "}
+            </div>
             <div>
               <p className="text-sm text-gray-600">Expected Guest Date</p>
               <p className="font-semibold">
@@ -93,7 +93,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
             <div>
               <p className="text-sm text-gray-600">Total Amount</p>
               <p className="font-semibold">
-                {invoice.data?.summary?.totalPrice}{" "}
+                {invoice.data?.summary?.totalPrice}
                 {invoice.data?.summary?.currency}
               </p>
             </div>
@@ -111,7 +111,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
             </a>
           </div>
         </CardContent>
-      </Card>{" "}
+      </Card>
       {invoice.data?.tourDetails && invoice.data.tourDetails.length > 0 && (
         <Card>
           <CardHeader>
@@ -119,7 +119,6 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {" "}
               {invoice.data.tourDetails.map(
                 (
                   tour: {
