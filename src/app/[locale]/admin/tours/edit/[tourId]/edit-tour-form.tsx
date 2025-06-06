@@ -20,9 +20,8 @@ type Props = Tour;
 export default function EditTourForm({
   id,
   title,
-  descriptionEN,
-  descriptionGE,
-  descriptionRU,
+  subtitle,
+  description,
   basePrice,
   duration,
   leaveTime,
@@ -81,12 +80,10 @@ export default function EditTourForm({
             <PencilIcon className="size-4" />
             Update Tour
           </>
-        }
-        defaultValues={{
+        }        defaultValues={{
           title,
-          descriptionEN,
-          descriptionGE,
-          descriptionRU,
+          subtitle,
+          description,
           basePrice,
           duration,
           leaveTime,

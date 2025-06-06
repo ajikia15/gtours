@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "@/i18n/navigation";
+import { getLocalizedTitle } from "@/lib/localizationHelpers";
+import { useLocale } from "next-intl";
 
 import { ShoppingCart, Plus } from "lucide-react";
 
@@ -21,6 +23,7 @@ export default function BookingPageClient({
 }: BookingPageClientProps) {
   const [showQuickBooking, setShowQuickBooking] = useState(false);
   const router = useRouter();
+  const locale = useLocale();
 
   const handleSuccess = () => {
     // Redirect to cart after successful booking
@@ -85,20 +88,17 @@ export default function BookingPageClient({
       </div>
 
       <div className="container mx-auto py-8 space-y-8">
-        <div className="text-center space-y-4">
-          <h1 className="text-3xl font-bold">
+        <div className="text-center space-y-4">          <h1 className="text-3xl font-bold">
             {preselectedTour
-              ? `Book ${preselectedTour.title}`
+              ? `Book ${getLocalizedTitle(preselectedTour, locale)}`
               : "Create New Booking"}
-          </h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+          </h1>          <p className="text-gray-600 max-w-2xl mx-auto">
             {preselectedTour
-              ? `Complete your booking for ${preselectedTour.title}. Select your activities, date, and travelers.`
+              ? `Complete your booking for ${getLocalizedTitle(preselectedTour, locale)}. Select your activities, date, and travelers.`
               : "Select your tour, activities, date, and travelers to create a new booking. You can choose between the full interface or compact popover mode."}
           </p>
-          {preselectedTour && (
-            <Badge variant="secondary" className="text-sm">
-              Tour preselected: {preselectedTour.title}
+          {preselectedTour && (            <Badge variant="secondary" className="text-sm">
+              Tour preselected: {getLocalizedTitle(preselectedTour, locale)}
             </Badge>
           )}
         </div>

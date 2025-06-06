@@ -3,10 +3,9 @@ import { OfferedActivity } from "./Activity";
 
 export type Tour = {
   id: string;
-  title: string;
-  descriptionEN: string;
-  descriptionGE: string;
-  descriptionRU: string;
+  title: string[]; // [EN, GE, RU]
+  subtitle: string[]; // [EN, GE, RU]
+  description: string[]; // [EN, GE, RU]
   basePrice: number;
   duration: number;
   leaveTime: string;

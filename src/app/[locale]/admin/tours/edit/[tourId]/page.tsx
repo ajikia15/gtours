@@ -2,6 +2,8 @@ import { Breadcrumbs } from "@/components/ui/breadcrumb";
 import EditTourForm from "./edit-tour-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getTourById } from "@/data/tours";
+import { getLocalizedTitle } from "@/lib/localizationHelpers";
+import { getLocale } from "next-intl/server";
 export default async function EditTour({
   params,
 }: {
@@ -9,6 +11,7 @@ export default async function EditTour({
 }) {
   const { tourId } = await params;
   const tour = await getTourById(tourId);
+  const locale = await getLocale();
   return (
     <div className="max-w-xl mx-auto mt-5">
       <Breadcrumbs
@@ -21,15 +24,13 @@ export default async function EditTour({
 
       <Card className="mt-5">
         <CardHeader>
-          <CardTitle>Edit Tour - {tour.title}</CardTitle>
+          <CardTitle>Edit Tour - {getLocalizedTitle(tour, locale)}</CardTitle>
         </CardHeader>
-        <CardContent>
-          <EditTourForm
+        <CardContent>          <EditTourForm
             id={tour.id}
             title={tour.title}
-            descriptionEN={tour.descriptionEN}
-            descriptionGE={tour.descriptionGE}
-            descriptionRU={tour.descriptionRU}
+            subtitle={tour.subtitle}
+            description={tour.description}
             basePrice={tour.basePrice}
             duration={tour.duration}
             leaveTime={tour.leaveTime}

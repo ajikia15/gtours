@@ -8,7 +8,7 @@ import TextSection from "./text-section";
 
 import TourDetailsCard from "./tour-details-card";
 import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
-import { getLocalizedDescription } from "@/lib/localizationHelpers";
+import { getLocalizedTitle, getLocalizedDescription } from "@/lib/localizationHelpers";
 import { getLocale } from "next-intl/server";
 import TourMapSection from "@/components/map/tour-map-section";
 import TourSuggestions from "./tour-suggestions";
@@ -30,19 +30,18 @@ export default async function TourPage({
   // console.log(tour);
   return (
     <div>
-      {!mobile && (
-        <Suspense fallback={<ImageSectionSkeleton />}>
+      {!mobile && (        <Suspense fallback={<ImageSectionSkeleton />}>
           <ImageSection
             images={tour.images}
             tourId={tourId}
-            tourTitle={tour.title}
+            tourTitle={tour.title[0]}
           />
         </Suspense>
       )}
       {mobile && (
         <div className="flex flex-col gap-4 my-2  md:my-10">
           <Suspense fallback={<ImageSectionSkeleton />}>
-            <MobileImageSection images={tour.images} tourTitle={tour.title} />
+            <MobileImageSection images={tour.images} tourTitle={tour.title[0]} />
           </Suspense>
         </div>
       )}
@@ -51,10 +50,10 @@ export default async function TourPage({
         <div className="flex flex-col gap-4 md:gap-8 h-full w-full">
           <div className="md:hidden">
             <h1 className="text-3xl text-center mb-1 font-bold text-gray-900">
-              {tour.title}
+              {getLocalizedTitle(tour, locale)}
             </h1>
             <h3 className="text-xl text-center text-gray-700 mb-1">
-              Explore wonders of {tour.title}
+              Explore wonders of {getLocalizedTitle(tour, locale)}
             </h3>
             <div className="w-full mt-8 mb-2 h-px bg-gray-300"></div>
           </div>
@@ -68,7 +67,7 @@ export default async function TourPage({
             <TourMapSection
               tourCoordinates={tour.coordinates}
               activities={tour.offeredActivities}
-              tourTitle={tour.title}
+              tourTitle={tour.title[0]}
             />
           </div>
           <TourSuggestions />

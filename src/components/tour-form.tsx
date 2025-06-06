@@ -42,13 +42,11 @@ export default function TourForm({
   defaultValues,
 }: Props) {
   const t = useTranslations("Admin.tourForm");
-
   const combinedDefaultValues: z.infer<typeof tourSchema> = {
     ...defaultValues,
-    title: defaultValues?.title || "",
-    descriptionEN: defaultValues?.descriptionEN || "",
-    descriptionGE: defaultValues?.descriptionGE || "",
-    descriptionRU: defaultValues?.descriptionRU || "",
+    title: defaultValues?.title || ["", "", ""], // [EN, GE, RU]
+    subtitle: defaultValues?.subtitle || ["", "", ""], // [EN, GE, RU]
+    description: defaultValues?.description || ["", "", ""], // [EN, GE, RU]
     basePrice: defaultValues?.basePrice || 0,
     duration: defaultValues?.duration || 0,
     leaveTime: defaultValues?.leaveTime || "",
@@ -81,29 +79,115 @@ export default function TourForm({
             <p className="text-sm text-gray-500">
               {t("sections.basicInformationDesc")}
             </p>
-          </div>
-
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>{t("fields.tourTitle")}</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder={t("fields.tourTitlePlaceholder")}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <div className="grid grid-cols-1 gap-4">
+          </div>          {/* Title Fields */}
+          <div className="space-y-4">
             <FormField
               control={form.control}
-              name="descriptionEN"
+              name="title.0"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fields.tourTitleEN")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t("fields.tourTitleENPlaceholder")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title.1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fields.tourTitleGE")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t("fields.tourTitleGEPlaceholder")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="title.2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fields.tourTitleRU")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t("fields.tourTitleRUPlaceholder")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Subtitle Fields */}
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="subtitle.0"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fields.subtitleEN")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t("fields.subtitleENPlaceholder")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subtitle.1"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fields.subtitleGE")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t("fields.subtitleGEPlaceholder")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="subtitle.2"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>{t("fields.subtitleRU")}</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      placeholder={t("fields.subtitleRUPlaceholder")}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
+          {/* Description Fields */}
+          <div className="space-y-4">
+            <FormField
+              control={form.control}
+              name="description.0"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.descriptionEN")}</FormLabel>
@@ -120,7 +204,7 @@ export default function TourForm({
             />
             <FormField
               control={form.control}
-              name="descriptionGE"
+              name="description.1"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.descriptionGE")}</FormLabel>
@@ -137,7 +221,7 @@ export default function TourForm({
             />
             <FormField
               control={form.control}
-              name="descriptionRU"
+              name="description.2"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.descriptionRU")}</FormLabel>

@@ -347,10 +347,9 @@ export const BookingProvider = ({
       return { success: false, message: errorMessage };
     }
 
-    try {
-      const result = await addToCart({
+    try {      const result = await addToCart({
         tourId: tour.id,
-        tourTitle: tour.title,
+        tourTitle: tour.title[0], // Use English title for cart
         tourBasePrice: tour.basePrice,
         tourImages: tour.images,
         selectedDate: booking.selectedDate,
@@ -393,10 +392,9 @@ export const BookingProvider = ({
       return { success: false, message: "User not authenticated" };
     }
 
-    try {
-      const result = await addToCart({
+    try {      const result = await addToCart({
         tourId: tour.id,
-        tourTitle: tour.title,
+        tourTitle: tour.title[0], // Use English title for cart
         tourBasePrice: tour.basePrice,
         tourImages: tour.images,
         selectedDate: sharedState.selectedDate,

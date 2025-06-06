@@ -3,12 +3,16 @@ import { Tour } from "@/types/Tour";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
+import { getLocalizedTitle } from "@/lib/localizationHelpers";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { MapPinIcon } from "lucide-react";
 import BookNowButton from "./book-now-button";
 import AddToCartButton from "./add-to-cart-button";
+import { getLocale } from "next-intl/server";
 
 export default async function ShortTourCard({ tour }: { tour: Tour }) {
+  const locale = await getLocale();
+  
   return (
     <div className="flex flex-col h-full border border-gray-300 shadow-xs rounded-xl">
       <Link
@@ -19,7 +23,7 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
         {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}
-            alt={tour.title}
+            alt={tour.title[0]}
             fill
             className="w-full h-full object-cover rounded-lg"
           />
@@ -27,11 +31,11 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
       </Link>
       <div className="flex flex-col gap-2 px-4 py-3">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-bold">{tour.title}</h3>
+          <h3 className="text-lg font-bold">{getLocalizedTitle(tour, locale)}</h3>
           <p className=" font-bold text-brand-secondary">₾{tour.basePrice}</p>
         </div>
         <div className="text-sm text-gray-500 flex items-center gap-1">
-          <MapPinIcon size={14} /> {tour.title}, საკარტველოუ
+          <MapPinIcon size={14} /> {getLocalizedTitle(tour, locale)}, საკარტველოუ
         </div>
         {/* <Link
           href={`/tour/${tour.id}`}

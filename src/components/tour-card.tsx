@@ -3,7 +3,7 @@ import { Tour } from "@/types/Tour";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
-import { getLocalizedDescription } from "@/lib/localizationHelpers";
+import { getLocalizedTitle, getLocalizedDescription } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { getLocale } from "next-intl/server";
@@ -23,18 +23,17 @@ export default async function TourCard({
         href={`/tour/${tour.id}`}
         className="aspect-square w-full relative cursor-pointer"
       >
-        {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
-        {tour.images && (
+        {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}        {tour.images && (
           <Image
             src={getImageUrl(tour.images[0])}
-            alt={tour.title}
+            alt={tour.title[0]}
             fill
             className="w-full h-full object-cover rounded-lg"
           />
         )}
       </Link>
       <div className="flex flex-col gap-2 p-6">
-        <h3 className="text-lg font-bold">{tour.title}</h3>
+        <h3 className="text-lg font-bold">{getLocalizedTitle(tour, locale)}</h3>
         <div className="text-sm text-gray-500 line-clamp-3 mr-10">
           <ReactMarkdown>{getLocalizedDescription(tour, locale)}</ReactMarkdown>
         </div>

@@ -13,6 +13,54 @@ type getToursOptions = {
     pageSize?: number;
   };
 };
+
+// Helper function to migrate old tour data structure to new array structure
+function migrateTourData(data: any): Partial<Tour> {
+  // Check if data is already in new format (arrays)
+  if (Array.isArray(data?.title)) {
+    return {
+      title: data.title || ["", "", ""],
+      subtitle: data.subtitle || ["", "", ""],
+      description: data.description || ["", "", ""],
+      basePrice: data.basePrice || 0,
+      duration: data.duration || 0,
+      leaveTime: data.leaveTime || "",
+      returnTime: data.returnTime || "",
+      coordinates: data.coordinates || undefined,
+      status: data.status || "draft",
+      images: data.images || [],
+      offeredActivities: data.offeredActivities || [],
+    };
+  }
+  
+  // Convert old format to new format
+  return {
+    title: [
+      data?.title || data?.titleEN || "",
+      data?.titleGE || "",
+      data?.titleRU || ""
+    ],
+    subtitle: [
+      data?.subtitleEN || "",
+      data?.subtitleGE || "",
+      data?.subtitleRU || ""
+    ],
+    description: [
+      data?.descriptionEN || "",
+      data?.descriptionGE || "",
+      data?.descriptionRU || ""
+    ],
+    basePrice: data?.basePrice || 0,
+    duration: data?.duration || 0,
+    leaveTime: data?.leaveTime || "",
+    returnTime: data?.returnTime || "",
+    coordinates: data?.coordinates || undefined,
+    status: data?.status || "draft",
+    images: data?.images || [],
+    offeredActivities: data?.offeredActivities || [],
+  };
+}
+
 export async function getTours(options?: getToursOptions) {
   const page = options?.pagination?.page || 1;
   const pageSize = options?.pagination?.pageSize || 10;
@@ -35,43 +83,25 @@ export async function getTours(options?: getToursOptions) {
 
   const tours = toursSnapshot.docs.map((doc) => {
     const data = doc.data();
+    const migratedData = migrateTourData(data);
     return {
       id: doc.id,
-      title: data?.title || "",
-      descriptionEN: data?.descriptionEN || "",
-      descriptionGE: data?.descriptionGE || "",
-      descriptionRU: data?.descriptionRU || "",
-      basePrice: data?.basePrice || 0,
-      duration: data?.duration || 0,
-      leaveTime: data?.leaveTime || "",
-      returnTime: data?.returnTime || "",
-      coordinates: data?.coordinates || undefined,
-      status: data?.status || "draft",
-      images: data?.images || [],
-      offeredActivities: data?.offeredActivities || [],
+      ...migratedData,
     };
   }) as Tour[];
   return { data: tours, totalPages };
 }
+
 export async function getTourById(tourId: string) {
   const tour = await firestore.collection("tours").doc(tourId).get();
   const tourData = tour.data();
 
+  const migratedData = migrateTourData(tourData);
+  
   // Create a clean, serializable version of the tour data
   const serializedTour = {
     id: tour.id,
-    title: tourData?.title || "",
-    descriptionEN: tourData?.descriptionEN || "",
-    descriptionGE: tourData?.descriptionGE || "",
-    descriptionRU: tourData?.descriptionRU || "",
-    basePrice: tourData?.basePrice || 0,
-    duration: tourData?.duration || 0,
-    leaveTime: tourData?.leaveTime || "",
-    returnTime: tourData?.returnTime || "",
-    coordinates: tourData?.coordinates || undefined,
-    status: tourData?.status || "draft",
-    images: tourData?.images || [],
-    offeredActivities: tourData?.offeredActivities || [],
+    ...migratedData,
   };
 
   return serializedTour as Tour;
@@ -84,20 +114,10 @@ export async function getToursById(tourIds: string[]) {
     .get();
   return tours.docs.map((doc) => {
     const data = doc.data();
+    const migratedData = migrateTourData(data);
     return {
       id: doc.id,
-      title: data?.title || "",
-      descriptionEN: data?.descriptionEN || "",
-      descriptionGE: data?.descriptionGE || "",
-      descriptionRU: data?.descriptionRU || "",
-      basePrice: data?.basePrice || 0,
-      duration: data?.duration || 0,
-      leaveTime: data?.leaveTime || "",
-      returnTime: data?.returnTime || "",
-      coordinates: data?.coordinates || undefined,
-      status: data?.status || "draft",
-      images: data?.images || [],
-      offeredActivities: data?.offeredActivities || [],
+      ...migratedData,
     };
   }) as Tour[];
 }

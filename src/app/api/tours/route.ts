@@ -5,15 +5,12 @@ export async function GET() {
   try {
     const { data } = await getTours({
       pagination: { page: 1, pageSize: 10 },
-    });
-
-    // Create a clean version of the data to avoid serialization issues
+    });    // Create a clean version of the data to avoid serialization issues
     const serializedTours = data.map((tour) => ({
       id: tour.id,
       title: tour.title,
-      descriptionEN: tour.descriptionEN,
-      descriptionGE: tour.descriptionGE,
-      descriptionRU: tour.descriptionRU,
+      subtitle: tour.subtitle,
+      description: tour.description,
       basePrice: tour.basePrice,
       duration: tour.duration,
       leaveTime: tour.leaveTime,
