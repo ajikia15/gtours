@@ -1,5 +1,5 @@
 "use client";
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { EmblaOptionsType, EmblaCarouselType } from "embla-carousel";
 import {
   DotButton,
@@ -15,7 +15,8 @@ type PropType = {
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props;
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
+  const autoplay = useMemo(() => Autoplay(), []);
+  const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay]);
 
   const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
