@@ -1,7 +1,10 @@
+"use client";
+
 import { MenuIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetHeader,
   SheetTitle,
@@ -49,15 +52,16 @@ export default function MobileNavbar() {
             <div className="space-y-4">
               {navItems.map((item) => {
                 return (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className={cn(
-                      "block text-lg font-medium transition-colors py-3 px-4 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
-                    )}
-                  >
-                    {item.label}
-                  </Link>
+                  <SheetClose key={item.href} asChild>
+                    <Link
+                      href={item.href}
+                      className={cn(
+                        "block text-lg font-medium transition-colors py-3 px-4 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  </SheetClose>
                 );
               })}
             </div>

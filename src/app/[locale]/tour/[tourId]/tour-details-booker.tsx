@@ -69,15 +69,13 @@ export default function TourDetailsBooker({
           Select Activities
         </h2>
         {activityCost > 0 && (
-          <p className="text-xs text-gray-600">
-            +{activityCost} GEL
-          </p>
+          <p className="text-xs text-gray-600">+{activityCost} GEL</p>
         )}
       </div>
       <ActivitySelection
         activities={tour.offeredActivities}
         selectedActivities={new Set(selectedActivities)}
-        setSelectedActivities={(activitySet) => 
+        setSelectedActivities={(activitySet) =>
           handleActivitiesChange(Array.from(activitySet))
         }
       />

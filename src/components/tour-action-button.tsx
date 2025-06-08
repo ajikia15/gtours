@@ -113,12 +113,12 @@ export default function TourActionButton({
           variant: "brandred" as const,
         };
       }
-      
+
       // If item exists but no changes, hide the button (avoid duplicate with primary)
       if (existingCartItem && !hasUserMadeChanges) {
         return null; // This will be handled below to render nothing
       }
-      
+
       // Show "Add to Cart" only if no item exists
       return {
         action: "add-to-cart",
@@ -161,7 +161,7 @@ export default function TourActionButton({
 
     try {
       const buttonState = getButtonState();
-      
+
       // If no button state, do nothing
       if (!buttonState) {
         return;
@@ -200,7 +200,7 @@ export default function TourActionButton({
               break;
             }
           }
-          
+
           const result = await booking.addBookingToCart(
             tour,
             selectedActivities
@@ -209,9 +209,7 @@ export default function TourActionButton({
             // Stay on current page after adding to cart
             toast.success("Added to cart!");
           } else {
-            toast.error(
-              result.message || "Failed to add to cart"
-            );
+            toast.error(result.message || "Failed to add to cart");
           }
           break;
 
@@ -224,7 +222,7 @@ export default function TourActionButton({
               break;
             }
           }
-          
+
           // Store activities temporarily for navigation and go to edit page for confirmation
           booking.setTempActivities(tour.id, selectedActivities);
           router.push(`/tour/${tour.id}/edit`);

@@ -88,7 +88,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
           </div>
         </div>
       </DrawerTrigger>
-      
+
       <DrawerContent className="max-h-[90vh]">
         <DrawerHeader className="pb-4">
           <DrawerTitle className="text-xl font-bold">
@@ -129,10 +129,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
                 </Badge>
               )}
             </div>
-            <TourDatePicker
-              date={selectedDate}
-              setDate={handleDateChange}
-            />
+            <TourDatePicker date={selectedDate} setDate={handleDateChange} />
           </Card>
 
           {/* Traveler Selection */}
@@ -185,13 +182,22 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
             <h3 className="font-medium mb-2">Pricing Summary</h3>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
-                <span>Base price ({getPayingPeopleCount()} paying travelers)</span>
+                <span>
+                  Base price ({getPayingPeopleCount()} paying travelers)
+                </span>
                 <span>{tour.basePrice * getPayingPeopleCount()} GEL</span>
               </div>
               {selectedActivities.length > 0 && (
                 <div className="flex justify-between">
                   <span>Activities ({selectedActivities.length})</span>
-                  <span>+{booking.calculateActivityPriceIncrement(tour, selectedActivities)} GEL</span>
+                  <span>
+                    +
+                    {booking.calculateActivityPriceIncrement(
+                      tour,
+                      selectedActivities
+                    )}{" "}
+                    GEL
+                  </span>
                 </div>
               )}
               <hr className="my-2" />
