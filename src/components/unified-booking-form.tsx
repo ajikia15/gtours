@@ -21,7 +21,9 @@ interface UnifiedBookingFormProps {
   tour: Tour;
   mode: "direct" | "cart-edit";
   cartItem?: CartItem;
-  onSuccess?: (action: "added-to-cart" | "proceed-to-checkout" | "updated") => void;
+  onSuccess?: (
+    action: "added-to-cart" | "proceed-to-checkout" | "updated"
+  ) => void;
   className?: string;
 }
 
@@ -30,7 +32,7 @@ export default function UnifiedBookingForm({
   mode,
   cartItem,
   onSuccess,
-  className = ""
+  className = "",
 }: UnifiedBookingFormProps) {
   const router = useRouter();
   const booking = useBooking();
@@ -39,40 +41,44 @@ export default function UnifiedBookingForm({
 
   // Use shared state only if cart has multiple items (for synchronization)
   const useSharedState = cart.items.length > 1;
-  
+
   // State management - simplified approach
   const [localState, setLocalState] = useState(() => {
     if (mode === "cart-edit" && cartItem) {
       return {
         selectedDate: cartItem.selectedDate,
         travelers: cartItem.travelers,
-        selectedActivities: cartItem.selectedActivities
+        selectedActivities: cartItem.selectedActivities,
       };
     }
-    
+
     // For direct booking, start with shared state if available
     return {
       selectedDate: booking.sharedState.selectedDate,
-      travelers: booking.sharedState.travelers.adults > 0 
-        ? booking.sharedState.travelers 
-        : { adults: 2, children: 0, infants: 0 },
-      selectedActivities: []
+      travelers:
+        booking.sharedState.travelers.adults > 0
+          ? booking.sharedState.travelers
+          : { adults: 2, children: 0, infants: 0 },
+      selectedActivities: [],
     };
   });
 
   // Current state - use shared state for cart editing with multiple items
-  const currentState = (mode === "cart-edit" && useSharedState) ? {
-    selectedDate: booking.sharedState.selectedDate,
-    travelers: booking.sharedState.travelers,
-    selectedActivities: localState.selectedActivities // Activities remain tour-specific
-  } : localState;
+  const currentState =
+    mode === "cart-edit" && useSharedState
+      ? {
+          selectedDate: booking.sharedState.selectedDate,
+          travelers: booking.sharedState.travelers,
+          selectedActivities: localState.selectedActivities, // Activities remain tour-specific
+        }
+      : localState;
 
   // Update handlers
   const handleDateChange = (date: Date | undefined) => {
     if (useSharedState) {
       booking.updateSharedDate(date);
     } else {
-      setLocalState(prev => ({ ...prev, selectedDate: date }));
+      setLocalState((prev) => ({ ...prev, selectedDate: date }));
     }
   };
 
@@ -80,12 +86,12 @@ export default function UnifiedBookingForm({
     if (useSharedState) {
       booking.updateSharedTravelers(travelers);
     } else {
-      setLocalState(prev => ({ ...prev, travelers }));
+      setLocalState((prev) => ({ ...prev, travelers }));
     }
   };
 
   const handleActivitiesChange = (activities: string[]) => {
-    setLocalState(prev => ({ ...prev, selectedActivities: activities }));
+    setLocalState((prev) => ({ ...prev, selectedActivities: activities }));
   };
 
   // Validation
@@ -118,7 +124,7 @@ export default function UnifiedBookingForm({
         const result = await booking.proceedToDirectCheckoutWithDetails(tour, {
           selectedDate: currentState.selectedDate!,
           travelers: currentState.travelers,
-          selectedActivities: currentState.selectedActivities
+          selectedActivities: currentState.selectedActivities,
         });
 
         if (result.success && result.checkoutUrl) {
@@ -142,12 +148,14 @@ export default function UnifiedBookingForm({
 
           // Update all other cart items with shared date/travelers
           const updatePromises = cart.items
-            .filter(item => item.id !== cartItem.id)
-            .map(item => updateCartItem(item.id, {
-              selectedDate: currentState.selectedDate,
-              travelers: currentState.travelers,
-            }));
-          
+            .filter((item) => item.id !== cartItem.id)
+            .map((item) =>
+              updateCartItem(item.id, {
+                selectedDate: currentState.selectedDate,
+                travelers: currentState.travelers,
+              })
+            );
+
           await Promise.all(updatePromises);
           toast.success("All bookings updated successfully!");
         } else {
@@ -196,8 +204,9 @@ export default function UnifiedBookingForm({
       {useSharedState && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm text-blue-800">
-            <strong>Note:</strong> Date and traveler changes will update all tours in your cart.
-            Activity selections are specific to this tour only.
+            <strong>Note:</strong> Date and traveler changes will update all
+            tours in your cart. Activity selections are specific to this tour
+            only.
           </p>
         </div>
       )}
@@ -205,7 +214,7 @@ export default function UnifiedBookingForm({
       {/* Date Selection */}
       <div className="space-y-3">
         <h4 className="font-medium">Select Date</h4>
-        <TourDatePicker 
+        <TourDatePicker
           date={currentState.selectedDate}
           setDate={handleDateChange}
         />
@@ -214,7 +223,7 @@ export default function UnifiedBookingForm({
       {/* Traveler Selection */}
       <div className="space-y-3">
         <h4 className="font-medium">Select Travelers</h4>
-        <TravelerSelection 
+        <TravelerSelection
           travelers={currentState.travelers}
           setTravelers={handleTravelersChange}
         />
@@ -226,14 +235,19 @@ export default function UnifiedBookingForm({
           <h4 className="font-medium">Select Activities</h4>
           {currentState.selectedActivities.length > 0 && (
             <p className="text-sm text-gray-600">
-              +{booking.calculateActivityPriceIncrement(tour, currentState.selectedActivities)} GEL
+              +
+              {booking.calculateActivityPriceIncrement(
+                tour,
+                currentState.selectedActivities
+              )}{" "}
+              GEL
             </p>
           )}
         </div>
-        <ActivitySelection 
+        <ActivitySelection
           activities={tour.offeredActivities || []}
           selectedActivities={new Set(currentState.selectedActivities)}
-          setSelectedActivities={(activities) => 
+          setSelectedActivities={(activities) =>
             handleActivitiesChange(Array.from(activities))
           }
           onSelectionChange={handleActivitiesChange}
@@ -254,13 +268,17 @@ export default function UnifiedBookingForm({
       )}
 
       {/* Submit Button */}
-      <Button 
-        onClick={handleSubmit} 
-        className="w-full" 
+      <Button
+        onClick={handleSubmit}
+        className="w-full"
         disabled={!isComplete || isProcessing}
         size="lg"
       >
-        {isProcessing ? "Processing..." : mode === "direct" ? "Book Now" : "Update Booking"}
+        {isProcessing
+          ? "Processing..."
+          : mode === "direct"
+          ? "Book Now"
+          : "Update Booking"}
       </Button>
     </Card>
   );

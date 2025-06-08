@@ -13,7 +13,13 @@ import { updateCartItem } from "@/data/cart";
 interface TourActionButtonProps {
   tour: Tour;
   selectedActivities?: string[];
-  variant?: "default" | "outline" | "ghost" | "destructive" | "secondary" | "brandred";
+  variant?:
+    | "default"
+    | "outline"
+    | "ghost"
+    | "destructive"
+    | "secondary"
+    | "brandred";
   size?: "default" | "sm" | "lg" | "icon";
   className?: string;
   children?: React.ReactNode;
@@ -33,7 +39,7 @@ interface TourActionButtonProps {
 export default function TourActionButton({
   tour,
   selectedActivities = [],
-  variant = "brandred", 
+  variant = "brandred",
   size = "lg",
   className = "",
   children,
@@ -93,59 +99,59 @@ export default function TourActionButton({
         action: "update-cart",
         text: "Update Cart",
         icon: <ShoppingCart className="h-4 w-4" />,
-        variant: "brandred" as const
+        variant: "brandred" as const,
       };
     }
-    
+
     if (existingCartItem) {
       return {
         action: "view-cart",
         text: "View in Cart",
         icon: <Eye className="h-4 w-4" />,
-        variant: "secondary" as const
+        variant: "secondary" as const,
       };
     }
-    
+
     // For intent="primary", prefer direct booking over cart addition
     if (intent === "primary") {
       return {
         action: "book-now",
         text: "Book Now",
         icon: <ShoppingCart className="h-4 w-4" />,
-        variant: variant
+        variant: variant,
       };
     }
-    
+
     // For intent="secondary", add to cart if other items exist
     if (hasCartItems) {
       return {
-        action: "add-to-cart", 
+        action: "add-to-cart",
         text: "Add to Cart",
         icon: <Plus className="h-4 w-4" />,
-        variant: "outline" as const
+        variant: "outline" as const,
       };
     }
-    
+
     // Default: book now
     return {
       action: "book-now",
-      text: "Book Now", 
+      text: "Book Now",
       icon: <ShoppingCart className="h-4 w-4" />,
-      variant: variant
+      variant: variant,
     };
   };
 
   const handleAction = async () => {
     setIsProcessing(true);
-    
+
     try {
       const buttonState = getButtonState();
-      
+
       switch (buttonState.action) {
         case "view-cart":
           router.push("/account/cart");
           break;
-          
+
         case "update-cart":
           // Update existing cart item
           if (existingCartItem) {
@@ -154,7 +160,7 @@ export default function TourActionButton({
               travelers,
               selectedActivities,
             });
-            
+
             if (result?.success !== false) {
               onUpdateSuccess?.(); // Call the callback to reset initial state
               toast.success("Cart updated!");
@@ -164,18 +170,23 @@ export default function TourActionButton({
             }
           }
           break;
-          
+
         case "add-to-cart":
           // Use booking context to add to cart (requires shared state to be complete)
-          const result = await booking.addBookingToCart(tour, selectedActivities);
+          const result = await booking.addBookingToCart(
+            tour,
+            selectedActivities
+          );
           if (result.success) {
             // Stay on current page after adding to cart
             toast.success("Added to cart!");
           } else {
-            toast.error(result.message || "Please complete booking details first");
+            toast.error(
+              result.message || "Please complete booking details first"
+            );
           }
           break;
-          
+
         case "book-now":
           // Store activities temporarily for navigation and go to direct booking page
           booking.setTempActivities(tour.id, selectedActivities);
@@ -191,12 +202,12 @@ export default function TourActionButton({
   };
 
   const buttonState = getButtonState();
-  
+
   // Don't render secondary button if item is already in cart (avoid duplicate "View in Cart" buttons)
   if (intent === "secondary" && existingCartItem && !hasUserMadeChanges) {
     return null;
   }
-  
+
   const displayText = isProcessing ? "Processing..." : buttonState.text;
   const buttonVariant = buttonState.variant;
 
@@ -211,7 +222,9 @@ export default function TourActionButton({
       {children || (
         <>
           {showIcon && buttonState.icon}
-          {text && <span className={showIcon ? "ml-2" : ""}>{displayText}</span>}
+          {text && (
+            <span className={showIcon ? "ml-2" : ""}>{displayText}</span>
+          )}
         </>
       )}
     </Button>

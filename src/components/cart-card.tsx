@@ -14,9 +14,14 @@ import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 interface CartCardProps {
   item: CartItem;
   dragHandleProps?: DraggableProvidedDragHandleProps | null;
+  onEdit?: () => void;
 }
 
-export default function CartCard({ item, dragHandleProps }: CartCardProps) {
+export default function CartCard({
+  item,
+  dragHandleProps,
+  onEdit,
+}: CartCardProps) {
   const [isRemoving, setIsRemoving] = useState(false);
   const router = useRouter();
 
@@ -38,7 +43,9 @@ export default function CartCard({ item, dragHandleProps }: CartCardProps) {
   };
 
   const handleEditItem = () => {
-    router.push(`/cart/edit/${item.id}`);
+    if (onEdit) {
+      onEdit();
+    }
   };
 
   return (

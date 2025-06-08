@@ -47,7 +47,12 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
         </Link> */}
         <div className="flex gap-2 mt-2 mb-2">
           <TourActionButton tour={tour} intent="primary" />
-          <TourActionButton tour={tour} intent="secondary" variant="ghost" text={false} />
+          <TourActionButton
+            tour={tour}
+            intent="secondary"
+            variant="ghost"
+            text={false}
+          />
         </div>
       </div>
     </div>
