@@ -6,8 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { getLocalizedTitle } from "@/lib/localizationHelpers";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { MapPinIcon } from "lucide-react";
-import BookNowButton from "./book-now-button";
-import AddToCartButton from "./add-to-cart-button";
+import TourActionButton from "./tour-action-button";
 import { getLocale } from "next-intl/server";
 
 export default async function ShortTourCard({ tour }: { tour: Tour }) {
@@ -47,8 +46,8 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
           View Tour
         </Link> */}
         <div className="flex gap-2 mt-2 mb-2">
-          <BookNowButton tour={tour} />
-          <AddToCartButton tour={tour} variant="ghost" text={false} />
+          <TourActionButton tour={tour} intent="primary" />
+          <TourActionButton tour={tour} intent="secondary" variant="ghost" text={false} />
         </div>
       </div>
     </div>

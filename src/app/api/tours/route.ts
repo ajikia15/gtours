@@ -1,11 +1,15 @@
 import { getTours } from "@/data/tours";
 import { NextResponse } from "next/server";
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('pageSize') || '10');
+    
     const { data } = await getTours({
-      pagination: { page: 1, pageSize: 10 },
-    }); // Create a clean version of the data to avoid serialization issues
+      pagination: { page, pageSize },
+    });    // Create a clean version of the data to avoid serialization issues
     const serializedTours = data.map((tour) => ({
       id: tour.id,
       title: tour.title,
@@ -18,6 +22,7 @@ export async function GET() {
       coordinates: tour.coordinates,
       status: tour.status,
       images: tour.images || [],
+      offeredActivities: tour.offeredActivities || [],
     }));
 
     return NextResponse.json(serializedTours);

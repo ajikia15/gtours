@@ -9,8 +9,7 @@ import { ChevronDown, ChevronUp, Album } from "lucide-react";
 import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
-import AddToCartButton from "@/components/add-to-cart-button";
-import BookNowButton from "@/components/book-now-button";
+import TourActionButton from "@/components/tour-action-button";
 
 import { useBooking } from "@/context/booking";
 import { useCart } from "@/context/cart";
@@ -144,15 +143,18 @@ export default function TourDetailsBooker({
   );
   const renderActionButtons = () => (
     <div className="space-y-3 ">
-      <BookNowButton
+      <TourActionButton
         tour={tour}
+        selectedActivities={Array.from(selectedActivities)}
+        intent="primary"
         variant="brandred"
         size="lg"
         className="w-full"
       />
-      <AddToCartButton
+      <TourActionButton
         tour={tour}
         selectedActivities={Array.from(selectedActivities)}
+        intent="secondary"
         className="w-full"
         variant="outline"
         detectChanges={true}

@@ -30,12 +30,15 @@ export default function DirectBookingPageClient({
   // Check what data is pre-filled
   const { selectedDate, travelers } = booking.sharedState;
   const existingCartItem = cart.items.find((item) => item.tourId === tour.id);
-  
+
   const hasPrefilledDate = selectedDate !== undefined;
-  const hasPrefilledTravelers = travelers.adults > 2 || travelers.children > 0 || travelers.infants > 0;
-  const hasPrefilledActivities = existingCartItem && existingCartItem.selectedActivities.length > 0;
-  
-  const hasAnyPrefill = hasPrefilledDate || hasPrefilledTravelers || hasPrefilledActivities;
+  const hasPrefilledTravelers =
+    travelers.adults > 2 || travelers.children > 0 || travelers.infants > 0;
+  const hasPrefilledActivities =
+    existingCartItem && existingCartItem.selectedActivities.length > 0;
+
+  const hasAnyPrefill =
+    hasPrefilledDate || hasPrefilledTravelers || hasPrefilledActivities;
 
   return (
     <div className="container mx-auto py-8 space-y-6">
@@ -70,16 +73,21 @@ export default function DirectBookingPageClient({
                 {hasPrefilledTravelers && (
                   <li>
                     • Travelers: {travelers.adults} adults
-                    {travelers.children > 0 && `, ${travelers.children} children`}
+                    {travelers.children > 0 &&
+                      `, ${travelers.children} children`}
                     {travelers.infants > 0 && `, ${travelers.infants} infants`}
                   </li>
                 )}
                 {hasPrefilledActivities && (
-                  <li>• Activities: {existingCartItem!.selectedActivities.length} selected</li>
+                  <li>
+                    • Activities: {existingCartItem!.selectedActivities.length}{" "}
+                    selected
+                  </li>
                 )}
               </ul>
               <p className="text-xs text-blue-700 mt-2">
-                This information was carried over from your previous selections. You can modify it below.
+                This information was carried over from your previous selections.
+                You can modify it below.
               </p>
             </div>
           </div>
@@ -119,10 +127,14 @@ export default function DirectBookingPageClient({
         <ul className="text-sm text-green-800 space-y-1">
           <li>• Complete your booking details below</li>
           <li>• You'll be taken directly to checkout after confirming</li>
-          <li>• Your booking will be saved and you can modify it later if needed</li>
+          <li>
+            • Your booking will be saved and you can modify it later if needed
+          </li>
           <li>• All prices include applicable taxes and fees</li>
           {hasAnyPrefill && (
-            <li className="font-medium">• Some details have been pre-filled from your previous selections</li>
+            <li className="font-medium">
+              • Some details have been pre-filled from your previous selections
+            </li>
           )}
         </ul>
       </Card>

@@ -6,6 +6,13 @@ import { ShoppingCart, Save } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import CartCard from "@/components/cart-card";
 import OrderSummary from "@/components/order-summary";
+import UnifiedBookingForm from "@/components/unified-booking-form";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   DragDropContext,
   Draggable,
@@ -15,6 +22,8 @@ import {
 import { toast } from "sonner";
 import { useState, useEffect } from "react";
 import { reorderCartItems } from "@/data/cart";
+import { Tour } from "@/types/Tour";
+import { CartItem } from "@/types/Cart";
 
 export default function CartPage() {
   const cart = useCart();
@@ -23,6 +32,28 @@ export default function CartPage() {
   const [localItems, setLocalItems] = useState(cart.items);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  
+  // Edit modal state
+  const [editingItem, setEditingItem] = useState<CartItem | null>(null);
+  const [tours, setTours] = useState<Tour[]>([]);
+
+  // Load tours for editing
+  useEffect(() => {
+    const loadTours = async () => {
+      try {
+        const response = await fetch('/api/tours?page=1&pageSize=50');
+        if (!response.ok) {
+          throw new Error('Failed to fetch tours');
+        }
+        const data = await response.json();
+        setTours(data);
+      } catch (error) {
+        console.error("Failed to load tours:", error);
+      }
+    };
+    
+    loadTours();
+  }, []);
 
   // Update local items when cart items change from Firestore
   useEffect(() => {

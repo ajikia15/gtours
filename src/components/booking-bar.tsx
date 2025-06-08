@@ -66,15 +66,25 @@ export default function BookingBar({
     if (mode === "edit" && editingItem) {
       return editingItem.selectedActivities;
     }
-    
-    // For direct booking, check if this tour is already in cart and pre-fill activities
+
+    // For direct booking, check for temporary activities first
     if (directBooking && preselectedTour) {
-      const existingCartItem = cart.items.find((item) => item.tourId === preselectedTour.id);
+      const { tempActivities, tempTourId } = booking.sharedState;
+      if (tempActivities && tempTourId === preselectedTour.id) {
+        // Clear the temp activities after using them
+        setTimeout(() => booking.clearTempActivities(), 0);
+        return tempActivities;
+      }
+
+      // Fallback: check if this tour is already in cart and pre-fill activities
+      const existingCartItem = cart.items.find(
+        (item) => item.tourId === preselectedTour.id
+      );
       if (existingCartItem) {
         return existingCartItem.selectedActivities;
       }
     }
-    
+
     return [];
   });
 
@@ -93,7 +103,13 @@ export default function BookingBar({
   const [localTravelers, setLocalTravelers] = useState(() => {
     if (mode === "add") {
       // For direct booking, pre-fill from shared state if it has meaningful data
-      if (directBooking && sharedTravelers && (sharedTravelers.adults > 2 || sharedTravelers.children > 0 || sharedTravelers.infants > 0)) {
+      if (
+        directBooking &&
+        sharedTravelers &&
+        (sharedTravelers.adults > 2 ||
+          sharedTravelers.children > 0 ||
+          sharedTravelers.infants > 0)
+      ) {
         return sharedTravelers;
       }
       return { adults: 2, children: 0, infants: 0 };

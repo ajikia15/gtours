@@ -27,6 +27,9 @@ import { toast } from "sonner";
 type SharedBookingState = {
   selectedDate: Date | undefined;
   travelers: TravelerCounts;
+  // Temporary storage for activities during navigation
+  tempActivities?: string[];
+  tempTourId?: string;
 };
 
 /**
@@ -38,6 +41,10 @@ type BookingContextType = {
   updateSharedDate: (date: Date | undefined) => void;
   updateSharedTravelers: (travelers: TravelerCounts) => void;
   resetSharedState: () => void;
+
+  // Temporary navigation helpers
+  setTempActivities: (tourId: string, activities: string[]) => void;
+  clearTempActivities: () => void;
 
   // Pricing calculations
   calculateActivityPriceIncrement: (
@@ -119,6 +126,8 @@ export const BookingProvider = ({
   const defaultSharedState: SharedBookingState = {
     selectedDate: undefined,
     travelers: { adults: 2, children: 0, infants: 0 },
+    tempActivities: undefined,
+    tempTourId: undefined,
   };
 
   // Shared booking state
@@ -147,6 +156,23 @@ export const BookingProvider = ({
 
   const resetSharedState = () => {
     setSharedState(defaultSharedState);
+  };
+
+  // Temporary activities management for navigation
+  const setTempActivities = (tourId: string, activities: string[]) => {
+    setSharedState((prev) => ({
+      ...prev,
+      tempActivities: activities,
+      tempTourId: tourId,
+    }));
+  };
+
+  const clearTempActivities = () => {
+    setSharedState((prev) => ({
+      ...prev,
+      tempActivities: undefined,
+      tempTourId: undefined,
+    }));
   };
 
   // Sync cart items when shared state changes
@@ -524,7 +550,9 @@ export const BookingProvider = ({
     // Validate the booking first
     const validation = validateBooking(booking);
     if (!validation.isComplete) {
-      const errorMessage = `Booking incomplete: ${validation.errors.join(", ")}`;
+      const errorMessage = `Booking incomplete: ${validation.errors.join(
+        ", "
+      )}`;
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }
@@ -616,6 +644,10 @@ export const BookingProvider = ({
     updateSharedDate,
     updateSharedTravelers,
     resetSharedState,
+
+    // Temporary navigation helpers
+    setTempActivities,
+    clearTempActivities,
 
     // Pricing calculations
     calculateActivityPriceIncrement,
