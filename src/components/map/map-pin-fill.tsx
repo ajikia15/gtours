@@ -11,6 +11,10 @@ export default function MapPinFill({
       width={size}
       height={size}
       viewBox="0 0 256 256"
+      style={{
+        transform: `translate(-${size/2}px, -${size * 0.85}px)`, // Center horizontally, anchor at pin tip (85% down)
+        transformOrigin: 'center bottom',
+      }}
     >
       <path
         fill={color}

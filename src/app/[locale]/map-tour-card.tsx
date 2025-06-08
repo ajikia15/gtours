@@ -19,13 +19,11 @@ export default function MapTourCard({
   // isFavourite: boolean;
 }) {
   // const t = await getTranslations("Homepage");
-  const locale = useLocale();
-
-  return (
-    <div className="flex flex-col h-full mr-10 border border-gray-300 shadow-xs rounded-xl">
+  const locale = useLocale();  return (
+    <div className="flex flex-col w-full lg:w-80 xl:w-96 border border-gray-300 shadow-sm rounded-xl bg-white">
       <Link
         href={`/tour/${tour.id}`}
-        className="aspect-square w-full relative cursor-pointer"
+        className="aspect-[4/3] w-full relative cursor-pointer overflow-hidden rounded-t-xl"
       >
         {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
         {tour.images && (
@@ -33,13 +31,12 @@ export default function MapTourCard({
             src={getImageUrl(tour.images[0])}
             alt={tour.title[0]}
             fill
-            className="w-full h-full object-cover rounded-lg"
+            className="w-full h-full object-cover rounded-t-xl"
           />
         )}
-      </Link>
-      <div className="flex flex-col gap-2 p-6">
-        <h3 className="text-lg font-bold">{getLocalizedTitle(tour, locale)}</h3>
-        <div className="text-sm text-gray-500 line-clamp-3 mr-10">
+      </Link>      <div className="flex flex-col gap-3 p-6">
+        <h3 className="text-xl font-bold">{getLocalizedTitle(tour, locale)}</h3>
+        <div className="text-base text-gray-500 line-clamp-3">
           <ReactMarkdown>{getLocalizedDescription(tour, locale)}</ReactMarkdown>
         </div>
         <Link
