@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "@/i18n/navigation";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronUp, Album } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 
 import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
 import TourActionButton from "@/components/tour-action-button";
 
-import { useBooking } from "@/context/booking";
-import { useCart } from "@/context/cart";
+import { useTourBooking } from "@/hooks/use-tour-booking";
 import { useCartChanges } from "@/hooks/use-cart-changes";
 
 import { Tour } from "@/types/Tour";
@@ -24,102 +22,64 @@ export default function TourDetailsBooker({
   tour: Tour;
   collapseAble?: boolean;
 }) {
-  // Hooks
-  const booking = useBooking();
-  const cart = useCart();
-  const router = useRouter();
   // Local State
   const [isExpanded, setIsExpanded] = useState(!collapseAble);
-  const [selectedActivities, setSelectedActivities] = useState<Set<string>>(
-    new Set()
-  );
-  const [isBookingNow, setIsBookingNow] = useState(false);
 
-  // Computed Values
-  const existingCartItem = cart.items.find((item) => item.tourId === tour.id);
-  const { selectedDate, travelers } = booking.sharedState;
+  // Use shared booking logic hook
+  const {
+    selectedDate,
+    travelers,
+    selectedActivities,
+    totalPrice,
+    activityCost,
+    handleDateChange,
+    handleTravelersChange,
+    handleActivitiesChange,
+  } = useTourBooking({ tour });
 
-  // Change detection hook
+  // Change detection hook (for update detection)
   const { initialState, resetInitialState } = useCartChanges({
     selectedDate,
     travelers,
-    selectedActivities: Array.from(selectedActivities),
+    selectedActivities,
   });
 
-  // Effects
-  useEffect(() => {
-    if (existingCartItem) {
-      setSelectedActivities(new Set(existingCartItem.selectedActivities));
-    }
-  }, [existingCartItem]);
-
-  // Calculation Functions
-  const calculateActivityPriceIncrement = () => {
-    return booking.calculateActivityPriceIncrement(
-      tour,
-      Array.from(selectedActivities)
-    );
-  };
-
-  const calculateTotalPrice = () => {
-    return booking.calculateTotalPrice(
-      tour,
-      travelers,
-      Array.from(selectedActivities)
-    );
-  };
   // Event Handlers
   const toggleExpanded = () => setIsExpanded(!isExpanded);
-
-  const handleBookTourNow = async () => {
-    setIsBookingNow(true);
-    try {
-      const result = await booking.proceedToDirectCheckout(
-        tour,
-        Array.from(selectedActivities)
-      );
-
-      if (result.success && result.checkoutUrl) {
-        router.push(result.checkoutUrl);
-      }
-    } catch (error) {
-      console.error("Error in Book Tour Now:", error);
-    } finally {
-      setIsBookingNow(false);
-    }
-  };
 
   // Render Functions
   const renderPricingSummary = () => (
     <div className="text-lg font-semibold text-gray-900">
-      Total: <span className="text-red-500">{calculateTotalPrice()} GEL</span>
+      Total: <span className="text-red-500">{totalPrice} GEL</span>
     </div>
   );
 
   const renderBookingContent = () => (
     <div className="flex flex-col gap-4">
       <h2 className="text-lg font-semibold text-gray-900">Choose Date</h2>
-      <TourDatePicker date={selectedDate} setDate={booking.updateSharedDate} />
+      <TourDatePicker date={selectedDate} setDate={handleDateChange} />
 
       <h2 className="text-lg font-semibold text-gray-900">Travelers</h2>
       <TravelerSelection
         travelers={travelers}
-        setTravelers={booking.updateSharedTravelers}
+        setTravelers={handleTravelersChange}
       />
       <div className="flex flex-row justify-between items-center">
         <h2 className="text-lg font-semibold text-gray-900">
           Select Activities
         </h2>
-        {calculateActivityPriceIncrement() > 0 && (
+        {activityCost > 0 && (
           <p className="text-xs text-gray-600">
-            +{calculateActivityPriceIncrement()} GEL
+            +{activityCost} GEL
           </p>
         )}
       </div>
       <ActivitySelection
         activities={tour.offeredActivities}
-        selectedActivities={selectedActivities}
-        setSelectedActivities={setSelectedActivities}
+        selectedActivities={new Set(selectedActivities)}
+        setSelectedActivities={(activitySet) => 
+          handleActivitiesChange(Array.from(activitySet))
+        }
       />
 
       {renderPricingSummary()}

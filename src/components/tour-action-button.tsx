@@ -34,6 +34,8 @@ interface TourActionButtonProps {
     initialized: boolean;
   };
   onUpdateSuccess?: () => void; // Callback after successful update
+  validateForBookNow?: () => { isComplete: boolean; errors: string[] }; // Validation for "Book Now"
+  validateForAddToCart?: () => { isComplete: boolean; errors: string[] }; // Validation for "Add to Cart"
 }
 
 export default function TourActionButton({
@@ -49,6 +51,8 @@ export default function TourActionButton({
   detectChanges = false,
   initialState,
   onUpdateSuccess,
+  validateForBookNow,
+  validateForAddToCart,
 }: TourActionButtonProps) {
   const router = useRouter();
   const cart = useCart();
@@ -57,7 +61,6 @@ export default function TourActionButton({
 
   // Determine current state
   const existingCartItem = cart.items.find((item) => item.tourId === tour.id);
-  const hasCartItems = cart.items.length > 0;
   const { selectedDate, travelers } = booking.sharedState;
 
   // Check if user has made changes (only if detectChanges is enabled)
@@ -92,8 +95,40 @@ export default function TourActionButton({
     selectedActivities,
   ]);
 
-  // Determine button behavior based on state
-  const getButtonState = () => {
+  // Determine button behavior based on intent and state
+  const getButtonState = (): {
+    action: string;
+    text: string;
+    icon: React.ReactNode;
+    variant: any;
+  } | null => {
+    // For secondary intent, be smart about cart state
+    if (intent === "secondary") {
+      // If there are changes to update, show update button
+      if (existingCartItem && hasUserMadeChanges) {
+        return {
+          action: "update-cart",
+          text: "Update Cart",
+          icon: <ShoppingCart className="h-4 w-4" />,
+          variant: "brandred" as const,
+        };
+      }
+      
+      // If item exists but no changes, hide the button (avoid duplicate with primary)
+      if (existingCartItem && !hasUserMadeChanges) {
+        return null; // This will be handled below to render nothing
+      }
+      
+      // Show "Add to Cart" only if no item exists
+      return {
+        action: "add-to-cart",
+        text: "Add to Cart",
+        icon: <Plus className="h-4 w-4" />,
+        variant: "outline" as const,
+      };
+    }
+
+    // For primary intent, use traditional cart-aware logic
     if (existingCartItem && hasUserMadeChanges) {
       return {
         action: "update-cart",
@@ -112,27 +147,7 @@ export default function TourActionButton({
       };
     }
 
-    // For intent="primary", prefer direct booking over cart addition
-    if (intent === "primary") {
-      return {
-        action: "book-now",
-        text: "Book Now",
-        icon: <ShoppingCart className="h-4 w-4" />,
-        variant: variant,
-      };
-    }
-
-    // For intent="secondary", add to cart if other items exist
-    if (hasCartItems) {
-      return {
-        action: "add-to-cart",
-        text: "Add to Cart",
-        icon: <Plus className="h-4 w-4" />,
-        variant: "outline" as const,
-      };
-    }
-
-    // Default: book now
+    // Primary intent with no cart item - show "Book Now"
     return {
       action: "book-now",
       text: "Book Now",
@@ -146,6 +161,11 @@ export default function TourActionButton({
 
     try {
       const buttonState = getButtonState();
+      
+      // If no button state, do nothing
+      if (!buttonState) {
+        return;
+      }
 
       switch (buttonState.action) {
         case "view-cart":
@@ -172,7 +192,15 @@ export default function TourActionButton({
           break;
 
         case "add-to-cart":
-          // Use booking context to add to cart (requires shared state to be complete)
+          // For "Add to Cart", use lenient validation if provided
+          if (validateForAddToCart) {
+            const validation = validateForAddToCart();
+            if (!validation.isComplete) {
+              toast.error("Please complete required fields");
+              break;
+            }
+          }
+          
           const result = await booking.addBookingToCart(
             tour,
             selectedActivities
@@ -182,15 +210,24 @@ export default function TourActionButton({
             toast.success("Added to cart!");
           } else {
             toast.error(
-              result.message || "Please complete booking details first"
+              result.message || "Failed to add to cart"
             );
           }
           break;
 
         case "book-now":
-          // Store activities temporarily for navigation and go to direct booking page
+          // For "Book Now", use strict validation if provided
+          if (validateForBookNow) {
+            const validation = validateForBookNow();
+            if (!validation.isComplete) {
+              toast.error("Please complete all required fields");
+              break;
+            }
+          }
+          
+          // Store activities temporarily for navigation and go to edit page for confirmation
           booking.setTempActivities(tour.id, selectedActivities);
-          router.push(`/book/${tour.id}`);
+          router.push(`/tour/${tour.id}/edit`);
           break;
       }
     } catch (error) {
@@ -203,8 +240,8 @@ export default function TourActionButton({
 
   const buttonState = getButtonState();
 
-  // Don't render secondary button if item is already in cart (avoid duplicate "View in Cart" buttons)
-  if (intent === "secondary" && existingCartItem && !hasUserMadeChanges) {
+  // Don't render if buttonState is null (for secondary intent when item exists with no changes)
+  if (!buttonState) {
     return null;
   }
 

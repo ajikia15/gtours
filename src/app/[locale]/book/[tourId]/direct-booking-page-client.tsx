@@ -126,7 +126,7 @@ export default function DirectBookingPageClient({
         <h3 className="font-medium text-green-900 mb-2">Direct Booking</h3>
         <ul className="text-sm text-green-800 space-y-1">
           <li>• Complete your booking details below</li>
-          <li>• You'll be taken directly to checkout after confirming</li>
+          <li>• You&apos;ll be taken directly to checkout after confirming</li>
           <li>
             • Your booking will be saved and you can modify it later if needed
           </li>

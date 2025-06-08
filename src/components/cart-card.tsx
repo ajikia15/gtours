@@ -8,7 +8,6 @@ import { Trash2, MapPin, Pencil, Activity, GripVertical } from "lucide-react";
 import { removeFromCart } from "@/data/cart";
 import { toast } from "sonner";
 import { useState } from "react";
-import { useRouter } from "@/i18n/navigation";
 import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 interface CartCardProps {
@@ -23,7 +22,6 @@ export default function CartCard({
   onEdit,
 }: CartCardProps) {
   const [isRemoving, setIsRemoving] = useState(false);
-  const router = useRouter();
 
   const handleRemoveItem = async () => {
     setIsRemoving(true);
