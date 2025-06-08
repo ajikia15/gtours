@@ -10,6 +10,7 @@ import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
 import AddToCartButton from "@/components/add-to-cart-button";
+import BookNowButton from "@/components/book-now-button";
 
 import { useBooking } from "@/context/booking";
 import { useCart } from "@/context/cart";
@@ -143,16 +144,12 @@ export default function TourDetailsBooker({
   );
   const renderActionButtons = () => (
     <div className="space-y-3 ">
-      <Button
-        className="w-full"
+      <BookNowButton
+        tour={tour}
         variant="brandred"
         size="lg"
-        onClick={handleBookTourNow}
-        disabled={isBookingNow}
-      >
-        <Album className="size-4 " />
-        {isBookingNow ? "Processing..." : "Book Tour Now"}
-      </Button>
+        className="w-full"
+      />
       <AddToCartButton
         tour={tour}
         selectedActivities={Array.from(selectedActivities)}

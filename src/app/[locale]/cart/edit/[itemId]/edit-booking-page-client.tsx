@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ArrowLeft } from "lucide-react";
+import { useSearchParams } from "next/navigation";
 
 interface EditBookingPageClientProps {
   tours: Tour[];
@@ -19,6 +20,8 @@ export default function EditBookingPageClient({
   itemId,
 }: EditBookingPageClientProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const directBooking = searchParams?.get("directBooking") === "1";
   const cart = useCart();
 
   const editingItem = cart.items?.find((item) => item.id === itemId);
@@ -105,6 +108,7 @@ export default function EditBookingPageClient({
         mode="edit"
         editingItem={item}
         onSuccess={handleSuccess}
+        directBooking={directBooking}
       />
 
       {/* Help Text */}

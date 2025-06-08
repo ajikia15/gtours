@@ -34,6 +34,7 @@ interface BookingBarProps {
   preselectedTour?: Tour;
   onSuccess?: () => void;
   className?: string;
+  directBooking?: boolean;
 }
 
 export default function BookingBar({
@@ -43,6 +44,7 @@ export default function BookingBar({
   preselectedTour,
   onSuccess,
   className = "",
+  directBooking = false,
 }: BookingBarProps) {
   const router = useRouter();
   const booking = useBooking();
@@ -64,12 +66,25 @@ export default function BookingBar({
     if (mode === "edit" && editingItem) {
       return editingItem.selectedActivities;
     }
+    
+    // For direct booking, check if this tour is already in cart and pre-fill activities
+    if (directBooking && preselectedTour) {
+      const existingCartItem = cart.items.find((item) => item.tourId === preselectedTour.id);
+      if (existingCartItem) {
+        return existingCartItem.selectedActivities;
+      }
+    }
+    
     return [];
   });
 
   // Local state for add mode only
   const [localDate, setLocalDate] = useState<Date | undefined>(() => {
     if (mode === "add") {
+      // For direct booking, pre-fill from shared state if available
+      if (directBooking && sharedDate) {
+        return sharedDate;
+      }
       return undefined;
     }
     return editingItem?.selectedDate;
@@ -77,6 +92,10 @@ export default function BookingBar({
 
   const [localTravelers, setLocalTravelers] = useState(() => {
     if (mode === "add") {
+      // For direct booking, pre-fill from shared state if it has meaningful data
+      if (directBooking && sharedTravelers && (sharedTravelers.adults > 2 || sharedTravelers.children > 0 || sharedTravelers.infants > 0)) {
+        return sharedTravelers;
+      }
       return { adults: 2, children: 0, infants: 0 };
     }
     return editingItem?.travelers || { adults: 2, children: 0, infants: 0 };
@@ -132,57 +151,84 @@ export default function BookingBar({
 
     try {
       if (mode === "edit" && editingItem) {
-        // Edit mode: update ALL cart items with shared state + individual activities
-
-        // First update this specific item's activities
-        await updateCartItem(editingItem.id, {
-          selectedActivities,
-        });
-
-        // Then sync ALL cart items with current shared state
-        const updatePromises = cart.items.map((item) =>
-          updateCartItem(item.id, {
+        // --- Direct booking: only update this item and go to checkout ---
+        if (directBooking) {
+          await updateCartItem(editingItem.id, {
             selectedDate,
             travelers,
-          })
-        );
-
-        await Promise.all(updatePromises);
-
-        toast.success("All bookings updated successfully!");
-        router.push("/account/cart");
-        onSuccess?.();
-      } else {
-        // Add mode: add directly to cart without shared state
-        const { addToCart } = await import("@/data/cart");
-
-        const result = await addToCart({
-          tourId: selectedTour.id,
-          tourTitle: selectedTour.title[0], // TODO
-          tourBasePrice: selectedTour.basePrice,
-          tourImages: selectedTour.images,
-          selectedDate: selectedDate!,
-          travelers,
-          selectedActivities,
-        });
-
-        if (result.success) {
-          toast.success("Added to cart successfully!");
-
-          // Navigate based on cart state
-          if (cart.items.length > 0) {
-            // Already have items, go to cart
-            router.push("/account/cart");
-          } else {
-            // No existing items, go directly to checkout
-            // TODO: redirect to checkout when implemented
-            router.push("/account/cart"); // For now, go to cart
-          }
-
+            selectedActivities,
+          });
+          toast.success("Booking updated! Proceeding to checkout...");
+          router.push(`/account/checkout?itemId=${editingItem.id}`);
           onSuccess?.();
         } else {
-          toast.error(result.message || "Failed to add to cart");
-          return;
+          // --- Normal edit: update ALL cart items with shared state + individual activities ---
+          await updateCartItem(editingItem.id, {
+            selectedActivities,
+          });
+          const updatePromises = cart.items.map((item) =>
+            updateCartItem(item.id, {
+              selectedDate,
+              travelers,
+            })
+          );
+          await Promise.all(updatePromises);
+          toast.success("All bookings updated successfully!");
+          router.push("/account/cart");
+          onSuccess?.();
+        }
+      } else {
+        // Add mode
+        if (directBooking) {
+          // Direct booking: proceed directly to checkout using booking context
+          const result = await booking.proceedToDirectCheckoutWithDetails(
+            selectedTour,
+            {
+              selectedDate: selectedDate!,
+              travelers,
+              selectedActivities,
+            }
+          );
+
+          if (result.success && result.checkoutUrl) {
+            toast.success("Proceeding to checkout...");
+            router.push(result.checkoutUrl);
+            onSuccess?.();
+          } else {
+            toast.error(result.message || "Failed to proceed to checkout");
+          }
+        } else {
+          // Normal add mode: add directly to cart without shared state
+          const { addToCart } = await import("@/data/cart");
+
+          const result = await addToCart({
+            tourId: selectedTour.id,
+            tourTitle: selectedTour.title[0], // TODO
+            tourBasePrice: selectedTour.basePrice,
+            tourImages: selectedTour.images,
+            selectedDate: selectedDate!,
+            travelers,
+            selectedActivities,
+          });
+
+          if (result.success) {
+            toast.success("Added to cart successfully!");
+
+            // Navigate based on cart state
+            if (cart.items.length > 0) {
+              // Already have items, go to cart
+              router.push("/account/cart");
+            } else {
+              // No existing items, go directly to checkout
+              // TODO: redirect to checkout when implemented
+              router.push("/account/cart"); // For now, go to cart
+            }
+
+            onSuccess?.();
+          } else {
+            toast.error(result.message || "Failed to add to cart");
+            return;
+          }
         }
       }
     } catch (error) {
@@ -401,6 +447,8 @@ export default function BookingBar({
           >
             {isProcessing
               ? "Processing..."
+              : mode === "edit" && directBooking
+              ? "Checkout"
               : mode === "edit"
               ? "Update"
               : "Book Now"}

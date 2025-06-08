@@ -76,6 +76,12 @@ type BookingContextType = {
     selectedActivities: string[]
   ) => Promise<{ success: boolean; checkoutUrl?: string; message?: string }>;
 
+  // Direct checkout with full booking details (for direct booking flow)
+  proceedToDirectCheckoutWithDetails: (
+    tour: Tour,
+    booking: BookingSelection
+  ) => Promise<{ success: boolean; checkoutUrl?: string; message?: string }>;
+
   // Utility functions
   getTotalPeople: (travelers: TravelerCounts) => number;
   getPayingPeople: (travelers: TravelerCounts) => number;
@@ -501,6 +507,92 @@ export const BookingProvider = ({
   };
 
   /**
+   * Proceed directly to checkout with full booking details (for direct booking flow)
+   * @param tour - The tour object
+   * @param booking - Complete booking selection with date, travelers, and activities
+   * @returns Promise with success status, checkout URL, and optional message
+   */
+  const proceedToDirectCheckoutWithDetails = async (
+    tour: Tour,
+    booking: BookingSelection
+  ): Promise<{ success: boolean; checkoutUrl?: string; message?: string }> => {
+    if (!auth?.currentUser) {
+      toast.error("Please sign in to continue");
+      return { success: false, message: "User not authenticated" };
+    }
+
+    // Validate the booking first
+    const validation = validateBooking(booking);
+    if (!validation.isComplete) {
+      const errorMessage = `Booking incomplete: ${validation.errors.join(", ")}`;
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
+    }
+
+    try {
+      // Check if tour already exists in cart
+      const existingCartItem = cart.items.find(
+        (item) => item.tourId === tour.id
+      );
+
+      let cartResult;
+
+      if (existingCartItem) {
+        // Update existing cart item with the booking details
+        const { updateCartItem } = await import("@/data/cart");
+
+        cartResult = await updateCartItem(existingCartItem.id, {
+          selectedDate: booking.selectedDate,
+          travelers: booking.travelers,
+          selectedActivities: booking.selectedActivities,
+        });
+
+        if (cartResult.success) {
+          toast.success("Tour updated and proceeding to checkout...");
+        }
+      } else {
+        // Add new item to cart with booking details
+        const { addToCart } = await import("@/data/cart");
+
+        cartResult = await addToCart({
+          tourId: tour.id,
+          tourTitle: tour.title[0], // Use English title for cart
+          tourBasePrice: tour.basePrice,
+          tourImages: tour.images,
+          selectedDate: booking.selectedDate,
+          travelers: booking.travelers,
+          selectedActivities: booking.selectedActivities,
+        });
+
+        if (cartResult.success) {
+          toast.success("Proceeding to checkout...");
+        }
+      }
+
+      if (!cartResult.success) {
+        return {
+          success: false,
+          message: cartResult.message || "Failed to prepare tour for checkout",
+        };
+      }
+
+      // Generate checkout URL with the specific tour item
+      const checkoutUrl = `/account/checkout?directTour=${tour.id}`;
+
+      return {
+        success: true,
+        checkoutUrl,
+        message: "Redirecting to checkout...",
+      };
+    } catch (error) {
+      console.error("Error in direct checkout with details:", error);
+      const errorMessage = "Failed to proceed to checkout";
+      toast.error(errorMessage);
+      return { success: false, message: errorMessage };
+    }
+  };
+
+  /**
    * Get total number of people (adults + children + infants)
    * @param travelers - Traveler counts
    * @returns Total number of people
@@ -541,6 +633,7 @@ export const BookingProvider = ({
 
     // Direct checkout functionality
     proceedToDirectCheckout,
+    proceedToDirectCheckoutWithDetails,
 
     // Utility functions
     getTotalPeople,

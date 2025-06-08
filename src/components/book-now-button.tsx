@@ -4,7 +4,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
 import { ShoppingCart } from "lucide-react";
-import { useBooking } from "@/context/booking";
 import { Tour } from "@/types/Tour";
 
 interface BookNowButtonProps {
@@ -30,20 +29,15 @@ export default function BookNowButton({
   children,
 }: BookNowButtonProps) {
   const router = useRouter();
-  const booking = useBooking();
   const [isBooking, setIsBooking] = useState(false);
 
   const handleBookNow = async () => {
     setIsBooking(true);
     try {
-      // Proceed directly to checkout with no selected activities (empty array)
-      const result = await booking.proceedToDirectCheckout(tour, []);
-
-      if (result.success && result.checkoutUrl) {
-        router.push(result.checkoutUrl);
-      }
+      // Navigate directly to the booking page, bypassing cart manipulation
+      router.push(`/book/${tour.id}`);
     } catch (error) {
-      console.error("Error in Book Now:", error);
+      console.error("Error navigating to booking:", error);
     } finally {
       setIsBooking(false);
     }
