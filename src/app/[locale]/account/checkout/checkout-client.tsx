@@ -10,7 +10,7 @@ import OrderSummary from "@/components/order-summary";
 import { UserProfile } from "@/types/User";
 import { useCart } from "@/context/cart";
 import { Link, useRouter } from "@/i18n/navigation";
-import { processCheckout } from "@/data/checkout";
+import { processCheckoutWithBOG } from "@/data/bog-checkout";
 
 interface CheckoutClientProps {
   initialUserProfile: UserProfile | null;
@@ -68,16 +68,18 @@ export default function CheckoutClient({
     try {
       setIsProcessing(true);
 
-      // Process checkout and create invoice
-      // In direct tour mode, we could modify this to process only the specific tour
-      // For now, we'll process the full cart but the user only sees the relevant tour
-      const result = await processCheckout();
+      // Process checkout with BOG payment integration
+      const result = await processCheckoutWithBOG();
 
-      if (result.success) {
-        // Show success message
+      if (result.success && result.requiresPayment && result.redirectUrl) {
+        // Show payment redirect message
+        toast.success(result.message || "Redirecting to payment...");
+
+        // Redirect to BOG payment page
+        window.location.href = result.redirectUrl;
+      } else if (result.success) {
+        // Direct success (shouldn't happen with BOG but handle anyway)
         toast.success(result.message || "Checkout completed successfully!");
-
-        // Redirect to success page with invoice details
         router.push(`/account/orders?invoice=${result.invoiceId}`);
       } else {
         // Show error message
@@ -213,53 +215,19 @@ export default function CheckoutClient({
 
                 {profileComplete && (
                   <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          Card Number
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="1234 5678 9012 3456"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          Expiry Date
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="MM/YY"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          CVV
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="123"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          Cardholder Name
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="John Doe"
-                          className="w-full p-2 border border-gray-300 rounded-md"
-                          defaultValue={
-                            profileComplete
-                              ? `${userProfile?.firstName} ${userProfile?.lastName}`
-                              : ""
-                          }
-                        />
+                    <div className="text-center p-8">
+                      <div className="space-y-4">
+                        <div className="text-lg font-medium">
+                          🏦 Bank of Georgia Payment
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          You will be redirected to Bank of Georgias secure
+                          payment page to complete your purchase.
+                        </p>
+                        <div className="flex justify-center space-x-4 text-sm text-gray-500">
+                          <span>💳 Bank Cards</span>
+                          <span>📱 BOG Mobile/Internet Banking</span>
+                        </div>
                       </div>
                     </div>
                   </div>
