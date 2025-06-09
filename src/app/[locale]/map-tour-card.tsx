@@ -19,7 +19,8 @@ export default function MapTourCard({
   // isFavourite: boolean;
 }) {
   // const t = await getTranslations("Homepage");
-  const locale = useLocale();  return (
+  const locale = useLocale();
+  return (
     <div className="flex flex-col w-full lg:w-80 xl:w-96 border border-gray-300 shadow-sm rounded-xl bg-white">
       <Link
         href={`/tour/${tour.id}`}
@@ -34,7 +35,8 @@ export default function MapTourCard({
             className="w-full h-full object-cover rounded-t-xl"
           />
         )}
-      </Link>      <div className="flex flex-col gap-3 p-6">
+      </Link>{" "}
+      <div className="flex flex-col gap-3 p-6">
         <h3 className="text-xl font-bold">{getLocalizedTitle(tour, locale)}</h3>
         <div className="text-base text-gray-500 line-clamp-3">
           <ReactMarkdown>{getLocalizedDescription(tour, locale)}</ReactMarkdown>
