@@ -217,7 +217,8 @@ export default function BookingBar({
           } else {
             toast.error(result.message || "Failed to proceed to checkout");
           }        } else {
-          // Normal add mode: add partial booking to cart (allows incomplete)          const result = await booking.addPartialBookingToCart(selectedTour, selectedActivities);
+          // Normal add mode: add partial booking to cart (allows incomplete)
+          const result = await booking.addPartialBookingToCart(selectedTour, selectedActivities);
 
           if (result.success) {
             // Navigate based on cart state

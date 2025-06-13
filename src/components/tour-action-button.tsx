@@ -117,7 +117,7 @@ export default function TourActionButton({
       // If item exists but no changes, hide the button (avoid duplicate with primary)
       if (existingCartItem && !hasUserMadeChanges) {
         return null; // This will be handled below to render nothing
-      }      // Show "Add to Cart" only if no item exists
+      } // Show "Add to Cart" only if no item exists
       return {
         action: "add-to-cart",
         text: "Add to Cart",
@@ -143,7 +143,7 @@ export default function TourActionButton({
         icon: <Eye className="h-4 w-4" />,
         variant: "secondary" as const,
       };
-    }    // Primary intent with no cart item - show "Book Now"
+    } // Primary intent with no cart item - show "Book Now"
     return {
       action: "book-now",
       text: "Book Now",
@@ -185,7 +185,8 @@ export default function TourActionButton({
               toast.error("Failed to update cart");
             }
           }
-          break;        case "add-to-cart":
+          break;
+        case "add-to-cart":
           // For "Add to Cart", use lenient validation if provided
           if (validateForAddToCart) {
             const validation = validateForAddToCart();
@@ -197,7 +198,8 @@ export default function TourActionButton({
 
           const result = await booking.addPartialBookingToCart(
             tour,
-            selectedActivities        );
+            selectedActivities
+          );
           if (result.success) {
             // Stay on current page after adding to cart
           } else {
