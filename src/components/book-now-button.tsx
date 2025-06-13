@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "@/i18n/navigation";
-import { ShoppingCart } from "lucide-react";
+import { BookmarkCheck } from "lucide-react";
 import { Tour } from "@/types/Tour";
 
 interface BookNowButtonProps {
@@ -49,10 +49,9 @@ export default function BookNowButton({
       className={className}
       onClick={handleBookNow}
       disabled={isBooking}
-    >
-      {children || (
+    >      {children || (
         <>
-          <ShoppingCart className="h-4 w-4 mr-2" />
+          <BookmarkCheck className="h-4 w-4 mr-2" />
           {isBooking ? "Booking..." : "Book Now"}
         </>
       )}

@@ -5,7 +5,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useCart } from "@/context/cart";
 import { useBooking } from "@/context/booking";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Eye, Plus } from "lucide-react";
+import { ShoppingCart, Eye, BookmarkCheck } from "lucide-react";
 import { Tour } from "@/types/Tour";
 import { toast } from "sonner";
 import { updateCartItem } from "@/data/cart";
@@ -117,13 +117,11 @@ export default function TourActionButton({
       // If item exists but no changes, hide the button (avoid duplicate with primary)
       if (existingCartItem && !hasUserMadeChanges) {
         return null; // This will be handled below to render nothing
-      }
-
-      // Show "Add to Cart" only if no item exists
+      }      // Show "Add to Cart" only if no item exists
       return {
         action: "add-to-cart",
         text: "Add to Cart",
-        icon: <Plus className="h-4 w-4" />,
+        icon: <ShoppingCart className="h-4 w-4" />,
         variant: "outline" as const,
       };
     }
@@ -145,13 +143,11 @@ export default function TourActionButton({
         icon: <Eye className="h-4 w-4" />,
         variant: "secondary" as const,
       };
-    }
-
-    // Primary intent with no cart item - show "Book Now"
+    }    // Primary intent with no cart item - show "Book Now"
     return {
       action: "book-now",
       text: "Book Now",
-      icon: <ShoppingCart className="h-4 w-4" />,
+      icon: <BookmarkCheck className="h-4 w-4" />,
       variant: variant,
     };
   };
@@ -189,9 +185,7 @@ export default function TourActionButton({
               toast.error("Failed to update cart");
             }
           }
-          break;
-
-        case "add-to-cart":
+          break;        case "add-to-cart":
           // For "Add to Cart", use lenient validation if provided
           if (validateForAddToCart) {
             const validation = validateForAddToCart();
@@ -201,13 +195,11 @@ export default function TourActionButton({
             }
           }
 
-          const result = await booking.addBookingToCart(
+          const result = await booking.addPartialBookingToCart(
             tour,
-            selectedActivities
-          );
+            selectedActivities        );
           if (result.success) {
             // Stay on current page after adding to cart
-            toast.success("Added to cart!");
           } else {
             toast.error(result.message || "Failed to add to cart");
           }

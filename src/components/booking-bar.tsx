@@ -216,24 +216,10 @@ export default function BookingBar({
             onSuccess?.();
           } else {
             toast.error(result.message || "Failed to proceed to checkout");
-          }
-        } else {
-          // Normal add mode: add directly to cart without shared state
-          const { addToCart } = await import("@/data/cart");
-
-          const result = await addToCart({
-            tourId: selectedTour.id,
-            tourTitle: selectedTour.title[0], // TODO
-            tourBasePrice: selectedTour.basePrice,
-            tourImages: selectedTour.images,
-            selectedDate: selectedDate!,
-            travelers,
-            selectedActivities,
-          });
+          }        } else {
+          // Normal add mode: add partial booking to cart (allows incomplete)          const result = await booking.addPartialBookingToCart(selectedTour, selectedActivities);
 
           if (result.success) {
-            toast.success("Added to cart successfully!");
-
             // Navigate based on cart state
             if (cart.items.length > 0) {
               // Already have items, go to cart
