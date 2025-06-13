@@ -9,6 +9,7 @@ import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -20,12 +21,15 @@ import {
   MapPin,
   Activity,
   ChevronDown,
+  Search,
 } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
+import { getLocalizedTitle } from "@/lib/localizationHelpers";
+import { useLocale } from "next-intl";
 
 interface BookingBarProps {
   tours: Tour[];
@@ -49,7 +53,7 @@ export default function BookingBar({
   const router = useRouter();
   const booking = useBooking();
   const cart = useCart();
-
+  const locale = useLocale();
   // Use shared state only in edit mode (like tour-details-booker)
   const { selectedDate: sharedDate, travelers: sharedTravelers } =
     booking.sharedState;
@@ -258,7 +262,7 @@ export default function BookingBar({
   // Section content helpers
   const getTourDisplay = () => {
     if (!selectedTour) return "Select tour";
-    return selectedTour.title;
+    return getLocalizedTitle(selectedTour, locale);
   };
 
   const getActivitiesDisplay = () => {
@@ -325,7 +329,7 @@ export default function BookingBar({
                     for your trip.
                   </p>
                 </div>
-              )}
+              )}{" "}
               <h4 className="font-medium">Select Tour</h4>
               <TourSelectionContent
                 tours={tours}
@@ -335,6 +339,7 @@ export default function BookingBar({
                   setTourOpenedFromActivities(false);
                   setOpenPopover(null);
                 }}
+                locale={locale}
               />
             </div>
           </PopoverContent>
@@ -480,32 +485,65 @@ interface TourSelectionContentProps {
   tours: Tour[];
   selectedTour: Tour | null;
   onTourSelect: (tour: Tour) => void;
+  locale?: string;
 }
 
 function TourSelectionContent({
   tours,
   selectedTour,
   onTourSelect,
+  locale = "en",
 }: TourSelectionContentProps) {
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter tours based on search query and selected locale
+  const filteredTours = tours.filter((tour) => {
+    const localizedTitle = getLocalizedTitle(tour, locale);
+    return localizedTitle.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
-    <div className="space-y-2 max-h-60 overflow-y-auto">
-      {tours.map((tour) => (
-        <button
-          key={tour.id}
-          onClick={() => onTourSelect(tour)}
-          className={cn(
-            "w-full p-3 text-left rounded-lg border transition-colors",
-            selectedTour?.id === tour.id
-              ? "border-blue-500 bg-blue-50"
-              : "border-gray-200 hover:border-gray-300"
-          )}
-        >
-          <div className="font-medium">{tour.title}</div>
-          <div className="text-sm text-gray-500">
-            {tour.basePrice} GEL • {tour.duration} days
+    <div className="space-y-3">
+      {/* Search Field */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+        <Input
+          type="text"
+          placeholder="Search tours..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10"
+        />
+      </div>
+
+      {/* Tour List */}
+      <div className="space-y-2 max-h-60 overflow-y-auto">
+        {filteredTours.length > 0 ? (
+          filteredTours.map((tour) => (
+            <button
+              key={tour.id}
+              onClick={() => onTourSelect(tour)}
+              className={cn(
+                "w-full p-3 text-left rounded-lg border transition-colors",
+                selectedTour?.id === tour.id
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-gray-200 hover:border-gray-300"
+              )}
+            >
+              <div className="font-medium">
+                {getLocalizedTitle(tour, locale)}
+              </div>
+              <div className="text-sm text-gray-500">
+                {tour.basePrice} GEL • {tour.duration} days
+              </div>
+            </button>
+          ))
+        ) : (
+          <div className="p-3 text-center text-gray-500">
+            No tours found matching your search.
           </div>
-        </button>
-      ))}
+        )}
+      </div>
     </div>
   );
 }
