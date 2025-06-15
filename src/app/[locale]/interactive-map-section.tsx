@@ -11,8 +11,8 @@ import geoData from "@/../public/gadm41_GEO_1.json";
 import MapPinFill from "@/components/map/map-pin-fill";
 import { Tour } from "@/types/Tour";
 import MapTourCard from "./map-tour-card";
-import TourCardSkeleton from "@/components/tour-card-skeleton";
-import { useAutoAnimate } from "@formkit/auto-animate/react";
+import MapTourCardSkeleton from "@/components/map-tour-card-skeleton";
+// import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { useResponsive } from "@/hooks/use-responsive";
 
 // Default map settings
@@ -22,7 +22,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
-  const [animationParent] = useAutoAnimate();
+  // const [animationParent] = useAutoAnimate();
   const { isMobile, isTablet } = useResponsive();
 
   useEffect(() => {
@@ -66,9 +66,10 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   if (!isMounted) {
     return (
       <div className="container mx-auto px-4 py-6">
+        {" "}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
           {/* Tour Card */}
-          <TourCardSkeleton key={1} />
+          <MapTourCardSkeleton key={1} />
 
           {/* Map Container */}
           <div className="order-1 lg:order-2 lg:flex-1">
@@ -84,18 +85,14 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   }
   return (
     <div className="container mx-auto px-4 py-6">
-      <div
-        className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center"
-        ref={animationParent}
-      >
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
+        {" "}
         {/* Tour Card */}
-
         {isLoading ? (
-          <TourCardSkeleton key={1} />
+          <MapTourCardSkeleton key={1} />
         ) : selectedTour ? (
           <MapTourCard key={selectedTour.id} tour={selectedTour} />
         ) : null}
-
         {/* Map Container */}
         <div className="order-1 lg:order-2 lg:flex-1">
           <div className="w-full aspect-[16/9] border border-gray-200 rounded-xl shadow-sm overflow-hidden">
