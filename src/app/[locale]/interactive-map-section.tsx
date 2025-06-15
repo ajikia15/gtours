@@ -6,6 +6,7 @@ import {
   Geographies,
   Geography,
   Marker,
+  ZoomableGroup,
 } from "react-simple-maps";
 import geoData from "@/../public/gadm41_GEO_1.json";
 import MapPinFill from "@/components/map/map-pin-fill";
@@ -13,7 +14,6 @@ import { Tour } from "@/types/Tour";
 import MapTourCard from "./map-tour-card";
 import MapTourCardSkeleton from "@/components/map-tour-card-skeleton";
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
-import { useResponsive } from "@/hooks/use-responsive";
 
 // Default map settings
 const DEFAULT_CENTER: [number, number] = [43.5, 42.3];
@@ -22,47 +22,20 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
+  const [position, setPosition] = useState({ coordinates: DEFAULT_CENTER, zoom: 1 });
   // const [animationParent] = useAutoAnimate();
-  const { isMobile, isTablet } = useResponsive();
 
   useEffect(() => {
     setIsMounted(true);
     setSelectedTour(tours[0]);
     setIsLoading(false);
-  }, [tours]);
-
-  const handleTourClick = useCallback((tour: Tour) => {
+  }, [tours]);  const handleTourClick = useCallback((tour: Tour) => {
     setSelectedTour(tour);
-  }, []); // Use fixed dimensions for the SVG, but make container responsive
-  const mapWidth = 1200;
-  const mapHeight = 675;
-  // Calculate responsive projection scale
-  const getProjectionScale = () => {
-    if (isMobile) {
-      return 8000; // Zoom out more on mobile
-    } else if (isTablet) {
-      return 9000; // Medium zoom on tablet
-    } else {
-      return 10000; // Original scale on desktop
-    }
-  };
+  }, []);
 
-  // Calculate responsive marker size
-  const getMarkerSize = () => {
-    if (isMobile) {
-      return 24; // Smaller on mobile for easier touch
-    } else if (isTablet) {
-      return 28; // Medium size on tablet
-    } else {
-      return 32; // Original size on desktop
-    }
-  };
-
-  // Calculate responsive pulse circle radius
-  const getPulseRadius = () => {
-    const markerSize = getMarkerSize();
-    return Math.round(markerSize * 0.65); // Proportional to marker size
-  };
+  const handleMoveEnd = useCallback((position: any) => {
+    setPosition(position);
+  }, []);
   if (!isMounted) {
     return (
       <div className="container mx-auto px-4 py-6">
@@ -86,62 +59,58 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
-        {" "}
         {/* Tour Card */}
         {isLoading ? (
           <MapTourCardSkeleton key={1} />
         ) : selectedTour ? (
           <MapTourCard key={selectedTour.id} tour={selectedTour} />
-        ) : null}
-        {/* Map Container */}
+        ) : null}{" "}        {/* Map Container */}
         <div className="order-1 lg:order-2 lg:flex-1">
-          <div className="w-full aspect-[16/9] border border-gray-200 rounded-xl shadow-sm overflow-hidden">
+          <div className="w-full aspect-[16/9] border border-gray-200 rounded-xl shadow-sm">
             <ComposableMap
-              className={`w-full h-full ${
-                isMobile
-                  ? "touch-pan-x touch-pan-y cursor-pointer"
-                  : "cursor-grab active:cursor-grabbing"
-              }`}
               projectionConfig={{
-                scale: getProjectionScale(),
+                scale: 12000, // Zoomed in more
                 center: DEFAULT_CENTER,
               }}
-              width={mapWidth}
-              height={mapHeight}
-              viewBox={`0 0 ${mapWidth} ${mapHeight}`}
+              width={800}
+              height={450}
+              style={{
+                width: "100%",
+                height: "100%",
+              }}
             >
-              <Geographies geography={geoData}>
-                {({ geographies }) =>
-                  geographies.map((geo) => (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      fill="#e0e0e0"
-                      stroke="#FFF"
-                      strokeWidth={3}
-                      style={{
-                        default: {
-                          outline: "none",
-                        },
-                        hover: {
-                          outline: "none",
-                          fill: "#d0d0d0",
-                        },
-                        pressed: {
-                          outline: "none",
-                          fill: "#c0c0c0",
-                        },
-                      }}
-                    />
-                  ))
-                }
-              </Geographies>
-              {tours.map((tour) => {
-                const markerSize = getMarkerSize();
-                const pulseRadius = getPulseRadius();
-                const pulseRadiusMax = pulseRadius + 5;
-
-                return (
+              <ZoomableGroup
+                zoom={position.zoom}
+                center={position.coordinates}
+                onMoveEnd={handleMoveEnd}
+              >
+                <Geographies geography={geoData}>
+                  {({ geographies }) =>
+                    geographies.map((geo) => (
+                      <Geography
+                        key={geo.rsmKey}
+                        geography={geo}
+                        fill="#e0e0e0"
+                        stroke="#FFF"
+                        strokeWidth={3}
+                        style={{
+                          default: {
+                            outline: "none",
+                          },
+                          hover: {
+                            outline: "none",
+                            fill: "#d0d0d0",
+                          },
+                          pressed: {
+                            outline: "none",
+                            fill: "#c0c0c0",
+                          },
+                        }}
+                      />
+                    ))
+                  }
+                </Geographies>
+                {tours.map((tour) => (
                   <Marker
                     key={tour.id}
                     coordinates={
@@ -153,39 +122,15 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                   >
                     <g className="marker-group" style={{ cursor: "pointer" }}>
                       <MapPinFill
-                        size={markerSize}
+                        size={28}
                         color={
                           selectedTour?.id === tour.id ? "#ff3333" : "#000000"
                         }
                       />
-                      {selectedTour?.id === tour.id && (
-                        <circle
-                          cx="0"
-                          cy="0"
-                          r={pulseRadius}
-                          fill="none"
-                          stroke="#ff3333"
-                          strokeWidth="2"
-                          opacity="0.6"
-                        >
-                          <animate
-                            attributeName="r"
-                            values={`${pulseRadius};${pulseRadiusMax};${pulseRadius}`}
-                            dur="2s"
-                            repeatCount="indefinite"
-                          />
-                          <animate
-                            attributeName="opacity"
-                            values="0.6;0.2;0.6"
-                            dur="2s"
-                            repeatCount="indefinite"
-                          />
-                        </circle>
-                      )}
                     </g>
                   </Marker>
-                );
-              })}
+                ))}
+              </ZoomableGroup>
             </ComposableMap>
           </div>
         </div>
