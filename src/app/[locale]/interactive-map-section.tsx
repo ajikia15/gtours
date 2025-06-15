@@ -18,11 +18,11 @@ import MapTourCardSkeleton from "@/components/map-tour-card-skeleton";
 // Default map settings
 const DEFAULT_CENTER: [number, number] = [43.5, 42.3];
 
-export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
-  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
+export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {  const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState({ coordinates: DEFAULT_CENTER, zoom: 1 });
+  const [isAnimating, setIsAnimating] = useState(false);
   // const [animationParent] = useAutoAnimate();
 
   useEffect(() => {
@@ -31,10 +31,20 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
     setIsLoading(false);
   }, [tours]);  const handleTourClick = useCallback((tour: Tour) => {
     setSelectedTour(tour);
+    // Pan to the selected tour's coordinates with animation
+    if (tour.coordinates && tour.coordinates.length >= 2) {
+      setIsAnimating(true);
+      setPosition(prev => ({
+        ...prev,
+        coordinates: [tour.coordinates![1], tour.coordinates![0]]
+      }));      // Remove animation after transition completes
+      setTimeout(() => setIsAnimating(false), 400);
+    }
   }, []);
-
   const handleMoveEnd = useCallback((position: any) => {
     setPosition(position);
+    // Ensure animation flag is off when user drags
+    setIsAnimating(false);
   }, []);
   if (!isMounted) {
     return (
@@ -78,11 +88,12 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                 width: "100%",
                 height: "100%",
               }}
-            >
-              <ZoomableGroup
+            >              <ZoomableGroup
                 zoom={position.zoom}
                 center={position.coordinates}
-                onMoveEnd={handleMoveEnd}
+                onMoveEnd={handleMoveEnd}                style={isAnimating ? {
+                  transition: "transform 0.4s ease-in-out"
+                } : {}}
               >
                 <Geographies geography={geoData}>
                   {({ geographies }) =>
