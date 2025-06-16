@@ -89,10 +89,16 @@ function DestinationSelectionContent({
       {/* Selected Destinations Tags */}
       {selectedDestinations.length > 0 && (
         <div className="space-y-2">
-          <div className="text-sm font-medium text-gray-700">Selected Destinations:</div>
+          <div className="text-sm font-medium text-gray-700">
+            Selected Destinations:
+          </div>
           <div className="flex gap-1 overflow-x-auto pb-2">
             {selectedDestinations.map((destination) => (
-              <Badge key={destination} variant="secondary" className="flex items-center gap-1 whitespace-nowrap">
+              <Badge
+                key={destination}
+                variant="secondary"
+                className="flex items-center gap-1 whitespace-nowrap"
+              >
                 {destination}
                 <button
                   onClick={() => onDestinationToggle(destination)}
@@ -162,12 +168,19 @@ function ActivitySelectionContent({
       {/* Selected Activities Tags */}
       {selectedActivities.length > 0 && (
         <div className="space-y-2">
-          <div className="text-sm font-medium text-gray-700">Selected Activities:</div>
+          <div className="text-sm font-medium text-gray-700">
+            Selected Activities:
+          </div>
           <div className="flex gap-1 overflow-x-auto pb-2">
             {selectedActivities.map((activityId) => {
-              const activityName = activities.find(([id]) => id === activityId)?.[1] || activityId;
+              const activityName =
+                activities.find(([id]) => id === activityId)?.[1] || activityId;
               return (
-                <Badge key={activityId} variant="secondary" className="flex items-center gap-1 whitespace-nowrap">
+                <Badge
+                  key={activityId}
+                  variant="secondary"
+                  className="flex items-center gap-1 whitespace-nowrap"
+                >
                   {activityName}
                   <button
                     onClick={() => onActivityToggle(activityId)}
@@ -238,7 +251,7 @@ export default function TourSearchBar({
   // Get all unique activities from tours, filtered by selected destinations
   const getAvailableActivities = () => {
     let relevantTours = tours;
-    
+
     // If destinations are selected, filter tours by those destinations
     if (filters.destinations.length > 0) {
       relevantTours = tours.filter((tour) => {
@@ -248,7 +261,7 @@ export default function TourSearchBar({
         );
       });
     }
-    
+
     // Get activities from the relevant tours
     return Array.from(
       relevantTours.reduce((acc, tour) => {
@@ -267,7 +280,8 @@ export default function TourSearchBar({
     const localizedTitle = getLocalizedTitle(tour, locale);
 
     // Destination filter
-    const matchesDestination = filters.destinations.length === 0 ||
+    const matchesDestination =
+      filters.destinations.length === 0 ||
       filters.destinations.some((destination) =>
         localizedTitle.toLowerCase().includes(destination.toLowerCase())
       );
@@ -285,7 +299,7 @@ export default function TourSearchBar({
     // All tours are available at any time
 
     return matchesDestination && matchesActivities;
-  });  // Handlers
+  }); // Handlers
   const handleDestinationToggle = (destination: string) => {
     setFilters((prev) => ({
       ...prev,
@@ -314,48 +328,52 @@ export default function TourSearchBar({
 
   const handleTravelersChange = (travelers: typeof filters.travelers) => {
     setFilters((prev) => ({ ...prev, travelers }));
-  };  const handleSearch = () => {
+  };
+  const handleSearch = () => {
     // Create URL search parameters
     const searchParams = new URLSearchParams();
-    
+
     // Add destinations
     if (filters.destinations.length > 0) {
-      searchParams.set('destinations', filters.destinations.join(','));
+      searchParams.set("destinations", filters.destinations.join(","));
     }
-    
+
     // Add activities
     if (filters.activities.length > 0) {
-      searchParams.set('activities', filters.activities.join(','));
+      searchParams.set("activities", filters.activities.join(","));
     }
-    
+
     // Add date
     if (filters.selectedDate) {
-      searchParams.set('date', filters.selectedDate.toISOString());
+      searchParams.set("date", filters.selectedDate.toISOString());
     }
-    
+
     // Add travelers
     const { adults, children, infants } = filters.travelers;
     if (adults !== 2 || children > 0 || infants > 0) {
-      searchParams.set('adults', adults.toString());
-      if (children > 0) searchParams.set('children', children.toString());
-      if (infants > 0) searchParams.set('infants', infants.toString());
+      searchParams.set("adults", adults.toString());
+      if (children > 0) searchParams.set("children", children.toString());
+      if (infants > 0) searchParams.set("infants", infants.toString());
     }
-    
+
     // Navigate to destinations page with search parameters
     const searchString = searchParams.toString();
-    const destinationUrl = searchString 
-      ? `/destinations?${searchString}` 
-      : '/destinations';
-    
-    router.push(destinationUrl);    
+    const destinationUrl = searchString
+      ? `/destinations?${searchString}`
+      : "/destinations";
+
+    router.push(destinationUrl);
     // Legacy callback for backward compatibility
     onSearch?.(filters, filteredTours);
   };
-  
+
   const clearFilter = (filterType: keyof SearchFilters) => {
     setFilters((prev) => ({
       ...prev,
-      [filterType]: filterType === "activities" || filterType === "destinations" ? [] : undefined,
+      [filterType]:
+        filterType === "activities" || filterType === "destinations"
+          ? []
+          : undefined,
     }));
   };
 
@@ -389,11 +407,13 @@ export default function TourSearchBar({
       filters.travelers.infants === 0
     ) {
       return "Pre-fill travelers"; // Default
-    }    return `${total} traveler${total !== 1 ? "s" : ""}`;
+    }
+    return `${total} traveler${total !== 1 ? "s" : ""}`;
   };
 
   return (
-    <div className={cn("space-y-4", className)}>{/* Main Search Bar */}
+    <div className={cn("space-y-4", className)}>
+      {/* Main Search Bar */}
       <Card
         className={cn("overflow-hidden rounded-sm border-0 py-0 bg-zinc-900")}
       >
@@ -543,7 +563,8 @@ export default function TourSearchBar({
                   {getTravelersDisplay()}
                 </div>
               </button>
-            </PopoverTrigger>            <PopoverContent className="w-80" align="start">
+            </PopoverTrigger>{" "}
+            <PopoverContent className="w-80" align="start">
               {" "}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
@@ -567,16 +588,14 @@ export default function TourSearchBar({
               Search
             </Button>
           </div>
-        </div>      </Card>
+        </div>{" "}
+      </Card>
     </div>
   );
 }
 
 // Component Composition Variants
-export function QuickTourSearch({
-  tours,
-  ...props
-}: TourSearchBarProps) {
+export function QuickTourSearch({ tours, ...props }: TourSearchBarProps) {
   return <TourSearchBar tours={tours} {...props} />;
 }
 

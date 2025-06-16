@@ -18,12 +18,12 @@ interface SearchParams {
 
 interface DestinationsPageProps {
   params: { locale: string };
-  searchParams: SearchParams;
+  searchParams: Promise<SearchParams>;
 }
 
-export default async function DestinationsPage({ 
+export default async function DestinationsPage({
   params,
-  searchParams 
+  searchParams,
 }: DestinationsPageProps) {
   const t = await getTranslations("Pages.destinations");
   const { data: allTours } = await getTours({
@@ -31,13 +31,18 @@ export default async function DestinationsPage({
   });
 
   // Parse search parameters
-  const destinationFilters = searchParams.destinations?.split(',') || [];
-  const activityFilters = searchParams.activities?.split(',') || [];
-  const dateFilter = searchParams.date ? new Date(searchParams.date) : null;
-  
+  const resolvedSearchParams = await searchParams;
+
+  const destinationFilters =
+    resolvedSearchParams.destinations?.split(",") || [];
+  const activityFilters = resolvedSearchParams.activities?.split(",") || [];
+  const dateFilter = resolvedSearchParams.date
+    ? new Date(resolvedSearchParams.date)
+    : null;
+
   // Filter tours based on search parameters
   let filteredTours = allTours;
-  
+
   if (destinationFilters.length > 0) {
     filteredTours = filteredTours.filter((tour) => {
       const localizedTitle = getLocalizedTitle(tour, params.locale);
@@ -46,7 +51,7 @@ export default async function DestinationsPage({
       );
     });
   }
-  
+
   if (activityFilters.length > 0) {
     filteredTours = filteredTours.filter((tour) =>
       activityFilters.some((activityId) =>
@@ -57,7 +62,8 @@ export default async function DestinationsPage({
     );
   }
 
-  const hasFilters = destinationFilters.length > 0 || activityFilters.length > 0 || dateFilter;
+  const hasFilters =
+    destinationFilters.length > 0 || activityFilters.length > 0 || dateFilter;
   const toursToShow = hasFilters ? filteredTours : allTours.slice(0, 20);
 
   return (
@@ -65,15 +71,16 @@ export default async function DestinationsPage({
       <Header title={t("title")} />
       <h2 className="text-2xl font-bold my-8 text-center">მოძებნე</h2>
       <TourSearchBar tours={allTours} className="my-8 max-w-4xl" />
-      
+
       {hasFilters && (
         <div className="mb-4">
           <h3 className="text-lg font-semibold">
-            {filteredTours.length} tour{filteredTours.length !== 1 ? 's' : ''} found
+            {filteredTours.length} tour{filteredTours.length !== 1 ? "s" : ""}{" "}
+            found
           </h3>
         </div>
       )}
-      
+
       <section className="grid grid-cols-4 gap-4 mt-4">
         <Suspense
           fallback={Array.from({ length: 4 }, (_, index) => (
