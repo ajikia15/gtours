@@ -14,9 +14,7 @@ export default function MapTourCardMobile({ tour }: MapTourCardMobileProps) {
         {tour.description}
       </p>
       <div className="flex items-center justify-between">
-        <span className="font-bold text-green-600">
-          From ${tour.basePrice}
-        </span>
+        <span className="font-bold text-green-600">From ${tour.basePrice}</span>
         <button className="text-xs bg-blue-500 text-white px-2 py-1 rounded">
           View Details
         </button>

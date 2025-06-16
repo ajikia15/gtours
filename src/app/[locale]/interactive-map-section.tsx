@@ -23,9 +23,10 @@ const DEFAULT_CENTER: [number, number] = [43.5, 42.3];
 export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isMounted, setIsMounted] = useState(false);  const [position, setPosition] = useState({ 
-    coordinates: DEFAULT_CENTER, 
-    zoom: 1 
+  const [isMounted, setIsMounted] = useState(false);
+  const [position, setPosition] = useState({
+    coordinates: DEFAULT_CENTER,
+    zoom: 1,
   });
   const [isAnimating, setIsAnimating] = useState(false);
   const [mobile, setMobile] = useState(false);
@@ -39,11 +40,11 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
     const userAgent = navigator.userAgent || "";
     const isMobileDevice = isMobile(userAgent);
     setMobile(isMobileDevice);
-    
+
     if (isMobileDevice) {
-      setPosition(prev => ({
+      setPosition((prev) => ({
         ...prev,
-        zoom: 1.5
+        zoom: 1.5,
       }));
     }
   }, [tours]);
@@ -53,29 +54,30 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
     // Pan to the selected tour's coordinates with animation
     if (tour.coordinates && tour.coordinates.length >= 2) {
       setIsAnimating(true);
-      setPosition(prev => ({
+      setPosition((prev) => ({
         ...prev,
-        coordinates: [tour.coordinates![1], tour.coordinates![0]]
-      }));      // Remove animation after transition completes
+        coordinates: [tour.coordinates![1], tour.coordinates![0]],
+      })); // Remove animation after transition completes
       setTimeout(() => setIsAnimating(false), 400);
     }
-  }, []);  const handleMoveEnd = useCallback((position: any) => {
+  }, []);
+  const handleMoveEnd = useCallback((position: any) => {
     setPosition(position);
     // Ensure animation flag is off when user drags
     setIsAnimating(false);
   }, []);
 
   const handleZoomIn = useCallback(() => {
-    setPosition(prev => ({
+    setPosition((prev) => ({
       ...prev,
-      zoom: Math.min(prev.zoom * 1.5, 8)
+      zoom: Math.min(prev.zoom * 1.5, 8),
     }));
   }, []);
 
   const handleZoomOut = useCallback(() => {
-    setPosition(prev => ({
+    setPosition((prev) => ({
       ...prev,
-      zoom: Math.max(prev.zoom / 1.5, 0.5)
+      zoom: Math.max(prev.zoom / 1.5, 0.5),
     }));
   }, []);
   if (!isMounted) {
@@ -100,7 +102,9 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   }
   return (
     <div className="container mx-auto px-4 py-6">
-      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">        {/* Tour Card */}
+      <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
+        {" "}
+        {/* Tour Card */}
         {!mobile && (
           <>
             {isLoading ? (
@@ -109,11 +113,14 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
               <MapTourCard key={selectedTour.id} tour={selectedTour} />
             ) : null}
           </>
-        )}        {/* Map Container */}
+        )}{" "}
+        {/* Map Container */}
         <div className="order-1 lg:order-2 lg:flex-1 relative">
-          <div className={`w-full border border-gray-200 rounded-xl shadow-sm ${
-            mobile ? "h-[70vh] min-h-[500px]" : "aspect-[16/9]"
-          }`}>
+          <div
+            className={`w-full border border-gray-200 rounded-xl shadow-sm ${
+              mobile ? "h-[70vh] min-h-[500px]" : "aspect-[16/9]"
+            }`}
+          >
             <ComposableMap
               projectionConfig={{
                 scale: 12000, // Zoomed in more
@@ -125,12 +132,19 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                 width: "100%",
                 height: "100%",
               }}
-            >              <ZoomableGroup
+            >
+              {" "}
+              <ZoomableGroup
                 zoom={position.zoom}
                 center={position.coordinates}
-                onMoveEnd={handleMoveEnd}                style={isAnimating ? {
-                  transition: "transform 0.4s ease-in-out"
-                } : {}}
+                onMoveEnd={handleMoveEnd}
+                style={
+                  isAnimating
+                    ? {
+                        transition: "transform 0.4s ease-in-out",
+                      }
+                    : {}
+                }
               >
                 <Geographies geography={geoData}>
                   {({ geographies }) =>
@@ -157,7 +171,8 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                       />
                     ))
                   }
-                </Geographies>                {tours.map((tour) => (
+                </Geographies>{" "}
+                {tours.map((tour) => (
                   <Marker
                     key={tour.id}
                     coordinates={
@@ -173,7 +188,8 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                         color={
                           selectedTour?.id === tour.id ? "#ff3333" : "#000000"
                         }
-                      />                      {/* Mobile popup at marker location */}
+                      />{" "}
+                      {/* Mobile popup at marker location */}
                       {mobile && selectedTour?.id === tour.id && (
                         <foreignObject x="20" y="-100" width="280" height="120">
                           <MapTourCardMobile tour={tour} />
@@ -181,10 +197,11 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                       )}
                     </g>
                   </Marker>
-                ))}</ZoomableGroup>
+                ))}
+              </ZoomableGroup>
             </ComposableMap>
           </div>
-          
+
           {/* Zoom Controls */}
           <div className="absolute top-4 right-4 flex flex-col gap-2 z-10">
             <button
@@ -199,7 +216,8 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
               className="w-10 h-10 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center font-bold text-lg"
               aria-label="Zoom out"
             >
-              −            </button>
+              −{" "}
+            </button>
           </div>
         </div>
       </div>
