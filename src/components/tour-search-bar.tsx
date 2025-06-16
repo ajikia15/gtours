@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "@/i18n/navigation";
 import { Tour } from "@/types/Tour";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,7 +26,6 @@ import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import { getLocalizedTitle } from "@/lib/localizationHelpers";
 import { useLocale } from "next-intl";
-import { useBooking } from "@/context/booking";
 
 interface SearchFilters {
   destinations: string[];
@@ -45,9 +45,7 @@ interface SearchFilters {
 interface TourSearchBarProps {
   tours: Tour[];
   onSearch?: (filters: SearchFilters, results: Tour[]) => void;
-  onTourSelect?: (tour: Tour) => void;
   className?: string;
-  showResults?: boolean;
 }
 
 interface DestinationSelectionContentProps {
@@ -214,22 +212,18 @@ function ActivitySelectionContent({
 export default function TourSearchBar({
   tours,
   onSearch,
-  onTourSelect,
   className = "",
-  showResults = true,
 }: TourSearchBarProps) {
   const locale = useLocale();
-  const booking = useBooking();
+  const router = useRouter();
   // Search state
   const [filters, setFilters] = useState<SearchFilters>({
     destinations: [],
     activities: [],
     travelers: { adults: 2, children: 0, infants: 0 },
   });
-
   // UI state
   const [openPopover, setOpenPopover] = useState<string | null>(null);
-  const [showSearchResults, setShowSearchResults] = useState(false);
 
   // Get all unique destinations from tour titles
   const allDestinations = Array.from(
@@ -320,32 +314,44 @@ export default function TourSearchBar({
 
   const handleTravelersChange = (travelers: typeof filters.travelers) => {
     setFilters((prev) => ({ ...prev, travelers }));
-  };
-  const handleSearch = () => {
-    const searchFilters: SearchFilters = {
-      ...filters,
-    };
-
-    onSearch?.(searchFilters, filteredTours);
-    setShowSearchResults(showResults);
-  };  const handleTourSelect = (tour: Tour) => {
-    // Pre-fill shared booking state with selected date and travelers
+  };  const handleSearch = () => {
+    // Create URL search parameters
+    const searchParams = new URLSearchParams();
+    
+    // Add destinations
+    if (filters.destinations.length > 0) {
+      searchParams.set('destinations', filters.destinations.join(','));
+    }
+    
+    // Add activities
+    if (filters.activities.length > 0) {
+      searchParams.set('activities', filters.activities.join(','));
+    }
+    
+    // Add date
     if (filters.selectedDate) {
-      booking.updateSharedDate(filters.selectedDate);
+      searchParams.set('date', filters.selectedDate.toISOString());
     }
-    if (
-      filters.travelers.adults !== 2 ||
-      filters.travelers.children > 0 ||
-      filters.travelers.infants > 0
-    ) {
-      booking.updateSharedTravelers(filters.travelers);
+    
+    // Add travelers
+    const { adults, children, infants } = filters.travelers;
+    if (adults !== 2 || children > 0 || infants > 0) {
+      searchParams.set('adults', adults.toString());
+      if (children > 0) searchParams.set('children', children.toString());
+      if (infants > 0) searchParams.set('infants', infants.toString());
     }
-
-    onTourSelect?.(tour);
-    // Don't close the popup when selecting a tour
-    // setOpenPopover(null);
-    setShowSearchResults(false);
+    
+    // Navigate to destinations page with search parameters
+    const searchString = searchParams.toString();
+    const destinationUrl = searchString 
+      ? `/destinations?${searchString}` 
+      : '/destinations';
+    
+    router.push(destinationUrl);    
+    // Legacy callback for backward compatibility
+    onSearch?.(filters, filteredTours);
   };
+  
   const clearFilter = (filterType: keyof SearchFilters) => {
     setFilters((prev) => ({
       ...prev,
@@ -562,87 +568,6 @@ export default function TourSearchBar({
             </Button>
           </div>
         </div>      </Card>
-
-      {/* Search Results */}
-      {showSearchResults && (
-        <Card className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">
-              {filteredTours.length} tour{filteredTours.length !== 1 ? "s" : ""}{" "}
-              found
-            </h3>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowSearchResults(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
-          </div>
-
-          {filteredTours.length > 0 ? (
-            <div className="space-y-3">
-              {filteredTours.slice(0, 10).map((tour) => (
-                <button
-                  key={tour.id}
-                  onClick={() => handleTourSelect(tour)}
-                  className="w-full p-3 text-left rounded-lg border hover:bg-gray-50 transition-colors"
-                >
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">
-                        {getLocalizedTitle(tour, locale)}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {tour.duration} days • From {tour.basePrice} GEL
-                      </div>
-                      {tour.offeredActivities &&
-                        tour.offeredActivities.length > 0 && (
-                          <div className="flex gap-1 mt-1">
-                            {tour.offeredActivities
-                              .slice(0, 3)
-                              .map((activity) => (
-                                <Badge
-                                  key={activity.activityTypeId}
-                                  variant="outline"
-                                  className="text-xs"
-                                >
-                                  {activity.nameSnapshot}
-                                </Badge>
-                              ))}
-                            {tour.offeredActivities.length > 3 && (
-                              <Badge variant="outline" className="text-xs">
-                                +{tour.offeredActivities.length - 3}
-                              </Badge>
-                            )}
-                          </div>
-                        )}
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-lg">
-                        {tour.basePrice} GEL
-                      </div>
-                      <div className="text-xs text-gray-500">per person</div>
-                    </div>
-                  </div>
-                </button>
-              ))}
-              {filteredTours.length > 10 && (
-                <div className="text-sm text-gray-500 text-center p-2 border-t">
-                  +{filteredTours.length - 10} more results. Use filters to
-                  narrow down.
-                </div>
-              )}
-            </div>
-          ) : (
-            <div className="text-center py-8 text-gray-500">
-              <Search className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No tours found matching your criteria.</p>
-              <p className="text-sm">Try adjusting your search or filters.</p>
-            </div>
-          )}
-        </Card>
-      )}
     </div>
   );
 }
@@ -651,8 +576,8 @@ export default function TourSearchBar({
 export function QuickTourSearch({
   tours,
   ...props
-}: Omit<TourSearchBarProps, "showResults">) {
-  return <TourSearchBar tours={tours} showResults={false} {...props} />;
+}: TourSearchBarProps) {
+  return <TourSearchBar tours={tours} {...props} />;
 }
 
 export function CompactTourSearch({ tours, ...props }: TourSearchBarProps) {
@@ -660,5 +585,5 @@ export function CompactTourSearch({ tours, ...props }: TourSearchBarProps) {
 }
 
 export function FullTourSearch({ tours, ...props }: TourSearchBarProps) {
-  return <TourSearchBar tours={tours} showResults={true} {...props} />;
+  return <TourSearchBar tours={tours} {...props} />;
 }
