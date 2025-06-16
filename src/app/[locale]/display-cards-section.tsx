@@ -3,9 +3,15 @@
 import { getTours } from "@/data/tours";
 import FakeTimeoutForSkeletons from "@/lib/fakeTimeoutForSkeletons";
 import TourCard from "@/components/tour-card";
-// export default function DisplayCardsSection({ tours }: { tours: Tour[] }) { // for passing props with tours
-export default async function DisplayCardsSection() {
-  const { data } = await getTours();
+import { Tour } from "@/types/Tour";
+
+export default async function DisplayCardsSection({
+  tours,
+}: {
+  tours?: Tour[];
+}) {
+  // If tours are passed as props, use them; otherwise fetch
+  const data = tours || (await getTours()).data;
   await FakeTimeoutForSkeletons();
 
   // const userFavourites = await getUserFavourites();

@@ -1,6 +1,6 @@
-import { getTours } from "@/data/tours";
-import DirectBookingPageClient from "./direct-booking-page-client";
-import { notFound } from "next/navigation";
+import { Suspense } from "react";
+import DirectBookingContent from "./direct-booking-content";
+import DirectBookingSkeleton from "./direct-booking-skeleton";
 
 interface DirectBookingPageProps {
   params: Promise<{ tourId: string }>;
@@ -9,20 +9,11 @@ interface DirectBookingPageProps {
 export default async function DirectBookingPage({
   params,
 }: DirectBookingPageProps) {
-  // Fetch tours from server
-  const { data: tours } = await getTours({
-    pagination: { page: 1, pageSize: 50 },
-  });
-
-  // Get the tour ID
   const { tourId } = await params;
 
-  // Find the specific tour
-  const tour = tours.find((t) => t.id === tourId);
-
-  if (!tour) {
-    notFound();
-  }
-
-  return <DirectBookingPageClient tours={tours} tour={tour} />;
+  return (
+    <Suspense fallback={<DirectBookingSkeleton />}>
+      <DirectBookingContent tourId={tourId} />
+    </Suspense>
+  );
 }

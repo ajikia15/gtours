@@ -25,14 +25,13 @@ import { getLocalizedTitle } from "@/lib/localizationHelpers";
 
 export default async function ToursTable({
   page = 1,
-  params = { locale: "en" },
+  params,
 }: {
   page?: number;
-  params?: Promise<{ locale: string }> | { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  // Ensure params is awaited
-  const resolvedParams = await Promise.resolve(params);
-  const locale = resolvedParams.locale;
+  // Properly await params
+  const { locale } = await params;
   const t = await getTranslations("Admin");
 
   const { data, totalPages } = await getTours({

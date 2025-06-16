@@ -1,6 +1,6 @@
-import { getTourById } from "@/data/tours";
-import { notFound } from "next/navigation";
-import EditTourBookingClient from "@/app/[locale]/tour/[tourId]/edit/edit-tour-booking-client";
+import { Suspense } from "react";
+import EditTourBookingContent from "./edit-tour-booking-content";
+import EditTourBookingSkeleton from "./edit-tour-booking-skeleton";
 
 interface EditTourBookingPageProps {
   params: Promise<{ tourId: string }>;
@@ -11,11 +11,9 @@ export default async function EditTourBookingPage({
 }: EditTourBookingPageProps) {
   const { tourId } = await params;
 
-  try {
-    const tour = await getTourById(tourId);
-    return <EditTourBookingClient tour={tour} />;
-  } catch (error) {
-    console.error("Failed to fetch tour:", error);
-    notFound();
-  }
+  return (
+    <Suspense fallback={<EditTourBookingSkeleton />}>
+      <EditTourBookingContent tourId={tourId} />
+    </Suspense>
+  );
 }
