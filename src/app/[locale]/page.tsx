@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { getTours } from "@/data/tours";
 import InteractiveMapSection from "./interactive-map-section";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
+import TourSearchBar from "@/components/tour-search-bar";
 
 export default async function HomePage() {
   // const t = useTranslations("Homepage");
@@ -13,11 +14,25 @@ export default async function HomePage() {
 
   const { data: tours } = await getTours({
     pagination: { page: 1, pageSize: 20 }, // Get more tours for selection
-  });
-
-  return (
+  });  return (
     <div className="space-y-10 mb-10">
-      <Carousel tours={tours} />
+      <div className="relative">
+        <Carousel />
+        <div className="absolute left-0 right-0 bottom-0 flex justify-center pointer-events-none">
+          <div
+            className="pointer-events-auto w-full max-w-4xl px-4"
+            style={{
+              transform: "translateY(50%)",
+            }}
+          >
+            <TourSearchBar 
+              tours={tours}
+              className="shadow-lg"
+              showResults={false}
+            />
+          </div>
+        </div>
+      </div>
       <h1 className="text-center my-8 text-2xl font-bold">{t("activities")}</h1>
       <QuickCategory />
 
