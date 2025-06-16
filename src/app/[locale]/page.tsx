@@ -9,12 +9,8 @@ import TourCardSkeleton from "@/components/tour-card-skeleton";
 import TourSearchBar from "@/components/tour-search-bar";
 
 export default async function HomePage() {
-  // const t = useTranslations("Homepage");
   const t = await getTranslations("Homepage");
 
-  const { data: tours } = await getTours({
-    pagination: { page: 1, pageSize: 20 }, // Get more tours for selection
-  });
   return (
     <div className="space-y-10 mb-10">
       <div className="relative">
@@ -26,18 +22,18 @@ export default async function HomePage() {
               transform: "translateY(50%)",
             }}
           >
-            <TourSearchBar
-              tours={tours}
-              className="shadow-lg"
-              showResults={false}
-            />
+            <Suspense
+              fallback={
+                <div className="bg-white shadow-lg rounded-lg p-4 h-16 animate-pulse"></div>
+              }
+            >
+              <SearchBarWithData />
+            </Suspense>
           </div>
         </div>
       </div>
       <h1 className="text-center my-8 text-2xl font-bold">{t("activities")}</h1>
       <QuickCategory />
-
-      {/* BookingBar for testing */}
 
       <h1 className="text-center my-8 text-2xl font-bold">
         {t("discover-georgia")}
@@ -53,7 +49,30 @@ export default async function HomePage() {
       >
         <DisplayCardsSection />
       </Suspense>
-      <InteractiveMapSection tours={tours} />
+
+      <Suspense
+        fallback={
+          <div className="w-full h-96 bg-gray-200 animate-pulse rounded-lg"></div>
+        }
+      >
+        <MapWithData />
+      </Suspense>
     </div>
   );
+}
+
+async function SearchBarWithData() {
+  const { data: tours } = await getTours({
+    pagination: { page: 1, pageSize: 20 },
+  });
+
+  return <TourSearchBar tours={tours} className="shadow-lg" />;
+}
+
+async function MapWithData() {
+  const { data: tours } = await getTours({
+    pagination: { page: 1, pageSize: 20 },
+  });
+
+  return <InteractiveMapSection tours={tours} />;
 }

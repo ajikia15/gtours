@@ -85,7 +85,7 @@ export async function getTours(options?: getToursOptions) {
     toursQuery = toursQuery.where("basePrice", "<=", maxPrice);
   }
 
-  const totalPages = await getTotalPages(toursQuery, pageSize);
+  // Get tours data first (this is fast)
   const toursSnapshot = await toursQuery
     .limit(pageSize)
     .offset((page - 1) * pageSize)
@@ -99,6 +99,17 @@ export async function getTours(options?: getToursOptions) {
       ...migratedData,
     };
   }) as Tour[];
+
+  // Only calculate total pages if specifically needed (adds ~2s delay)
+  let totalPages = 1;
+  if (options?.pagination?.page && options.pagination.page > 1) {
+    // Only do expensive count query for pagination beyond first page
+    totalPages = await getTotalPages(toursQuery, pageSize);
+  } else if (tours.length === pageSize) {
+    // If we got a full page, there's probably more - estimate
+    totalPages = page + 1;
+  }
+  
   return { data: tours, totalPages };
 }
 
