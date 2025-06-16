@@ -5,9 +5,10 @@ import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
 import { getLocalizedTitle } from "@/lib/localizationHelpers";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
-import { MapPinIcon } from "lucide-react";
+import { ArrowRight, MapPinIcon } from "lucide-react";
 import TourActionButton from "./tour-action-button";
 import { getLocale } from "next-intl/server";
+import { Button } from "./ui/button";
 
 export default async function ShortTourCard({ tour }: { tour: Tour }) {
   const locale = await getLocale();
@@ -39,20 +40,21 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
           <MapPinIcon size={14} /> {getLocalizedTitle(tour, locale)},
           საკარტველოუ
         </div>
-        {/* <Link
-          href={`/tour/${tour.id}`}
-          className="w-fit font-bold hover:underline"
-        >
-          View Tour
-        </Link> */}
-        <div className="flex gap-2 mt-2 mb-2">
-          <TourActionButton tour={tour} intent="primary" />
-          <TourActionButton
-            tour={tour}
-            intent="secondary"
-            variant="ghost"
-            text={false}
-          />
+        <div className="flex justify-between items-center">
+          <div className="flex gap-2 mt-2 mb-2">
+            <TourActionButton tour={tour} intent="primary" />
+            <TourActionButton
+              tour={tour}
+              intent="secondary"
+              variant="ghost"
+              text={false}
+            />
+          </div>
+          <Link href={`/tour/${tour.id}`} className="grid place-items-center  ">
+            <Button className="rounded-full w-10 h-10" variant="ghost">
+              <ArrowRight />
+            </Button>
+          </Link>
         </div>
       </div>
     </div>
