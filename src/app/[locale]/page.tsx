@@ -14,7 +14,8 @@ export default async function HomePage() {
 
   const { data: tours } = await getTours({
     pagination: { page: 1, pageSize: 20 }, // Get more tours for selection
-  });  return (
+  });
+  return (
     <div className="space-y-10 mb-10">
       <div className="relative">
         <Carousel />
@@ -25,7 +26,7 @@ export default async function HomePage() {
               transform: "translateY(50%)",
             }}
           >
-            <TourSearchBar 
+            <TourSearchBar
               tours={tours}
               className="shadow-lg"
               showResults={false}

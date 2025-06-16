@@ -98,30 +98,32 @@ export default function HeroSearch() {
 
 ### SearchBarProps
 
-| Prop | Type | Required | Default | Description |
-|------|------|----------|---------|-------------|
-| `tours` | `Tour[]` | ✅ | - | Array of tours to search through |
-| `onSearch` | `(filters: SearchFilters) => void` | ❌ | - | Callback when search is performed |
-| `onTourSelect` | `(tour: Tour) => void` | ❌ | - | Callback when a tour is selected |
-| `className` | `string` | ❌ | `""` | Custom styling classes |
-| `placeholder` | `string` | ❌ | `"Search destinations..."` | Search input placeholder |
-| `showFilters` | `boolean` | ❌ | `true` | Whether to show filter popovers |
-| `compactMode` | `boolean` | ❌ | `false` | Enable compact layout |
+| Prop           | Type                               | Required | Default                    | Description                       |
+| -------------- | ---------------------------------- | -------- | -------------------------- | --------------------------------- |
+| `tours`        | `Tour[]`                           | ✅       | -                          | Array of tours to search through  |
+| `onSearch`     | `(filters: SearchFilters) => void` | ❌       | -                          | Callback when search is performed |
+| `onTourSelect` | `(tour: Tour) => void`             | ❌       | -                          | Callback when a tour is selected  |
+| `className`    | `string`                           | ❌       | `""`                       | Custom styling classes            |
+| `placeholder`  | `string`                           | ❌       | `"Search destinations..."` | Search input placeholder          |
+| `showFilters`  | `boolean`                          | ❌       | `true`                     | Whether to show filter popovers   |
+| `compactMode`  | `boolean`                          | ❌       | `false`                    | Enable compact layout             |
 
 ### SearchFilters Interface
 
 ```typescript
 interface SearchFilters {
-  destination?: string;           // Search query for destinations
-  activities: string[];          // Array of activity type IDs
-  dateFrom?: Date;               // Start date filter
-  dateTo?: Date;                 // End date filter (optional)
-  travelers: {                   // Traveler count requirements
+  destination?: string; // Search query for destinations
+  activities: string[]; // Array of activity type IDs
+  dateFrom?: Date; // Start date filter
+  dateTo?: Date; // End date filter (optional)
+  travelers: {
+    // Traveler count requirements
     adults: number;
     children: number;
     infants: number;
   };
-  priceRange?: {                 // Price filtering (future)
+  priceRange?: {
+    // Price filtering (future)
     min: number;
     max: number;
   };
@@ -131,17 +133,20 @@ interface SearchFilters {
 ## Component Variants
 
 ### 1. Full SearchBar (Default)
+
 - Complete horizontal layout with all filter sections
 - Collapsible search results
 - Active filter badges
 - Best for dedicated search pages
 
 ### 2. CompactSearchBar
+
 - Includes filters but in compact mode
 - Dropdown results overlay
 - Suitable for sidebar or header integration
 
 ### 3. QuickSearchBar
+
 - Minimal search input only
 - No filter popovers
 - Perfect for hero sections or quick access
@@ -164,7 +169,9 @@ const filteredTours = tours.filter((tour) => {
   const matchesActivities =
     filters.activities.length === 0 ||
     filters.activities.some((activityId) =>
-      tour.offeredActivities?.some((offered) => offered.activityTypeId === activityId)
+      tour.offeredActivities?.some(
+        (offered) => offered.activityTypeId === activityId
+      )
     );
 
   return matchesSearch && matchesActivities;
@@ -231,10 +238,10 @@ import { getLocalizedTitle } from "@/lib/localizationHelpers";
 const handleTourSelect = (tour: Tour) => {
   // Option 1: Navigate to tour details
   router.push(`/tour/${tour.id}`);
-  
+
   // Option 2: Add to booking flow
   router.push(`/book/${tour.id}`);
-  
+
   // Option 3: Update search context
   setSelectedTour(tour);
 };
@@ -248,11 +255,11 @@ const handleTourSelect = (tour: Tour) => {
 // Matches BookingBar exactly
 .search-bar {
   @apply bg-zinc-900 text-white;
-  
+
   .section-button {
     @apply hover:bg-zinc-800 transition-colors;
   }
-  
+
   .section-divider {
     @apply divide-x divide-zinc-700;
   }
@@ -268,6 +275,7 @@ const handleTourSelect = (tour: Tour) => {
 ## Usage Patterns in GTours
 
 ### 1. Destinations Page
+
 ```tsx
 // Replace existing BookingBar with SearchBar
 <SearchBar
@@ -278,6 +286,7 @@ const handleTourSelect = (tour: Tour) => {
 ```
 
 ### 2. Header Navigation
+
 ```tsx
 // Quick search in header
 <QuickSearchBar
@@ -288,6 +297,7 @@ const handleTourSelect = (tour: Tour) => {
 ```
 
 ### 3. Hero Section
+
 ```tsx
 // Primary search interface
 <FullSearchBar
@@ -300,6 +310,7 @@ const handleTourSelect = (tour: Tour) => {
 ```
 
 ### 4. Carousel Overlay
+
 ```tsx
 // Replace BookingBar in carousel
 <CompactSearchBar
@@ -382,7 +393,7 @@ describe("SearchBar", () => {
   test("filters tours by search query", () => {
     render(<SearchBar tours={mockTours} />);
     fireEvent.change(screen.getByPlaceholderText(/search/i), {
-      target: { value: "skiing" }
+      target: { value: "skiing" },
     });
     expect(screen.getByText("Skiing Adventure")).toBeInTheDocument();
   });
@@ -392,7 +403,7 @@ describe("SearchBar", () => {
     fireEvent.click(screen.getByText("Activities"));
     fireEvent.click(screen.getByLabelText("Skiing"));
     expect(onSearch).toHaveBeenCalledWith({
-      activities: ["skiing-activity-id"]
+      activities: ["skiing-activity-id"],
     });
   });
 });
@@ -404,7 +415,7 @@ describe("SearchBar", () => {
 test("search to booking flow", () => {
   render(<SearchBar tours={mockTours} onTourSelect={mockSelect} />);
   fireEvent.change(screen.getByPlaceholderText(/search/i), {
-    target: { value: "adventure" }
+    target: { value: "adventure" },
   });
   fireEvent.click(screen.getByText("Search"));
   fireEvent.click(screen.getByText("Mountain Adventure"));

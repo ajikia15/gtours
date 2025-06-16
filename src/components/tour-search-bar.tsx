@@ -214,12 +214,14 @@ export default function TourSearchBar({
   // Filter and search tours
   const filteredTours = tours.filter((tour) => {
     const localizedTitle = getLocalizedTitle(tour, locale);
-    
+
     // Text search
     const matchesSearch = searchQuery
       ? localizedTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
         tour.offeredActivities?.some((activity) =>
-          activity.nameSnapshot.toLowerCase().includes(searchQuery.toLowerCase())
+          activity.nameSnapshot
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
         )
       : true;
 
@@ -232,7 +234,9 @@ export default function TourSearchBar({
     const matchesActivities =
       filters.activities.length === 0 ||
       filters.activities.some((activityId) =>
-        tour.offeredActivities?.some((offered) => offered.activityTypeId === activityId)
+        tour.offeredActivities?.some(
+          (offered) => offered.activityTypeId === activityId
+        )
       );
 
     // Note: Date and travelers are for pre-filling shared state, not filtering
@@ -271,18 +275,23 @@ export default function TourSearchBar({
       ...filters,
       destination: filters.destination || searchQuery || undefined,
     };
-    
+
     onSearch?.(searchFilters, filteredTours);
     setShowSearchResults(showResults);
-  };  const handleTourSelect = (tour: Tour) => {
+  };
+  const handleTourSelect = (tour: Tour) => {
     // Pre-fill shared booking state with selected date and travelers
     if (filters.selectedDate) {
       booking.updateSharedDate(filters.selectedDate);
     }
-    if (filters.travelers.adults !== 2 || filters.travelers.children > 0 || filters.travelers.infants > 0) {
+    if (
+      filters.travelers.adults !== 2 ||
+      filters.travelers.children > 0 ||
+      filters.travelers.infants > 0
+    ) {
       booking.updateSharedTravelers(filters.travelers);
     }
-    
+
     onTourSelect?.(tour);
     setOpenPopover(null);
     setShowSearchResults(false);
@@ -305,35 +314,41 @@ export default function TourSearchBar({
     return `${filters.activities.length} activit${
       filters.activities.length !== 1 ? "ies" : "y"
     }`;
-  };  const getDateDisplay = () => {
+  };
+  const getDateDisplay = () => {
     if (filters.selectedDate) {
       return filters.selectedDate.toLocaleDateString();
     }
     return "Pre-fill date";
   };
   const getTravelersDisplay = () => {
-    const total = filters.travelers.adults + filters.travelers.children + filters.travelers.infants;
-    if (total === 2 && filters.travelers.children === 0 && filters.travelers.infants === 0) {
+    const total =
+      filters.travelers.adults +
+      filters.travelers.children +
+      filters.travelers.infants;
+    if (
+      total === 2 &&
+      filters.travelers.children === 0 &&
+      filters.travelers.infants === 0
+    ) {
       return "Pre-fill travelers"; // Default
     }
     return `${total} traveler${total !== 1 ? "s" : ""}`;
   };
   const hasActiveFilters = Boolean(
     filters.destination ||
-    filters.activities.length > 0 ||
-    filters.selectedDate ||
-    filters.travelers.adults !== 2 ||
-    filters.travelers.children > 0 ||
-    filters.travelers.infants > 0
+      filters.activities.length > 0 ||
+      filters.selectedDate ||
+      filters.travelers.adults !== 2 ||
+      filters.travelers.children > 0 ||
+      filters.travelers.infants > 0
   );
 
   return (
     <div className={cn("space-y-4", className)}>
       {/* Main Search Bar */}
       <Card
-        className={cn(
-          "overflow-hidden rounded-sm border-0 py-0 bg-zinc-900"
-        )}
+        className={cn("overflow-hidden rounded-sm border-0 py-0 bg-zinc-900")}
       >
         <div className="flex divide-x divide-zinc-700">
           {/* Search Input Section */}
@@ -456,14 +471,17 @@ export default function TourSearchBar({
               >
                 <div className="flex items-center gap-2 mb-1">
                   <CalendarDays className="h-4 w-4 text-zinc-300" />
-                  <span className="text-sm font-medium text-gray-100">Date</span>
+                  <span className="text-sm font-medium text-gray-100">
+                    Date
+                  </span>
                   <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
                 </div>
                 <div className="text-xs truncate text-gray-300">
                   {getDateDisplay()}
                 </div>
               </button>
-            </PopoverTrigger>            <PopoverContent className="w-auto p-0" align="start">
+            </PopoverTrigger>{" "}
+            <PopoverContent className="w-auto p-0" align="start">
               <TourDatePicker
                 date={filters.selectedDate}
                 setDate={handleDateChange}
@@ -494,10 +512,14 @@ export default function TourSearchBar({
                 </div>
               </button>
             </PopoverTrigger>
-            <PopoverContent className="w-80" align="start">              <div className="space-y-3">
+            <PopoverContent className="w-80" align="start">
+              {" "}
+              <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium">Select Travelers</h4>
-                  <div className="text-xs text-gray-500">For pre-filling bookings</div>
+                  <div className="text-xs text-gray-500">
+                    For pre-filling bookings
+                  </div>
                   {(filters.travelers.adults !== 2 ||
                     filters.travelers.children > 0 ||
                     filters.travelers.infants > 0) && (
@@ -551,9 +573,15 @@ export default function TourSearchBar({
             </Badge>
           )}
           {filters.activities.map((activityId) => {
-            const activityName = allActivities.find(([id]) => id === activityId)?.[1] || activityId;
+            const activityName =
+              allActivities.find(([id]) => id === activityId)?.[1] ||
+              activityId;
             return (
-              <Badge key={activityId} variant="secondary" className="flex items-center gap-1">
+              <Badge
+                key={activityId}
+                variant="secondary"
+                className="flex items-center gap-1"
+              >
                 {activityName}
                 <button
                   onClick={() => handleActivityToggle(activityId)}
@@ -563,11 +591,14 @@ export default function TourSearchBar({
                 </button>
               </Badge>
             );
-          })}          {filters.selectedDate && (
+          })}{" "}
+          {filters.selectedDate && (
             <Badge variant="secondary" className="flex items-center gap-1">
               Date: {filters.selectedDate.toLocaleDateString()}
               <button
-                onClick={() => setFilters((prev) => ({ ...prev, selectedDate: undefined }))}
+                onClick={() =>
+                  setFilters((prev) => ({ ...prev, selectedDate: undefined }))
+                }
                 className="ml-1 hover:bg-gray-300 rounded"
               >
                 <X className="h-3 w-3" />
@@ -582,7 +613,8 @@ export default function TourSearchBar({
         <Card className="p-4">
           <div className="flex items-center justify-between mb-4">
             <h3 className="font-semibold">
-              {filteredTours.length} tour{filteredTours.length !== 1 ? "s" : ""} found
+              {filteredTours.length} tour{filteredTours.length !== 1 ? "s" : ""}{" "}
+              found
             </h3>
             <Button
               variant="ghost"
@@ -592,7 +624,7 @@ export default function TourSearchBar({
               <X className="h-4 w-4" />
             </Button>
           </div>
-          
+
           {filteredTours.length > 0 ? (
             <div className="space-y-3">
               {filteredTours.slice(0, 10).map((tour) => (
@@ -609,23 +641,32 @@ export default function TourSearchBar({
                       <div className="text-sm text-gray-500">
                         {tour.duration} days • From {tour.basePrice} GEL
                       </div>
-                      {tour.offeredActivities && tour.offeredActivities.length > 0 && (
-                        <div className="flex gap-1 mt-1">
-                          {tour.offeredActivities.slice(0, 3).map((activity) => (
-                            <Badge key={activity.activityTypeId} variant="outline" className="text-xs">
-                              {activity.nameSnapshot}
-                            </Badge>
-                          ))}
-                          {tour.offeredActivities.length > 3 && (
-                            <Badge variant="outline" className="text-xs">
-                              +{tour.offeredActivities.length - 3}
-                            </Badge>
-                          )}
-                        </div>
-                      )}
+                      {tour.offeredActivities &&
+                        tour.offeredActivities.length > 0 && (
+                          <div className="flex gap-1 mt-1">
+                            {tour.offeredActivities
+                              .slice(0, 3)
+                              .map((activity) => (
+                                <Badge
+                                  key={activity.activityTypeId}
+                                  variant="outline"
+                                  className="text-xs"
+                                >
+                                  {activity.nameSnapshot}
+                                </Badge>
+                              ))}
+                            {tour.offeredActivities.length > 3 && (
+                              <Badge variant="outline" className="text-xs">
+                                +{tour.offeredActivities.length - 3}
+                              </Badge>
+                            )}
+                          </div>
+                        )}
                     </div>
                     <div className="text-right">
-                      <div className="font-bold text-lg">{tour.basePrice} GEL</div>
+                      <div className="font-bold text-lg">
+                        {tour.basePrice} GEL
+                      </div>
                       <div className="text-xs text-gray-500">per person</div>
                     </div>
                   </div>
@@ -633,7 +674,8 @@ export default function TourSearchBar({
               ))}
               {filteredTours.length > 10 && (
                 <div className="text-sm text-gray-500 text-center p-2 border-t">
-                  +{filteredTours.length - 10} more results. Use filters to narrow down.
+                  +{filteredTours.length - 10} more results. Use filters to
+                  narrow down.
                 </div>
               )}
             </div>
@@ -651,7 +693,10 @@ export default function TourSearchBar({
 }
 
 // Component Composition Variants
-export function QuickTourSearch({ tours, ...props }: Omit<TourSearchBarProps, "showResults">) {
+export function QuickTourSearch({
+  tours,
+  ...props
+}: Omit<TourSearchBarProps, "showResults">) {
   return <TourSearchBar tours={tours} showResults={false} {...props} />;
 }
 
