@@ -1,6 +1,10 @@
 "use client";
 import React, { useCallback, useMemo, useEffect, useRef } from "react";
-import { EmblaOptionsType, EmblaCarouselType, EmblaEventType } from "embla-carousel";
+import {
+  EmblaOptionsType,
+  EmblaCarouselType,
+  EmblaEventType,
+} from "embla-carousel";
 import {
   DotButton,
   useDotButton,
@@ -17,8 +21,7 @@ type SlideContent = {
   title: string;
   subtitle: string;
   buttonText: string;
-  buttonAction: () => void;
-  href?: string;
+  href: string;
 };
 
 type PropType = {
@@ -32,7 +35,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props;
   const autoplay = useMemo(() => Autoplay(), []);
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay]);
-  
+
   const tweenFactor = useRef(0);
   const tweenNodes = useRef<HTMLElement[]>([]);
   const animationId = useRef<number | null>(null);
@@ -44,11 +47,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       title: "Discover Georgia",
       subtitle: "Book Your Adventure Now",
       buttonText: "Book Now",
-      buttonAction: () => {
-        // For now, redirect to destinations as we don't have tour preselected
-        window.location.href = "/destinations";
-      },
-      href: "/destinations"
+      href: "/destinations",
     },
     {
       id: 1,
@@ -56,10 +55,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       title: "Explore Georgia",
       subtitle: "Discover Amazing Destinations",
       buttonText: "Explore",
-      buttonAction: () => {
-        window.location.href = "/destinations";
-      },
-      href: "/destinations"
+      href: "/destinations",
     },
     {
       id: 2,
@@ -67,10 +63,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       title: "Read Our Stories",
       subtitle: "Get Inspired by Travel Tales",
       buttonText: "Blog",
-      buttonAction: () => {
-        window.location.href = "/blog";
-      },
-      href: "/blog"
+      href: "/blog",
     },
     {
       id: 3,
@@ -78,10 +71,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       title: "About Our Company",
       subtitle: "Learn More About Us",
       buttonText: "About Us",
-      buttonAction: () => {
-        window.location.href = "/about";
-      },
-      href: "/about"
+      href: "/about",
     },
     {
       id: 4,
@@ -89,18 +79,15 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
       title: "Get in Touch",
       subtitle: "Contact Us for More Information",
       buttonText: "Contact",
-      buttonAction: () => {
-        window.location.href = "/contact";
-      },
-      href: "/contact"
-    }
+      href: "/contact",
+    },
   ];
 
   const actualSlides = slides || [0, 1, 2, 3, 4];
 
   const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
     tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
-      return slideNode.querySelector('.embla__parallax__layer') as HTMLElement;
+      return slideNode.querySelector(".embla__parallax__layer") as HTMLElement;
     });
   }, []);
 
@@ -120,7 +107,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         const engine = emblaApi.internalEngine();
         const scrollProgress = emblaApi.scrollProgress();
         const slidesInView = emblaApi.slidesInView();
-        const isScrollEvent = eventName === 'scroll';
+        const isScrollEvent = eventName === "scroll";
 
         emblaApi.scrollSnapList().forEach((scrollSnap, snapIndex) => {
           let diffToTarget = scrollSnap - scrollProgress;
@@ -167,17 +154,17 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     tweenParallax(emblaApi);
 
     emblaApi
-      .on('reInit', setTweenNodes)
-      .on('reInit', setTweenFactor)
-      .on('reInit', tweenParallax)
-      .on('scroll', tweenParallax)
-      .on('slideFocus', tweenParallax);
+      .on("reInit", setTweenNodes)
+      .on("reInit", setTweenFactor)
+      .on("reInit", tweenParallax)
+      .on("scroll", tweenParallax)
+      .on("slideFocus", tweenParallax);
 
     return () => {
       if (animationId.current) {
         cancelAnimationFrame(animationId.current);
       }
-      tweenNodes.current.forEach((slide) => slide.removeAttribute('style'));
+      tweenNodes.current.forEach((slide) => slide.removeAttribute("style"));
     };
   }, [emblaApi, tweenParallax, setTweenNodes, setTweenFactor]);
 
@@ -203,18 +190,20 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         className="embla__viewport"
         ref={emblaRef}
         style={{ position: "relative" }}
-      >        <div className="embla__container">
+      >
+        {" "}
+        <div className="embla__container">
           {actualSlides.map((index) => {
             const content = slideContent[index] || slideContent[0];
             return (
               <div
                 className="embla__slide"
                 key={index}
-                style={{ 
-                  position: "relative", 
+                style={{
+                  position: "relative",
                   overflow: "hidden",
                   transform: "translate3d(0, 0, 0)",
-                  backfaceVisibility: "hidden"
+                  backfaceVisibility: "hidden",
                 }}
               >
                 <div className="embla__parallax">
@@ -230,7 +219,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                     />
                     {/* Dark overlay */}
                     <div className="absolute inset-0 bg-black/40 z-10" />
-                    
+
                     {/* Content overlay */}
                     <div className="absolute inset-0 z-20 flex items-center justify-center">
                       <div className="text-center text-white px-8">
@@ -241,10 +230,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                           {content.subtitle}
                         </p>
                         <Link href={content.href || "/"}>
-                          <Button 
-                            size="lg" 
-                            className="bg-brand-secondary hover:bg-brand-secondary/90 text-white px-8 py-3 text-lg font-semibold shadow-xl"
-                          >
+                          <Button size="lg" className="font-semibold shadow-xl">
                             {content.buttonText}
                           </Button>
                         </Link>
@@ -255,7 +241,8 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
               </div>
             );
           })}
-        </div>        <div className="embla__dots">
+        </div>{" "}
+        <div className="embla__dots">
           {actualSlides.map((_, index) => (
             <DotButton
               key={index}
