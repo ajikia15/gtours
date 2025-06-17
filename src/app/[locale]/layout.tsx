@@ -15,6 +15,7 @@ import { headers } from "next/headers";
 import { isMobile } from "@/lib/isMobile";
 import MobileNavbar from "@/components/layout/MobileNavbar";
 import NavigationProgress from "@/components/layout/navigation-progress";
+import { NavigationLoadingOverlay } from "@/components/navigation-loading-overlay";
 
 export default async function LocaleLayout({
   children,
@@ -50,9 +51,9 @@ export default async function LocaleLayout({
   const mobile = isMobile(userAgent);
   return (
     <html lang={locale}>
-      <body className={`${fontClassName} antialiased `}>
-        <NextIntlClientProvider locale={locale} messages={messages}>
+      <body className={`${fontClassName} antialiased `}>        <NextIntlClientProvider locale={locale} messages={messages}>
           <NavigationProgress />
+          <NavigationLoadingOverlay />
           <AuthProvider>
             <CartProvider>
               <BookingProvider>
