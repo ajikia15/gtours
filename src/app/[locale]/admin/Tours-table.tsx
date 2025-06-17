@@ -33,7 +33,7 @@ export default async function ToursTable({
   // Ensure params is awaited
   const resolvedParams = await Promise.resolve(params);
   const locale = resolvedParams.locale;
-  
+
   // Start both operations in parallel instead of sequentially
   const [translationsResult, toursResult] = await Promise.all([
     getTranslations("Admin"),
@@ -42,9 +42,9 @@ export default async function ToursTable({
         page,
         pageSize: 10,
       },
-    })
+    }),
   ]);
-  
+
   const t = translationsResult;
   const { data, totalPages } = toursResult;
   return (

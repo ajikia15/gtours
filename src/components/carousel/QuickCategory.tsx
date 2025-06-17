@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { ActivityCarousel } from "./ActivityCarousel";
 import { activityTypes } from "@/data/activity-constants";
+import { Link } from "@/i18n/navigation";
 import React from "react";
 
 type Props = {
@@ -18,7 +19,11 @@ const QuickCategory = ({ className }: Props) => {
     <ActivityCarousel className={className}>
       {activities.map((activity, index) => (
         <React.Fragment key={index}>
-          <div className="w-36 sm:w-28 md:w-32 lg:w-36 flex-none px-1 sm:px-2 flex flex-col items-center justify-center cursor-pointer py-4">
+          {" "}
+          <Link
+            href={`/destinations?activities=${activity.id}`}
+            className="w-36 sm:w-28 md:w-32 lg:w-36 flex-none px-1 sm:px-2 flex flex-col items-center justify-center cursor-pointer py-4 hover:bg-gray-50 transition-colors rounded-lg"
+          >
             <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
               <Image
                 src={`/${activity.pngFileName}.png`}
@@ -30,9 +35,9 @@ const QuickCategory = ({ className }: Props) => {
             <div className="w-full text-center flex items-center justify-center">
               <span className="text-xs sm:text-sm md:text-base font-medium leading-tight">
                 {t(`${activity.id}`)}
-              </span>
+              </span>{" "}
             </div>
-          </div>
+          </Link>
           {index < activities.length - 1 && (
             <div
               key={`${index}_separator`}

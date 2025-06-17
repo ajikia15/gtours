@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "@/i18n/navigation";
+import { useSearchParams } from "next/navigation";
 import { Tour } from "@/types/Tour";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -229,14 +230,38 @@ export default function TourSearchBar({
 }: TourSearchBarProps) {
   const locale = useLocale();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Initialize filters from URL parameters
+  const getInitialFilters = useCallback((): SearchFilters => {
+    const destinations = searchParams.get('destinations')?.split(',').filter(Boolean) || [];
+    const activities = searchParams.get('activities')?.split(',').filter(Boolean) || [];
+    const dateParam = searchParams.get('date');
+    const adultsParam = searchParams.get('adults');
+    const childrenParam = searchParams.get('children');
+    const infantsParam = searchParams.get('infants');
+    
+    return {
+      destinations,
+      activities,
+      selectedDate: dateParam ? new Date(dateParam) : undefined,
+      travelers: {
+        adults: adultsParam ? parseInt(adultsParam) : 2,
+        children: childrenParam ? parseInt(childrenParam) : 0,
+        infants: infantsParam ? parseInt(infantsParam) : 0,
+      }
+    };
+  }, [searchParams]);
+
   // Search state
-  const [filters, setFilters] = useState<SearchFilters>({
-    destinations: [],
-    activities: [],
-    travelers: { adults: 2, children: 0, infants: 0 },
-  });
+  const [filters, setFilters] = useState<SearchFilters>(getInitialFilters);
   // UI state
   const [openPopover, setOpenPopover] = useState<string | null>(null);
+
+  // Update filters when URL changes
+  useEffect(() => {
+    setFilters(getInitialFilters());
+  }, [getInitialFilters]);
 
   // Get all unique destinations from tour titles
   const allDestinations = Array.from(

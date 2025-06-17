@@ -51,7 +51,9 @@ export default async function LocaleLayout({
   const mobile = isMobile(userAgent);
   return (
     <html lang={locale}>
-      <body className={`${fontClassName} antialiased `}>        <NextIntlClientProvider locale={locale} messages={messages}>
+      <body className={`${fontClassName} antialiased `}>
+        {" "}
+        <NextIntlClientProvider locale={locale} messages={messages}>
           <NavigationProgress />
           <NavigationLoadingOverlay />
           <AuthProvider>

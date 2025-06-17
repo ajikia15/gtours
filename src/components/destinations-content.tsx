@@ -63,9 +63,8 @@ export default async function DestinationsContent({
             found
           </h3>
         </div>
-      )}
-
-      <section className="grid grid-cols-4 gap-4 mt-4">
+      )}{" "}
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
         {toursToShow.map((tour) => (
           <div key={tour.id}>
             <ShortTourCard tour={tour} />

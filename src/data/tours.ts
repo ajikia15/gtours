@@ -109,7 +109,7 @@ export async function getTours(options?: getToursOptions) {
     // If we got a full page, there's probably more - estimate
     totalPages = page + 1;
   }
-  
+
   return { data: tours, totalPages };
 }
 

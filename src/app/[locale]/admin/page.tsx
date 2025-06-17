@@ -38,7 +38,8 @@ export default async function AdminDashboard({
       <div className="mt-4">
         <Suspense fallback={<TableSkeleton />}>
           <ToursTable page={page} params={params} />
-        </Suspense>      </div>
+        </Suspense>{" "}
+      </div>
     </div>
   );
 }

@@ -31,7 +31,6 @@ export default async function DestinationsPage({
     <>
       <Header title={t("title")} />
       <h2 className="text-2xl font-bold my-8 text-center">მოძებნე</h2>
-
       <Suspense
         fallback={
           <div className="my-8 max-w-4xl mx-auto">
@@ -40,11 +39,10 @@ export default async function DestinationsPage({
         }
       >
         <SearchBarContent />
-      </Suspense>
-
+      </Suspense>{" "}
       <Suspense
         fallback={
-          <section className="grid grid-cols-4 gap-4 mt-4">
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
             {Array.from({ length: 8 }, (_, index) => (
               <TourCardSkeleton key={`skeleton-${index}`} />
             ))}

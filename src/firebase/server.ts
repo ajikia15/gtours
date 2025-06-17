@@ -38,7 +38,8 @@ export const getTotalPages = async (
   firestoreQuery: FirebaseFirestore.Query<
     FirebaseFirestore.DocumentData,
     FirebaseFirestore.DocumentData
-  >,  pageSize: number
+  >,
+  pageSize: number
 ) => {
   const queryCount = firestoreQuery.count();
   const countSnapshot = await queryCount.get();
