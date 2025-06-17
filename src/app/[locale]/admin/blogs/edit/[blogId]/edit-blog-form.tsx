@@ -23,7 +23,6 @@ export default function EditBlogForm({
   id,
   title,
   description,
-  content,
   author,
   publishedDate,
   categories,
@@ -91,11 +90,9 @@ export default function EditBlogForm({
             <PencilIcon className="size-4" />
             {t("updateBlog")}
           </>
-        }
-        defaultValues={{
+        }        defaultValues={{
           title,
           description,
-          content,
           author,
           publishedDate,
           categories,

@@ -21,7 +21,6 @@ function migrateBlogData(data: any): Partial<Blog> {
     return {
       title: data.title || ["", "", ""],
       description: data.description || ["", "", ""],
-      content: data.content || ["", "", ""],
       author: data.author || "",
       publishedDate: data.publishedDate?.toDate() || new Date(),
       categories: data.categories || [],
@@ -43,11 +42,6 @@ function migrateBlogData(data: any): Partial<Blog> {
       data?.description || data?.descriptionEN || "",
       data?.descriptionGE || "",
       data?.descriptionRU || "",
-    ],
-    content: [
-      data?.content || data?.contentEN || "",
-      data?.contentGE || "",
-      data?.contentRU || "",
     ],
     author: data?.author || "",
     publishedDate: data?.publishedDate?.toDate() || new Date(),

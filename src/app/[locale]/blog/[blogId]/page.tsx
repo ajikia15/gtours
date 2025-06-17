@@ -4,14 +4,12 @@ import { getLocale, getTranslations } from "next-intl/server";
 import {
   getLocalizedTitle,
   getLocalizedDescription,
-  getLocalizedBlogContent,
   getLocalizedBlogMetaDescription,
 } from "@/lib/localizationHelpers";
 import Image from "next/image";
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, UserIcon } from "lucide-react";
-import ReactMarkdown from "react-markdown";
 
 export default async function BlogPage({
   params,
@@ -28,10 +26,8 @@ export default async function BlogPage({
     // Only show published blogs to public users
     if (blog.status !== "published") {
       notFound();
-    }
-    const title = getLocalizedTitle(blog, locale);
+    }    const title = getLocalizedTitle(blog, locale);
     const description = getLocalizedDescription(blog, locale);
-    const content = getLocalizedBlogContent(blog, locale);
 
     return (
       <article className="max-w-4xl mx-auto py-12 px-6">
@@ -83,12 +79,7 @@ export default async function BlogPage({
                 priority
               />
             </div>
-          )}
-        </header>
-        {/* Content */}
-        <div className="prose prose-lg max-w-none">
-          <ReactMarkdown>{content}</ReactMarkdown>
-        </div>{" "}
+          )}        </header>
         {/* Additional Images */}
         {blog.images && blog.images.length > 1 && (
           <div className="mt-8">

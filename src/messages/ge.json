@@ -82,7 +82,22 @@
       "title": "ადმინისტრაციის პანელი",
       "newTour": "ახალი ტური",
       "tours": "ტურები",
-      "noToursFound": "ტურები არ მოიძებნა"
+      "blogs": "ბლოგები",
+      "blogsTitle": "ბლოგების მართვა",
+      "newBlog": "ახალი ბლოგი",
+      "noToursFound": "ტურები არ მოიძებნა",
+      "noBlogsFound": "ბლოგები არ მოიძებნა"
+    },
+    "blogTable": {
+      "title": "სათაური",
+      "author": "ავტორი",
+      "publishedDate": "გამოქვეყნების თარიღი",
+      "categories": "კატეგორიები",
+      "status": "სტატუსი",
+      "actions": "მოქმედებები",
+      "view": "ნახვა",
+      "edit": "რედაქტირება",
+      "delete": "წაშლა"
     },
     "table": {
       "title": "სათაური",
@@ -205,12 +220,6 @@
         "descriptionENPlaceholder": "ბლოგის პოსტის მოკლე აღწერა ინგლისურად...",
         "descriptionGEPlaceholder": "ბლოგის პოსტის მოკლე აღწერა ქართულად...",
         "descriptionRUPlaceholder": "Краткое описание вашего блога на русском...",
-        "contentEN": "კონტენტი (ინგლისური)",
-        "contentGE": "კონტენტი (ქართული)",
-        "contentRU": "კონტენტი (რუსული)",
-        "contentENPlaceholder": "დაწერეთ ბლოგის სრული შინაარსი ინგლისურად...",
-        "contentGEPlaceholder": "დაწერეთ ბლოგის სრული შინაარსი ქართულად...",
-        "contentRUPlaceholder": "Напишите полное содержание блога на русском...",
         "author": "ავტორი",
         "authorPlaceholder": "შეიყვანეთ ავტორის სახელი...",
         "publishedDate": "გამოქვეყნების თარიღი",
@@ -289,7 +298,8 @@
       "author": "ავტორი",
       "categories": "კატეგორიები",
       "gallery": "გალერეა",
-      "tags": "ტეგები"
+      "tags": "ტეგები",
+      "noBlogsFound": "ბლოგის პოსტები არ მოიძებნა"
     }
   },
   "BlogCard": {

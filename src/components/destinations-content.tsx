@@ -31,14 +31,14 @@ export default function DestinationsContent({
   const activityFilters = searchParams.activities?.split(",") || [];
   const sortBy = searchParams.sortBy || "price";
   const sortOrder = searchParams.sortOrder || "desc";
-  
+
   // Apply client-side filtering to the tours
   let filteredTours = tours;
 
   if (destinationFilters.length > 0) {
     filteredTours = filteredTours.filter((tour: Tour) => {
-      const localeIndex = locale === 'en' ? 0 : locale === 'ge' ? 1 : 2;
-      const title = tour.title[localeIndex] || tour.title[0] || '';
+      const localeIndex = locale === "en" ? 0 : locale === "ge" ? 1 : 2;
+      const title = tour.title[localeIndex] || tour.title[0] || "";
       return destinationFilters.some((destination) =>
         title.toLowerCase().includes(destination.toLowerCase())
       );
@@ -54,24 +54,26 @@ export default function DestinationsContent({
       )
     );
   }
-  
+
   // Apply client-side sorting to the filtered tours
   const sortedTours = [...filteredTours].sort((a, b) => {
     if (sortBy === "alphabetical") {
-      const localeIndex = locale === 'en' ? 0 : locale === 'ge' ? 1 : 2;
-      const titleA = a.title[localeIndex] || a.title[0] || '';
-      const titleB = b.title[localeIndex] || b.title[0] || '';
-      return sortOrder === "asc" 
+      const localeIndex = locale === "en" ? 0 : locale === "ge" ? 1 : 2;
+      const titleA = a.title[localeIndex] || a.title[0] || "";
+      const titleB = b.title[localeIndex] || b.title[0] || "";
+      return sortOrder === "asc"
         ? titleA.localeCompare(titleB)
         : titleB.localeCompare(titleA);
     } else {
       // Sort by price
-      return sortOrder === "asc" 
+      return sortOrder === "asc"
         ? a.basePrice - b.basePrice
         : b.basePrice - a.basePrice;
-    }  });
+    }
+  });
 
-  const hasFilters = destinationFilters.length > 0 || activityFilters.length > 0;
+  const hasFilters =
+    destinationFilters.length > 0 || activityFilters.length > 0;
 
   return (
     <>
@@ -79,22 +81,15 @@ export default function DestinationsContent({
       <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           {hasFilters && (
-            <Button
-              variant="outline"
-              size="sm"
-              className="text-xs"
-              asChild
-            >
+            <Button variant="outline" size="sm" className="text-xs" asChild>
               <Link href="/destinations">
                 <X className="h-3 w-3 mr-1" />
                 Reset Filters
               </Link>
             </Button>
           )}
-        </div><SortingButtons
-          currentSortBy={sortBy}
-          currentSortOrder={sortOrder}
-        />
+        </div>
+        <SortingButtons currentSortBy={sortBy} currentSortOrder={sortOrder} />
       </div>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">

@@ -1,7 +1,7 @@
 import "server-only";
 import { firestore, getTotalPages } from "../firebase/server";
 import { Tour } from "@/types/Tour";
-import { unstable_cache } from 'next/cache';
+import { unstable_cache } from "next/cache";
 
 type getToursOptions = {
   filters?: {
@@ -95,7 +95,9 @@ export async function getTours(options?: getToursOptions) {
     orderDirection = sortOrder || "desc";
   }
 
-  let toursQuery = firestore.collection("tours").orderBy(orderBy, orderDirection);
+  let toursQuery = firestore
+    .collection("tours")
+    .orderBy(orderBy, orderDirection);
 
   // Add filters
   if (status) {
@@ -191,10 +193,10 @@ async function _getPublishedTours() {
 
     return { data: tours, error: null };
   } catch (error) {
-    console.error('Error fetching published tours:', error);
-    return { 
-      data: [], 
-      error: error instanceof Error ? error.message : 'Failed to fetch tours' 
+    console.error("Error fetching published tours:", error);
+    return {
+      data: [],
+      error: error instanceof Error ? error.message : "Failed to fetch tours",
     };
   }
 }
@@ -202,9 +204,9 @@ async function _getPublishedTours() {
 // Cache the published tours for better performance
 export const getPublishedTours = unstable_cache(
   _getPublishedTours,
-  ['published-tours'],
+  ["published-tours"],
   {
     revalidate: 300, // Revalidate every 5 minutes
-    tags: ['tours']
+    tags: ["tours"],
   }
 );

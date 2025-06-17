@@ -52,12 +52,10 @@ export default function BlogForm({
   const [newCategory, setNewCategory] = useState("");
   const [newKeyword, setNewKeyword] = useState("");
   const [seoOpen, setSeoOpen] = useState(false);
-
   const combinedDefaultValues: z.infer<typeof blogSchema> = {
     ...defaultValues,
     title: defaultValues?.title || ["", "", ""], // [EN, GE, RU]
     description: defaultValues?.description || ["", "", ""], // [EN, GE, RU]
-    content: defaultValues?.content || ["", "", ""], // [EN, GE, RU]
     author: defaultValues?.author || "",
     publishedDate: defaultValues?.publishedDate || new Date(),
     categories: defaultValues?.categories || [],
@@ -232,63 +230,7 @@ export default function BlogForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
-          </div>
-
-          {/* Content Fields */}
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="content.0"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.contentEN")}</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={10}
-                      placeholder={t("fields.contentENPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="content.1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.contentGE")}</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={10}
-                      placeholder={t("fields.contentGEPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="content.2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.contentRU")}</FormLabel>
-                  <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={10}
-                      placeholder={t("fields.contentRUPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+            />          </div>
         </fieldset>
 
         {/* 2. BLOG DETAILS */}

@@ -82,7 +82,22 @@
       "title": "Панель администратора",
       "newTour": "Новый тур",
       "tours": "Туры",
-      "noToursFound": "Туры не найдены"
+      "blogs": "Блоги",
+      "blogsTitle": "Управление блогами",
+      "newBlog": "Новый блог",
+      "noToursFound": "Туры не найдены",
+      "noBlogsFound": "Блоги не найдены"
+    },
+    "blogTable": {
+      "title": "Название",
+      "author": "Автор",
+      "publishedDate": "Дата публикации",
+      "categories": "Категории",
+      "status": "Статус",
+      "actions": "Действия",
+      "view": "Просмотр",
+      "edit": "Редактировать",
+      "delete": "Удалить"
     },
     "table": {
       "title": "Название",
@@ -205,12 +220,6 @@
         "descriptionENPlaceholder": "Краткое описание блог-поста на английском...",
         "descriptionGEPlaceholder": "Краткое описание блог-поста на грузинском...",
         "descriptionRUPlaceholder": "Краткое описание блог-поста на русском...",
-        "contentEN": "Содержание (английский)",
-        "contentGE": "Содержание (грузинский)",
-        "contentRU": "Содержание (русский)",
-        "contentENPlaceholder": "Напишите полное содержание блога на английском...",
-        "contentGEPlaceholder": "Напишите полное содержание блога на грузинском...",
-        "contentRUPlaceholder": "Напишите полное содержание блога на русском...",
         "author": "Автор",
         "authorPlaceholder": "Введите имя автора...",
         "publishedDate": "Дата публикации",
@@ -289,7 +298,8 @@
       "author": "Автор",
       "categories": "Категории",
       "gallery": "Галерея",
-      "tags": "Теги"
+      "tags": "Теги",
+      "noBlogsFound": "Записи блога не найдены"
     }
   },
   "BlogCard": {

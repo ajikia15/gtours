@@ -71,7 +71,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
   return (
     <Link
       href={`/blog/${blog.id}`}
-      className="flex w-full flex-col gap-6 mb-20 hover:shadow-lg transition-shadow"
+      className="flex w-full flex-col gap-6 mb-20 transition-shadow"
     >
       <div className="flex">
         <div className="w-5/6 aspect-video">
@@ -101,17 +101,12 @@ export default function BlogCard({ blog }: BlogCardProps) {
           </li>
         </ul>
       </div>
-      <div className="flex w-4/5 flex-col gap-4 px-6">
+      <div className="flex w-4/5 flex-col gap-4">
         <h2 className="text-xl font-bold text-zinc-800">{title}</h2>
-        <p className="line-clamp-3">{description}</p>{" "}
-        <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-600">
-            {t("author")}: {blog.author}
-          </span>
-          <p className="text-sm font-semibold text-red-500">
-            {t("readMore")} &gt;
-          </p>
-        </div>
+        <p className="line-clamp-3">{description}</p>
+        <p className="text-sm font-semibold text-red-500">
+          {t("readMore")} &gt;
+        </p>
       </div>
     </Link>
   );

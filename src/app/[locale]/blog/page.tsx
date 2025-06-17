@@ -11,7 +11,7 @@ export default async function BlogPage() {
   });
 
   return (
-    <div className="max-w-6xl mx-auto py-12 px-6">
+    <div className="py-12">
       <div className="text-center mb-16">
         <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
         <p className="text-xl text-muted-foreground mb-6">{t("subtitle")}</p>

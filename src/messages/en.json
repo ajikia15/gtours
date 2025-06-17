@@ -82,7 +82,22 @@
       "title": "Admin Dashboard",
       "newTour": "New Tour",
       "tours": "Tours",
-      "noToursFound": "No tours found"
+      "blogs": "Blogs",
+      "blogsTitle": "Blog Management",
+      "newBlog": "New Blog",
+      "noToursFound": "No tours found",
+      "noBlogsFound": "No blogs found"
+    },
+    "blogTable": {
+      "title": "Title",
+      "author": "Author",
+      "publishedDate": "Published Date",
+      "categories": "Categories",
+      "status": "Status",
+      "actions": "Actions",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
     },
     "table": {
       "title": "Title",
@@ -289,7 +304,8 @@
       "author": "Author",
       "categories": "Categories",
       "gallery": "Gallery",
-      "tags": "Tags"
+      "tags": "Tags",
+      "noBlogsFound": "No blog posts found"
     }
   },
   "BlogCard": {

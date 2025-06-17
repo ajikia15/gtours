@@ -10,9 +10,6 @@ export const blogDataSchema = z.object({
   description: z
     .array(z.string().min(1, "Description is required"))
     .length(3, "Description must have 3 language versions [EN, GE, RU]"),
-  content: z
-    .array(z.string().min(1, "Content is required"))
-    .length(3, "Content must have 3 language versions [EN, GE, RU]"),
   author: z.string().min(1, "Author is required"),
   publishedDate: z.coerce.date(),
   categories: z.array(z.string().min(1, "Category cannot be empty")),

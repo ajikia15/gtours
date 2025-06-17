@@ -21,20 +21,26 @@ export default function SortingButtons({
   const [loadingButton, setLoadingButton] = useState<string | null>(null);
 
   // Generate sorting URLs for buttons
-  const generateSortUrl = (newSortBy: "price" | "alphabetical", newSortOrder?: "asc" | "desc") => {
+  const generateSortUrl = (
+    newSortBy: "price" | "alphabetical",
+    newSortOrder?: "asc" | "desc"
+  ) => {
     const params = new URLSearchParams(searchParams.toString());
-    
+
     // Set sorting params
     params.set("sortBy", newSortBy);
-    
+
     // If same sort type, toggle order; otherwise use provided order or default
     if (newSortBy === currentSortBy) {
       const toggledOrder = currentSortOrder === "asc" ? "desc" : "asc";
       params.set("sortOrder", newSortOrder || toggledOrder);
     } else {
-      params.set("sortOrder", newSortOrder || (newSortBy === "price" ? "desc" : "asc"));
+      params.set(
+        "sortOrder",
+        newSortOrder || (newSortBy === "price" ? "desc" : "asc")
+      );
     }
-    
+
     return `?${params.toString()}`;
   };
 
@@ -59,7 +65,12 @@ export default function SortingButtons({
         ) : (
           <ArrowUpDown className="h-3 w-3 mr-1" />
         )}
-        Price {currentSortBy === "price" ? (currentSortOrder === "desc" ? "↓" : "↑") : ""}
+        Price{" "}
+        {currentSortBy === "price"
+          ? currentSortOrder === "desc"
+            ? "↓"
+            : "↑"
+          : ""}
       </Button>
       <Button
         variant={currentSortBy === "alphabetical" ? "default" : "outline"}
@@ -73,7 +84,12 @@ export default function SortingButtons({
         ) : (
           <ArrowUpDown className="h-3 w-3 mr-1" />
         )}
-        A-Z {currentSortBy === "alphabetical" ? (currentSortOrder === "asc" ? "↑" : "↓") : ""}
+        A-Z{" "}
+        {currentSortBy === "alphabetical"
+          ? currentSortOrder === "asc"
+            ? "↑"
+            : "↓"
+          : ""}
       </Button>
     </div>
   );

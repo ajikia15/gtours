@@ -32,13 +32,6 @@ export function getLocalizedDescription(
   return item.description[index] || item.description[LANGUAGE_INDEX.en] || "";
 }
 
-// Blog-specific functions
-export function getLocalizedBlogContent(blog: Blog, locale: string): string {
-  const index =
-    LANGUAGE_INDEX[locale as keyof typeof LANGUAGE_INDEX] ?? LANGUAGE_INDEX.en;
-  return blog.content[index] || blog.content[LANGUAGE_INDEX.en] || "";
-}
-
 export function getLocalizedBlogMetaDescription(
   blog: Blog,
   locale: string
