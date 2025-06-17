@@ -1,16 +1,21 @@
 import "server-only";
 import { firestore, getTotalPages } from "../firebase/server";
 import { Tour } from "@/types/Tour";
+import { unstable_cache } from 'next/cache';
 
 type getToursOptions = {
   filters?: {
     minPrice?: number | null;
     maxPrice?: number | null;
-    // TODO
+    status?: "active" | "disabled" | "draft"; // Add status filter
   };
   pagination?: {
     page?: number;
     pageSize?: number;
+  };
+  sorting?: {
+    sortBy?: "price" | "alphabetical";
+    sortOrder?: "asc" | "desc";
   };
 };
 
@@ -74,9 +79,28 @@ function migrateTourData(data: any): Partial<Tour> {
 export async function getTours(options?: getToursOptions) {
   const page = options?.pagination?.page || 1;
   const pageSize = options?.pagination?.pageSize || 10;
-  const { minPrice, maxPrice } = options?.filters || {};
+  const { minPrice, maxPrice, status } = options?.filters || {};
+  const { sortBy, sortOrder } = options?.sorting || {};
 
-  let toursQuery = firestore.collection("tours").orderBy("basePrice", "desc");
+  // Build the query with sorting
+  let orderBy: string;
+  let orderDirection: "asc" | "desc";
+
+  if (sortBy === "alphabetical") {
+    orderBy = "title";
+    orderDirection = sortOrder || "asc";
+  } else {
+    // Default to price sorting
+    orderBy = "basePrice";
+    orderDirection = sortOrder || "desc";
+  }
+
+  let toursQuery = firestore.collection("tours").orderBy(orderBy, orderDirection);
+
+  // Add filters
+  if (status) {
+    toursQuery = toursQuery.where("status", "==", status);
+  }
 
   if (minPrice !== null && minPrice !== undefined) {
     toursQuery = toursQuery.where("basePrice", ">=", minPrice);
@@ -142,3 +166,45 @@ export async function getToursById(tourIds: string[]) {
     };
   }) as Tour[];
 }
+
+/**
+ * Get published tours (only filtering by status in Firestore, sorting handled client-side)
+ */
+async function _getPublishedTours() {
+  try {
+    // Simple query - only filter by status to get published tours
+    const toursQuery = firestore
+      .collection("tours")
+      .where("status", "==", "active"); // Only published/active tours
+
+    // Get all published tours
+    const toursSnapshot = await toursQuery.get();
+
+    const tours = toursSnapshot.docs.map((doc) => {
+      const data = doc.data();
+      const migratedData = migrateTourData(data);
+      return {
+        id: doc.id,
+        ...migratedData,
+      };
+    }) as Tour[];
+
+    return { data: tours, error: null };
+  } catch (error) {
+    console.error('Error fetching published tours:', error);
+    return { 
+      data: [], 
+      error: error instanceof Error ? error.message : 'Failed to fetch tours' 
+    };
+  }
+}
+
+// Cache the published tours for better performance
+export const getPublishedTours = unstable_cache(
+  _getPublishedTours,
+  ['published-tours'],
+  {
+    revalidate: 300, // Revalidate every 5 minutes
+    tags: ['tours']
+  }
+);

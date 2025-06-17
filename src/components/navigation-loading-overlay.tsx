@@ -16,9 +16,7 @@ export function NavigationLoadingOverlay() {
     // Listen for Link clicks to detect navigation start
     const handleLinkClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const link = target.closest("a");
-
-      if (
+      const link = target.closest("a");      if (
         link &&
         link.href &&
         !link.href.startsWith("#") &&
@@ -28,8 +26,26 @@ export function NavigationLoadingOverlay() {
         // Check if it's an internal navigation
         const isInternal =
           link.href.includes(window.location.origin) ||
-          link.href.startsWith("/");
-        const isSamePage = link.href === window.location.href;
+          link.href.startsWith("/") ||
+          link.href.startsWith("?");
+        
+        // Check if it's the same page (same pathname, different search params should not show loading)
+        let isSamePage = false;
+        try {
+          const currentUrl = new URL(window.location.href);
+          let linkUrl: URL;
+          
+          // Handle relative URLs starting with ?
+          if (link.href.startsWith("?")) {
+            linkUrl = new URL(currentUrl.origin + currentUrl.pathname + link.href);
+          } else {
+            linkUrl = new URL(link.href, window.location.origin);
+          }
+          
+          isSamePage = linkUrl.pathname === currentUrl.pathname;        } catch {
+          // If URL parsing fails, assume it's not the same page
+          isSamePage = false;
+        }
 
         if (isInternal && !isSamePage) {
           setIsNavigating(true);
