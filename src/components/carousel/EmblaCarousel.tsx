@@ -8,8 +8,21 @@ import {
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Link } from "@/i18n/navigation";
+
+type SlideContent = {
+  id: number;
+  image: string;
+  title: string;
+  subtitle: string;
+  buttonText: string;
+  buttonAction: () => void;
+  href?: string;
+};
+
 type PropType = {
-  slides: number[];
+  slides?: number[];
   options?: EmblaOptionsType;
 };
 
@@ -23,6 +36,67 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const tweenFactor = useRef(0);
   const tweenNodes = useRef<HTMLElement[]>([]);
   const animationId = useRef<number | null>(null);
+  // Define slide content with Georgian tours theme
+  const slideContent: SlideContent[] = [
+    {
+      id: 0,
+      image: "https://picsum.photos/800/600?random=1",
+      title: "Discover Georgia",
+      subtitle: "Book Your Adventure Now",
+      buttonText: "Book Now",
+      buttonAction: () => {
+        // For now, redirect to destinations as we don't have tour preselected
+        window.location.href = "/destinations";
+      },
+      href: "/destinations"
+    },
+    {
+      id: 1,
+      image: "https://picsum.photos/800/600?random=2",
+      title: "Explore Georgia",
+      subtitle: "Discover Amazing Destinations",
+      buttonText: "Explore",
+      buttonAction: () => {
+        window.location.href = "/destinations";
+      },
+      href: "/destinations"
+    },
+    {
+      id: 2,
+      image: "https://picsum.photos/800/600?random=3",
+      title: "Read Our Stories",
+      subtitle: "Get Inspired by Travel Tales",
+      buttonText: "Blog",
+      buttonAction: () => {
+        window.location.href = "/blog";
+      },
+      href: "/blog"
+    },
+    {
+      id: 3,
+      image: "https://picsum.photos/800/600?random=4",
+      title: "About Our Company",
+      subtitle: "Learn More About Us",
+      buttonText: "About Us",
+      buttonAction: () => {
+        window.location.href = "/about";
+      },
+      href: "/about"
+    },
+    {
+      id: 4,
+      image: "https://picsum.photos/800/600?random=5",
+      title: "Get in Touch",
+      subtitle: "Contact Us for More Information",
+      buttonText: "Contact",
+      buttonAction: () => {
+        window.location.href = "/contact";
+      },
+      href: "/contact"
+    }
+  ];
+
+  const actualSlides = slides || [0, 1, 2, 3, 4];
 
   const setTweenNodes = useCallback((emblaApi: EmblaCarouselType): void => {
     tweenNodes.current = emblaApi.slideNodes().map((slideNode) => {
@@ -118,8 +192,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
 
     resetOrStop();
   }, []);
-
-  const { selectedIndex, scrollSnaps, onDotButtonClick } = useDotButton(
+  const { selectedIndex, onDotButtonClick } = useDotButton(
     emblaApi,
     onNavButtonClick
   );
@@ -130,37 +203,60 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         className="embla__viewport"
         ref={emblaRef}
         style={{ position: "relative" }}
-      >
-        <div className="embla__container">
-          {slides.map((index) => (
-            <div
-              className="embla__slide"
-              key={index}
-              style={{ 
-                position: "relative", 
-                overflow: "hidden",
-                transform: "translate3d(0, 0, 0)",
-                backfaceVisibility: "hidden"
-              }}
-            >
-              <div className="embla__parallax">
-                <div className="embla__parallax__layer">
-                  <Image
-                    className="embla__slide__img embla__parallax__img"
-                    src={`https://picsum.photos/800/340?random=${index + 1}`}
-                    alt={`Random ${index + 1}`}
-                    fill
-                    style={{
-                      objectFit: "cover",
-                    }}
-                  />
+      >        <div className="embla__container">
+          {actualSlides.map((index) => {
+            const content = slideContent[index] || slideContent[0];
+            return (
+              <div
+                className="embla__slide"
+                key={index}
+                style={{ 
+                  position: "relative", 
+                  overflow: "hidden",
+                  transform: "translate3d(0, 0, 0)",
+                  backfaceVisibility: "hidden"
+                }}
+              >
+                <div className="embla__parallax">
+                  <div className="embla__parallax__layer">
+                    <Image
+                      className="embla__slide__img embla__parallax__img"
+                      src={content.image}
+                      alt={content.title}
+                      fill
+                      style={{
+                        objectFit: "cover",
+                      }}
+                    />
+                    {/* Dark overlay */}
+                    <div className="absolute inset-0 bg-black/40 z-10" />
+                    
+                    {/* Content overlay */}
+                    <div className="absolute inset-0 z-20 flex items-center justify-center">
+                      <div className="text-center text-white px-8">
+                        <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                          {content.title}
+                        </h1>
+                        <p className="text-lg md:text-xl mb-8 drop-shadow-md opacity-90">
+                          {content.subtitle}
+                        </p>
+                        <Link href={content.href || "/"}>
+                          <Button 
+                            size="lg" 
+                            className="bg-brand-secondary hover:bg-brand-secondary/90 text-white px-8 py-3 text-lg font-semibold shadow-xl"
+                          >
+                            {content.buttonText}
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-        <div className="embla__dots">
-          {scrollSnaps.map((_, index) => (
+            );
+          })}
+        </div>        <div className="embla__dots">
+          {actualSlides.map((_, index) => (
             <DotButton
               key={index}
               onClick={() => onDotButtonClick(index)}

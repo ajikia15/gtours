@@ -4,11 +4,11 @@ import "./embla.css";
 
 export default function Carousel() {
   const OPTIONS: EmblaOptionsType = { axis: "x", loop: true };
-  const SLIDES = Array.from(Array(5).keys());
+  // Remove SLIDES as we'll use the default in EmblaCarousel
 
   return (
     <div>
-      <EmblaCarousel slides={SLIDES} options={OPTIONS} />
+      <EmblaCarousel options={OPTIONS} />
     </div>
   );
 }

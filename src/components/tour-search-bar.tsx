@@ -231,16 +231,18 @@ export default function TourSearchBar({
   const locale = useLocale();
   const router = useRouter();
   const searchParams = useSearchParams();
-  
+
   // Initialize filters from URL parameters
   const getInitialFilters = useCallback((): SearchFilters => {
-    const destinations = searchParams.get('destinations')?.split(',').filter(Boolean) || [];
-    const activities = searchParams.get('activities')?.split(',').filter(Boolean) || [];
-    const dateParam = searchParams.get('date');
-    const adultsParam = searchParams.get('adults');
-    const childrenParam = searchParams.get('children');
-    const infantsParam = searchParams.get('infants');
-    
+    const destinations =
+      searchParams.get("destinations")?.split(",").filter(Boolean) || [];
+    const activities =
+      searchParams.get("activities")?.split(",").filter(Boolean) || [];
+    const dateParam = searchParams.get("date");
+    const adultsParam = searchParams.get("adults");
+    const childrenParam = searchParams.get("children");
+    const infantsParam = searchParams.get("infants");
+
     return {
       destinations,
       activities,
@@ -249,7 +251,7 @@ export default function TourSearchBar({
         adults: adultsParam ? parseInt(adultsParam) : 2,
         children: childrenParam ? parseInt(childrenParam) : 0,
         infants: infantsParam ? parseInt(infantsParam) : 0,
-      }
+      },
     };
   }, [searchParams]);
 
