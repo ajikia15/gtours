@@ -5,6 +5,12 @@ import SearchBarContent from "@/components/search-bar-content";
 import { getPublishedTours } from "@/data/tours";
 
 interface SearchParams {
+  destinations?: string;
+  activities?: string;
+  date?: string;
+  adults?: string;
+  children?: string;
+  infants?: string;
   sortBy?: "price" | "alphabetical";
   sortOrder?: "asc" | "desc";
 }
