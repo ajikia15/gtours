@@ -72,3 +72,10 @@ export default async function LocaleLayout({
     </html>
   );
 }
+
+// Generate static params for all locales to enable instant navigation
+export async function generateStaticParams() {
+  return routing.locales.map((locale) => ({
+    locale: locale,
+  }));
+}

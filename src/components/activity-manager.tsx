@@ -286,7 +286,7 @@ function ActivityFields({
             <FormMessage />
           </FormItem>
         )}
-      />{" "}
+      />
       <FormField
         control={control}
         name={`offeredActivities.${index}.specificDescription.0`}

@@ -195,7 +195,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
                     {booking.calculateActivityPriceIncrement(
                       tour,
                       selectedActivities
-                    )}{" "}
+                    )}
                     GEL
                   </span>
                 </div>

@@ -320,7 +320,7 @@ export default function BookingBar({
                     for your trip.
                   </p>
                 </div>
-              )}{" "}
+              )}
               <h4 className="font-medium">Select Tour</h4>
               <TourSelectionContent
                 tours={tours}

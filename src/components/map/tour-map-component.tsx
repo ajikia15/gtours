@@ -192,7 +192,7 @@ TourMapSectionProps) {
                     <h3 className="font-bold text-lg">
                       {activity.nameSnapshot}
                     </h3>
-                  </div>{" "}
+                  </div>
                   <p className="text-sm text-gray-600 mb-2">
                     {getLocalizedActivityDescription(activity, locale)}
                   </p>

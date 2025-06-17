@@ -532,7 +532,7 @@ export default function TourSearchBar({
                   {getDateDisplay()}
                 </div>
               </button>
-            </PopoverTrigger>{" "}
+            </PopoverTrigger>
             <PopoverContent className="w-auto p-0" align="start">
               <TourDatePicker
                 date={filters.selectedDate}
@@ -563,9 +563,8 @@ export default function TourSearchBar({
                   {getTravelersDisplay()}
                 </div>
               </button>
-            </PopoverTrigger>{" "}
+            </PopoverTrigger>
             <PopoverContent className="w-80" align="start">
-              {" "}
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
                   <h4 className="font-medium">Select Travelers</h4>
@@ -588,7 +587,7 @@ export default function TourSearchBar({
               Search
             </Button>
           </div>
-        </div>{" "}
+        </div>
       </Card>
     </div>
   );

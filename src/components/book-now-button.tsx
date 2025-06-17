@@ -50,7 +50,6 @@ export default function BookNowButton({
       onClick={handleBookNow}
       disabled={isBooking}
     >
-      {" "}
       {children || (
         <>
           <BookmarkCheck className="h-4 w-4 mr-2" />

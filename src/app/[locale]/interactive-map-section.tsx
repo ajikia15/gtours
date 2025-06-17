@@ -83,7 +83,6 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   if (!isMounted) {
     return (
       <div className="container mx-auto px-4 py-6">
-        {" "}
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
           {/* Tour Card */}
           <MapTourCardSkeleton key={1} />
@@ -103,7 +102,6 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   return (
     <div className="container mx-auto px-4 py-6">
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
-        {" "}
         {/* Tour Card */}
         {!mobile && (
           <>
@@ -113,7 +111,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
               <MapTourCard key={selectedTour.id} tour={selectedTour} />
             ) : null}
           </>
-        )}{" "}
+        )}
         {/* Map Container */}
         <div className="order-1 lg:order-2 lg:flex-1 relative">
           <div
@@ -133,7 +131,6 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                 height: "100%",
               }}
             >
-              {" "}
               <ZoomableGroup
                 zoom={position.zoom}
                 center={position.coordinates}
@@ -171,7 +168,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                       />
                     ))
                   }
-                </Geographies>{" "}
+                </Geographies>
                 {tours.map((tour) => (
                   <Marker
                     key={tour.id}
@@ -188,7 +185,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                         color={
                           selectedTour?.id === tour.id ? "#ff3333" : "#000000"
                         }
-                      />{" "}
+                      />
                       {/* Mobile popup at marker location */}
                       {mobile && selectedTour?.id === tour.id && (
                         <foreignObject x="20" y="-100" width="280" height="120">
@@ -216,7 +213,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
               className="w-10 h-10 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center font-bold text-lg"
               aria-label="Zoom out"
             >
-              −{" "}
+              −
             </button>
           </div>
         </div>

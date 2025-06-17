@@ -59,7 +59,7 @@ export default async function DestinationsContent({
       {hasFilters && (
         <div className="mb-4">
           <h3 className="text-lg font-semibold">
-            {filteredTours.length} tour{filteredTours.length !== 1 ? "s" : ""}{" "}
+            {filteredTours.length} tour{filteredTours.length !== 1 ? "s" : ""}
             found
           </h3>
         </div>

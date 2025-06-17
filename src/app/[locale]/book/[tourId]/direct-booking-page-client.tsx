@@ -80,7 +80,7 @@ export default function DirectBookingPageClient({
                 )}
                 {hasPrefilledActivities && (
                   <li>
-                    • Activities: {existingCartItem!.selectedActivities.length}{" "}
+                    • Activities: {existingCartItem!.selectedActivities.length}
                     selected
                   </li>
                 )}

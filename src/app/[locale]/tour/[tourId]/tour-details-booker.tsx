@@ -138,7 +138,6 @@ export default function TourDetailsBooker({
     <>
       {/* Main Booking Section */}
       <div className="relative">
-        {" "}
         <div
           className={`
             transition-all duration-500 ease-in-out overflow-hidden
@@ -148,7 +147,7 @@ export default function TourDetailsBooker({
           {renderBookingContent()}
         </div>
         {!isExpanded && collapseAble && renderCollapsedOverlay()}
-      </div>{" "}
+      </div>
       {/* Action Buttons */}
       {(isExpanded || !collapseAble) && renderActionButtons()}
     </>

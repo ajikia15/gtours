@@ -239,7 +239,7 @@ export default function UnifiedBookingForm({
               {booking.calculateActivityPriceIncrement(
                 tour,
                 currentState.selectedActivities
-              )}{" "}
+              )}
               GEL
             </p>
           )}

@@ -7,6 +7,20 @@ import TourContent from "./tour-content";
 import ImageSectionSkeleton from "./image-section-skeleton";
 import TextSectionSkeleton from "./text-section-skeleton";
 import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
+import { getTours } from "@/data/tours";
+
+// Generate static params for all tours to enable instant navigation
+export async function generateStaticParams() {
+  try {
+    const result = await getTours();
+    return result.data.map((tour) => ({
+      tourId: tour.id,
+    }));
+  } catch (error) {
+    console.error("Error generating static params for tours:", error);
+    return [];
+  }
+}
 
 export default async function TourPage({
   params,

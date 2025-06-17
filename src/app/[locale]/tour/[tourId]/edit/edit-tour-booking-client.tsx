@@ -89,7 +89,7 @@ export default function EditTourBookingClient({
             <div>
               <h3 className="font-semibold text-lg">{tour.title[0]}</h3>
               <p className="text-gray-600">
-                Base price: {tour.basePrice} GEL per person • {tour.duration}{" "}
+                Base price: {tour.basePrice} GEL per person • {tour.duration}
                 days
               </p>
             </div>
@@ -170,7 +170,7 @@ export default function EditTourBookingClient({
                 {booking.calculateActivityPriceIncrement(
                   tour,
                   selectedActivities
-                )}{" "}
+                )}
                 GEL
               </span>
             </div>

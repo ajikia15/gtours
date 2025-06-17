@@ -35,7 +35,7 @@ export default function MapTourCard({
             className="w-full h-full object-cover rounded-t-xl"
           />
         )}
-      </Link>{" "}
+      </Link>
       <div className="flex flex-col gap-3 p-6">
         <h3 className="text-xl font-bold">{getLocalizedTitle(tour, locale)}</h3>
         <div className="text-base text-gray-500 line-clamp-3">
