@@ -1,6 +1,7 @@
 import { getTranslations } from "next-intl/server";
 import BlogCard from "@/components/blog-card";
 import { getPublishedBlogs } from "@/data/blogs";
+import Header from "../header";
 
 export default async function BlogPage() {
   const t = await getTranslations("Pages.blog");
@@ -13,9 +14,7 @@ export default async function BlogPage() {
   return (
     <div className="py-12">
       <div className="text-center mb-16">
-        <h1 className="text-4xl font-bold mb-4">{t("title")}</h1>
-        <p className="text-xl text-muted-foreground mb-6">{t("subtitle")}</p>
-        <p className="text-lg leading-relaxed">{t("description")}</p>
+        <Header title={t("title")} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

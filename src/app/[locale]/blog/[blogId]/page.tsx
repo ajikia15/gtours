@@ -26,7 +26,8 @@ export default async function BlogPage({
     // Only show published blogs to public users
     if (blog.status !== "published") {
       notFound();
-    }    const title = getLocalizedTitle(blog, locale);
+    }
+    const title = getLocalizedTitle(blog, locale);
     const description = getLocalizedDescription(blog, locale);
 
     return (
@@ -39,7 +40,6 @@ export default async function BlogPage({
               {description}
             </p>
           </div>
-
           {/* Meta information */}
           <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-6">
             <div className="flex items-center gap-2">
@@ -55,7 +55,6 @@ export default async function BlogPage({
               </span>
             </div>
           </div>
-
           {/* Categories */}
           {blog.categories && blog.categories.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-6">
@@ -66,7 +65,6 @@ export default async function BlogPage({
               ))}
             </div>
           )}
-
           {/* Featured Image */}
           {blog.featuredImage && (
             <div className="mb-8">
@@ -79,7 +77,8 @@ export default async function BlogPage({
                 priority
               />
             </div>
-          )}        </header>
+          )}{" "}
+        </header>
         {/* Additional Images */}
         {blog.images && blog.images.length > 1 && (
           <div className="mt-8">

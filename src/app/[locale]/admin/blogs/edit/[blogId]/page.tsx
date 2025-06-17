@@ -31,7 +31,9 @@ export default async function EditBlog({
             {t("blogForm.editBlog")} - {getLocalizedTitle(blog, locale)}
           </CardTitle>
         </CardHeader>
-        <CardContent>          <EditBlogForm
+        <CardContent>
+          {" "}
+          <EditBlogForm
             id={blog.id}
             title={blog.title}
             description={blog.description}

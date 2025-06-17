@@ -230,7 +230,8 @@ export default function BlogForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />          </div>
+            />{" "}
+          </div>
         </fieldset>
 
         {/* 2. BLOG DETAILS */}
