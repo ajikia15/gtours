@@ -37,7 +37,7 @@ export default function BottomNavClient() {
           <Button
             variant="ghost"
             size="sm"
-            className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors relative"
+            className="flex flex-col h-12 w-12 p-0 rounded-xl hover:bg-accent/80 transition-colors relative"
           >
             <ShoppingCartIcon className="h-6 w-6 mb-1" />
             <span className="text-xs font-medium">{tNav("cart")}</span>
@@ -62,7 +62,7 @@ export default function BottomNavClient() {
             <Button
               variant="ghost"
               size="sm"
-              className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors"
+              className="flex flex-col h-12 w-12 p-0 rounded-xl hover:bg-accent/80 transition-colors"
             >
               <UserCircleIcon className="h-6 w-6 mb-1" />
               <span className="text-xs font-medium">{tAuth("signIn")}</span>
@@ -95,7 +95,7 @@ function UserDrawerBottomNav() {
         <Button
           variant="ghost"
           size="sm"
-          className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors"
+          className="flex flex-col h-12 w-12 p-0 rounded-xl hover:bg-accent/80 transition-colors"
         >
           <UserCircleIcon className="h-6 w-6 mb-1" />
           <span className="text-xs font-medium">Profile</span>

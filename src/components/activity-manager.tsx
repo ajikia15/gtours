@@ -76,14 +76,16 @@ export default function ActivityManager({ control, disabled = false }: Props) {
   // Watch all activity descriptions for red dot indicators
   const watchedActivities = useWatch({
     control,
-    name: "offeredActivities"
+    name: "offeredActivities",
   });
 
   // Helper to check if any activity has empty fields in a language
   const isLanguageEmpty = (langIndex: number) => {
-    return watchedActivities?.some((activity: any) => 
-      !activity?.specificDescription?.[langIndex]?.trim()
-    ) || false;
+    return (
+      watchedActivities?.some(
+        (activity: any) => !activity?.specificDescription?.[langIndex]?.trim()
+      ) || false
+    );
   };
 
   // Handle client-side mounting to avoid hydration issues
@@ -115,7 +117,8 @@ export default function ActivityManager({ control, disabled = false }: Props) {
     }
 
     const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;    if (sourceIndex !== destinationIndex) {
+    const destinationIndex = result.destination.index;
+    if (sourceIndex !== destinationIndex) {
       move(sourceIndex, destinationIndex);
     }
   };
@@ -160,7 +163,8 @@ export default function ActivityManager({ control, disabled = false }: Props) {
             Add Activity
           </Button>
         </div>
-      </div>      {/* Activities List with Global Tab Switcher */}
+      </div>{" "}
+      {/* Activities List with Global Tab Switcher */}
       {fields.length > 0 ? (
         <Tabs defaultValue="en" className="w-full">
           <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-4 pb-2 pt-2 px-2">
@@ -325,7 +329,9 @@ function ActivityFields({
         name={`offeredActivities.${index}.specificDescription.${languageIndex}`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Specific Description ({languageLabels[languageIndex]})</FormLabel>
+            <FormLabel>
+              Specific Description ({languageLabels[languageIndex]})
+            </FormLabel>
             <FormControl>
               <Input
                 {...field}
@@ -392,7 +398,11 @@ function ActivitiesListByLanguage({
               </div>
             </div>
           </div>
-          <ActivityFields control={control} index={index} languageIndex={languageIndex} />
+          <ActivityFields
+            control={control}
+            index={index}
+            languageIndex={languageIndex}
+          />
         </div>
       ))}
     </div>
@@ -408,11 +418,7 @@ function ActivitiesListByLanguage({
             className="space-y-4"
           >
             {fields.map((field, index) => (
-              <Draggable
-                key={field.id}
-                draggableId={field.id}
-                index={index}
-              >
+              <Draggable key={field.id} draggableId={field.id} index={index}>
                 {(provided, snapshot) => (
                   <div
                     ref={provided.innerRef}
@@ -456,7 +462,11 @@ function ActivitiesListByLanguage({
                         </div>
                       </div>
                     </div>
-                    <ActivityFields control={control} index={index} languageIndex={languageIndex} />
+                    <ActivityFields
+                      control={control}
+                      index={index}
+                      languageIndex={languageIndex}
+                    />
                   </div>
                 )}
               </Draggable>

@@ -111,7 +111,12 @@ function SchedulesListByLanguage({
               <MDXEditor
                 value={schedule.description[languageIndex]}
                 onChange={(value) =>
-                  updateSchedule(schedule.id, "description", languageIndex, value)
+                  updateSchedule(
+                    schedule.id,
+                    "description",
+                    languageIndex,
+                    value
+                  )
                 }
                 placeholder={`Enter schedule description in ${languageLabels[languageIndex]}`}
               />
@@ -169,7 +174,9 @@ function SchedulesListByLanguage({
                     </CardHeader>
                     <CardContent className="space-y-4">
                       <div>
-                        <Label htmlFor={`title-${languageIndex}-${schedule.id}`}>
+                        <Label
+                          htmlFor={`title-${languageIndex}-${schedule.id}`}
+                        >
                           Title ({languageLabels[languageIndex]})
                         </Label>
                         <Input
@@ -187,13 +194,20 @@ function SchedulesListByLanguage({
                         />
                       </div>
                       <div>
-                        <Label htmlFor={`description-${languageIndex}-${schedule.id}`}>
+                        <Label
+                          htmlFor={`description-${languageIndex}-${schedule.id}`}
+                        >
                           Description ({languageLabels[languageIndex]})
                         </Label>
                         <MDXEditor
                           value={schedule.description[languageIndex]}
                           onChange={(value) =>
-                            updateSchedule(schedule.id, "description", languageIndex, value)
+                            updateSchedule(
+                              schedule.id,
+                              "description",
+                              languageIndex,
+                              value
+                            )
                           }
                           placeholder={`Enter schedule description in ${languageLabels[languageIndex]}`}
                         />
@@ -222,8 +236,10 @@ export default function SchedulesManager({
 
   // Helper to check if any schedule has empty fields in a language
   const isLanguageEmpty = (langIndex: number) => {
-    return schedules.some((schedule) => 
-      !schedule.title[langIndex]?.trim() || !schedule.description[langIndex]?.trim()
+    return schedules.some(
+      (schedule) =>
+        !schedule.title[langIndex]?.trim() ||
+        !schedule.description[langIndex]?.trim()
     );
   };
 
@@ -298,7 +314,8 @@ export default function SchedulesManager({
           <Plus className="mr-2 h-4 w-4" />
           Add Schedule Item
         </Button>
-      </div>      {/* Schedules List with Global Tab Switcher */}
+      </div>{" "}
+      {/* Schedules List with Global Tab Switcher */}
       {schedules.length > 0 ? (
         <Tabs defaultValue="en" className="w-full">
           <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-4 pb-2 pt-2 px-2">

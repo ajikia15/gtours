@@ -54,7 +54,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
   return (
     <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
       <DrawerTrigger asChild>
-        <div className="z-50 flex flex-col items-center justify-center w-full px-4 pb-4 pt-3 bg-white fixed bottom-0 inset-x-0 mb-20 border-t border border-gray-200 rounded-t-lg shadow-lg">
+        <div className="z-50 flex flex-col items-center justify-center w-full px-4 pb-4 pt-3 bg-white fixed bottom-0 inset-x-0 mb-18 border-t border border-gray-200 rounded-t-lg ">
           <div className="flex justify-center">
             <div className="h-2 rounded-full bg-gray-300 w-24"></div>
           </div>
