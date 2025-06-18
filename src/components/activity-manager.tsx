@@ -1,6 +1,12 @@
 "use client";
 
-import { useFieldArray, Control, useFormContext } from "react-hook-form";
+import {
+  useFieldArray,
+  Control,
+  useFormContext,
+  useWatch,
+} from "react-hook-form";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import {
   DragDropContext,
@@ -37,6 +43,27 @@ type Props = {
   control: Control<TourFormData>;
   disabled?: boolean;
 };
+
+// Helper component for tab triggers with empty field indicators
+const LanguageTabTrigger = ({
+  value,
+  label,
+  isEmpty,
+}: {
+  value: string;
+  label: string;
+  isEmpty: boolean;
+}) => (
+  <TabsTrigger value={value} className="relative">
+    {label}
+    {isEmpty && (
+      <span
+        className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
+        title="Some fields in this language are empty"
+      ></span>
+    )}
+  </TabsTrigger>
+);
 
 export default function ActivityManager({ control, disabled = false }: Props) {
   const { fields, append, remove, move } = useFieldArray({
@@ -268,6 +295,7 @@ function ActivityFields({
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {" "}
       <FormField
         control={control}
         name={`offeredActivities.${index}.priceIncrement`}
@@ -287,54 +315,8 @@ function ActivityFields({
           </FormItem>
         )}
       />
-      <FormField
-        control={control}
-        name={`offeredActivities.${index}.specificDescription.0`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Specific Description (English)</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                placeholder="Tour-specific details in English..."
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={control}
-        name={`offeredActivities.${index}.specificDescription.1`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Specific Description (Georgian)</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                placeholder="Tour-specific details in Georgian..."
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={control}
-        name={`offeredActivities.${index}.specificDescription.2`}
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Specific Description (Russian)</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                placeholder="Tour-specific details in Russian..."
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      {/* Multilingual Descriptions with Global Tab Switcher */}
+      <ActivityDescriptionTabs control={control} index={index} />
       <FormField
         control={control}
         name={`offeredActivities.${index}.coordinates.0`}
@@ -383,6 +365,112 @@ function ActivityFields({
           </FormItem>
         )}
       />
+    </div>
+  );
+}
+
+// Component for multilingual activity descriptions with tab switcher
+function ActivityDescriptionTabs({
+  control,
+  index,
+}: {
+  control: Control<TourFormData>;
+  index: number;
+}) {
+  // Watch the specific description fields for this activity
+  const watchedDescriptions = useWatch({
+    control,
+    name: `offeredActivities.${index}.specificDescription`,
+  });
+
+  // Helper to check if any description field in a language is empty
+  const isLanguageEmpty = (langIndex: number) => {
+    return !watchedDescriptions?.[langIndex]?.trim();
+  };
+
+  return (
+    <div className="space-y-4">
+      <h5 className="text-sm font-medium text-gray-700">
+        Specific Description
+      </h5>
+      <Tabs defaultValue="en" className="w-full">
+        <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-4 pb-2 pt-2 px-2">
+          <TabsList className="grid w-full grid-cols-3">
+            <LanguageTabTrigger
+              value="en"
+              label="English"
+              isEmpty={isLanguageEmpty(0)}
+            />
+            <LanguageTabTrigger
+              value="ge"
+              label="Georgian"
+              isEmpty={isLanguageEmpty(1)}
+            />
+            <LanguageTabTrigger
+              value="ru"
+              label="Russian"
+              isEmpty={isLanguageEmpty(2)}
+            />
+          </TabsList>
+        </div>
+
+        <TabsContent value="en">
+          <FormField
+            control={control}
+            name={`offeredActivities.${index}.specificDescription.0`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Specific Description (English)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Tour-specific details in English..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </TabsContent>
+
+        <TabsContent value="ge">
+          <FormField
+            control={control}
+            name={`offeredActivities.${index}.specificDescription.1`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Specific Description (Georgian)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Tour-specific details in Georgian..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </TabsContent>
+
+        <TabsContent value="ru">
+          <FormField
+            control={control}
+            name={`offeredActivities.${index}.specificDescription.2`}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Specific Description (Russian)</FormLabel>
+                <FormControl>
+                  <Input
+                    {...field}
+                    placeholder="Tour-specific details in Russian..."
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

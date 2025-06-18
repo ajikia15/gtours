@@ -30,6 +30,7 @@ export default function EditTourForm({
   status,
   images = [],
   offeredActivities = [],
+  schedules = [],
   ...tourProps
 }: Props) {
   const auth = useAuth();
@@ -114,6 +115,7 @@ export default function EditTourForm({
               ? activity.specificDescription
               : [activity.specificDescription || "", "", ""], // Convert old format to new
           })),
+          schedules: schedules || [],
         }}
       />
     </div>

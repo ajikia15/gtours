@@ -1,7 +1,7 @@
 "use client";
 
 import { tourSchema, tourStatusEnum } from "@/validation/tourSchema";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { Form } from "./ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,8 +22,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import MultiImageUploader, { ImageUpload } from "./multi-image-uploader";
 import ActivityManager from "./activity-manager";
+import SchedulesManager from "./schedules-manager";
 import { useCoordinatePaste } from "@/lib/useCoordinatePaste";
 import { useTranslations } from "next-intl";
 
@@ -35,6 +37,27 @@ type Props = {
   submitButtonLabel: React.ReactNode;
   defaultValues?: TourFormData;
 };
+
+// Helper component for tab triggers with empty field indicators
+const LanguageTabTrigger = ({
+  value,
+  label,
+  isEmpty,
+}: {
+  value: string;
+  label: string;
+  isEmpty: boolean;
+}) => (
+  <TabsTrigger value={value} className="relative">
+    {label}
+    {isEmpty && (
+      <span
+        className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
+        title="Some fields in this language are empty"
+      ></span>
+    )}
+  </TabsTrigger>
+);
 
 export default function TourForm({
   handleSubmit: onSubmit,
@@ -55,21 +78,38 @@ export default function TourForm({
     status: defaultValues?.status || "draft",
     images: defaultValues?.images || [],
     offeredActivities: defaultValues?.offeredActivities || [],
+    schedules: defaultValues?.schedules || [],
   };
   const form = useForm<TourFormData>({
     resolver: zodResolver(tourSchema),
     defaultValues: combinedDefaultValues,
   });
-
   // Smart paste functionality for coordinates
   const { handlePaste } = useCoordinatePaste(
     (lat) => form.setValue("coordinates.0", lat),
     (lng) => form.setValue("coordinates.1", lng)
   );
+  // Watch all multilingual fields efficiently
+  const watchedFields = useWatch({
+    control: form.control,
+    name: ["title", "subtitle", "description"],
+  });
 
+  const [title, subtitle, description] = watchedFields;
+
+  // Helper to check if any field in a language is empty
+  const isLanguageEmpty = (langIndex: number) => {
+    const titleEmpty = !title?.[langIndex]?.trim();
+    const subtitleEmpty = !subtitle?.[langIndex]?.trim();
+    const descriptionEmpty = !description?.[langIndex]?.trim();
+    return titleEmpty || subtitleEmpty || descriptionEmpty;
+  };
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="relative space-y-8"
+      >
         {/* 1. BASIC INFORMATION */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
@@ -79,167 +119,237 @@ export default function TourForm({
             <p className="text-sm text-gray-500">
               {t("sections.basicInformationDesc")}
             </p>
-          </div>
-          {/* Title Fields */}
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="title.0"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.tourTitleEN")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t("fields.tourTitleENPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="title.1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.tourTitleGE")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t("fields.tourTitleGEPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="title.2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.tourTitleRU")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t("fields.tourTitleRUPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* Subtitle Fields */}
-          <div className="space-y-4">
-            <FormField
-              control={form.control}
-              name="subtitle.0"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.subtitleEN")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t("fields.subtitleENPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="subtitle.1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.subtitleGE")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t("fields.subtitleGEPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="subtitle.2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.subtitleRU")}</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      placeholder={t("fields.subtitleRUPlaceholder")}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          {/* Description Fields */}
-          <div className="space-y-4">            <FormField
-              control={form.control}
-              name="description.0"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.descriptionEN")}</FormLabel>
-                  <FormControl>
-                    <MDXEditor
-                      value={field.value || ""}
-                      onChange={field.onChange}
-                      placeholder={t("fields.descriptionENPlaceholder")}
-                      disabled={form.formState.isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description.1"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.descriptionGE")}</FormLabel>
-                  <FormControl>
-                    <MDXEditor
-                      value={field.value || ""}
-                      onChange={field.onChange}
-                      placeholder={t("fields.descriptionGEPlaceholder")}
-                      disabled={form.formState.isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="description.2"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>{t("fields.descriptionRU")}</FormLabel>
-                  <FormControl>
-                    <MDXEditor
-                      value={field.value || ""}
-                      onChange={field.onChange}
-                      placeholder={t("fields.descriptionRUPlaceholder")}
-                      disabled={form.formState.isSubmitting}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-        </fieldset>
+          </div>{" "}
+          {/* Global Language Tab Switcher - Sticky */}
+          <Tabs defaultValue="en" className="w-full">
+            <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-6 pb-2 pt-2 px-2">
+              <TabsList className="grid w-full grid-cols-3">
+                <LanguageTabTrigger
+                  value="en"
+                  label="English"
+                  isEmpty={isLanguageEmpty(0)}
+                />
+                <LanguageTabTrigger
+                  value="ge"
+                  label="Georgian"
+                  isEmpty={isLanguageEmpty(1)}
+                />
+                <LanguageTabTrigger
+                  value="ru"
+                  label="Russian"
+                  isEmpty={isLanguageEmpty(2)}
+                />
+              </TabsList>
+            </div>
 
+            {/* English Fields */}
+            <TabsContent value="en" className="space-y-6">
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">
+                  Tour Title
+                </h4>
+                <FormField
+                  control={form.control}
+                  name="title.0"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.tourTitleEN")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={t("fields.tourTitleENPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">Subtitle</h4>
+                <FormField
+                  control={form.control}
+                  name="subtitle.0"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.subtitleEN")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={t("fields.subtitleENPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">
+                  Description
+                </h4>
+                <FormField
+                  control={form.control}
+                  name="description.0"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.descriptionEN")}</FormLabel>
+                      <FormControl>
+                        <MDXEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder={t("fields.descriptionENPlaceholder")}
+                          disabled={form.formState.isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </TabsContent>
+
+            {/* Georgian Fields */}
+            <TabsContent value="ge" className="space-y-6">
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">
+                  Tour Title
+                </h4>
+                <FormField
+                  control={form.control}
+                  name="title.1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.tourTitleGE")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={t("fields.tourTitleGEPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">Subtitle</h4>
+                <FormField
+                  control={form.control}
+                  name="subtitle.1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.subtitleGE")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={t("fields.subtitleGEPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">
+                  Description
+                </h4>
+                <FormField
+                  control={form.control}
+                  name="description.1"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.descriptionGE")}</FormLabel>
+                      <FormControl>
+                        <MDXEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder={t("fields.descriptionGEPlaceholder")}
+                          disabled={form.formState.isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </TabsContent>
+
+            {/* Russian Fields */}
+            <TabsContent value="ru" className="space-y-6">
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">
+                  Tour Title
+                </h4>
+                <FormField
+                  control={form.control}
+                  name="title.2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.tourTitleRU")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={t("fields.tourTitleRUPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">Subtitle</h4>
+                <FormField
+                  control={form.control}
+                  name="subtitle.2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.subtitleRU")}</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder={t("fields.subtitleRUPlaceholder")}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              <div className="space-y-4">
+                <h4 className="text-md font-medium text-gray-700">
+                  Description
+                </h4>
+                <FormField
+                  control={form.control}
+                  name="description.2"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{t("fields.descriptionRU")}</FormLabel>
+                      <FormControl>
+                        <MDXEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
+                          placeholder={t("fields.descriptionRUPlaceholder")}
+                          disabled={form.formState.isSubmitting}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
+        </fieldset>
         {/* 2. BUSINESS DETAILS */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
@@ -292,7 +402,6 @@ export default function TourForm({
             />
           </div>
         </fieldset>
-
         {/* 3. SCHEDULE */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
@@ -340,7 +449,6 @@ export default function TourForm({
             />
           </div>
         </fieldset>
-
         {/* 4. LOCATION */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
@@ -415,7 +523,6 @@ export default function TourForm({
             </div>
           </div>
         </fieldset>
-
         {/* 5. ADMINISTRATIVE */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
@@ -455,7 +562,6 @@ export default function TourForm({
             )}
           />
         </fieldset>
-
         {/* 6. VISUAL CONTENT */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
@@ -490,9 +596,37 @@ export default function TourForm({
               </FormItem>
             )}
           />
-        </fieldset>
+        </fieldset>{" "}
+        {/* 7. SCHEDULES */}
+        <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
+          <div className="border-b pb-4">
+            <h3 className="text-lg font-medium text-gray-900">
+              {t("sections.schedules")}
+            </h3>
+            <p className="text-sm text-gray-500">
+              {t("sections.schedulesDesc")}
+            </p>
+          </div>
 
-        {/* 7. ACTIVITIES */}
+          <FormField
+            control={form.control}
+            name="schedules"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <SchedulesManager
+                    schedules={field.value || []}
+                    onSchedulesChange={(schedules) => {
+                      field.onChange(schedules);
+                    }}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </fieldset>
+        {/* 8. ACTIVITIES */}
         <fieldset disabled={form.formState.isSubmitting} className="space-y-4">
           <div className="border-b pb-4">
             <h3 className="text-lg font-medium text-gray-900">
@@ -502,13 +636,11 @@ export default function TourForm({
               {t("sections.activitiesDesc")}
             </p>
           </div>
-
           <ActivityManager
             control={form.control}
             disabled={form.formState.isSubmitting}
-          />
+          />{" "}
         </fieldset>
-
         {/* SUBMIT BUTTON */}
         <div className="pt-6 border-t">
           <Button

@@ -11,7 +11,8 @@ export default async function EditTour({
 }) {
   const { tourId } = await params;
   const tour = await getTourById(tourId);
-  const locale = await getLocale();  return (
+  const locale = await getLocale();
+  return (
     <div className="max-w-4xl mx-auto mt-5">
       <Breadcrumbs
         items={[
@@ -26,6 +27,7 @@ export default async function EditTour({
           <CardTitle>Edit Tour - {getLocalizedTitle(tour, locale)}</CardTitle>
         </CardHeader>
         <CardContent>
+          {" "}
           <EditTourForm
             id={tour.id}
             title={tour.title}
@@ -39,6 +41,7 @@ export default async function EditTour({
             status={tour.status}
             images={tour.images || []}
             offeredActivities={tour.offeredActivities || []}
+            schedules={tour.schedules || []}
           />
         </CardContent>
       </Card>

@@ -73,7 +73,25 @@ export const tourImageSchema = z.object({
   ),
 });
 
+export const scheduleItemSchema = z.object({
+  id: z.string(),
+  title: z
+    .array(z.string().min(1, "Schedule title is required"))
+    .length(3, "Schedule title must have 3 language versions [EN, GE, RU]"),
+  description: z
+    .array(z.string().min(1, "Schedule description is required"))
+    .length(
+      3,
+      "Schedule description must have 3 language versions [EN, GE, RU]"
+    ),
+});
+
+export const tourScheduleSchema = z.object({
+  schedules: z.array(scheduleItemSchema),
+});
+
 // Combine all schemas using .and()
 export const tourSchema = tourDataSchema
   .and(tourActivitiesSchema)
-  .and(tourImageSchema);
+  .and(tourImageSchema)
+  .and(tourScheduleSchema);

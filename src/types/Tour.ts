@@ -1,6 +1,12 @@
 import { TourStatus, Coordinates } from "@/validation/tourSchema";
 import { OfferedActivity } from "./Activity";
 
+export type ScheduleItem = {
+  id: string;
+  title: string[]; // [EN, GE, RU]
+  description: string[]; // [EN, GE, RU]
+};
+
 export type Tour = {
   id: string;
   title: string[]; // [EN, GE, RU]
@@ -14,6 +20,7 @@ export type Tour = {
   status: TourStatus;
   images?: string[];
   offeredActivities: OfferedActivity[];
+  schedules?: ScheduleItem[];
 };
 
 // export type TourWithId = Tour & { id: string };

@@ -139,6 +139,8 @@
         "statusDesc": "Publication status",
         "images": "Images",
         "imagesDesc": "Visual content for your tour",
+        "schedules": "Schedules",
+        "schedulesDesc": "Daily itinerary and schedule items for your tour",
         "activities": "Activities",
         "activitiesDesc": "Specific activities included in this tour"
       },
@@ -437,7 +439,9 @@
     "chooseActivities": "Choose Activities",
     "tourHighlights": "Tour Highlights",
     "meetingPoint": "Meeting Point",
-    "endPoint": "End Point"
+    "endPoint": "End Point",
+    "tourSchedule": "Schedule",
+    "noDescription": "No description available"
   },
   "Common": {
     "loading": "Loading...",

@@ -10,6 +10,7 @@ import { Suspense } from "react";
 import ImageSectionSkeleton from "./image-section-skeleton";
 import TextSectionSkeleton from "./text-section-skeleton";
 import TourDetailsCardSkeleton from "./tour-details-card-skeleton";
+import TourSchedulesDisplay from "@/components/tour-schedules-display";
 import {
   getLocalizedTitle,
   getLocalizedDescription,
@@ -60,13 +61,22 @@ export default async function TourContent({
               Explore wonders of {getLocalizedTitle(tour, locale)}
             </h3>
             <div className="w-full mt-8 mb-2 h-px bg-gray-300"></div>
-          </div>
+          </div>{" "}
           <Suspense fallback={<TextSectionSkeleton />}>
             <TextSection
               mobile={mobile}
               description={getLocalizedDescription(tour, locale)}
             />
           </Suspense>
+          {/* Tour Schedules Section */}
+          {tour.schedules && tour.schedules.length > 0 && (
+            <div className="my-8">
+              <TourSchedulesDisplay
+                schedules={tour.schedules}
+                locale={locale}
+              />
+            </div>
+          )}
           <div className="w-full h-80 my-10 md:my-0">
             <TourMapSection
               tourCoordinates={tour.coordinates}

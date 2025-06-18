@@ -30,7 +30,6 @@ function migrateTourData(data: any): Partial<Tour> {
         : [activity.specificDescription || "", "", ""], // Convert old string to array
     }));
   };
-
   // Check if data is already in new format (arrays)
   if (Array.isArray(data?.title)) {
     return {
@@ -45,9 +44,9 @@ function migrateTourData(data: any): Partial<Tour> {
       status: data.status || "draft",
       images: data.images || [],
       offeredActivities: migrateActivities(data.offeredActivities || []),
+      schedules: data.schedules || [],
     };
   }
-
   // Convert old format to new format
   return {
     title: [
@@ -73,6 +72,7 @@ function migrateTourData(data: any): Partial<Tour> {
     status: data?.status || "draft",
     images: data?.images || [],
     offeredActivities: migrateActivities(data?.offeredActivities || []),
+    schedules: data?.schedules || [],
   };
 }
 
