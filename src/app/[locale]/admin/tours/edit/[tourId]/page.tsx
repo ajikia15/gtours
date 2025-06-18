@@ -11,9 +11,8 @@ export default async function EditTour({
 }) {
   const { tourId } = await params;
   const tour = await getTourById(tourId);
-  const locale = await getLocale();
-  return (
-    <div className="max-w-xl mx-auto mt-5">
+  const locale = await getLocale();  return (
+    <div className="max-w-4xl mx-auto mt-5">
       <Breadcrumbs
         items={[
           { label: "Admin Dashboard", href: "/admin" },

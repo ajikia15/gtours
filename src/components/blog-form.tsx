@@ -13,8 +13,8 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import { MDXEditor } from "./ui/mdx-editor";
 import {
   Select,
   SelectContent,
@@ -179,18 +179,18 @@ export default function BlogForm({
           </div>
 
           {/* Description Fields */}
-          <div className="space-y-4">
-            <FormField
+          <div className="space-y-4">            <FormField
               control={form.control}
               name="description.0"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.descriptionEN")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={3}
+                    <MDXEditor
+                      value={field.value || ""}
+                      onChange={field.onChange}
                       placeholder={t("fields.descriptionENPlaceholder")}
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -204,10 +204,11 @@ export default function BlogForm({
                 <FormItem>
                   <FormLabel>{t("fields.descriptionGE")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={3}
+                    <MDXEditor
+                      value={field.value || ""}
+                      onChange={field.onChange}
                       placeholder={t("fields.descriptionGEPlaceholder")}
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -221,10 +222,11 @@ export default function BlogForm({
                 <FormItem>
                   <FormLabel>{t("fields.descriptionRU")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={3}
+                    <MDXEditor
+                      value={field.value || ""}
+                      onChange={field.onChange}
                       placeholder={t("fields.descriptionRUPlaceholder")}
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -426,18 +428,18 @@ export default function BlogForm({
               className="space-y-4"
             >
               {/* Meta Description Fields */}
-              <div className="space-y-4">
-                <FormField
+              <div className="space-y-4">                <FormField
                   control={form.control}
                   name="seoMeta.metaDescription.0"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>{t("fields.metaDescriptionEN")}</FormLabel>
                       <FormControl>
-                        <Textarea
-                          {...field}
-                          rows={2}
+                        <MDXEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
                           placeholder={t("fields.metaDescriptionENPlaceholder")}
+                          disabled={form.formState.isSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
@@ -451,10 +453,11 @@ export default function BlogForm({
                     <FormItem>
                       <FormLabel>{t("fields.metaDescriptionGE")}</FormLabel>
                       <FormControl>
-                        <Textarea
-                          {...field}
-                          rows={2}
+                        <MDXEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
                           placeholder={t("fields.metaDescriptionGEPlaceholder")}
+                          disabled={form.formState.isSubmitting}
                         />
                       </FormControl>
                       <FormMessage />
@@ -468,10 +471,11 @@ export default function BlogForm({
                     <FormItem>
                       <FormLabel>{t("fields.metaDescriptionRU")}</FormLabel>
                       <FormControl>
-                        <Textarea
-                          {...field}
-                          rows={2}
+                        <MDXEditor
+                          value={field.value || ""}
+                          onChange={field.onChange}
                           placeholder={t("fields.metaDescriptionRUPlaceholder")}
+                          disabled={form.formState.isSubmitting}
                         />
                       </FormControl>
                       <FormMessage />

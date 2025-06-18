@@ -13,8 +13,8 @@ import {
   FormMessage,
 } from "./ui/form";
 import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
+import { MDXEditor } from "./ui/mdx-editor";
 import {
   Select,
   SelectContent,
@@ -183,18 +183,18 @@ export default function TourForm({
             />
           </div>
           {/* Description Fields */}
-          <div className="space-y-4">
-            <FormField
+          <div className="space-y-4">            <FormField
               control={form.control}
               name="description.0"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>{t("fields.descriptionEN")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={3}
+                    <MDXEditor
+                      value={field.value || ""}
+                      onChange={field.onChange}
                       placeholder={t("fields.descriptionENPlaceholder")}
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -208,10 +208,11 @@ export default function TourForm({
                 <FormItem>
                   <FormLabel>{t("fields.descriptionGE")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={3}
+                    <MDXEditor
+                      value={field.value || ""}
+                      onChange={field.onChange}
                       placeholder={t("fields.descriptionGEPlaceholder")}
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />
@@ -225,10 +226,11 @@ export default function TourForm({
                 <FormItem>
                   <FormLabel>{t("fields.descriptionRU")}</FormLabel>
                   <FormControl>
-                    <Textarea
-                      {...field}
-                      rows={3}
+                    <MDXEditor
+                      value={field.value || ""}
+                      onChange={field.onChange}
                       placeholder={t("fields.descriptionRUPlaceholder")}
+                      disabled={form.formState.isSubmitting}
                     />
                   </FormControl>
                   <FormMessage />

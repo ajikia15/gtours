@@ -7,7 +7,7 @@ export default async function NewTour() {
   const t = await getTranslations("Admin");
 
   return (
-    <div className="max-w-xl mx-auto mt-5">
+    <div className="max-w-4xl mx-auto mt-5">
       <Breadcrumbs
         items={[
           { label: t("breadcrumbs.adminDashboard"), href: "/admin" },
