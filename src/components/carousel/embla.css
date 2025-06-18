@@ -6,6 +6,63 @@
   --embla-dot-font-size-active: 2rem;
   --embla-dot-gap: 0.5rem;
 }
+
+/* Mobile styles for reduced vertical space */
+.embla--mobile {
+  --slide-height: 20rem; /* Reduced from 32rem to 20rem */
+  --slide-spacing: 1rem;
+  --slide-size: 100%;
+}
+
+.embla--mobile .embla__slide {
+  height: var(--slide-height);
+  aspect-ratio: auto; /* Override aspect ratio on mobile */
+}
+
+.embla--mobile .embla__parallax,
+.embla--mobile .embla__parallax__layer {
+  height: 100%;
+}
+
+/* Disable pointer events on mobile carousel content to prevent interaction */
+.embla--mobile .embla__slide {
+  pointer-events: none;
+}
+
+/* Completely disable touch interaction on mobile */
+.embla--mobile {
+  pointer-events: none;
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.embla--mobile .embla__viewport {
+  pointer-events: none;
+  touch-action: pan-y;
+}
+
+.embla--mobile .embla__container {
+  pointer-events: none;
+}
+
+/* Hide dots on mobile */
+.embla--mobile .embla__dots {
+  display: none !important;
+}
+
+/* Additional mobile breakpoint adjustments */
+@media (max-width: 768px) {
+  .embla--mobile {
+    --slide-height: 18rem; /* Even smaller on very small screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .embla--mobile {
+    --slide-height: 16rem; /* Smallest on phones */
+  }
+}
 .embla__viewport {
   overflow: hidden;
   border-radius: 1rem;

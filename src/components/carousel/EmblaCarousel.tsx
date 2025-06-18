@@ -1,5 +1,11 @@
 "use client";
-import React, { useCallback, useMemo, useEffect, useRef } from "react";
+import React, {
+  useCallback,
+  useMemo,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   EmblaOptionsType,
   EmblaCarouselType,
@@ -14,6 +20,7 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
+import { isMobile } from "@/lib/isMobile";
 
 type SlideContent = {
   id: number;
@@ -33,12 +40,39 @@ const TWEEN_FACTOR_BASE = 0.1;
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
   const { slides, options } = props;
-  const autoplay = useMemo(() => Autoplay(), []);
-  const [emblaRef, emblaApi] = useEmblaCarousel(options, [autoplay]);
+  const [mobile, setMobile] = useState(false);
+  // Modify options for mobile - disable interaction
+  const carouselOptions = useMemo(() => {
+    if (mobile) {
+      return {
+        ...options,
+        watchDrag: false, // Disable drag on mobile
+        watchSlides: false, // Disable slide watching
+        watchResize: false, // Disable resize watching
+        dragFree: false, // Disable free drag
+        startIndex: 0, // Always start at first slide
+      };
+    }
+    return options;
+  }, [options, mobile]);
+
+  // Only use autoplay on non-mobile devices
+  const autoplay = useMemo(() => (mobile ? null : Autoplay()), [mobile]);
+  const [emblaRef, emblaApi] = useEmblaCarousel(
+    carouselOptions,
+    autoplay ? [autoplay] : []
+  );
 
   const tweenFactor = useRef(0);
   const tweenNodes = useRef<HTMLElement[]>([]);
   const animationId = useRef<number | null>(null);
+
+  // Check for mobile device
+  useEffect(() => {
+    const userAgent = navigator.userAgent || "";
+    const isMobileDevice = isMobile(userAgent);
+    setMobile(isMobileDevice);
+  }, []);
   // Define slide content with Georgian tours theme
   const slideContent: SlideContent[] = [
     {
@@ -94,9 +128,11 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const setTweenFactor = useCallback((emblaApi: EmblaCarouselType) => {
     tweenFactor.current = TWEEN_FACTOR_BASE * emblaApi.scrollSnapList().length;
   }, []);
-
   const tweenParallax = useCallback(
     (emblaApi: EmblaCarouselType, eventName?: EmblaEventType) => {
+      // Skip parallax effect on mobile for better performance
+      if (mobile) return;
+
       // Cancel any pending animation frame
       if (animationId.current) {
         cancelAnimationFrame(animationId.current);
@@ -143,7 +179,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
         });
       });
     },
-    []
+    [mobile]
   );
 
   useEffect(() => {
@@ -183,9 +219,20 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
     emblaApi,
     onNavButtonClick
   );
-
   return (
-    <section className="embla">
+    <section
+      className={mobile ? "embla embla--mobile" : "embla"}
+      style={
+        mobile
+          ? {
+              pointerEvents: "none",
+              touchAction: "pan-y",
+              userSelect: "none",
+              WebkitUserSelect: "none",
+            }
+          : {}
+      }
+    >
       <div
         className="embla__viewport"
         ref={emblaRef}
@@ -220,41 +267,63 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                     {/* Dark overlay */}
                     <div className="absolute inset-0 bg-black/40 z-10" />
 
-                    {/* Content overlay */}
-                    <div className="absolute inset-0 z-20 flex items-center justify-center">
-                      <div className="text-center text-white px-8">
-                        <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
-                          {content.title}
-                        </h1>
-                        <p className="text-lg md:text-xl mb-8 drop-shadow-md opacity-90">
-                          {content.subtitle}
-                        </p>
-                        <Link href={content.href || "/"}>
-                          <Button size="lg" className="font-semibold shadow-xl">
-                            {content.buttonText}
-                          </Button>
-                        </Link>
+                    {/* Content overlay - hide interactive elements on mobile */}
+                    {!mobile && (
+                      <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="text-center text-white px-8">
+                          <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-lg">
+                            {content.title}
+                          </h1>
+                          <p className="text-lg md:text-xl mb-8 drop-shadow-md opacity-90">
+                            {content.subtitle}
+                          </p>
+                          <Link href={content.href || "/"}>
+                            <Button
+                              size="lg"
+                              className="font-semibold shadow-xl"
+                            >
+                              {content.buttonText}
+                            </Button>
+                          </Link>
+                        </div>
                       </div>
-                    </div>
+                    )}
+
+                    {/* Mobile overlay - simple, no interactivity */}
+                    {mobile && (
+                      <div className="absolute inset-0 z-20 flex items-center justify-center">
+                        <div className="text-center text-white px-4">
+                          <h1 className="text-2xl font-bold drop-shadow-lg">
+                            {content.title}
+                          </h1>
+                          <p className="text-sm mt-2 drop-shadow-md opacity-90">
+                            {content.subtitle}
+                          </p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
             );
           })}
         </div>{" "}
-        <div className="embla__dots">
-          {actualSlides.map((_, index) => (
-            <DotButton
-              key={index}
-              onClick={() => onDotButtonClick(index)}
-              className={"embla__dot".concat(
-                index === selectedIndex ? " embla__dot--selected" : ""
-              )}
-            >
-              0{index + 1}
-            </DotButton>
-          ))}
-        </div>
+        {/* Hide dots on mobile */}
+        {!mobile && (
+          <div className="embla__dots">
+            {actualSlides.map((_, index) => (
+              <DotButton
+                key={index}
+                onClick={() => onDotButtonClick(index)}
+                className={"embla__dot".concat(
+                  index === selectedIndex ? " embla__dot--selected" : ""
+                )}
+              >
+                0{index + 1}
+              </DotButton>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
