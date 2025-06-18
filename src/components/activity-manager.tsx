@@ -70,9 +70,21 @@ export default function ActivityManager({ control, disabled = false }: Props) {
     control,
     name: "offeredActivities",
   });
-
   const [selectedActivityType, setSelectedActivityType] = useState<string>("");
   const [isMounted, setIsMounted] = useState(false);
+
+  // Watch all activity descriptions for red dot indicators
+  const watchedActivities = useWatch({
+    control,
+    name: "offeredActivities"
+  });
+
+  // Helper to check if any activity has empty fields in a language
+  const isLanguageEmpty = (langIndex: number) => {
+    return watchedActivities?.some((activity: any) => 
+      !activity?.specificDescription?.[langIndex]?.trim()
+    ) || false;
+  };
 
   // Handle client-side mounting to avoid hydration issues
   useEffect(() => {
@@ -103,55 +115,10 @@ export default function ActivityManager({ control, disabled = false }: Props) {
     }
 
     const sourceIndex = result.source.index;
-    const destinationIndex = result.destination.index;
-
-    if (sourceIndex !== destinationIndex) {
+    const destinationIndex = result.destination.index;    if (sourceIndex !== destinationIndex) {
       move(sourceIndex, destinationIndex);
     }
   };
-
-  // Static content when not mounted or no fields
-  const StaticContent = () => (
-    <div className="space-y-4">
-      {fields.map((field, index) => (
-        <div
-          key={field.id}
-          className="border rounded-lg p-4 space-y-4 bg-gray-50"
-        >
-          <div className="flex items-center justify-between">
-            <h4 className="font-medium flex items-center gap-2">
-              <div className="relative w-5 h-5">
-                <Image
-                  src={`/${
-                    activityTypes.find((at) => at.id === field.activityTypeId)
-                      ?.pngFileName
-                  }.png`}
-                  alt={field.nameSnapshot}
-                  fill
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
-              {field.nameSnapshot}
-            </h4>
-            <div className="flex items-center gap-2">
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => remove(index)}
-              >
-                <Trash2 className="w-4 h-4" />
-              </Button>
-              <div className="text-gray-500 cursor-grab active:cursor-grabbing p-1">
-                <MoveIcon className="w-4 h-4" />
-              </div>
-            </div>
-          </div>
-          <ActivityFields control={control} index={index} />
-        </div>
-      ))}
-    </div>
-  );
 
   return (
     <fieldset disabled={disabled} className="space-y-4">
@@ -193,81 +160,62 @@ export default function ActivityManager({ control, disabled = false }: Props) {
             Add Activity
           </Button>
         </div>
-      </div>
-
-      {/* Activities List with Drag and Drop */}
+      </div>      {/* Activities List with Global Tab Switcher */}
       {fields.length > 0 ? (
-        isMounted ? (
-          <DragDropContext onDragEnd={handleDragEnd}>
-            <Droppable droppableId="tour-activities" direction="vertical">
-              {(provided) => (
-                <div
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                  className="space-y-4"
-                >
-                  {fields.map((field, index) => (
-                    <Draggable
-                      key={field.id}
-                      draggableId={field.id}
-                      index={index}
-                    >
-                      {(provided, snapshot) => (
-                        <div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          className={`border rounded-lg p-4 space-y-4 transition-colors ${
-                            snapshot.isDragging
-                              ? "bg-blue-50 border-blue-200"
-                              : "bg-gray-50"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <h4 className="font-medium flex items-center gap-2">
-                              <div className="relative w-5 h-5">
-                                <Image
-                                  src={`/${
-                                    activityTypes.find(
-                                      (at) => at.id === field.activityTypeId
-                                    )?.pngFileName
-                                  }.png`}
-                                  alt={field.nameSnapshot}
-                                  fill
-                                  style={{ objectFit: "contain" }}
-                                />
-                              </div>
-                              {field.nameSnapshot}
-                            </h4>
-                            <div className="flex items-center gap-2">
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => remove(index)}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                              <div
-                                {...provided.dragHandleProps}
-                                className="text-gray-500 cursor-grab active:cursor-grabbing p-1"
-                              >
-                                <MoveIcon className="w-4 h-4" />
-                              </div>
-                            </div>
-                          </div>
-                          <ActivityFields control={control} index={index} />
-                        </div>
-                      )}
-                    </Draggable>
-                  ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        ) : (
-          <StaticContent />
-        )
+        <Tabs defaultValue="en" className="w-full">
+          <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-4 pb-2 pt-2 px-2">
+            <TabsList className="grid w-full grid-cols-3">
+              <LanguageTabTrigger
+                value="en"
+                label="English"
+                isEmpty={isLanguageEmpty(0)}
+              />
+              <LanguageTabTrigger
+                value="ge"
+                label="Georgian"
+                isEmpty={isLanguageEmpty(1)}
+              />
+              <LanguageTabTrigger
+                value="ru"
+                label="Russian"
+                isEmpty={isLanguageEmpty(2)}
+              />
+            </TabsList>
+          </div>
+
+          <TabsContent value="en">
+            <ActivitiesListByLanguage
+              fields={fields}
+              control={control}
+              languageIndex={0}
+              isMounted={isMounted}
+              remove={remove}
+              handleDragEnd={handleDragEnd}
+            />
+          </TabsContent>
+
+          <TabsContent value="ge">
+            <ActivitiesListByLanguage
+              fields={fields}
+              control={control}
+              languageIndex={1}
+              isMounted={isMounted}
+              remove={remove}
+              handleDragEnd={handleDragEnd}
+            />
+          </TabsContent>
+
+          <TabsContent value="ru">
+            <ActivitiesListByLanguage
+              fields={fields}
+              control={control}
+              languageIndex={2}
+              isMounted={isMounted}
+              remove={remove}
+              handleDragEnd={handleDragEnd}
+            />
+          </TabsContent>
+        </Tabs>
       ) : (
         <div className="text-center py-8 text-gray-500">
           No activities added yet. Select an activity type above to get started.
@@ -281,9 +229,11 @@ export default function ActivityManager({ control, disabled = false }: Props) {
 function ActivityFields({
   control,
   index,
+  languageIndex,
 }: {
   control: Control<TourFormData>;
   index: number;
+  languageIndex: number;
 }) {
   const { setValue } = useFormContext<TourFormData>();
 
@@ -293,72 +243,93 @@ function ActivityFields({
     (lng) => setValue(`offeredActivities.${index}.coordinates.1`, lng)
   );
 
+  const languageLabels = ["English", "Georgian", "Russian"];
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      {" "}
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <FormField
+          control={control}
+          name={`offeredActivities.${index}.priceIncrement`}
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Price Increment ($)</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  placeholder="0.00"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name={`offeredActivities.${index}.coordinates.0`}
+          render={({ field: { value, onChange, ...field } }) => (
+            <FormItem>
+              <FormLabel>Latitude</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="any"
+                  placeholder="41.715138"
+                  value={value ?? 0}
+                  onChange={(e) =>
+                    onChange(e.target.value ? Number(e.target.value) : 0)
+                  }
+                  onPaste={(e) => handlePaste(e, true)}
+                  title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={control}
+          name={`offeredActivities.${index}.coordinates.1`}
+          render={({ field: { value, onChange, ...field } }) => (
+            <FormItem>
+              <FormLabel>Longitude</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  type="number"
+                  step="any"
+                  placeholder="44.827096"
+                  value={value ?? 0}
+                  onChange={(e) =>
+                    onChange(e.target.value ? Number(e.target.value) : 0)
+                  }
+                  onPaste={(e) => handlePaste(e, false)}
+                  title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+
+      {/* Language-specific description field */}
       <FormField
         control={control}
-        name={`offeredActivities.${index}.priceIncrement`}
+        name={`offeredActivities.${index}.specificDescription.${languageIndex}`}
         render={({ field }) => (
           <FormItem>
-            <FormLabel>Price Increment ($)</FormLabel>
+            <FormLabel>Specific Description ({languageLabels[languageIndex]})</FormLabel>
             <FormControl>
               <Input
                 {...field}
-                type="number"
-                min={0}
-                step={0.01}
-                placeholder="0.00"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      {/* Multilingual Descriptions with Global Tab Switcher */}
-      <ActivityDescriptionTabs control={control} index={index} />
-      <FormField
-        control={control}
-        name={`offeredActivities.${index}.coordinates.0`}
-        render={({ field: { value, onChange, ...field } }) => (
-          <FormItem>
-            <FormLabel>Latitude</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                type="number"
-                step="any"
-                placeholder="41.715138"
-                value={value ?? 0}
-                onChange={(e) =>
-                  onChange(e.target.value ? Number(e.target.value) : 0)
-                }
-                onPaste={(e) => handlePaste(e, true)}
-                title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <FormField
-        control={control}
-        name={`offeredActivities.${index}.coordinates.1`}
-        render={({ field: { value, onChange, ...field } }) => (
-          <FormItem>
-            <FormLabel>Longitude</FormLabel>
-            <FormControl>
-              <Input
-                {...field}
-                type="number"
-                step="any"
-                placeholder="44.827096"
-                value={value ?? 0}
-                onChange={(e) =>
-                  onChange(e.target.value ? Number(e.target.value) : 0)
-                }
-                onPaste={(e) => handlePaste(e, false)}
-                title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                placeholder={`Tour-specific details in ${languageLabels[languageIndex]}...`}
               />
             </FormControl>
             <FormMessage />
@@ -369,108 +340,133 @@ function ActivityFields({
   );
 }
 
-// Component for multilingual activity descriptions with tab switcher
-function ActivityDescriptionTabs({
+// Component for activities list by language
+function ActivitiesListByLanguage({
+  fields,
   control,
-  index,
+  languageIndex,
+  isMounted,
+  remove,
+  handleDragEnd,
 }: {
+  fields: any[];
   control: Control<TourFormData>;
-  index: number;
+  languageIndex: number;
+  isMounted: boolean;
+  remove: (index: number) => void;
+  handleDragEnd: (result: DropResult) => void;
 }) {
-  // Watch the specific description fields for this activity
-  const watchedDescriptions = useWatch({
-    control,
-    name: `offeredActivities.${index}.specificDescription`,
-  });
-
-  // Helper to check if any description field in a language is empty
-  const isLanguageEmpty = (langIndex: number) => {
-    return !watchedDescriptions?.[langIndex]?.trim();
-  };
-
-  return (
+  const StaticContent = () => (
     <div className="space-y-4">
-      <h5 className="text-sm font-medium text-gray-700">
-        Specific Description
-      </h5>
-      <Tabs defaultValue="en" className="w-full">
-        <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-4 pb-2 pt-2 px-2">
-          <TabsList className="grid w-full grid-cols-3">
-            <LanguageTabTrigger
-              value="en"
-              label="English"
-              isEmpty={isLanguageEmpty(0)}
-            />
-            <LanguageTabTrigger
-              value="ge"
-              label="Georgian"
-              isEmpty={isLanguageEmpty(1)}
-            />
-            <LanguageTabTrigger
-              value="ru"
-              label="Russian"
-              isEmpty={isLanguageEmpty(2)}
-            />
-          </TabsList>
+      {fields.map((field, index) => (
+        <div
+          key={field.id}
+          className="border rounded-lg p-4 space-y-4 bg-gray-50"
+        >
+          <div className="flex items-center justify-between">
+            <h4 className="font-medium flex items-center gap-2">
+              <div className="relative w-5 h-5">
+                <Image
+                  src={`/${
+                    activityTypes.find((at) => at.id === field.activityTypeId)
+                      ?.pngFileName
+                  }.png`}
+                  alt={field.nameSnapshot}
+                  fill
+                  style={{ objectFit: "contain" }}
+                />
+              </div>
+              {field.nameSnapshot}
+            </h4>
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => remove(index)}
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+              <div className="text-gray-500 cursor-grab active:cursor-grabbing p-1">
+                <MoveIcon className="w-4 h-4" />
+              </div>
+            </div>
+          </div>
+          <ActivityFields control={control} index={index} languageIndex={languageIndex} />
         </div>
-
-        <TabsContent value="en">
-          <FormField
-            control={control}
-            name={`offeredActivities.${index}.specificDescription.0`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Specific Description (English)</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Tour-specific details in English..."
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </TabsContent>
-
-        <TabsContent value="ge">
-          <FormField
-            control={control}
-            name={`offeredActivities.${index}.specificDescription.1`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Specific Description (Georgian)</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Tour-specific details in Georgian..."
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </TabsContent>
-
-        <TabsContent value="ru">
-          <FormField
-            control={control}
-            name={`offeredActivities.${index}.specificDescription.2`}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Specific Description (Russian)</FormLabel>
-                <FormControl>
-                  <Input
-                    {...field}
-                    placeholder="Tour-specific details in Russian..."
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </TabsContent>
-      </Tabs>
+      ))}
     </div>
+  );
+
+  return isMounted ? (
+    <DragDropContext onDragEnd={handleDragEnd}>
+      <Droppable droppableId="tour-activities" direction="vertical">
+        {(provided) => (
+          <div
+            {...provided.droppableProps}
+            ref={provided.innerRef}
+            className="space-y-4"
+          >
+            {fields.map((field, index) => (
+              <Draggable
+                key={field.id}
+                draggableId={field.id}
+                index={index}
+              >
+                {(provided, snapshot) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    className={`border rounded-lg p-4 space-y-4 transition-colors ${
+                      snapshot.isDragging
+                        ? "bg-blue-50 border-blue-200"
+                        : "bg-gray-50"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <h4 className="font-medium flex items-center gap-2">
+                        <div className="relative w-5 h-5">
+                          <Image
+                            src={`/${
+                              activityTypes.find(
+                                (at) => at.id === field.activityTypeId
+                              )?.pngFileName
+                            }.png`}
+                            alt={field.nameSnapshot}
+                            fill
+                            style={{ objectFit: "contain" }}
+                          />
+                        </div>
+                        {field.nameSnapshot}
+                      </h4>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => remove(index)}
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                        <div
+                          {...provided.dragHandleProps}
+                          className="text-gray-500 cursor-grab active:cursor-grabbing p-1"
+                        >
+                          <MoveIcon className="w-4 h-4" />
+                        </div>
+                      </div>
+                    </div>
+                    <ActivityFields control={control} index={index} languageIndex={languageIndex} />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+            {provided.placeholder}
+          </div>
+        )}
+      </Droppable>
+    </DragDropContext>
+  ) : (
+    <StaticContent />
   );
 }
