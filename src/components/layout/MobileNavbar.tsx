@@ -1,6 +1,6 @@
 "use client";
 
-import { MenuIcon } from "lucide-react";
+import { ChartNoAxesColumnIncreasing } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -27,54 +27,61 @@ export default function MobileNavbar() {
   ];
 
   return (
-    <div className="fixed top-0 inset-x-0 flex items-center justify-between bg-white w-full z-50 p-3">
-      <Link href="/" className="flex items-center space-x-2">
+    <div className="fixed top-0 inset-x-0 grid grid-cols-3 items-center bg-white w-full z-50 p-3">
+      {/* Left space - empty for balance */}
+      <div></div>
+
+      {/* Center - Logo */}
+      <Link href="/" className="flex items-center justify-center">
         <Image
           src="/logo_notxt.svg"
           alt="Georgia Travel Tours"
           width={40}
           height={40}
         />
-        <span className="font-bold text-xl text-primary">{t("logo")}</span>
+        {/* <span className="font-bold text-xl text-primary">{t("logo")}</span> */}
       </Link>
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-10 w-10"
-            aria-label="Open navigation menu"
-          >
-            <MenuIcon className="h-6 w-6" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="right" className="w-80 sm:w-96">
-          <SheetHeader>
-            <SheetTitle className="text-left">{t("menu")}</SheetTitle>
-          </SheetHeader>
 
-          <div className="flex flex-col space-y-6 py-6">
-            {/* Navigation Links */}
-            <div className="space-y-4">
-              {navItems.map((item) => {
-                return (
-                  <SheetClose key={item.href} asChild>
-                    <Link
-                      href={item.href}
-                      className={cn(
-                        "block text-lg font-medium transition-colors py-3 px-4 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
-                      )}
-                    >
-                      {item.label}
-                    </Link>
-                  </SheetClose>
-                );
-              })}
+      {/* Right - Menu */}
+      <div className="flex justify-end">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button
+              variant="ghost"
+              className="h-12 w-12 p-0"
+              aria-label="Open navigation menu"
+            >
+              <ChartNoAxesColumnIncreasing size={32} className="-rotate-90" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="w-80 sm:w-96">
+            <SheetHeader>
+              <SheetTitle className="text-left">{t("menu")}</SheetTitle>
+            </SheetHeader>
+
+            <div className="flex flex-col space-y-6 py-6">
+              {/* Navigation Links */}
+              <div className="space-y-4">
+                {navItems.map((item) => {
+                  return (
+                    <SheetClose key={item.href} asChild>
+                      <Link
+                        href={item.href}
+                        className={cn(
+                          "block text-lg font-medium transition-colors py-3 px-4 rounded-md text-muted-foreground hover:text-foreground hover:bg-accent"
+                        )}
+                      >
+                        {item.label}
+                      </Link>
+                    </SheetClose>
+                  );
+                })}
+              </div>
+              <Separator />
             </div>
-            <Separator />
-          </div>
-        </SheetContent>
-      </Sheet>
+          </SheetContent>
+        </Sheet>
+      </div>
     </div>
   );
 }

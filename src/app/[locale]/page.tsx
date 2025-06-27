@@ -45,9 +45,11 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      
+
       <div className="space-y-10">
-        <h1 className="text-center my-8 text-2xl font-bold">{t("activities")}</h1>
+        <h1 className="text-center my-8 text-2xl font-bold">
+          {t("activities")}
+        </h1>
         <QuickCategory />
 
         <h1 className="text-center my-8 text-2xl font-bold">

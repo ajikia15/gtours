@@ -8,26 +8,27 @@ export default async function Navbar() {
   return (
     <nav className="bg-background fixed top-0 z-50 w-full border-b">
       <div className="container mx-auto">
-        <div className="flex items-center justify-between h-16">
+        <div className="grid grid-cols-3 items-center h-16">
+          {/* Left - Logo */}
           <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href="/" className="flex items-center space-x-3">
               <Image
                 src="/logo_notxt.svg"
                 alt="Georgia Travel Tours"
                 width={40}
                 height={40}
               />
-              <span className="font-bold text-xl text-primary">
-                {t("logo")}
-              </span>
+              <span className="font-bold  text-primary">{t("logo")}</span>
             </Link>
           </div>
 
-          <div className="flex">
+          {/* Center - Navigation Links */}
+          <div className="flex justify-center">
             <NavLinks />
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Right - Auth Buttons */}
+          <div className="flex items-center justify-end space-x-4">
             <AuthButtons />
           </div>
         </div>
