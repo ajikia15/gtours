@@ -54,11 +54,17 @@ const LanguageTabTrigger = ({
   label: string;
   isEmpty: boolean;
 }) => (
-  <TabsTrigger value={value} className="relative">
-    {label}
+  <TabsTrigger
+    value={value}
+    className="relative text-xs sm:text-sm py-2 px-2 sm:px-3"
+  >
+    <span className="hidden sm:inline">
+      {label === "EN" ? "English" : label === "GE" ? "Georgian" : "Russian"}
+    </span>
+    <span className="sm:hidden">{label}</span>
     {isEmpty && (
       <span
-        className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
+        className="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
         title="Some fields in this language are empty"
       ></span>
     )}
@@ -168,7 +174,7 @@ export default function ActivityManager({ control, disabled = false }: Props) {
       {fields.length > 0 ? (
         <Tabs defaultValue="en" className="w-full">
           <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-4 pb-2 pt-2 px-2">
-            <TabsList className="grid w-full grid-cols-3">
+            <TabsList>
               <LanguageTabTrigger
                 value="en"
                 label="English"

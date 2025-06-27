@@ -123,7 +123,7 @@ export default function TourForm({
           {/* Global Language Tab Switcher - Sticky */}
           <Tabs defaultValue="en" className="w-full">
             <div className="sticky top-16 z-20 bg-white/95 backdrop-blur-sm border-b shadow-sm rounded-md mb-6 pb-2 pt-2 px-2">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList>
                 <LanguageTabTrigger
                   value="en"
                   label="English"

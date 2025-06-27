@@ -14,7 +14,7 @@ import { Separator } from "../ui/separator";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/lib/utils";
-
+import Image from "next/image";
 export default function MobileNavbar() {
   const t = useTranslations("Navbar");
 
@@ -29,6 +29,12 @@ export default function MobileNavbar() {
   return (
     <div className="fixed top-0 inset-x-0 flex items-center justify-between bg-white w-full z-50 p-3">
       <Link href="/" className="flex items-center space-x-2">
+        <Image
+          src="/logo_notxt.svg"
+          alt="Georgia Travel Tours"
+          width={40}
+          height={40}
+        />
         <span className="font-bold text-xl text-primary">{t("logo")}</span>
       </Link>
       <Sheet>
