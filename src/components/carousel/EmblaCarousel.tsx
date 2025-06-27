@@ -221,11 +221,10 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   );
   return (
     <section
-      className={mobile ? "embla embla--mobile" : "embla"}
+      className={mobile ? "embla embla--mobile mx-4" : "embla"}
       style={
         mobile
           ? {
-              pointerEvents: "none",
               touchAction: "pan-y",
               userSelect: "none",
               WebkitUserSelect: "none",
@@ -289,7 +288,7 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                       </div>
                     )}
 
-                    {/* Mobile overlay - simple, no interactivity */}
+                    {/* Mobile overlay - with button support */}
                     {mobile && (
                       <div className="absolute inset-0 z-20 flex items-center justify-center">
                         <div className="text-center text-white px-4">
@@ -299,6 +298,14 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
                           <p className="text-sm mt-2 drop-shadow-md opacity-90">
                             {content.subtitle}
                           </p>
+                          <Link href={content.href || "/"}>
+                            <Button
+                              size="sm"
+                              className="font-semibold shadow-xl mt-3"
+                            >
+                              {content.buttonText}
+                            </Button>
+                          </Link>
                         </div>
                       </div>
                     )}

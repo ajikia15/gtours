@@ -144,7 +144,9 @@ export default function MobileTourSearchBar({
                     <CalendarDays className="h-5 w-5 text-gray-600" />
                     <div className="flex-1 text-left">
                       <h3 className="font-medium">Date</h3>
-                      <p className="text-sm text-gray-600">{getDateDisplay()}</p>
+                      <p className="text-sm text-gray-600">
+                        {getDateDisplay()}
+                      </p>
                     </div>
                   </div>
                 </AccordionTrigger>

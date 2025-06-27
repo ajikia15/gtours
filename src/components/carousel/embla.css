@@ -12,6 +12,9 @@
   --slide-height: 20rem; /* Reduced from 32rem to 20rem */
   --slide-spacing: 1rem;
   --slide-size: 100%;
+  /* Add user-select for better mobile experience */
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .embla--mobile .embla__slide {
@@ -24,19 +27,18 @@
   height: 100%;
 }
 
-/* Disable pointer events on mobile carousel content to prevent interaction */
+/* Disable pointer events on mobile carousel slides to prevent swipe interaction */
 .embla--mobile .embla__slide {
   pointer-events: none;
 }
 
-/* Completely disable touch interaction on mobile */
-.embla--mobile {
-  pointer-events: none;
-  touch-action: pan-y;
-  user-select: none;
-  -webkit-user-select: none;
+/* Allow pointer events on buttons and links within mobile slides */
+.embla--mobile .embla__slide button,
+.embla--mobile .embla__slide a {
+  pointer-events: auto;
 }
 
+/* Disable touch interaction on mobile carousel container */
 .embla--mobile .embla__viewport {
   pointer-events: none;
   touch-action: pan-y;

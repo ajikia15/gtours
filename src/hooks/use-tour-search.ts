@@ -231,9 +231,12 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
     if (filters.destinations.length > 0) parts.push(getDestinationDisplay());
     if (filters.activities.length > 0) parts.push(getActivitiesDisplay());
     if (filters.selectedDate) parts.push(getDateDisplay());
-    if (getTravelersDisplay() !== "Pre-fill travelers") parts.push(getTravelersDisplay());
-    
-    return parts.length > 0 ? parts.join(" • ") : "Search destinations, activities...";
+    if (getTravelersDisplay() !== "Pre-fill travelers")
+      parts.push(getTravelersDisplay());
+
+    return parts.length > 0
+      ? parts.join(" • ")
+      : "Search destinations, activities...";
   };
 
   return {

@@ -13,9 +13,9 @@ export default async function HomePage() {
   const t = await getTranslations("Homepage");
 
   return (
-    <div className="space-y-10 mb-10">
+    <div className="mb-10">
       {/* Mobile Search Bar - Above Carousel */}
-      <div className="md:hidden px-4">
+      <div className="md:hidden px-4 mb-4">
         <Suspense
           fallback={
             <div className="bg-white shadow-lg rounded-lg p-4 h-16 animate-pulse"></div>
@@ -25,7 +25,7 @@ export default async function HomePage() {
         </Suspense>
       </div>
 
-      <div className="relative">
+      <div className="relative mb-10">
         <Carousel />
         {/* Desktop Search Bar - Overlaid on Carousel */}
         <div className="hidden md:flex absolute left-0 right-0 bottom-0 justify-center pointer-events-none">
@@ -45,31 +45,34 @@ export default async function HomePage() {
           </div>
         </div>
       </div>
-      <h1 className="text-center my-8 text-2xl font-bold">{t("activities")}</h1>
-      <QuickCategory />
+      
+      <div className="space-y-10">
+        <h1 className="text-center my-8 text-2xl font-bold">{t("activities")}</h1>
+        <QuickCategory />
 
-      <h1 className="text-center my-8 text-2xl font-bold">
-        {t("discover-georgia")}
-      </h1>
-      <Suspense
-        fallback={
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
-            {Array.from({ length: 4 }, (_, index) => (
-              <TourCardSkeleton key={`skeleton-${index}`} />
-            ))}
-          </div>
-        }
-      >
-        <DisplayCardsSection />
-      </Suspense>
+        <h1 className="text-center my-8 text-2xl font-bold">
+          {t("discover-georgia")}
+        </h1>
+        <Suspense
+          fallback={
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+              {Array.from({ length: 4 }, (_, index) => (
+                <TourCardSkeleton key={`skeleton-${index}`} />
+              ))}
+            </div>
+          }
+        >
+          <DisplayCardsSection />
+        </Suspense>
 
-      <Suspense
-        fallback={
-          <div className="w-full h-96 bg-gray-200 animate-pulse rounded-lg"></div>
-        }
-      >
-        <MapWithData />
-      </Suspense>
+        <Suspense
+          fallback={
+            <div className="w-full h-96 bg-gray-200 animate-pulse rounded-lg"></div>
+          }
+        >
+          <MapWithData />
+        </Suspense>
+      </div>
     </div>
   );
 }

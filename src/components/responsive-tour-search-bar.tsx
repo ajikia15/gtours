@@ -20,7 +20,11 @@ export default function ResponsiveTourSearchBar({
   const { isMobile } = useResponsive();
 
   return isMobile ? (
-    <MobileTourSearchBar tours={tours} onSearch={onSearch} className={className} />
+    <MobileTourSearchBar
+      tours={tours}
+      onSearch={onSearch}
+      className={className}
+    />
   ) : (
     <TourSearchBar tours={tours} onSearch={onSearch} className={className} />
   );
