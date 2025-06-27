@@ -1,5 +1,5 @@
 "use client";
-import { useRouter, usePathname } from "@/i18n/navigation";
+import { usePathname } from "@/i18n/navigation";
 import { useEffect, useState } from "react";
 
 export default function NavigationLoadingIndicator() {
@@ -13,9 +13,6 @@ export default function NavigationLoadingIndicator() {
 
   // Listen for navigation start/end
   useEffect(() => {
-    const handleNavigationStart = () => setIsNavigating(true);
-    const handleNavigationEnd = () => setIsNavigating(false);
-
     // For now, we'll rely on the loading.tsx file
     // In a future version, we could add custom navigation events
 
