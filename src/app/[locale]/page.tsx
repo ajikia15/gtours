@@ -7,15 +7,28 @@ import { getTours } from "@/data/tours";
 import InteractiveMapSection from "./interactive-map-section";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
 import TourSearchBar from "@/components/tour-search-bar";
+import MobileTourSearchBar from "@/components/mobile-tour-search-bar";
 
 export default async function HomePage() {
   const t = await getTranslations("Homepage");
 
   return (
     <div className="space-y-10 mb-10">
+      {/* Mobile Search Bar - Above Carousel */}
+      <div className="md:hidden px-4">
+        <Suspense
+          fallback={
+            <div className="bg-white shadow-lg rounded-lg p-4 h-16 animate-pulse"></div>
+          }
+        >
+          <MobileSearchBarWithData />
+        </Suspense>
+      </div>
+
       <div className="relative">
         <Carousel />
-        <div className="absolute left-0 right-0 bottom-0 flex justify-center pointer-events-none">
+        {/* Desktop Search Bar - Overlaid on Carousel */}
+        <div className="hidden md:flex absolute left-0 right-0 bottom-0 justify-center pointer-events-none">
           <div
             className="pointer-events-auto w-full max-w-4xl px-4"
             style={{
@@ -27,7 +40,7 @@ export default async function HomePage() {
                 <div className="bg-white shadow-lg rounded-lg p-4 h-16 animate-pulse"></div>
               }
             >
-              <SearchBarWithData />
+              <DesktopSearchBarWithData />
             </Suspense>
           </div>
         </div>
@@ -61,7 +74,15 @@ export default async function HomePage() {
   );
 }
 
-async function SearchBarWithData() {
+async function MobileSearchBarWithData() {
+  const { data: tours } = await getTours({
+    pagination: { page: 1, pageSize: 20 },
+  });
+
+  return <MobileTourSearchBar tours={tours} className="shadow-lg" />;
+}
+
+async function DesktopSearchBarWithData() {
   const { data: tours } = await getTours({
     pagination: { page: 1, pageSize: 20 },
   });
