@@ -8,7 +8,7 @@ export default async function Navbar() {
   return (
     <nav className="bg-background fixed top-0 z-50 w-full border-b">
       <div className="container mx-auto">
-        <div className="grid grid-cols-3 items-center h-16">
+        <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16 gap-4">
           {/* Left - Logo */}
           <div className="flex-shrink-0">
             <Link href="/" className="flex items-center space-x-3">
@@ -23,7 +23,7 @@ export default async function Navbar() {
           </div>
 
           {/* Center - Navigation Links */}
-          <div className="flex justify-center">
+          <div className="flex justify-center min-w-0">
             <NavLinks />
           </div>
 

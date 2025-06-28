@@ -36,11 +36,12 @@ export const setToken = async ({
     }
 
     const userRecord = await auth.getUser(verifiedToken.uid);
-    
+
     // Parse comma-separated admin emails
-    const adminEmails = process.env.ADMIN_EMAIL?.split(',').map(email => email.trim()) || [];
-    const isAdmin = adminEmails.includes(userRecord.email || '');
-    
+    const adminEmails =
+      process.env.ADMIN_EMAIL?.split(",").map((email) => email.trim()) || [];
+    const isAdmin = adminEmails.includes(userRecord.email || "");
+
     if (isAdmin && !userRecord.customClaims?.admin) {
       await auth.setCustomUserClaims(verifiedToken.uid, {
         admin: true,
