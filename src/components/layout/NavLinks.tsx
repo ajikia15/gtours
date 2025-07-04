@@ -16,7 +16,7 @@ export default function NavLinks() {
   ];
 
   // Adjust spacing based on locale - Georgian needs tighter spacing
-  const spacingClass = locale === 'ge' ? 'space-x-2 lg:space-x-3' : 'space-x-4';
+  const spacingClass = locale === "ge" ? "space-x-2 lg:space-x-3" : "space-x-4";
 
   return (
     <div className={cn("hidden md:flex", spacingClass)}>
