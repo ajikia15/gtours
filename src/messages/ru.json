@@ -4,7 +4,8 @@
     "description": "Это главная страница нашего приложения. Здесь вы можете найти различные ресурсы и ссылки на другие разделы.",
     "discover-georgia": "Откройте для себя Грузию",
     "activities": "Активности",
-    "viewDetails": "детали"
+    "viewDetails": "детали",
+    "popular-tours": "Популярные туры"
   },
   "Navbar": {
     "home": "Главная",
@@ -239,7 +240,13 @@
         "metaDescriptionRUPlaceholder": "SEO мета описание на русском...",
         "seoKeywords": "SEO ключевые слова",
         "keywordPlaceholder": "Добавить ключевое слово...",
-        "addKeyword": "Добавить ключевое слово"
+        "addKeyword": "Добавить ключевое слово",
+        "contentEN": "Контент (английский)",
+        "contentENPlaceholder": "Напишите свой полный контент в блоге на английском ...",
+        "contentGE": "Содержание (грузин)",
+        "contentGEPlaceholder": "დაწერეთ ბლოგის სრული ქართულად ...",
+        "contentRU": "Содержание (русский)",
+        "contentRUPlaceholder": "Напиите"
       },
       "messages": {
         "errorSaving": "Ошибка сохранения блог-поста",
@@ -284,7 +291,8 @@
       "yourName": "Ваше имя",
       "yourEmail": "Ваш email",
       "yourMessage": "Ваше сообщение",
-      "sendButton": "Отправить сообщение"
+      "sendButton": "Отправить сообщение",
+      "contactDescription": "Наши операторы всегда готовы помочь вам. \nЗадайте вопрос, оставьте отзыв или просто поговорите с нами."
     },
     "destinations": {
       "title": "Направления",

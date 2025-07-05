@@ -291,7 +291,8 @@
       "yourName": "Your name",
       "yourEmail": "Your email",
       "yourMessage": "Your message",
-      "sendButton": "Send Message"
+      "sendButton": "Send Message",
+      "contactDescription": "Our operators are always ready to help you. Ask a question, leave feedback or just chat with us."
     },
     "destinations": {
       "title": "Destinations",

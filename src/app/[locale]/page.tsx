@@ -8,6 +8,7 @@ import InteractiveMapSection from "./interactive-map-section";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
 import TourSearchBar from "@/components/tour-search-bar";
 import MobileTourSearchBar from "@/components/mobile-tour-search-bar";
+import ContactSection from "@/components/contact-section";
 
 export default async function HomePage() {
   const t = await getTranslations("Homepage");
@@ -77,6 +78,20 @@ export default async function HomePage() {
           </h1>
           <MapWithData />
         </Suspense>
+
+        {/* Contact Section */}
+        <div className="py-12">
+          <h1 className="text-center my-8 text-2xl font-bold">
+            {t("contact-us")}
+          </h1>
+          <Suspense
+            fallback={
+              <div className="w-full h-96 bg-gray-200 animate-pulse rounded-lg"></div>
+            }
+          >
+            <ContactSection />
+          </Suspense>
+        </div>
       </div>
     </div>
   );

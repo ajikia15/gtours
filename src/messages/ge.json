@@ -4,7 +4,8 @@
     "description": "ეს არის ჩვენი აპლიკაციის მთავარი გვერდი. აქ შეგიძლიათ იპოვოთ სხვადასხვა რესურსები და ბმულები სხვა სექციებზე.",
     "discover-georgia": "აღმოაჩინეთ საქართველო",
     "activities": "აქტივობები",
-    "viewDetails": "ნახე ვრცლად"
+    "viewDetails": "ნახე ვრცლად",
+    "popular-tours": "Popular Tours"
   },
   "Navbar": {
     "home": "მთავარი",
@@ -239,7 +240,13 @@
         "metaDescriptionRUPlaceholder": "SEO мета описание на русском...",
         "seoKeywords": "SEO საკვანძო სიტყვები",
         "keywordPlaceholder": "დაამატეთ საკვანძო სიტყვა...",
-        "addKeyword": "საკვანძო სიტყვის დამატება"
+        "addKeyword": "საკვანძო სიტყვის დამატება",
+        "contentEN": "Content (English)",
+        "contentENPlaceholder": "Write your full blog content in English...",
+        "contentGE": "Content (Georgian)",
+        "contentGEPlaceholder": "დაწერეთ ბლოგის სრული შინაარსი ქართულად...",
+        "contentRU": "Content (Russian)",
+        "contentRUPlaceholder": "Напишите полное содержание блога на русском..."
       },
       "messages": {
         "errorSaving": "შეცდომა ბლოგ პოსტის შენახვისას",
@@ -284,7 +291,8 @@
       "yourName": "თქვენი სახელი",
       "yourEmail": "თქვენი ელ-ფოსტა",
       "yourMessage": "თქვენი შეტყობინება",
-      "sendButton": "შეტყობინების გაგზავნა"
+      "sendButton": "შეტყობინების გაგზავნა",
+      "contactDescription": "Our operators are always ready to help you. Ask a question, leave feedback or just chat with us."
     },
     "destinations": {
       "title": "მიმართულებები",
