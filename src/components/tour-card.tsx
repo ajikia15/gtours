@@ -9,7 +9,8 @@ import {
 } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
+import { Button } from "./ui/button";
 export default async function TourCard({
   tour,
 }: // isFavourite,
@@ -17,14 +18,14 @@ export default async function TourCard({
   tour: Tour;
   // isFavourite: boolean;
 }) {
-  // const t = await getTranslations("Homepage");
+  const t = await getTranslations("Homepage");
   const locale = await getLocale();
 
   return (
     <div className="flex flex-col h-full border border-gray-300 shadow-xs rounded-xl">
       <Link
         href={`/tour/${tour.id}`}
-        className="aspect-square w-full relative cursor-pointer"
+        className="aspect-[5/4] w-full relative cursor-pointer"
       >
         {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
         {tour.images && (
@@ -36,17 +37,18 @@ export default async function TourCard({
           />
         )}
       </Link>
-      <div className="flex flex-col gap-2 p-6">
-        <h3 className="text-lg font-bold">{getLocalizedTitle(tour, locale)}</h3>
-        <div className="text-sm text-gray-500 line-clamp-3 mr-10">
+      <div className="flex flex-col gap-3 px-6 py-5">
+        <h3 className="text-lg font-light">
+          {getLocalizedTitle(tour, locale)}
+        </h3>
+        <div className="text-sm font-light text-gray-500 line-clamp-3 mr-6">
           <ReactMarkdown>{getLocalizedDescription(tour, locale)}</ReactMarkdown>
         </div>
-        <Link
-          href={`/tour/${tour.id}`}
-          className="w-fit font-bold hover:underline"
-        >
-          View Tour
-        </Link>
+        <Button variant="link" className="w-fit p-0 ">
+          <Link href={`/tour/${tour.id}`} className="font-bold">
+            {t("viewDetails")}
+          </Link>
+        </Button>
       </div>
     </div>
   );
