@@ -47,101 +47,93 @@ export default function CartCard({
   };
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300 shadow-sm overflow-hidden  transition-shadow">
-      <div className="flex h-40 sm:h-44 md:h-48">
+    <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden transition-shadow hover:shadow-md w-full">
+      <div className="flex">
         {/* Image Section */}
-        <div className="relative h-full bg-gray-100 aspect-[12/9] rounded-r-xl">
+        <div className="relative flex-shrink-0 w-24 sm:w-32 md:w-40">
           {item.tourImages?.[0] ? (
             <Image
               src={getImageUrl(item.tourImages[0])}
               alt={item.tourTitle}
               fill
-              className="object-cover rounded-r-xl"
+              className="object-cover"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gray-200">
+            <div className="w-full h-full flex items-center justify-center bg-gray-100">
               <MapPin className="h-8 w-8 text-gray-400" />
             </div>
           )}
         </div>
 
         {/* Content Section */}
-        <div className="flex-1 p-6 flex">
-          {/* Left Column - Tour Details */}
-          <div className="flex-1 pr-4 flex flex-col">
-            <h3 className="text-lg font-bold text-gray-900 line-clamp-1 mb-2">
-              {item.tourTitle}
-            </h3>
+        <div className="flex-1 p-3 sm:p-4 flex flex-col justify-between">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-start">
+            {/* Left Column - Tour Details */}
+            <div className="flex-1 mb-2 sm:mb-0 sm:pr-4">
+              <h3 className="text-base sm:text-lg font-bold text-gray-800 line-clamp-1">
+                {item.tourTitle}
+              </h3>
 
-            {/* Location */}
-            <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
-              <MapPin className="h-4 w-4 flex-shrink-0" />
-              <span>{item.tourTitle}, Georgia</span>
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mt-1">
+                <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                <span className="line-clamp-1">{item.tourTitle}, Georgia</span>
+              </div>
+
+              <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 mt-2">
+                <Activity className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
+                {item.selectedActivities.length > 0 ? (
+                  <span>
+                    {item.selectedActivities.length} activit
+                    {item.selectedActivities.length > 1 ? "ies" : "y"}{" "}
+                    selected
+                  </span>
+                ) : (
+                  <span className="text-gray-500">No activities selected</span>
+                )}
+              </div>
             </div>
 
-            {/* Selected Activities */}
-            <div className="flex items-center gap-2 text-sm text-gray-500 mb-3">
-              <Activity className="h-4 w-4 flex-shrink-0" />
-              {item.selectedActivities.length > 0 ? (
-                <>
-                  {item.selectedActivities.length} activit
-                  {item.selectedActivities.length > 1 ? "ies" : "y"} selected
-                </>
-              ) : (
-                <>No activities selected</>
-              )}
-            </div>
-
-            {/* Placeholder Description */}
-            <div className="text-sm text-gray-600 line-clamp-2">
-              Experience the best of what this tour has to offer with carefully
-              selected activities and destinations.
-            </div>
-          </div>
-
-          {/* Right Column - Actions and Booking */}
-          <div className="flex-1 flex flex-col justify-between items-end">
-            {/* Top Row - Action Buttons */}
-            <div className="flex gap-1">
+            {/* Right Column - Action Buttons */}
+            <div className="flex-shrink-0 flex items-center gap-1">
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={handleEditItem}
-                className="text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-full p-1"
+                className="text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full h-8 w-8"
                 title="Edit booking details"
               >
                 <Pencil className="h-4 w-4" />
               </Button>
               <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={handleRemoveItem}
                 disabled={isRemoving}
-                className="text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-full p-1"
+                className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full h-8 w-8"
                 title="Remove from cart"
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
             </div>
+          </div>
 
-            {/* Middle Row - Price (centered) */}
-            <div className="text-red-600 font-semibold text-lg">
+          {/* Bottom Row - Price and Booking Button */}
+          <div className="flex items-center justify-between mt-2 sm:mt-0">
+            <div className="text-lg sm:text-xl font-bold text-red-500">
               ${item.totalPrice || 299}
             </div>
-
-            {/* Bottom Row - Finish Booking Button */}
             <div>
               <Button
                 size="sm"
                 onClick={!item.isComplete ? handleEditItem : undefined}
                 disabled={item.isComplete}
-                className={`${
+                className={`rounded-full px-4 py-1 text-sm font-semibold transition-colors ${
                   item.isComplete
-                    ? "bg-gray-400 text-gray-600 cursor-not-allowed hover:bg-gray-400"
+                    ? "bg-gray-200 text-gray-500 cursor-not-allowed"
                     : "bg-black text-white hover:bg-gray-800"
                 }`}
               >
-                {item.isComplete ? "Booking finished" : "Finish booking"}
+                {item.isComplete ? "Finished" : "Finish booking"}
               </Button>
             </div>
           </div>
@@ -150,7 +142,7 @@ export default function CartCard({
         {/* Drag Handle */}
         <div
           {...dragHandleProps}
-          className="flex items-center justify-center w-8 bg-gray-50 border-l border-gray-200 cursor-grab active:cursor-grabbing"
+          className="flex items-center justify-center w-10 bg-gray-50 border-l border-gray-200 cursor-grab active:cursor-grabbing"
         >
           <GripVertical className="h-5 w-5 text-gray-400" />
         </div>
