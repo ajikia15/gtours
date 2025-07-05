@@ -27,11 +27,7 @@ export default function MobileNavbar() {
   ];
 
   return (
-    <div className="fixed top-0 inset-x-0 grid grid-cols-3 items-center bg-white w-full z-50 p-3">
-      {/* Left space - empty for balance */}
-      <div></div>
-
-      {/* Center - Logo */}
+    <div className="fixed top-0 inset-x-0 flex justify-between items-center bg-white w-full z-50 p-3 pl-5">
       <Link href="/" className="flex items-center justify-center">
         <Image
           src="/logo_notxt.svg"
@@ -39,7 +35,9 @@ export default function MobileNavbar() {
           width={40}
           height={40}
         />
-        {/* <span className="font-bold text-xl text-primary">{t("logo")}</span> */}
+        <span className="font-bold text-lg text-primary ml-3">
+          Georgia Travel Tours
+        </span>
       </Link>
 
       {/* Right - Menu */}
