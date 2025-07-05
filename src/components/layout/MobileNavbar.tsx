@@ -35,7 +35,7 @@ export default function MobileNavbar() {
           width={40}
           height={40}
         />
-        <span className="font-bold text-lg text-primary ml-3">
+        <span className="font-bold  text-primary ml-3">
           Georgia Travel Tours
         </span>
       </Link>
