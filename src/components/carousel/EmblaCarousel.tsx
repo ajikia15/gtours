@@ -1,11 +1,5 @@
 "use client";
-import React, {
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useCallback, useMemo, useEffect, useRef } from "react";
 import {
   EmblaOptionsType,
   EmblaCarouselType,
@@ -20,7 +14,6 @@ import useEmblaCarousel from "embla-carousel-react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { isMobile } from "@/lib/isMobile";
 
 type SlideContent = {
   id: number;
@@ -34,13 +27,13 @@ type SlideContent = {
 type PropType = {
   slides?: number[];
   options?: EmblaOptionsType;
+  mobile?: boolean;
 };
 
 const TWEEN_FACTOR_BASE = 0.1;
 
 const EmblaCarousel: React.FC<PropType> = (props) => {
-  const { slides, options } = props;
-  const [mobile, setMobile] = useState(false);
+  const { slides, options, mobile } = props;
   // Modify options for mobile - disable interaction
   const carouselOptions = useMemo(() => {
     if (mobile) {
@@ -67,12 +60,6 @@ const EmblaCarousel: React.FC<PropType> = (props) => {
   const tweenNodes = useRef<HTMLElement[]>([]);
   const animationId = useRef<number | null>(null);
 
-  // Check for mobile device
-  useEffect(() => {
-    const userAgent = navigator.userAgent || "";
-    const isMobileDevice = isMobile(userAgent);
-    setMobile(isMobileDevice);
-  }, []);
   // Define slide content with Georgian tours theme
   const slideContent: SlideContent[] = [
     {

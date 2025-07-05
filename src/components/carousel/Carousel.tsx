@@ -1,14 +1,16 @@
 import EmblaCarousel from "@/components/carousel/EmblaCarousel";
 import { EmblaOptionsType } from "embla-carousel";
 import "./embla.css";
+import { isMobile } from "@/lib/isMobile";
+import { headers } from "next/headers";
 
-export default function Carousel() {
+export default async function Carousel() {
   const OPTIONS: EmblaOptionsType = { axis: "x", loop: true };
-  // Remove SLIDES as we'll use the default in EmblaCarousel
-
+  const userAgent = (await headers()).get("user-agent") || "";
+  const mobile = isMobile(userAgent);
   return (
     <div>
-      <EmblaCarousel options={OPTIONS} />
+      <EmblaCarousel options={OPTIONS} mobile={mobile} />
     </div>
   );
 }
