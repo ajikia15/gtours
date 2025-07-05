@@ -9,7 +9,8 @@ import {
 } from "@/lib/localizationHelpers";
 import ReactMarkdown from "react-markdown";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import { Button } from "@/components/ui/button";
 
 export default function MapTourCard({
   tour,
@@ -18,13 +19,13 @@ export default function MapTourCard({
   tour: Tour;
   // isFavourite: boolean;
 }) {
-  // const t = await getTranslations("Homepage");
+  const t = useTranslations("Homepage");
   const locale = useLocale();
   return (
-    <div className="flex flex-col w-full lg:w-80 xl:w-96 border border-gray-300 shadow-sm rounded-xl bg-white">
+    <div className="flex flex-col lg:w-80 xl:w-96 border border-gray-300 shadow-xs rounded-xl">
       <Link
         href={`/tour/${tour.id}`}
-        className="aspect-[4/3] w-full relative cursor-pointer overflow-hidden rounded-t-xl"
+        className="aspect-[5/4] w-full relative cursor-pointer"
       >
         {/* <ToggleFavouriteButton tourId={tour.id} isFavourite={isFavourite} /> */}
         {tour.images && (
@@ -32,21 +33,22 @@ export default function MapTourCard({
             src={getImageUrl(tour.images[0])}
             alt={tour.title[0]}
             fill
-            className="w-full h-full object-cover rounded-t-xl"
+            className="w-full h-full object-cover rounded-lg"
           />
         )}
       </Link>
-      <div className="flex flex-col gap-3 p-6">
-        <h3 className="text-xl font-bold">{getLocalizedTitle(tour, locale)}</h3>
-        <div className="text-base text-gray-500 line-clamp-3">
+      <div className="flex flex-col gap-3 px-6 py-5">
+        <h3 className="text-lg font-light">
+          {getLocalizedTitle(tour, locale)}
+        </h3>
+        <div className="text-sm font-light text-gray-500 line-clamp-3 mr-6">
           <ReactMarkdown>{getLocalizedDescription(tour, locale)}</ReactMarkdown>
         </div>
-        <Link
-          href={`/tour/${tour.id}`}
-          className="w-fit font-bold hover:underline"
-        >
-          View Tour
-        </Link>
+        <Button variant="link" className="w-fit p-0 ">
+          <Link href={`/tour/${tour.id}`} className="font-bold">
+            {t("viewDetails")}
+          </Link>
+        </Button>
       </div>
     </div>
   );

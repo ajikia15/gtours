@@ -53,7 +53,7 @@ export default async function HomePage() {
         <QuickCategory />
 
         <h1 className="text-center my-8 text-2xl font-bold">
-          {t("discover-georgia")}
+          {t("popular-tours")}
         </h1>
         <Suspense
           fallback={
@@ -72,6 +72,9 @@ export default async function HomePage() {
             <div className="w-full h-96 bg-gray-200 animate-pulse rounded-lg"></div>
           }
         >
+          <h1 className="text-center my-8 text-2xl font-bold">
+            {t("discover-georgia")}
+          </h1>
           <MapWithData />
         </Suspense>
       </div>

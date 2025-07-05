@@ -82,7 +82,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
   }, []);
   if (!isMounted) {
     return (
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 ">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
           {/* Tour Card */}
           <MapTourCardSkeleton key={1} />
@@ -100,7 +100,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
     );
   }
   return (
-    <div className="container mx-auto px-4 py-6">
+    <div className="container mx-auto px-4 ">
       <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 xl:gap-12 items-start lg:items-center">
         {/* Tour Card */}
         {!mobile && (
@@ -115,7 +115,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
         {/* Map Container */}
         <div className="order-1 lg:order-2 lg:flex-1 relative">
           <div
-            className={`w-full border border-gray-200 rounded-xl shadow-sm ${
+            className={`w-full rounded-xl  ${
               mobile ? "h-[70vh] min-h-[500px]" : "aspect-[16/9]"
             }`}
           >

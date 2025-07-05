@@ -4,7 +4,8 @@
     "description": "This is the homepage of our application. Here you can find various resources and links to other sections.",
     "discover-georgia": "Discover Georgia",
     "activities": "Activities",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "popular-tours": "Popular Tours"
   },
   "Navbar": {
     "home": "Home",
