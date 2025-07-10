@@ -84,8 +84,7 @@ export default function CartCard({
                 {item.selectedActivities.length > 0 ? (
                   <span>
                     {item.selectedActivities.length} activit
-                    {item.selectedActivities.length > 1 ? "ies" : "y"}{" "}
-                    selected
+                    {item.selectedActivities.length > 1 ? "ies" : "y"} selected
                   </span>
                 ) : (
                   <span className="text-gray-500">No activities selected</span>
