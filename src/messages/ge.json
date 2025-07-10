@@ -19,14 +19,21 @@
     "cart": "კალათა"
   },
   "QuickCategory": {
-    "camping": "კემპინგი",
-    "hot-air-balloon": "ცხელი ჰაერის ბალონი",
-    "parachute": "პარაშუტი",
-    "ski": "ზმელტოვა",
-    "water-rafting": "რაფტინგი",
-    "zip-lining": "ზიპ-ლაინი",
-    "snowmobile": "თოვლის სკუტერი",
-    "horse-rider": "ცხენოსნობა"
+    "hot-air-balloon": "Ცხელი საჰაერო ბუშტი",
+    "parasailing": "პარასალინგი",
+    "paragliding": "პარაპლანით ფრენა",
+    "river-rafting": "მდინარის ჯომარდობა",
+    "zipline": "ზიპლაინი",
+    "karting": "კარტინგი",
+    "skiing": "თხილამურებით სრიალი",
+    "snowmobile-ride": "თოვლმავლით გასეირნება",
+    "horse-ride": "Ცხენით ჯირითი",
+    "boat-ride": "ნავით გასეირნება",
+    "motorboat-ride": "მოტორიანი ნავით გასეირნება",
+    "helicopter-ride": "ვერტმფრენით გასეირნება",
+    "georgian-food-tasting": "ქართული კერძების დეგუსტაცია",
+    "wine-tasting": "ღვინის დეგუსტაცია",
+    "georgian-cooking-masterclass": "ქართული კულინარიის მასტერკლასი"
   },
   "Footer": {
     "logo": "Georgia Travel Tours",
@@ -145,7 +152,7 @@
         "schedules": "გრაფიკები",
         "schedulesDesc": "ღამე-დღის მარშრუტი და გრაფიკის ერთეულები თქვენი ტურისთვის",
         "activities": "აქტივობები",
-        "activitiesDesc": "სპეციფიკური აქტივობები ამ ტურში ჩართული"
+        "activitiesDesc": "სპეციფიური აქტივობები ამ ტურში ჩართული"
       },
       "fields": {
         "tourTitle": "ტურის სათაური",

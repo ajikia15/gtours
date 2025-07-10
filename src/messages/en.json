@@ -19,14 +19,21 @@
     "cart": "Cart"
   },
   "QuickCategory": {
-    "camping": "Camping",
     "hot-air-balloon": "Hot Air Balloon",
-    "parachute": "Parachute",
-    "ski": "Skiing",
-    "water-rafting": "Water Rafting",
-    "zip-lining": "Zip Lining",
-    "snowmobile": "Snowmobile",
-    "horse-rider": "Horse Riding"
+    "parasailing": "Parasailing",
+    "paragliding": "Paragliding",
+    "river-rafting": "River Rafting",
+    "zipline": "Zipline",
+    "karting": "Karting",
+    "skiing": "Skiing",
+    "snowmobile-ride": "Snowmobile Ride",
+    "horse-ride": "Horse Ride",
+    "boat-ride": "Boat Ride",
+    "motorboat-ride": "Motorboat Ride",
+    "helicopter-ride": "Helicopter Ride",
+    "georgian-food-tasting": "Georgian Food Tasting",
+    "wine-tasting": "Wine Tasting",
+    "georgian-cooking-masterclass": "Georgian Cooking Masterclass"
   },
   "Footer": {
     "logo": "Georgia Travel Tours",
