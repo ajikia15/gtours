@@ -38,7 +38,7 @@ const getActivityIconForPopup = (activityTypeId: string, color: string) => {
   if (activityType) {
     return (
       <Image
-        src={`/${activityType.pngFileName}.png`}
+        src={`/${activityType.iconFileName}`}
         alt={activityType.name}
         width={16}
         height={16}

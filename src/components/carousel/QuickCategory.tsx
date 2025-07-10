@@ -26,7 +26,7 @@ const QuickCategory = ({ className }: Props) => {
           >
             <div className="relative h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 mb-1 sm:mb-2">
               <Image
-                src={`/${activity.pngFileName}.png`}
+                src={`/${activity.iconFileName}`}
                 alt={activity.name}
                 fill
                 style={{ objectFit: "contain" }}

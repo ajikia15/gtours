@@ -21,7 +21,7 @@ export const getActivityIcon = (
   if (activityType) {
     return (
       <Image
-        src={`/${activityType.pngFileName}.png`}
+        src={`/${activityType.iconFileName}`}
         alt={activityType.name}
         width={size}
         height={size}
