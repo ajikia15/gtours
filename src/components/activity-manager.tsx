@@ -147,7 +147,7 @@ export default function ActivityManager({ control, disabled = false }: Props) {
                   <div className="flex items-center gap-2">
                     <div className="relative w-4 h-4">
                       <Image
-                        src={`/${activityType.pngFileName}.png`}
+                        src={`/${activityType.iconFileName}.png`}
                         alt={activityType.name}
                         fill
                         style={{ objectFit: "contain" }}
@@ -381,7 +381,7 @@ function ActivitiesListByLanguage({
                 <Image
                   src={`/${
                     activityTypes.find((at) => at.id === field.activityTypeId)
-                      ?.pngFileName
+                      ?.iconFileName
                   }.png`}
                   alt={field.nameSnapshot}
                   fill
@@ -442,7 +442,7 @@ function ActivitiesListByLanguage({
                             src={`/${
                               activityTypes.find(
                                 (at) => at.id === field.activityTypeId
-                              )?.pngFileName
+                              )?.iconFileName
                             }.png`}
                             alt={field.nameSnapshot}
                             fill

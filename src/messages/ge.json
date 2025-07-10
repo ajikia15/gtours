@@ -19,21 +19,21 @@
     "cart": "კალათა"
   },
   "QuickCategory": {
-    "hot-air-balloon": "Ცხელი საჰაერო ბუშტი",
+    "hot-air-balloon": "საჰაერო ბუშტი",
     "parasailing": "პარასალინგი",
-    "paragliding": "პარაპლანით ფრენა",
-    "river-rafting": "მდინარის ჯომარდობა",
+    "paragliding": "პარაპლანი",
+    "river-rafting": "ჯომარდობა",
     "zipline": "ზიპლაინი",
     "karting": "კარტინგი",
     "skiing": "თხილამურებით სრიალი",
-    "snowmobile-ride": "თოვლმავლით გასეირნება",
-    "horse-ride": "Ცხენით ჯირითი",
-    "boat-ride": "ნავით გასეირნება",
-    "motorboat-ride": "მოტორიანი ნავით გასეირნება",
-    "helicopter-ride": "ვერტმფრენით გასეირნება",
-    "georgian-food-tasting": "ქართული კერძების დეგუსტაცია",
+    "snowmobile-ride": "ბურანი",
+    "horse-ride": "ჯირითი",
+    "boat-ride": "ნავი",
+    "motorboat-ride": "კატერი",
+    "helicopter-ride": "ვერტმფრენი",
+    "georgian-food-tasting": "კერძების დეგუსტაცია",
     "wine-tasting": "ღვინის დეგუსტაცია",
-    "georgian-cooking-masterclass": "ქართული კულინარიის მასტერკლასი"
+    "georgian-cooking-masterclass": "კულინარიის მასტერკლასი"
   },
   "Footer": {
     "logo": "Georgia Travel Tours",
