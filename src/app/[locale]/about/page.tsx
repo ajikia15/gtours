@@ -52,69 +52,114 @@ export default async function AboutPage() {
             Adventure
           </p>
         </div>
-        <div className="relative">
-          {/* Container for the main image positioned to the right */}
-          <div className="flex justify-end">
+        <div className="relative min-h-[300px] md:min-h-[350px]">
+          {/* Mobile layout: Stack images with slight overlap */}
+          <div className="md:hidden flex flex-col items-center space-y-4">
             <Image
-              src="https://picsum.photos/300/300?random=6"
+              src="https://picsum.photos/250/250?random=6"
               alt="Unique Tours Adventure"
-              width={300}
-              height={300}
+              width={250}
+              height={250}
               className="rounded-lg aspect-square"
+            />
+            <Image
+              src="https://picsum.photos/180/180?random=7"
+              alt="Adventure Experience"
+              width={180}
+              height={180}
+              className="rounded-lg aspect-square shadow-lg -mt-8"
             />
           </div>
 
-          {/* Smaller overlaying image - positioned absolutely to be half outside */}
-          <Image
-            src="https://picsum.photos/180/180?random=7"
-            alt="Adventure Experience"
-            width={200}
-            height={200}
-            className="rounded-lg aspect-square absolute top-1/2 transform -translate-y-1/2 z-10  shadow-lg"
-            style={{
-              right: "190px", // 300px (main image width) - 90px (half of small image) = 210px
-            }}
-          />
+          {/* Desktop layout: Overlapping images */}
+          <div className="hidden md:block">
+            <div className="flex justify-end">
+              <Image
+                src="https://picsum.photos/300/300?random=6"
+                alt="Unique Tours Adventure"
+                width={300}
+                height={300}
+                className="rounded-lg aspect-square"
+              />
+            </div>
+            <Image
+              src="https://picsum.photos/180/180?random=7"
+              alt="Adventure Experience"
+              width={200}
+              height={200}
+              className="rounded-lg aspect-square absolute top-1/2 transform -translate-y-1/2 z-10 shadow-lg"
+              style={{
+                right: "190px",
+              }}
+            />
+          </div>
         </div>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-2 my-20 w-full  mx-auto">
+      <section className="grid grid-cols-1 md:grid-cols-2 my-20 w-full mx-auto">
         <div className="flex flex-col items-center">
           <h3 className="underline underline-offset-8 text-brand-secondary italic font-light">
             What we offer
           </h3>
-          <div className="relative mt-12">
-            {/* Main center image */}
-            <Image
-              src="https://picsum.photos/350/350?random=8"
-              alt="What we offer"
-              width={350}
-              height={350}
-              className="rounded-lg aspect-square"
-            />
+          <div className="relative mt-12 min-h-[300px] md:min-h-[400px]">
+            {/* Mobile layout: Grid with slight overlaps */}
+            <div className="md:hidden space-y-6">
+              <div className="flex justify-center">
+                <Image
+                  src="https://picsum.photos/280/280?random=8"
+                  alt="What we offer"
+                  width={280}
+                  height={280}
+                  className="rounded-lg aspect-square"
+                />
+              </div>
+              <div className="flex justify-between items-center -mt-4">
+                <Image
+                  src="https://picsum.photos/120/200?random=9"
+                  alt="Our service"
+                  width={120}
+                  height={200}
+                  className="rounded-lg shadow-lg"
+                />
+                <Image
+                  src="https://picsum.photos/200/200?random=10"
+                  alt="Our experience"
+                  width={200}
+                  height={200}
+                  className="rounded-lg aspect-square shadow-lg -ml-4"
+                />
+              </div>
+            </div>
 
-            {/* Left overlaying image - middle of image aligned with left border of big image */}
-            <Image
-              src="https://picsum.photos/140/240?random=9"
-              alt="Our service"
-              width={140}
-              height={240}
-              className="rounded-lg absolute top-1/2 z-10 shadow-lg"
-              style={{
-                left: "-70px", // Half of image width (140px/2 = 70px) to center it on the border
-              }}
-            />
-
-            {/* Right overlaying image - starts at the middle horizontal point, starts from vertical center */}
-            <Image
-              src="https://picsum.photos/240/240?random=10"
-              alt="Our experience"
-              width={240}
-              height={240}
-              className="rounded-lg aspect-square absolute top-1/2 z-10 shadow-lg"
-              style={{
-                left: "175px", // Starts at the middle of the 350px image (350/2 = 175px from left)
-              }}
-            />
+            {/* Desktop layout: Complex overlapping */}
+            <div className="hidden md:block">
+              <Image
+                src="https://picsum.photos/350/350?random=8"
+                alt="What we offer"
+                width={350}
+                height={350}
+                className="rounded-lg aspect-square"
+              />
+              <Image
+                src="https://picsum.photos/140/240?random=9"
+                alt="Our service"
+                width={140}
+                height={240}
+                className="rounded-lg absolute top-1/2 z-10 shadow-lg"
+                style={{
+                  left: "-70px",
+                }}
+              />
+              <Image
+                src="https://picsum.photos/240/240?random=10"
+                alt="Our experience"
+                width={240}
+                height={240}
+                className="rounded-lg aspect-square absolute top-1/2 z-10 shadow-lg"
+                style={{
+                  left: "175px",
+                }}
+              />
+            </div>
           </div>
         </div>
         <div className="md:my-20 mt-32">
