@@ -7,11 +7,33 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import RatingCard from "./rating-card";
+import Timeline from "@/components/timeline";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 
 export default async function AboutPage() {
   const t = await getTranslations("Pages.about");
+
+  const timelineItems = [
+    {
+      id: "1",
+      title: "Travel with us in Europe",
+      description:
+        "Travel with us in Europe and get the best experience ever in the west Europe",
+    },
+    {
+      id: "2",
+      title: "Travel with us in Europe",
+      description:
+        "Travel with us in Europe and get the best experience ever in the west Europe",
+    },
+    {
+      id: "3",
+      title: "Travel with us in Europe",
+      description:
+        "Travel with us in Europe and get the best experience ever in the west Europe",
+    },
+  ];
 
   return (
     <div className="max-w-7xl mx-auto py-12 px-6">
@@ -94,15 +116,18 @@ export default async function AboutPage() {
             />
           </div>
         </div>
-        <div className="my-20">
+        <div className="md:my-20 mt-32">
           <h3 className="font-bold text-xl">
             Get The Best <br /> Memories Ever
           </h3>
+          <div className="mt-8">
+            <Timeline items={timelineItems} />
+          </div>
         </div>
       </section>
       <section>
-        <h2 className="font-bold text-xl">what people say about us</h2>
-        <div className="grid-cols-2 lg:grid-cols-4 grid w-full gap-4">
+        <h2 className="font-bold text-xl">What People Say About Us</h2>
+        <div className="grid-cols-2 lg:grid-cols-4 grid w-full gap-4 my-12">
           <RatingCard />
           <RatingCard />
           <RatingCard />
