@@ -10,6 +10,7 @@ import RatingCard from "./rating-card";
 import Timeline from "@/components/timeline";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
+import RatingCarousel from "@/components/rating-carousel";
 
 export default async function AboutPage() {
   const t = await getTranslations("Pages.about");
@@ -127,11 +128,15 @@ export default async function AboutPage() {
       </section>
       <section>
         <h2 className="font-bold text-xl">What People Say About Us</h2>
-        <div className="grid-cols-2 lg:grid-cols-4 grid w-full gap-4 my-12">
-          <RatingCard />
-          <RatingCard />
-          <RatingCard />
-          <RatingCard />
+        <div className="my-12">
+          <RatingCarousel>
+            <RatingCard />
+            <RatingCard />
+            <RatingCard />
+            <RatingCard />
+            <RatingCard />
+            <RatingCard />
+          </RatingCarousel>
         </div>
       </section>
       <section>
