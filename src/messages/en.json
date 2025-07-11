@@ -318,7 +318,9 @@
       "categories": "Categories",
       "gallery": "Gallery",
       "tags": "Tags",
-      "noBlogsFound": "No blog posts found"
+      "noBlogsFound": "No blog posts found",
+      "similarBlogs": "Similar Blogs",
+      "noSimilarBlogs": "No similar blogs found"
     }
   },
   "BlogCard": {

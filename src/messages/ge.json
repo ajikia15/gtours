@@ -318,7 +318,9 @@
       "categories": "კატეგორიები",
       "gallery": "გალერეა",
       "tags": "ტეგები",
-      "noBlogsFound": "ბლოგის პოსტები არ მოიძებნა"
+      "noBlogsFound": "ბლოგის პოსტები არ მოიძებნა",
+      "similarBlogs": "მსგავსი ბლოგები",
+      "noSimilarBlogs": "მსგავსი ბლოგები არ მოიძებნა"
     }
   },
   "BlogCard": {

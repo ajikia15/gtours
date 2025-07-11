@@ -318,7 +318,9 @@
       "categories": "Категории",
       "gallery": "Галерея",
       "tags": "Теги",
-      "noBlogsFound": "Записи блога не найдены"
+      "noBlogsFound": "Записи блога не найдены",
+      "similarBlogs": "Похожие блоги",
+      "noSimilarBlogs": "Похожие блоги не найдены"
     }
   },
   "BlogCard": {
