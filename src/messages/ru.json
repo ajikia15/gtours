@@ -95,14 +95,29 @@
       "blogs": "Блоги",
       "blogsTitle": "Управление блогами",
       "newBlog": "Новый блог",
+      "ratings": "Рейтинги",
+      "ratingsTitle": "Управление рейтингами",
+      "newRating": "Новый рейтинг",
       "noToursFound": "Туры не найдены",
-      "noBlogsFound": "Блоги не найдены"
+      "noBlogsFound": "Блоги не найдены",
+      "noRatingsFound": "Рейтинги не найдены"
     },
     "blogTable": {
       "title": "Название",
       "author": "Автор",
       "publishedDate": "Дата публикации",
       "categories": "Категории",
+      "status": "Статус",
+      "actions": "Действия",
+      "view": "Просмотр",
+      "edit": "Редактировать",
+      "delete": "Удалить"
+    },
+    "ratingTable": {
+      "title": "Название",
+      "author": "Автор",
+      "rating": "Рейтинг",
+      "createdDate": "Дата создания",
       "status": "Статус",
       "actions": "Действия",
       "view": "Просмотр",
@@ -129,7 +144,56 @@
       "editTour": "Редактировать тур",
       "blogs": "Блоги",
       "newBlog": "Новый блог",
-      "editBlog": "Редактировать блог"
+      "editBlog": "Редактировать блог",
+      "ratings": "Рейтинги",
+      "newRating": "Новый рейтинг",
+      "editRating": "Редактировать рейтинг"
+    },
+    "ratingForm": {
+      "newRating": "Новый рейтинг",
+      "editRating": "Редактировать рейтинг",
+      "createRating": "Создать рейтинг",
+      "updateRating": "Обновить рейтинг",
+      "sections": {
+        "basicInformation": "Основная информация",
+        "basicInformationDesc": "Основные детали о рейтинге",
+        "ratingDetails": "Детали рейтинга",
+        "ratingDetailsDesc": "Балл рейтинга и метаданные",
+        "status": "Статус",
+        "statusDesc": "Статус публикации"
+      },
+      "fields": {
+        "titleEN": "Название (Английский)",
+        "titleGE": "Название (Грузинский)",
+        "titleRU": "Название (Русский)",
+        "titleENPlaceholder": "Великолепный опыт",
+        "titleGEPlaceholder": "შესანიშნავი გამოცდილება",
+        "titleRUPlaceholder": "Великолепный опыт",
+        "reviewEN": "Отзыв (Английский)",
+        "reviewGE": "Отзыв (Грузинский)",
+        "reviewRU": "Отзыв (Русский)",
+        "reviewENPlaceholder": "Напишите ваш отзыв на английском...",
+        "reviewGEPlaceholder": "ჩაწერეთ შეფასება ქართულად...",
+        "reviewRUPlaceholder": "Напишите ваш отзыв на русском...",
+        "author": "Автор",
+        "authorPlaceholder": "Иван Иванов",
+        "rating": "Рейтинг",
+        "ratingPlaceholder": "Выберите рейтинг",
+        "createdDate": "Дата создания",
+        "tourId": "ID тура",
+        "tourIdPlaceholder": "ID тура (необязательно)",
+        "ratingStatus": "Статус",
+        "selectStatusPlaceholder": "Выберите статус"
+      },
+      "status": {
+        "active": "Активный",
+        "inactive": "Неактивный",
+        "draft": "Черновик"
+      },
+      "messages": {
+        "errorSaving": "Ошибка при сохранении рейтинга",
+        "savedSuccessfully": "Рейтинг успешно сохранен"
+      }
     },
     "tourForm": {
       "newTour": "Новый тур",
@@ -244,7 +308,7 @@
         "metaDescriptionGE": "Мета описание (грузинский)",
         "metaDescriptionRU": "Мета описание (русский)",
         "metaDescriptionENPlaceholder": "SEO мета описание на английском...",
-        "metaDescriptionGEPlaceholder": "SEO мета описание на грузინском...",
+        "metaDescriptionGEPlaceholder": "SEO метა აღწერა ქართულად...",
         "metaDescriptionRUPlaceholder": "SEO мета описание на русском...",
         "seoKeywords": "SEO ключевые слова",
         "keywordPlaceholder": "Добавить ключевое слово...",

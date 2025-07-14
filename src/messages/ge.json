@@ -95,14 +95,29 @@
       "blogs": "ბლოგები",
       "blogsTitle": "ბლოგების მართვა",
       "newBlog": "ახალი ბლოგი",
+      "ratings": "რეიტინგები",
+      "ratingsTitle": "რეიტინგების მართვა",
+      "newRating": "ახალი რეიტინგი",
       "noToursFound": "ტურები არ მოიძებნა",
-      "noBlogsFound": "ბლოგები არ მოიძებნა"
+      "noBlogsFound": "ბლოგები არ მოიძებნა",
+      "noRatingsFound": "რეიტინგები არ მოიძებნა"
     },
     "blogTable": {
       "title": "სათაური",
       "author": "ავტორი",
       "publishedDate": "გამოქვეყნების თარიღი",
       "categories": "კატეგორიები",
+      "status": "სტატუსი",
+      "actions": "მოქმედებები",
+      "view": "ნახვა",
+      "edit": "რედაქტირება",
+      "delete": "წაშლა"
+    },
+    "ratingTable": {
+      "title": "სათაური",
+      "author": "ავტორი",
+      "rating": "რეიტინგი",
+      "createdDate": "შექმნის თარიღი",
       "status": "სტატუსი",
       "actions": "მოქმედებები",
       "view": "ნახვა",
@@ -129,7 +144,56 @@
       "editTour": "ტურის რედაქტირება",
       "blogs": "ბლოგები",
       "newBlog": "ახალი ბლოგი",
-      "editBlog": "ბლოგის რედაქტირება"
+      "editBlog": "ბლოგის რედაქტირება",
+      "ratings": "რეიტინგები",
+      "newRating": "ახალი რეიტინგი",
+      "editRating": "რეიტინგის რედაქტირება"
+    },
+    "ratingForm": {
+      "newRating": "ახალი რეიტინგი",
+      "editRating": "რეიტინგის რედაქტირება",
+      "createRating": "რეიტინგის შექმნა",
+      "updateRating": "რეიტინგის განახლება",
+      "sections": {
+        "basicInformation": "ძირითადი ინფორმაცია",
+        "basicInformationDesc": "ძირითადი დეტალები რეიტინგის შესახებ",
+        "ratingDetails": "რეიტინგის დეტალები",
+        "ratingDetailsDesc": "რეიტინგის ქულა და მეტადატა",
+        "status": "სტატუსი",
+        "statusDesc": "გამოქვეყნების სტატუსი"
+      },
+      "fields": {
+        "titleEN": "სათაური (ინგლისური)",
+        "titleGE": "სათაური (ქართული)",
+        "titleRU": "სათაური (რუსული)",
+        "titleENPlaceholder": "შესანიშნავი გამოცდილება",
+        "titleGEPlaceholder": "შესანიშნავი გამოცდილება",
+        "titleRUPlaceholder": "Великолепный опыт",
+        "reviewEN": "შეფასება (ინგლისური)",
+        "reviewGE": "შეფასება (ქართული)",
+        "reviewRU": "შეფასება (რუსული)",
+        "reviewENPlaceholder": "ჩაწერეთ შეფასება ინგლისურად...",
+        "reviewGEPlaceholder": "ჩაწერეთ შეფასება ქართულად...",
+        "reviewRUPlaceholder": "Напишите ваш отзыв на русском...",
+        "author": "ავტორი",
+        "authorPlaceholder": "იოანე ღვინეთი",
+        "rating": "რეიტინგი",
+        "ratingPlaceholder": "აირჩიეთ რეიტინგი",
+        "createdDate": "შექმნის თარიღი",
+        "tourId": "ტურის ID",
+        "tourIdPlaceholder": "ტურის ID (არასავალდებულო)",
+        "ratingStatus": "სტატუსი",
+        "selectStatusPlaceholder": "აირჩიეთ სტატუსი"
+      },
+      "status": {
+        "active": "აქტიური",
+        "inactive": "არააქტიური",
+        "draft": "დრაფტი"
+      },
+      "messages": {
+        "errorSaving": "რეიტინგის შენახვისას შეცდომა",
+        "savedSuccessfully": "რეიტინგი წარმატებით შენახულია"
+      }
     },
     "tourForm": {
       "newTour": "ახალი ტური",

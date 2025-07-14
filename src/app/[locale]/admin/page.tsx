@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { PlusCircleIcon, BookOpenIcon, RouteIcon } from "lucide-react";
+import { PlusCircleIcon, BookOpenIcon, RouteIcon, StarIcon } from "lucide-react";
 import ToursTable from "./Tours-table";
 import BlogsTable from "./blogs/Blogs-table";
+import RatingsTable from "./ratings/Ratings-table";
 import { Suspense } from "react";
 import TableSkeleton from "@/components/ui/table-skeleton";
 import { getTranslations } from "next-intl/server";
@@ -38,7 +39,7 @@ export default async function AdminDashboard({
       <h1 className="text-3xl font-bold my-4">{t("title")}</h1>
 
       <Tabs defaultValue={activeTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-2">
+        <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="tours" className="flex items-center gap-2">
             <RouteIcon className="h-4 w-4" />
             {t("tours")}
@@ -46,6 +47,10 @@ export default async function AdminDashboard({
           <TabsTrigger value="blogs" className="flex items-center gap-2">
             <BookOpenIcon className="h-4 w-4" />
             {t("blogs")}
+          </TabsTrigger>
+          <TabsTrigger value="ratings" className="flex items-center gap-2">
+            <StarIcon className="h-4 w-4" />
+            {t("ratings")}
           </TabsTrigger>
         </TabsList>
 
@@ -75,6 +80,21 @@ export default async function AdminDashboard({
           <div className="mt-4">
             <Suspense fallback={<TableSkeleton />}>
               <BlogsTable page={page} params={params} />
+            </Suspense>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="ratings" className="space-y-4">
+          <Button>
+            <Link href="/admin/ratings/new" className="flex items-center gap-2">
+              <PlusCircleIcon className="size-4" />
+              {t("newRating")}
+            </Link>
+          </Button>
+
+          <div className="mt-4">
+            <Suspense fallback={<TableSkeleton />}>
+              <RatingsTable page={page} params={params} />
             </Suspense>
           </div>
         </TabsContent>

@@ -29,7 +29,7 @@ export default async function BlogPage({
     if (blog.status !== "published") {
       notFound();
     }
-    
+
     const title = getLocalizedTitle(blog, locale);
     const description = getLocalizedDescription(blog, locale);
 
@@ -37,13 +37,14 @@ export default async function BlogPage({
     const { data: allBlogs } = await getPublishedBlogs({
       pagination: { page: 1, pageSize: 5 },
     });
-    const similarBlogs = allBlogs.filter(b => b.id !== blogId).slice(0, 4);
+    const similarBlogs = allBlogs.filter((b) => b.id !== blogId).slice(0, 4);
 
     // Get the first image (featured or first from images array)
     const mainImage = blog.featuredImage || blog.images?.[0];
-    const publishedDate = blog.publishedDate instanceof Date
-      ? blog.publishedDate
-      : new Date(blog.publishedDate);
+    const publishedDate =
+      blog.publishedDate instanceof Date
+        ? blog.publishedDate
+        : new Date(blog.publishedDate);
 
     const day = publishedDate.getDate().toString().padStart(2, "0");
     const month = (publishedDate.getMonth() + 1).toString().padStart(2, "0");
@@ -140,15 +141,18 @@ export default async function BlogPage({
               <h3 className="text-xl font-semibold mb-6 text-gray-900">
                 {t("similarBlogs")}
               </h3>
-              
+
               {/* Vertical Scrollable Container */}
               <div className="max-h-[800px] overflow-y-auto space-y-2 pr-2">
                 {similarBlogs.map((similarBlog) => (
-                  <div key={similarBlog.id} className="transform scale-90 origin-top -mb-6">
+                  <div
+                    key={similarBlog.id}
+                    className="transform scale-90 origin-top -mb-6"
+                  >
                     <BlogCard blog={similarBlog} />
                   </div>
                 ))}
-                
+
                 {similarBlogs.length === 0 && (
                   <div className="text-center py-8 text-gray-500">
                     <p>{t("noSimilarBlogs")}</p>

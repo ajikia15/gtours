@@ -95,14 +95,29 @@
       "blogs": "Blogs",
       "blogsTitle": "Blog Management",
       "newBlog": "New Blog",
+      "ratings": "Ratings",
+      "ratingsTitle": "Ratings Management",
+      "newRating": "New Rating",
       "noToursFound": "No tours found",
-      "noBlogsFound": "No blogs found"
+      "noBlogsFound": "No blogs found",
+      "noRatingsFound": "No ratings found"
     },
     "blogTable": {
       "title": "Title",
       "author": "Author",
       "publishedDate": "Published Date",
       "categories": "Categories",
+      "status": "Status",
+      "actions": "Actions",
+      "view": "View",
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "ratingTable": {
+      "title": "Title",
+      "author": "Author",
+      "rating": "Rating",
+      "createdDate": "Created Date",
       "status": "Status",
       "actions": "Actions",
       "view": "View",
@@ -129,7 +144,56 @@
       "editTour": "Edit Tour",
       "blogs": "Blogs",
       "newBlog": "New Blog",
-      "editBlog": "Edit Blog"
+      "editBlog": "Edit Blog",
+      "ratings": "Ratings",
+      "newRating": "New Rating",
+      "editRating": "Edit Rating"
+    },
+    "ratingForm": {
+      "newRating": "New Rating",
+      "editRating": "Edit Rating",
+      "createRating": "Create Rating",
+      "updateRating": "Update Rating",
+      "sections": {
+        "basicInformation": "Basic Information",
+        "basicInformationDesc": "Essential details about the rating",
+        "ratingDetails": "Rating Details",
+        "ratingDetailsDesc": "Rating score and metadata",
+        "status": "Status",
+        "statusDesc": "Publication status"
+      },
+      "fields": {
+        "titleEN": "Title (English)",
+        "titleGE": "Title (Georgian)",
+        "titleRU": "Title (Russian)",
+        "titleENPlaceholder": "Great Experience",
+        "titleGEPlaceholder": "შესანიშნავი გამოცდილება",
+        "titleRUPlaceholder": "Великолепный опыт",
+        "reviewEN": "Review (English)",
+        "reviewGE": "Review (Georgian)",
+        "reviewRU": "Review (Russian)",
+        "reviewENPlaceholder": "Write your review in English...",
+        "reviewGEPlaceholder": "ჩაწერეთ თქვენი შეფასება ქართულად...",
+        "reviewRUPlaceholder": "Напишите ваш отзыв на русском...",
+        "author": "Author",
+        "authorPlaceholder": "John Doe",
+        "rating": "Rating",
+        "ratingPlaceholder": "Select rating",
+        "createdDate": "Created Date",
+        "tourId": "Tour ID",
+        "tourIdPlaceholder": "Optional tour ID",
+        "ratingStatus": "Status",
+        "selectStatusPlaceholder": "Select a status"
+      },
+      "status": {
+        "active": "Active",
+        "inactive": "Inactive",
+        "draft": "Draft"
+      },
+      "messages": {
+        "errorSaving": "Error saving rating",
+        "savedSuccessfully": "Rating saved successfully"
+      }
     },
     "tourForm": {
       "newTour": "New Tour",

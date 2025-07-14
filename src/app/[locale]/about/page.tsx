@@ -11,9 +11,26 @@ import Timeline from "@/components/timeline";
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import RatingCarousel from "@/components/rating-carousel";
+import { getActiveRatings } from "@/data/ratings";
+import { getLocale } from "next-intl/server";
 
 export default async function AboutPage() {
   const t = await getTranslations("Pages.about");
+  const locale = await getLocale();
+  const activeRatings = await getActiveRatings(6);
+
+  // Debug: Log what we're fetching
+  console.log("Active ratings fetched:", activeRatings);
+  console.log("Number of active ratings:", activeRatings.length);
+  if (activeRatings.length > 0) {
+    console.log("First rating:", activeRatings[0]);
+  }
+
+  // Helper function to get localized text
+  const getLocalizedText = (textArray: string[], locale: string) => {
+    const langIndex = locale === "en" ? 0 : locale === "ge" ? 1 : 2;
+    return textArray[langIndex] || textArray[0] || "";
+  };
 
   const timelineItems = [
     {
@@ -175,12 +192,37 @@ export default async function AboutPage() {
         <h2 className="font-bold text-xl">What People Say About Us</h2>
         <div className="my-12">
           <RatingCarousel>
-            <RatingCard />
-            <RatingCard />
-            <RatingCard />
-            <RatingCard />
-            <RatingCard />
-            <RatingCard />
+            {activeRatings.length > 0
+              ? activeRatings.map((rating, index) => {
+                  console.log(`Processing rating ${index}:`, rating);
+                  console.log(`Rating title array:`, rating.title);
+                  console.log(`Rating review array:`, rating.review);
+                  console.log(`Current locale:`, locale);
+                  
+                  const localizedTitle = getLocalizedText(rating.title, locale);
+                  const localizedReview = getLocalizedText(rating.review, locale);
+                  
+                  console.log(`Localized title:`, localizedTitle);
+                  console.log(`Localized review:`, localizedReview);
+                  
+                  return (
+                    <RatingCard
+                      key={rating.id}
+                      title={localizedTitle}
+                      review={localizedReview}
+                      author={rating.author}
+                      number={rating.rating.toString()}
+                    />
+                  );
+                })
+              : [
+                  <RatingCard key="1" />,
+                  <RatingCard key="2" />,
+                  <RatingCard key="3" />,
+                  <RatingCard key="4" />,
+                  <RatingCard key="5" />,
+                  <RatingCard key="6" />,
+                ]}
           </RatingCarousel>
         </div>
       </section>
