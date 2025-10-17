@@ -28,7 +28,7 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { cn } from "@/lib/utils";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 
 interface MDXEditorProps {
   value: string;
@@ -40,28 +40,93 @@ interface MDXEditorProps {
 
 const MDXEditorComponent = React.forwardRef<MDXEditorMethods, MDXEditorProps>(
   ({ value, onChange, placeholder, className, disabled }, ref) => {
-    const [isClient, setIsClient] = useState(false);
-
-    useEffect(() => {
-      setIsClient(true);
-    }, []);
-
     const editorRef = useRef<MDXEditorMethods | null>(null);
 
-    // SSR fallback - simple textarea
-    if (!isClient) {
-      return (
-        <div className={cn("border rounded-md", className)}>
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={placeholder}
-            disabled={disabled}
-            className="w-full min-h-[200px] p-3 rounded-md border-0 resize-none focus:outline-none"
-          />
-        </div>
-      );
-    }
+    // Keep local state to avoid re-rendering parent on each keystroke
+    const [localMarkdown, setLocalMarkdown] = useState<string>(value);
+
+    // Sync local state when external value changes (e.g., form resets)
+    useEffect(() => {
+      if (value !== localMarkdown) {
+        setLocalMarkdown(value);
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [value]);
+
+    // Debounce propagating changes up to the parent to reduce expensive form rerenders
+    useEffect(() => {
+      const handle = setTimeout(() => {
+        if (localMarkdown !== value) {
+          onChange(localMarkdown);
+        }
+      }, 250);
+      return () => clearTimeout(handle);
+      // Intentionally omit onChange from deps to keep stable behavior
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [localMarkdown, value]);
+
+    const setEditorRef = useCallback(
+      (instance: MDXEditorMethods | null) => {
+        editorRef.current = instance;
+        if (typeof ref === "function") {
+          ref(instance as unknown as MDXEditorMethods);
+        } else if (ref) {
+          (ref as React.MutableRefObject<MDXEditorMethods | null>).current =
+            instance;
+        }
+      },
+      [ref]
+    );
+
+    const ToolbarContents = useCallback(
+      () => (
+        <>
+          <UndoRedo />
+          <Separator />
+          <BoldItalicUnderlineToggles />
+          <Separator />
+          <BlockTypeSelect />
+          <Separator />
+          <ListsToggle />
+          <Separator />
+          <CreateLink />
+          <InsertImage />
+          <Separator />
+          <InsertTable />
+          <InsertThematicBreak />
+          <Separator />
+          <SpacerButton disabled={disabled} />
+        </>
+      ),
+      [disabled]
+    );
+
+    const plugins = useMemo(
+      () => [
+        headingsPlugin(),
+        listsPlugin(),
+        quotePlugin(),
+        thematicBreakPlugin(),
+        markdownShortcutPlugin(),
+        linkPlugin(),
+        linkDialogPlugin(),
+        imagePlugin(),
+        tablePlugin(),
+        codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
+        codeMirrorPlugin({
+          codeBlockLanguages: {
+            js: "JavaScript",
+            css: "CSS",
+            txt: "text",
+            tsx: "TypeScript",
+          },
+        }),
+        toolbarPlugin({
+          toolbarContents: ToolbarContents,
+        }),
+      ],
+      [ToolbarContents]
+    );
 
     function SpacerButton({ disabled }: { disabled?: boolean }) {
       const insertSpacer = () => {
@@ -85,60 +150,12 @@ const MDXEditorComponent = React.forwardRef<MDXEditorMethods, MDXEditorProps>(
     return (
       <div className={cn("border rounded-md", className)}>
         <MDXEditor
-          ref={(instance) => {
-            editorRef.current = instance as MDXEditorMethods | null;
-            if (typeof ref === "function") {
-              ref(instance);
-            } else if (ref) {
-              (ref as React.MutableRefObject<MDXEditorMethods | null>).current =
-                instance as MDXEditorMethods | null;
-            }
-          }}
-          markdown={value}
-          onChange={onChange}
+          ref={setEditorRef}
+          markdown={localMarkdown}
+          onChange={setLocalMarkdown}
           placeholder={placeholder}
           readOnly={disabled}
-          plugins={[
-            headingsPlugin(),
-            listsPlugin(),
-            quotePlugin(),
-            thematicBreakPlugin(),
-            markdownShortcutPlugin(),
-            linkPlugin(),
-            linkDialogPlugin(),
-            imagePlugin(),
-            tablePlugin(),
-            codeBlockPlugin({ defaultCodeBlockLanguage: "txt" }),
-            codeMirrorPlugin({
-              codeBlockLanguages: {
-                js: "JavaScript",
-                css: "CSS",
-                txt: "text",
-                tsx: "TypeScript",
-              },
-            }),
-            toolbarPlugin({
-              toolbarContents: () => (
-                <>
-                  <UndoRedo />
-                  <Separator />
-                  <BoldItalicUnderlineToggles />
-                  <Separator />
-                  <BlockTypeSelect />
-                  <Separator />
-                  <ListsToggle />
-                  <Separator />
-                  <CreateLink />
-                  <InsertImage />
-                  <Separator />
-                  <InsertTable />
-                  <InsertThematicBreak />
-                  <Separator />
-                  <SpacerButton disabled={disabled} />
-                </>
-              ),
-            }),
-          ]}
+          plugins={plugins}
         />
       </div>
     );
