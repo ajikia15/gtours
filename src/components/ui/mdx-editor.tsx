@@ -28,7 +28,7 @@ import {
 } from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import { cn } from "@/lib/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface MDXEditorProps {
   value: string;
@@ -46,6 +46,8 @@ const MDXEditorComponent = React.forwardRef<MDXEditorMethods, MDXEditorProps>(
       setIsClient(true);
     }, []);
 
+    const editorRef = useRef<MDXEditorMethods | null>(null);
+
     // SSR fallback - simple textarea
     if (!isClient) {
       return (
@@ -61,10 +63,37 @@ const MDXEditorComponent = React.forwardRef<MDXEditorMethods, MDXEditorProps>(
       );
     }
 
+    function SpacerButton({ disabled }: { disabled?: boolean }) {
+      const insertSpacer = () => {
+        if (!editorRef.current || disabled) return;
+        editorRef.current.insertMarkdown("\n\u00A0\n");
+      };
+      return (
+        <button
+          type="button"
+          onClick={insertSpacer}
+          disabled={disabled}
+          title="Insert spacer"
+          aria-label="Insert spacer"
+          className="mx-1 px-2 py-1 rounded hover:bg-gray-100 disabled:opacity-50"
+        >
+          ↵↵
+        </button>
+      );
+    }
+
     return (
       <div className={cn("border rounded-md", className)}>
         <MDXEditor
-          ref={ref}
+          ref={(instance) => {
+            editorRef.current = instance as MDXEditorMethods | null;
+            if (typeof ref === "function") {
+              ref(instance);
+            } else if (ref) {
+              (ref as React.MutableRefObject<MDXEditorMethods | null>).current =
+                instance as MDXEditorMethods | null;
+            }
+          }}
           markdown={value}
           onChange={onChange}
           placeholder={placeholder}
@@ -104,6 +133,8 @@ const MDXEditorComponent = React.forwardRef<MDXEditorMethods, MDXEditorProps>(
                   <Separator />
                   <InsertTable />
                   <InsertThematicBreak />
+                  <Separator />
+                  <SpacerButton disabled={disabled} />
                 </>
               ),
             }),
