@@ -34,7 +34,7 @@ export default async function DestinationsPage({
   return (
     <>
       <Header title={t("title")} />
-      <h2 className="text-2xl font-bold my-8 text-center">მოძებნე</h2>
+      <h2 className="text-2xl font-bold my-8 text-center">{t("search")}</h2>
 
       {/* Remove Suspense around SearchBarContent to prevent loading overlay on sort changes */}
       <div className="my-8 max-w-4xl mx-auto">
