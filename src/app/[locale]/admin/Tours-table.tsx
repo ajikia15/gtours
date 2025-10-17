@@ -18,10 +18,11 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import { Link } from "@/i18n/navigation";
-import { Eye, Pencil, Trash } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import TourStatusBadge from "@/components/tour-status-badge";
 import { getTranslations } from "next-intl/server";
 import { getLocalizedTitle } from "@/lib/localizationHelpers";
+import DeleteTourButton from "@/components/delete-tour-button";
 
 export default async function ToursTable({
   page = 1,
@@ -96,9 +97,11 @@ export default async function ToursTable({
                     </Button>
                   </Link>
 
-                  <Button variant="outline" title={t("table.delete")}>
-                    <Trash />
-                  </Button>
+                  <DeleteTourButton
+                    tourId={tour.id}
+                    images={tour.images}
+                    title={t("table.delete")}
+                  />
                 </TableCell>
               </TableRow>
             ))}

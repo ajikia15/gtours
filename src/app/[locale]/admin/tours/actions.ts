@@ -1,8 +1,8 @@
 "use server";
 import { tourDataSchema } from "@/validation/tourSchema";
-import { z } from "zod";
 import { firestore } from "@/firebase/server";
 import { verifyAdminToken } from "@/lib/auth-utils";
+import { z } from "zod";
 
 export const saveNewTour = async (
   data: z.infer<typeof tourDataSchema>,
@@ -115,4 +115,33 @@ export const saveTourImages = async (
   await firestore.collection("tours").doc(tourId).update({
     images,
   });
+};
+
+export const deleteTour = async (id: string, token: string) => {
+  try {
+    await verifyAdminToken(token);
+  } catch (error) {
+    console.error("Error verifying admin token in deleteTour:", error);
+    return {
+      error: "Unauthorized",
+      message:
+        error instanceof Error
+          ? error.message
+          : "Invalid or expired authentication token",
+    };
+  }
+
+  try {
+    await firestore.collection("tours").doc(id).delete();
+    return {
+      success: "Tour deleted successfully",
+      message: "Tour deleted successfully",
+    };
+  } catch (error) {
+    console.error("Error deleting tour:", error);
+    return {
+      error: "Failed to delete tour",
+      message: "An error occurred while deleting the tour",
+    };
+  }
 };
