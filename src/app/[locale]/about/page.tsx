@@ -1,5 +1,4 @@
-import { getTranslations } from "next-intl/server";
-import Header from "../header";
+// import { getTranslations } from "next-intl/server";
 import {
   Accordion,
   AccordionContent,
@@ -15,7 +14,7 @@ import { getActiveRatings } from "@/data/ratings";
 import { getLocale } from "next-intl/server";
 
 export default async function AboutPage() {
-  const t = await getTranslations("Pages.about");
+  // const t = await getTranslations("Pages.about");
   const locale = await getLocale();
   const activeRatings = await getActiveRatings(6);
 
@@ -54,22 +53,24 @@ export default async function AboutPage() {
   ];
 
   return (
-    <div className="max-w-7xl mx-auto py-12 px-6">
-      <Header title={t("title")} />
-      <section className="grid grid-cols-1 md:grid-cols-2 my-20 w-full max-w-5xl mx-auto">
-        <div className="my-6 ">
-          <p className="text-brand-secondary font-light flex flex-row gap-4 items-center italic mb-4">
-            Explore us <ArrowRight size={16} />
-          </p>
-          <h3 className="font-bold text-xl mb-3">
-            Unique Tours For <br /> Your Adventure
-          </h3>
-          <p className="text-gray-500">
-            We are passionate to create <br /> Something Unique for Your
-            Adventure
-          </p>
+    <div className="max-w-7xl mx-auto px-6 md:px-0">
+      {/* <Header title={t("title")} /> */}
+      <section className="grid grid-cols-1 md:grid-cols-2 py-8 md:py-12 xl:py-20 w-full max-w-5xl mx-auto">
+        <div className="flex items-start md:items-center">
+          <div>
+            <p className="text-brand-secondary font-light flex flex-row gap-4 items-center italic mb-4">
+              Explore us <ArrowRight size={16} />
+            </p>
+            <h3 className="font-bold text-3xl mb-3">
+              Unique Tours For <br /> Your Adventure
+            </h3>
+            <p className="text-gray-500">
+              We are passionate to create <br /> Something Unique for Your
+              Adventure
+            </p>
+          </div>
         </div>
-        <div className="relative min-h-[300px] md:min-h-[350px]">
+        <div className="relative md:min-h-[350px]">
           {/* Mobile layout: Stack images with slight overlap */}
           <div className="md:hidden flex flex-col items-center space-y-4">
             <Image
@@ -84,7 +85,7 @@ export default async function AboutPage() {
               alt="Adventure Experience"
               width={180}
               height={180}
-              className="rounded-lg aspect-square shadow-lg -mt-8"
+              className="rounded-lg aspect-square shadow-lg mt-4"
             />
           </div>
 
@@ -112,14 +113,14 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-      <section className="grid grid-cols-1 md:grid-cols-2 my-20 w-full mx-auto">
-        <div className="flex flex-col items-center">
-          <h3 className="underline underline-offset-8 text-brand-secondary italic font-light">
+      <section className="grid grid-cols-1 md:grid-cols-2 py-8 md:py-12 xl:py-20  w-full mx-auto">
+        <div className="flex flex-col items-center md:items-start order-2 md:order-1">
+          <h3 className="underline underline-offset-8 text-brand-secondary italic font-light text-center md:text-left">
             What we offer
           </h3>
-          <div className="relative mt-12 min-h-[300px] md:min-h-[400px]">
+          <div className="relative mt-8 md:mt-12 md:min-h-[400px]">
             {/* Mobile layout: Grid with slight overlaps */}
-            <div className="md:hidden space-y-6">
+            <div className="md:hidden space-y-4">
               <div className="flex justify-center">
                 <Image
                   src="https://picsum.photos/280/280?random=8"
@@ -129,7 +130,7 @@ export default async function AboutPage() {
                   className="rounded-lg aspect-square"
                 />
               </div>
-              <div className="flex justify-between items-center -mt-4">
+              <div className="flex justify-between items-center mt-4">
                 <Image
                   src="https://picsum.photos/120/200?random=9"
                   alt="Our service"
@@ -142,7 +143,7 @@ export default async function AboutPage() {
                   alt="Our experience"
                   width={200}
                   height={200}
-                  className="rounded-lg aspect-square shadow-lg -ml-4"
+                  className="rounded-lg aspect-square shadow-lg ml-3"
                 />
               </div>
             </div>
@@ -179,18 +180,18 @@ export default async function AboutPage() {
             </div>
           </div>
         </div>
-        <div className="md:my-20 mt-32">
+        <div className="order-1 md:order-2 flex flex-col space-y-6 md:space-y-8 md:my-20">
           <h3 className="font-bold text-xl">
             Get The Best <br /> Memories Ever
           </h3>
-          <div className="mt-8">
+          <div>
             <Timeline items={timelineItems} />
           </div>
         </div>
       </section>
-      <section>
+      <section className="py-8 md:py-12 xl:py-16">
         <h2 className="font-bold text-xl">What People Say About Us</h2>
-        <div className="my-12">
+        <div className="mt-6 md:mt-12">
           <RatingCarousel>
             {activeRatings.length > 0
               ? activeRatings.map((rating, index) => {
@@ -198,13 +199,16 @@ export default async function AboutPage() {
                   console.log(`Rating title array:`, rating.title);
                   console.log(`Rating review array:`, rating.review);
                   console.log(`Current locale:`, locale);
-                  
+
                   const localizedTitle = getLocalizedText(rating.title, locale);
-                  const localizedReview = getLocalizedText(rating.review, locale);
-                  
+                  const localizedReview = getLocalizedText(
+                    rating.review,
+                    locale
+                  );
+
                   console.log(`Localized title:`, localizedTitle);
                   console.log(`Localized review:`, localizedReview);
-                  
+
                   return (
                     <RatingCard
                       key={rating.id}
@@ -226,9 +230,9 @@ export default async function AboutPage() {
           </RatingCarousel>
         </div>
       </section>
-      <section>
+      <section className="py-8 md:py-12 xl:py-16">
         <h2 className="font-bold text-xl">FAQ</h2>
-        <Accordion type="single" collapsible className="w-full">
+        <Accordion type="single" collapsible className="w-full mt-4 md:mt-6">
           <AccordionItem value={"1"}>
             <AccordionTrigger>how to plan tour beforehand?</AccordionTrigger>
             <AccordionContent>i dont know</AccordionContent>
