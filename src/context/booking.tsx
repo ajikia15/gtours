@@ -201,7 +201,8 @@ export const BookingProvider = ({
    */
   const calculateActivityPriceIncrement = (
     tour: Tour,
-    selectedActivityIds: string[]
+    selectedActivityIds: string[],
+    totalPeople: number = 2
   ): number => {
     // Return 0 if tour or activities are not available
     if (
@@ -212,11 +213,17 @@ export const BookingProvider = ({
       return 0;
     }
 
+    // Price is for 2 people, each additional person adds the same amount
+    const multiplier = Math.max(0, totalPeople - 2);
+
     return selectedActivityIds.reduce((total, activityId) => {
       const activity = tour.offeredActivities.find(
         (a) => a.activityTypeId === activityId
       );
-      return total + (activity?.priceIncrement || 0);
+      // Base price for activity (covers first 2 people) + increment for each additional person
+      const activityBasePrice = activity?.priceIncrement || 0;
+      const additionalPeopleCost = activityBasePrice * multiplier;
+      return total + activityBasePrice + additionalPeopleCost;
     }, 0);
   };
 
@@ -256,7 +263,8 @@ export const BookingProvider = ({
     const carCost = calculateCarCost(totalPeople);
     const activityCost = calculateActivityPriceIncrement(
       tour,
-      selectedActivityIds
+      selectedActivityIds,
+      totalPeople
     );
 
     return basePrice + carCost + activityCost;
@@ -289,7 +297,8 @@ export const BookingProvider = ({
     const carCost = calculateCarCost(totalPeople);
     const activityCost = calculateActivityPriceIncrement(
       tour,
-      selectedActivityIds
+      selectedActivityIds,
+      totalPeople
     );
     const totalPrice = basePrice + carCost + activityCost;
 

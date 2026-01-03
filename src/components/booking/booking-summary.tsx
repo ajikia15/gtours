@@ -63,14 +63,19 @@ export default function BookingSummary({
           <span>{pricingBreakdown.basePrice} GEL</span>
         </div>
 
+        {pricingBreakdown.carCost > 0 && (
+          <div className="flex justify-between items-center text-sm">
+            <span className="text-gray-600">Additional Car:</span>
+            <span>+{pricingBreakdown.carCost} GEL</span>
+          </div>
+        )}
+
         {pricingBreakdown.activityCost > 0 && (
           <div className="flex justify-between items-center text-sm">
             <span className="text-gray-600">Activities:</span>
             <span>+{pricingBreakdown.activityCost} GEL</span>
           </div>
         )}
-
-        {/* Car cost is hidden from users but calculated in total */}
 
         <div className="flex justify-between items-center font-semibold border-t pt-2">
           <span>Total:</span>

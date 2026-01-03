@@ -43,11 +43,13 @@ const calculateItemCompleteness = (item: Partial<CartItem>): boolean => {
  * Fetches activity data from Firestore to ensure accurate pricing
  * @param tourId - ID of the tour
  * @param selectedActivityIds - Array of selected activity type IDs
+ * @param totalPeople - Total number of people
  * @returns Promise<number> - Total price increment from activities
  */
 const calculateActivityPriceIncrement = async (
   tourId: string,
-  selectedActivityIds: string[]
+  selectedActivityIds: string[],
+  totalPeople: number = 2
 ): Promise<number> => {
   try {
     const tourDoc = await firestore.collection("tours").doc(tourId).get();
@@ -59,6 +61,9 @@ const calculateActivityPriceIncrement = async (
     const tourData = tourDoc.data();
     const offeredActivities = tourData?.offeredActivities || [];
 
+    // Price is for 2 people, each additional person adds the same amount
+    const multiplier = Math.max(0, totalPeople - 2);
+
     return selectedActivityIds.reduce((total, activityId) => {
       const activity = offeredActivities.find(
         (a: any) => a.activityTypeId === activityId
@@ -67,7 +72,10 @@ const calculateActivityPriceIncrement = async (
         console.warn(`Activity ${activityId} not found in tour ${tourId}`);
         return total;
       }
-      return total + (activity?.priceIncrement || 0);
+      // Base price for activity (covers first 2 people) + increment for each additional person
+      const activityBasePrice = activity?.priceIncrement || 0;
+      const additionalPeopleCost = activityBasePrice * multiplier;
+      return total + activityBasePrice + additionalPeopleCost;
     }, 0);
   } catch (error) {
     console.error("Error calculating activity price increment:", error);
@@ -93,7 +101,8 @@ const calculateItemPrice = (
   travelers: { adults: number; children: number; infants: number },
   activityPriceIncrement: number
 ): number => {
-  const totalPeople = travelers.adults + travelers.children;
+  const totalPeople =
+    travelers.adults + travelers.children + (travelers.infants || 0);
 
   // Base price is fixed and includes 1 car cost (up to 6 people)
   const baseCost = basePrice;
@@ -127,15 +136,19 @@ export const addToCart = async (cartItemData: {
   try {
     const userId = await verifyUser();
 
+    const totalPeople =
+      cartItemData.travelers.adults +
+      cartItemData.travelers.children +
+      (cartItemData.travelers.infants || 0);
+
     // Recalculate activity price increment from server data for security
     const activityPriceIncrement = await calculateActivityPriceIncrement(
       cartItemData.tourId,
-      cartItemData.selectedActivities
+      cartItemData.selectedActivities,
+      totalPeople
     );
 
     // Calculate car cost
-    const totalPeople =
-      cartItemData.travelers.adults + cartItemData.travelers.children;
     const additionalCars = Math.max(0, Math.floor((totalPeople - 1) / 6));
     const carCost = additionalCars * 200;
 
@@ -214,18 +227,23 @@ export const updateCartItem = async (
       updates.status = updates.isComplete ? "ready" : "incomplete";
 
       if (updates.travelers || updates.selectedActivities) {
+        const finalTravelers = updates.travelers || currentData.travelers;
+        const totalPeople =
+          finalTravelers.adults +
+          finalTravelers.children +
+          (finalTravelers.infants || 0);
+
         // Recalculate activity price increment if activities changed
         let newActivityPriceIncrement = currentData.activityPriceIncrement;
-        if (updates.selectedActivities) {
+        if (updates.selectedActivities || updates.travelers) {
           newActivityPriceIncrement = await calculateActivityPriceIncrement(
             currentData.tourId,
-            updates.selectedActivities
+            updates.selectedActivities || currentData.selectedActivities,
+            totalPeople
           );
         }
 
         // Recalculate car cost if travelers changed
-        const finalTravelers = updates.travelers || currentData.travelers;
-        const totalPeople = finalTravelers.adults + finalTravelers.children;
         const additionalCars = Math.max(0, Math.floor((totalPeople - 1) / 6));
         const newCarCost = additionalCars * 200;
 
@@ -235,7 +253,7 @@ export const updateCartItem = async (
           newActivityPriceIncrement
         );
 
-        if (updates.selectedActivities) {
+        if (updates.selectedActivities || updates.travelers) {
           updates.activityPriceIncrement = newActivityPriceIncrement;
         }
         if (updates.travelers) {

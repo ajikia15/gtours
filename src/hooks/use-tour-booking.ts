@@ -85,16 +85,14 @@ export function useTourBooking({
   }, [tour.id]);
 
   // Calculate pricing
-  const totalPrice = booking.calculateTotalPrice(
+  const pricingBreakdown = booking.getPricingBreakdown(
     tour,
     travelers,
     selectedActivities
   );
-  const activityCost = booking.calculateActivityPriceIncrement(
-    tour,
-    selectedActivities
-  );
-  const basePrice = tour.basePrice * booking.getPayingPeople(travelers);
+  const totalPrice = pricingBreakdown.totalPrice;
+  const activityCost = pricingBreakdown.activityCost;
+  const basePrice = pricingBreakdown.basePrice;
 
   // Validation
   const validation = booking.validateBooking({
@@ -116,13 +114,6 @@ export function useTourBooking({
     // More lenient validation for adding to cart - always allow partial bookings
     return { isComplete: true, errors: [] };
   };
-
-  // Pricing breakdown
-  const pricingBreakdown = booking.getPricingBreakdown(
-    tour,
-    travelers,
-    selectedActivities
-  );
 
   // Helper functions for display
   const getDateDisplay = () => {

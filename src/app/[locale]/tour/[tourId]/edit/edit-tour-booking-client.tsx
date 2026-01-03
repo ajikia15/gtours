@@ -29,7 +29,7 @@ export default function EditTourBookingClient({
     getTravelersDisplay,
     getActivitiesDisplay,
     getTotalPeopleCount,
-    getPayingPeopleCount,
+    // getPayingPeopleCount,
     handleDateChange,
     handleTravelersChange,
     handleActivitiesChange,
@@ -37,6 +37,7 @@ export default function EditTourBookingClient({
     travelers,
     booking,
     validateForBookNow,
+    // pricingBreakdown,
   } = useTourBooking({ tour });
 
   const handleBack = () => {
@@ -155,33 +156,34 @@ export default function EditTourBookingClient({
       </Card>
 
       {/* Pricing Breakdown */}
-      <Card className="p-6 bg-gray-50">
+      {/* <Card className="p-6 bg-gray-50">
         <h3 className="font-semibold mb-4">Pricing Summary</h3>
         <div className="space-y-2">
           <div className="flex justify-between">
-            <span>Base price ({getPayingPeopleCount()} paying travelers)</span>
-            <span>{tour.basePrice * getPayingPeopleCount()} GEL</span>
+            <span>Base price</span>
+            <span>{pricingBreakdown.basePrice} GEL</span>
           </div>
-          {selectedActivities.length > 0 && (
+          {pricingBreakdown.carCost > 0 && (
+            <div className="flex justify-between">
+              <span>Additional Car</span>
+              <span>+{pricingBreakdown.carCost} GEL</span>
+            </div>
+          )}
+          {pricingBreakdown.activityCost > 0 && (
             <div className="flex justify-between">
               <span>Activities ({selectedActivities.length})</span>
-              <span>
-                +
-                {booking.calculateActivityPriceIncrement(
-                  tour,
-                  selectedActivities
-                )}
-                GEL
-              </span>
+              <span>+{pricingBreakdown.activityCost} GEL</span>
             </div>
           )}
           <hr className="my-2" />
           <div className="flex justify-between font-semibold text-lg">
             <span>Total</span>
-            <span className="text-red-600">{totalPrice} GEL</span>
+            <span className="text-red-600">
+              {pricingBreakdown.totalPrice} GEL
+            </span>
           </div>
         </div>
-      </Card>
+      </Card> */}
 
       {/* Validation Errors */}
       {!bookingState.isComplete && bookingState.errors.length > 0 && (

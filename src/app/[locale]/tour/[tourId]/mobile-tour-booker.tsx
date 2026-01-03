@@ -33,13 +33,13 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
     getTravelersDisplay,
     getActivitiesDisplay,
     getTotalPeopleCount,
-    getPayingPeopleCount,
+    // getPayingPeopleCount,
     handleDateChange,
     handleTravelersChange,
     handleActivitiesChange,
     selectedDate,
     travelers,
-    booking,
+    // booking,
     validateForBookNow,
     validateForAddToCart,
   } = useTourBooking({ tour });
@@ -178,7 +178,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
           </Card>
 
           {/* Pricing Breakdown */}
-          <Card className="p-4 bg-gray-50">
+          {/* <Card className="p-4 bg-gray-50">
             <h3 className="font-medium mb-2">Pricing Summary</h3>
             <div className="space-y-1 text-sm">
               <div className="flex justify-between">
@@ -206,7 +206,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
                 <span>{totalPrice} GEL</span>
               </div>
             </div>
-          </Card>
+          </Card> */}
 
           {/* Validation Errors - Only show for primary intent (Book Now) */}
           {!bookingState.isComplete && bookingState.errors.length > 0 && (

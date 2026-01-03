@@ -31,7 +31,7 @@ export default function TourDetailsBooker({
     travelers,
     selectedActivities,
     totalPrice,
-    activityCost,
+    // activityCost,
     handleDateChange,
     handleTravelersChange,
     handleActivitiesChange,
@@ -68,9 +68,10 @@ export default function TourDetailsBooker({
         <h2 className="text-lg font-semibold text-gray-900">
           Select Activities
         </h2>
-        {activityCost > 0 && (
+        {/* disabled price changes for activities per request */}
+        {/* {activityCost > 0 && (
           <p className="text-xs text-gray-600">+{activityCost} GEL</p>
-        )}
+        )} */}
       </div>
       <ActivitySelection
         activities={tour.offeredActivities}
