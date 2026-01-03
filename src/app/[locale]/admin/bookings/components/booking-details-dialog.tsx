@@ -13,20 +13,23 @@ import { Booking } from "@/data/bookings";
 import { format } from "date-fns";
 import { Eye } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useTranslations } from "next-intl";
 
 export function BookingDetailsDialog({ booking }: { booking: Booking }) {
+  const t = useTranslations("Admin.bookingDetails");
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="icon" title="View Details">
+        <Button variant="outline" size="icon" title={t("viewDetails")}>
           <Eye className="h-4 w-4" />
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-3xl max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>Booking Details</DialogTitle>
+          <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>
-            Invoice #{booking.invoiceNumber}
+            {t("invoice")} {booking.invoiceNumber}
           </DialogDescription>
         </DialogHeader>
 
@@ -35,25 +38,25 @@ export function BookingDetailsDialog({ booking }: { booking: Booking }) {
             {/* Customer Information */}
             <div className="space-y-2">
               <h3 className="font-semibold text-lg border-b pb-1">
-                Customer Information
+                {t("customerInfo")}
               </h3>
               <div className="grid grid-cols-2 gap-4 text-sm">
                 <div>
                   <span className="font-medium text-muted-foreground">
-                    Name:
+                    {t("name")}
                   </span>
                   <p>{booking.customer.name}</p>
                 </div>
                 <div>
                   <span className="font-medium text-muted-foreground">
-                    Email:
+                    {t("email")}
                   </span>
                   <p>{booking.customer.email}</p>
                 </div>
                 {booking.customer.phone && (
                   <div>
                     <span className="font-medium text-muted-foreground">
-                      Phone:
+                      {t("phone")}
                     </span>
                     <p>{booking.customer.phone}</p>
                   </div>
@@ -63,11 +66,13 @@ export function BookingDetailsDialog({ booking }: { booking: Booking }) {
 
             {/* Booking Summary */}
             <div className="space-y-2">
-              <h3 className="font-semibold text-lg border-b pb-1">Summary</h3>
+              <h3 className="font-semibold text-lg border-b pb-1">
+                {t("summary")}
+              </h3>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
                 <div>
                   <span className="font-medium text-muted-foreground">
-                    Total Price:
+                    {t("totalPrice")}
                   </span>
                   <p className="text-lg font-bold text-primary">
                     {booking.summary.currency} {booking.summary.totalPrice}
@@ -75,19 +80,19 @@ export function BookingDetailsDialog({ booking }: { booking: Booking }) {
                 </div>
                 <div>
                   <span className="font-medium text-muted-foreground">
-                    Total Tourists:
+                    {t("totalTourists")}
                   </span>
                   <p>{booking.summary.tourists}</p>
                 </div>
                 <div>
                   <span className="font-medium text-muted-foreground">
-                    Total Tours:
+                    {t("totalTours")}
                   </span>
                   <p>{booking.summary.tours}</p>
                 </div>
                 <div>
                   <span className="font-medium text-muted-foreground">
-                    Created At:
+                    {t("createdAt")}
                   </span>
                   <p>
                     {booking.createdAt
@@ -105,7 +110,9 @@ export function BookingDetailsDialog({ booking }: { booking: Booking }) {
 
             {/* Tour Details */}
             <div className="space-y-4">
-              <h3 className="font-semibold text-lg border-b pb-1">Itinerary</h3>
+              <h3 className="font-semibold text-lg border-b pb-1">
+                {t("itinerary")}
+              </h3>
               {booking.tourDetails.map((tour, index) => (
                 <div
                   key={index}
@@ -123,13 +130,13 @@ export function BookingDetailsDialog({ booking }: { booking: Booking }) {
                   <div className="grid grid-cols-2 gap-4 text-sm">
                     <div>
                       <span className="font-medium text-muted-foreground">
-                        Date:
+                        {t("date")}
                       </span>
                       <p>{tour.selectedDate}</p>
                     </div>
                     <div>
                       <span className="font-medium text-muted-foreground">
-                        Travelers:
+                        {t("travelers")}
                       </span>
                       <p>{tour.travelers}</p>
                     </div>
@@ -138,7 +145,7 @@ export function BookingDetailsDialog({ booking }: { booking: Booking }) {
                   {tour.activities && tour.activities.length > 0 && (
                     <div>
                       <span className="font-medium text-muted-foreground text-sm">
-                        Selected Activities:
+                        {t("selectedActivities")}
                       </span>
                       <ul className="list-disc list-inside text-sm mt-1">
                         {tour.activities.map((activity, i) => (

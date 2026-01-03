@@ -16,9 +16,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 export function DeleteBookingButton({ bookingId }: { bookingId: string }) {
   const [isDeleting, setIsDeleting] = useState(false);
+  const t = useTranslations("Admin.bookingTable");
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -26,9 +28,9 @@ export function DeleteBookingButton({ bookingId }: { bookingId: string }) {
     setIsDeleting(false);
 
     if (result.success) {
-      toast.success("Booking deleted successfully");
+      toast.success(t("deleteSuccess"));
     } else {
-      toast.error("Failed to delete booking");
+      toast.error(t("deleteError"));
     }
   };
 
@@ -45,19 +47,18 @@ export function DeleteBookingButton({ bookingId }: { bookingId: string }) {
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          <AlertDialogTitle>{t("deleteConfirmTitle")}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the
-            booking and remove it from our servers.
+            {t("deleteConfirmDescription")}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>{t("cancel")}</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             className="bg-destructive hover:bg-destructive/90"
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isDeleting ? t("deleting") : t("delete")}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

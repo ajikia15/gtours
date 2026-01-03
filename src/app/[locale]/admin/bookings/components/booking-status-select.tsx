@@ -10,6 +10,7 @@ import {
 import { updateBookingStatus } from "@/data/bookings";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface BookingStatusSelectProps {
   bookingId: string;
@@ -22,6 +23,7 @@ export function BookingStatusSelect({
 }: BookingStatusSelectProps) {
   const [status, setStatus] = useState(currentStatus);
   const [isLoading, setIsLoading] = useState(false);
+  const t = useTranslations("Admin.bookingStatus");
 
   const handleValueChange = async (value: string) => {
     const newStatus = value as any;
@@ -34,9 +36,9 @@ export function BookingStatusSelect({
 
     if (!result.success) {
       setStatus(currentStatus); // Revert on error
-      toast.error("Failed to update status");
+      toast.error(t("updateError"));
     } else {
-      toast.success("Status updated");
+      toast.success(t("updateSuccess"));
     }
   };
 
@@ -47,13 +49,13 @@ export function BookingStatusSelect({
       disabled={isLoading}
     >
       <SelectTrigger className="w-[130px]">
-        <SelectValue placeholder="Status" />
+        <SelectValue placeholder={t("statusPlaceholder")} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="pending">Pending</SelectItem>
-        <SelectItem value="confirmed">Confirmed</SelectItem>
-        <SelectItem value="completed">Completed</SelectItem>
-        <SelectItem value="cancelled">Cancelled</SelectItem>
+        <SelectItem value="pending">{t("pending")}</SelectItem>
+        <SelectItem value="confirmed">{t("confirmed")}</SelectItem>
+        <SelectItem value="completed">{t("completed")}</SelectItem>
+        <SelectItem value="cancelled">{t("cancelled")}</SelectItem>
       </SelectContent>
     </Select>
   );

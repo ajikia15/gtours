@@ -9,11 +9,13 @@ import {
 } from "@/components/ui/select";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export function BookingStatusFilter() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentStatus = searchParams.get("status") || "all";
+  const t = useTranslations("Admin.bookingStatus");
 
   const handleValueChange = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -33,14 +35,14 @@ export function BookingStatusFilter() {
   return (
     <Select value={currentStatus} onValueChange={handleValueChange}>
       <SelectTrigger className="w-[180px]">
-        <SelectValue placeholder="Filter by status" />
+        <SelectValue placeholder={t("filterPlaceholder")} />
       </SelectTrigger>
       <SelectContent>
-        <SelectItem value="all">All Statuses</SelectItem>
-        <SelectItem value="pending">Pending</SelectItem>
-        <SelectItem value="confirmed">Confirmed</SelectItem>
-        <SelectItem value="completed">Completed</SelectItem>
-        <SelectItem value="cancelled">Cancelled</SelectItem>
+        <SelectItem value="all">{t("all")}</SelectItem>
+        <SelectItem value="pending">{t("pending")}</SelectItem>
+        <SelectItem value="confirmed">{t("confirmed")}</SelectItem>
+        <SelectItem value="completed">{t("completed")}</SelectItem>
+        <SelectItem value="cancelled">{t("cancelled")}</SelectItem>
       </SelectContent>
     </Select>
   );

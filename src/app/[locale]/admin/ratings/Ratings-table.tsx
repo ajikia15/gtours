@@ -86,7 +86,13 @@ export default async function RatingsTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  {rating.createdDate.toLocaleDateString(locale === "ge" ? "ka-GE" : locale === "ru" ? "ru-RU" : "en-US")}
+                  {new Date(rating.createdDate).toLocaleDateString(
+                    locale === "ge"
+                      ? "ka-GE"
+                      : locale === "ru"
+                      ? "ru-RU"
+                      : "en-US"
+                  )}
                 </TableCell>
                 <TableCell>
                   <RatingStatusBadge status={rating.status} />

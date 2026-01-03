@@ -62,7 +62,7 @@ export default async function AdminDashboard({
           </TabsTrigger>
           <TabsTrigger value="bookings" className="flex items-center gap-2">
             <ReceiptIcon className="h-4 w-4" />
-            Bookings
+            {t("bookings")}
           </TabsTrigger>
           <TabsTrigger value="blogs" className="flex items-center gap-2">
             <BookOpenIcon className="h-4 w-4" />

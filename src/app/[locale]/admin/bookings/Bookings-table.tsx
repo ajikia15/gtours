@@ -23,6 +23,7 @@ import { DeleteBookingButton } from "./components/delete-booking-button";
 
 import { BookingDetailsDialog } from "./components/booking-details-dialog";
 import { BookingStatusFilter } from "./components/booking-status-filter";
+import { getTranslations } from "next-intl/server";
 
 export default async function BookingsTable({
   page = 1,
@@ -35,7 +36,8 @@ export default async function BookingsTable({
   order?: "asc" | "desc";
   status?: "pending" | "confirmed" | "completed" | "cancelled";
 }) {
-  // const t = await getTranslations("Admin");
+  const t = await getTranslations("Admin.bookingTable");
+  const tDashboard = await getTranslations("Admin.dashboard");
 
   const result = await getAllBookings({
     pagination: { page, pageSize: 10 },
@@ -47,7 +49,9 @@ export default async function BookingsTable({
   if ("error" in result && result.error) {
     return (
       <div className="flex items-center justify-center h-full p-4 text-destructive">
-        <p>Error: {result.error}</p>
+        <p>
+          {t("error")}: {result.error}
+        </p>
       </div>
     );
   }
@@ -62,7 +66,9 @@ export default async function BookingsTable({
 
       {!data?.length && (
         <div className="flex items-center justify-center h-32 border rounded-md bg-muted/10">
-          <p className="text-sm text-muted-foreground">No bookings found</p>
+          <p className="text-sm text-muted-foreground">
+            {tDashboard("noBookingsFound")}
+          </p>
         </div>
       )}
       {data?.length && (
@@ -70,16 +76,16 @@ export default async function BookingsTable({
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Invoice #</TableHead>
+                <TableHead>{t("invoice")}</TableHead>
                 <TableHead>
-                  <SortableHeader title="Date" value="date" />
+                  <SortableHeader title={t("date")} value="date" />
                 </TableHead>
-                <TableHead>Customer</TableHead>
+                <TableHead>{t("customer")}</TableHead>
                 <TableHead>
-                  <SortableHeader title="Amount" value="amount" />
+                  <SortableHeader title={t("amount")} value="amount" />
                 </TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="w-[100px]">Actions</TableHead>
+                <TableHead>{t("status")}</TableHead>
+                <TableHead className="w-[100px]">{t("actions")}</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
