@@ -63,6 +63,8 @@ export interface InvoiceDocument {
     price: number;
   }[];
 
+  status?: "pending" | "confirmed" | "completed" | "cancelled";
+
   // Email Extension fields (will trigger email sending)
   to: string[];
   sendGrid: {
@@ -261,6 +263,7 @@ export async function processCheckout(
       }, // Additional metadata for our app (not passed to template)
       userId,
       createdAt: now, // Keep as Date for Firestore
+      status: "pending", // Initial status
     }); // Clear the user's cart after successful checkout
     const clearResult = await clearCart();
     if (!clearResult.success) {
