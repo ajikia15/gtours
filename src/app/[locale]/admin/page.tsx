@@ -1,9 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "@/i18n/navigation";
-import { PlusCircleIcon, BookOpenIcon, RouteIcon, StarIcon } from "lucide-react";
+import {
+  PlusCircleIcon,
+  BookOpenIcon,
+  RouteIcon,
+  StarIcon,
+  ReceiptIcon,
+} from "lucide-react";
 import ToursTable from "./Tours-table";
 import BlogsTable from "./blogs/Blogs-table";
 import RatingsTable from "./ratings/Ratings-table";
+import BookingsTable from "./bookings/Bookings-table";
 import { Suspense } from "react";
 import TableSkeleton from "@/components/ui/table-skeleton";
 import { getTranslations } from "next-intl/server";
@@ -28,6 +35,15 @@ export default async function AdminDashboard({
       )
     : 1;
 
+  const sort = searchParams?.sort as "date" | "amount" | undefined;
+  const order = searchParams?.order as "asc" | "desc" | undefined;
+  const status = searchParams?.status as
+    | "pending"
+    | "confirmed"
+    | "completed"
+    | "cancelled"
+    | undefined;
+
   const activeTab = searchParams?.tab
     ? Array.isArray(searchParams.tab)
       ? searchParams.tab[0]
@@ -39,10 +55,14 @@ export default async function AdminDashboard({
       <h1 className="text-3xl font-bold my-4">{t("title")}</h1>
 
       <Tabs defaultValue={activeTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="tours" className="flex items-center gap-2">
             <RouteIcon className="h-4 w-4" />
             {t("tours")}
+          </TabsTrigger>
+          <TabsTrigger value="bookings" className="flex items-center gap-2">
+            <ReceiptIcon className="h-4 w-4" />
+            Bookings
           </TabsTrigger>
           <TabsTrigger value="blogs" className="flex items-center gap-2">
             <BookOpenIcon className="h-4 w-4" />
@@ -65,6 +85,19 @@ export default async function AdminDashboard({
           <div className="mt-4">
             <Suspense fallback={<TableSkeleton />}>
               <ToursTable page={page} params={params} />
+            </Suspense>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="bookings" className="space-y-4">
+          <div className="mt-4">
+            <Suspense fallback={<TableSkeleton />}>
+              <BookingsTable
+                page={page}
+                sort={sort}
+                order={order}
+                status={status}
+              />
             </Suspense>
           </div>
         </TabsContent>
