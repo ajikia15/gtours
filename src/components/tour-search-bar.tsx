@@ -400,7 +400,7 @@ export default function TourSearchBar({
           <div className="px-8 flex items-center">
             <Button
               onClick={handleSearch}
-              className="rounded-none px-6 py-3 bg-brand-secondary hover:bg-brand-secondary/90"
+              className="rounded-full px-8 bg-brand-secondary hover:bg-brand-secondary/90 font-semibold tracking-wide shadow-md hover:shadow-lg transition-shadow"
               size="lg"
             >
               Search

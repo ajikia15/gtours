@@ -61,7 +61,7 @@ export default async function LocaleLayout({
               <BookingProvider>
                 {!mobile && <Navbar />}
                 {mobile && <MobileNavbar />}
-                <div className="container mx-auto mt-20">
+                <div className="container mx-auto mt-20 md:mt-28">
                   {children}
                   <Toaster />
                   <Footer />

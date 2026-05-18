@@ -114,14 +114,15 @@ export default function LocaleSwitcher({ variant }: LocaleSwitcherProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="px-3 py-2 border rounded">
+        <button className="flex items-center gap-1 px-2.5 h-8 rounded-full text-xs font-semibold tracking-wide hover:bg-background transition-colors">
+          <GlobeIcon className="h-3.5 w-3.5" />
           {locale.toUpperCase()}
         </button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent align="end">
         {routing.locales.map((loc: string) => (
           <DropdownMenuItem key={loc} onClick={() => handleLocaleChange(loc)}>
-            {loc.toUpperCase()}
+            {loc.toUpperCase()} — {getLanguageName(loc)}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

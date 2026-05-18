@@ -2,11 +2,15 @@ import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import AuthButtons from "../auth-buttons";
 import NavLinks from "./NavLinks";
+import UtilityBar from "./UtilityBar";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
   return (
     <nav className="bg-background fixed top-0 z-50 w-full border-b">
+      <UtilityBar />
       <div className="container mx-auto">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16 gap-4">
           {/* Left - Logo */}
@@ -27,9 +31,18 @@ export default async function Navbar() {
             <NavLinks />
           </div>
 
-          {/* Right - Auth Buttons */}
-          <div className="flex items-center justify-end space-x-4">
+          {/* Right - Account cluster + CTA */}
+          <div className="flex items-center justify-end gap-3">
             <AuthButtons />
+            <Link href="/destinations" className="hidden lg:inline-flex">
+              <Button
+                variant="brandred"
+                size="sm"
+                className="rounded-full h-10 px-5 font-semibold tracking-wide shadow-md hover:shadow-lg transition-shadow"
+              >
+                {t("planTrip")}
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

@@ -20,7 +20,7 @@ export default function ShoppingCart() {
       <Button
         variant="ghost"
         size="icon"
-        className="relative"
+        className="relative w-9 h-9 rounded-full hover:bg-background"
         aria-label={`View cart (${cart.totalItems} items)`}
       >
         <ShoppingCartIcon className="h-5 w-5" aria-hidden="true" />

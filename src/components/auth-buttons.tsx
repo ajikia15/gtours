@@ -46,20 +46,24 @@ export default function AuthButtons() {
   }
 
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-1.5 py-1">
       <LocaleSwitcher />
 
       {auth.currentUser ? (
         <>
-          <ShoppingCart />
+          <span className="h-5 w-px bg-border" />
+          <div className="flex items-center">
+            <ShoppingCart />
+          </div>
+          <span className="h-5 w-px bg-border" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
-                variant="outline"
+                variant="ghost"
                 size="icon"
-                className="rounded-full w-10 h-10"
+                className="rounded-full w-9 h-9 hover:bg-background"
               >
-                <UserIcon className="h-10 w-10" size={10} />
+                <UserIcon className="h-5 w-5" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -81,7 +85,6 @@ export default function AuthButtons() {
               <DropdownMenuItem
                 onClick={async () => {
                   await auth.logout();
-                  // Middleware will handle redirects if user tries to access protected routes
                 }}
               >
                 {t("signOut")}
@@ -90,14 +93,19 @@ export default function AuthButtons() {
           </DropdownMenu>
         </>
       ) : (
-        <div className="flex items-center gap-2">
-          <Link href="/login">
-            <Button variant="outline">{t("signIn")}</Button>
-          </Link>
-          <Link href="/register">
-            <Button>{t("signUp")}</Button>
-          </Link>
-        </div>
+        <>
+          <span className="h-5 w-px bg-border" />
+          <div className="flex items-center gap-1.5 pr-1">
+            <Link href="/login">
+              <Button variant="ghost" size="sm" className="h-8 px-3 hover:bg-background">
+                {t("signIn")}
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button size="sm" className="h-8 px-3 rounded-full">{t("signUp")}</Button>
+            </Link>
+          </div>
+        </>
       )}
     </div>
   );

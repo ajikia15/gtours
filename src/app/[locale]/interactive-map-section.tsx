@@ -135,6 +135,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
                 zoom={position.zoom}
                 center={position.coordinates}
                 onMoveEnd={handleMoveEnd}
+                filterZoomEvent={(evt: any) => evt.type !== "wheel"}
                 style={
                   isAnimating
                     ? {
