@@ -1,4 +1,5 @@
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 
 export default function Footer() {
   const t = useTranslations("Footer");
@@ -34,9 +35,20 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">
+                <Link
+                  href="/privacy"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
                   {t("privacyPolicy")}
-                </a>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/terms"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
+                  {t("termsOfService")}
+                </Link>
               </li>
             </ul>
           </div>
