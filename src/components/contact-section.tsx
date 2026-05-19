@@ -19,17 +19,17 @@ export default async function ContactSection() {
           </div>
           <div>
             <h3 className="text-sm">{t("phoneNumber")}</h3>
-            <p className="font-bold">+995 555 123 456</p>
+            <p className="font-bold">+995 511 199 189</p>
           </div>
         </div>
 
         <div className="flex flex-row gap-3 items-center">
-          <div className=" rounded-md bg-gray-200  grid place-items-center w-12 h-12">
+          <div className="rounded-md bg-gray-200  grid place-items-center w-12 h-12">
             <Mail />
           </div>
           <div>
             <h3 className=" font-light text-sm">{t("emailAddress")}</h3>
-            <p className="font-bold">info@gtours.ge</p>
+            <p className="font-bold">georgiatraveltours.info@gmail.com</p>
           </div>
         </div>
 

@@ -12,19 +12,19 @@ export default function UtilityBar() {
       <div className="container mx-auto flex h-9 items-center justify-between">
         <div className="flex items-center gap-6">
           <a
-            href="tel:+995555123456"
+            href="tel:+995511199189"
             className="flex items-center gap-2 hover:text-white transition-colors"
           >
             <PhoneIcon className="h-3.5 w-3.5" />
-            <span>+995 555 123 456</span>
+            <span>+995 511 199 189</span>
           </a>
           <span className="h-3.5 w-px bg-white/15" />
           <a
-            href="mailto:hello@georgiatravel.com"
+            href="mailto:georgiatraveltours.info@gmail.com"
             className="flex items-center gap-2 hover:text-white transition-colors"
           >
             <MailIcon className="h-3.5 w-3.5" />
-            <span>hello@georgiatravel.com</span>
+            <span>georgiatraveltours.info@gmail.com</span>
           </a>
         </div>
 
