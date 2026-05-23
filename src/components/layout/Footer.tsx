@@ -58,22 +58,42 @@ export default function Footer() {
             <h3 className="font-semibold text-lg mb-4">{t("socialMedia")}</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61590150298732"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
                   {t("facebook")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">
+                <a
+                  href="https://www.instagram.com/georgiatravelt/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
                   {t("instagram")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">
-                  {t("twitter")}
+                <a
+                  href="https://www.tiktok.com/@georgia.travel.to"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
+                  {t("tiktok")}
                 </a>
               </li>
               <li>
-                <a href="#" className="text-gray-300 hover:text-white text-sm">
+                <a
+                  href="https://www.youtube.com/channel/UC0yqJXO-d-YSY_pbWjn_U4w"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-300 hover:text-white text-sm"
+                >
                   {t("youtube")}
                 </a>
               </li>
