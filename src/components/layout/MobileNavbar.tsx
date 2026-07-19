@@ -1,6 +1,7 @@
 "use client";
 
-import { ChartNoAxesColumnIncreasing } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Sheet,
@@ -17,6 +18,14 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 export default function MobileNavbar() {
   const t = useTranslations("Navbar");
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 8);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const navItems = [
     { href: "/", label: t("home") },
@@ -27,32 +36,27 @@ export default function MobileNavbar() {
   ];
 
   return (
-    <div className="fixed top-0 inset-x-0 flex justify-between items-center bg-white w-full z-50 p-3 pl-5">
-      <Link href="/" className="flex items-center justify-center">
-        <Image
-          src="/logo_notxt.svg"
-          alt="Georgia Travel Tours"
-          width={40}
-          height={40}
-        />
-        <span className="font-bold  text-primary ml-3">
-          Georgia Travel Tours
-        </span>
-      </Link>
-
-      {/* Right - Menu */}
-      <div className="flex justify-end">
+    <div
+      className={cn(
+        "fixed top-0 inset-x-0 grid grid-cols-[1fr_auto_1fr] items-center w-full z-50 px-3 py-2 transition-colors duration-300",
+        scrolled ? "bg-white shadow-sm" : "bg-transparent"
+      )}
+    >
+      <div className="flex justify-start">
         <Sheet>
           <SheetTrigger asChild>
             <Button
               variant="ghost"
-              className="h-12 w-12 p-0"
+              className={cn(
+                "h-10 w-10 p-0 hover:bg-transparent",
+                scrolled ? "text-primary" : "text-white"
+              )}
               aria-label="Open navigation menu"
             >
-              <ChartNoAxesColumnIncreasing size={32} className="-rotate-90" />
+              <Menu size={26} strokeWidth={1.5} />
             </Button>
           </SheetTrigger>
-          <SheetContent side="right" className="w-80 sm:w-96">
+          <SheetContent side="left" className="w-80 sm:w-96">
             <SheetHeader>
               <SheetTitle className="text-left">{t("menu")}</SheetTitle>
             </SheetHeader>
@@ -79,6 +83,35 @@ export default function MobileNavbar() {
             </div>
           </SheetContent>
         </Sheet>
+      </div>
+
+      <Link href="/" className="flex items-center justify-center gap-2">
+        <Image
+          src="/logo_notxt.svg"
+          alt="Georgia Travel Tours"
+          width={22}
+          height={22}
+        />
+        <span
+          className={cn(
+            "font-medium text-sm whitespace-nowrap transition-colors",
+            scrolled ? "text-primary" : "text-white"
+          )}
+        >
+          {t("logo")}
+        </span>
+      </Link>
+
+      <div className="flex justify-end">
+        <Link href="/destinations">
+          <Button
+            variant="brandred"
+            size="sm"
+            className="rounded-full h-8 px-4 font-medium text-sm"
+          >
+            {t("planShort")}
+          </Button>
+        </Link>
       </div>
     </div>
   );

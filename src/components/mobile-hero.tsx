@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
 import type { Tour } from "@/types/Tour";
 import MobileTourSearchBar from "@/components/mobile-tour-search-bar";
 
@@ -67,32 +66,25 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
 
   return (
     <section className="relative -mt-20">
-      <div className="sticky top-0 h-[100dvh] overflow-hidden bg-neutral-900 text-white">
-        {clips.map((c, i) => (
-          <video
-            key={i}
-            className={cn(
-              "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
-              i === active ? "opacity-100" : "opacity-0"
-            )}
-            src={c.src}
-            poster={c.poster}
-            autoPlay
-            muted
-            loop
-            playsInline
-          />
-        ))}
+      <div className="sticky top-0 h-screen overflow-hidden bg-neutral-900 text-white">
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src={PLACEHOLDER}
+          autoPlay
+          muted
+          loop
+          playsInline
+        />
 
         <div
-          className="pointer-events-none absolute inset-0 z-[2]"
+          className="pointer-events-none absolute inset-0"
           style={{
             background:
               "linear-gradient(180deg, rgba(9,12,18,.35) 0%, rgba(9,12,18,0) 40%, rgba(9,12,18,0) 78%, rgba(9,12,18,.4) 100%)",
           }}
         />
 
-        <div className="absolute inset-x-5 bottom-[22dvh] z-[5]">
+        <div className="absolute inset-x-5 bottom-[22vh]">
           <div className="mb-2 flex items-center gap-2">
             <span className="text-[15px] font-bold">{current.title}</span>
             <span className="text-[13px] text-white/80">· {current.region}</span>
@@ -107,7 +99,7 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
         </div>
       </div>
 
-      <div className="relative z-10 -mt-[20dvh] min-h-[100dvh] rounded-t-[28px] bg-[#F5F5F7] px-5 pt-6 text-neutral-900 shadow-[0_-14px_30px_-20px_rgba(20,22,28,.4)]">
+      <div className="relative z-10 -mt-[20vh] min-h-screen rounded-t-[28px] bg-[#F5F5F7] px-5 pt-6 text-neutral-900 shadow-[0_-14px_30px_-20px_rgba(20,22,28,.4)]">
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-neutral-300" />
 
         <h2 className="mb-3.5 whitespace-nowrap text-2xl font-extrabold tracking-tight text-brand-primary">

@@ -17,7 +17,8 @@
     "logo": "Georgia Travel Tours",
     "menu": "მენიუ",
     "cart": "კალათა",
-    "planTrip": "დაგეგმე მოგზაურობა"
+    "planTrip": "დაგეგმე მოგზაურობა",
+    "planShort": "დაგეგმვა"
   },
   "QuickCategory": {
     "hot-air-balloon": "საჰაერო ბუშტი",

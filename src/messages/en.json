@@ -17,7 +17,8 @@
     "logo": "Georgia Travel Tours",
     "menu": "Menu",
     "cart": "Cart",
-    "planTrip": "Plan Your Trip"
+    "planTrip": "Plan Your Trip",
+    "planShort": "Plan"
   },
   "QuickCategory": {
     "hot-air-balloon": "Hot Air Balloon",

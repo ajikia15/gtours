@@ -5,7 +5,7 @@ export default async function ContactSection() {
   const t = await getTranslations("Pages.contact");
 
   return (
-    <div className="flex flex-row gap-12">
+    <div className="flex flex-col md:flex-row gap-12">
       <div className="space-y-8">
         <div>
           <h2 className="font-bold text-xl">{t("title")}</h2>
@@ -29,7 +29,7 @@ export default async function ContactSection() {
           </div>
           <div>
             <h3 className=" font-light text-sm">{t("emailAddress")}</h3>
-            <p className="font-bold">georgiatraveltours.info@gmail.com</p>
+            <p className="font-bold break-all">georgiatraveltours.info@gmail.com</p>
           </div>
         </div>
 

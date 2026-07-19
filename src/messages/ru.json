@@ -17,7 +17,8 @@
     "logo": "Georgia Travel Tours",
     "menu": "Меню",
     "cart": "Корзина",
-    "planTrip": "Планируйте поездку"
+    "planTrip": "Планируйте поездку",
+    "planShort": "План"
   },
   "QuickCategory": {
     "hot-air-balloon": "Полет на воздушном шаре",
