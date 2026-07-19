@@ -16,6 +16,7 @@ import { isMobile } from "@/lib/isMobile";
 import MobileNavbar from "@/components/layout/MobileNavbar";
 import NavigationProgress from "@/components/layout/navigation-progress";
 import { NavigationLoadingOverlay } from "@/components/navigation-loading-overlay";
+import RemixWizard from "@/components/remix-wizard";
 
 export default async function LocaleLayout({
   children,
@@ -67,6 +68,7 @@ export default async function LocaleLayout({
                   <Footer />
                 </div>
                 {mobile && <BottomNavigation />}
+                <RemixWizard />
               </BookingProvider>
             </CartProvider>
           </AuthProvider>

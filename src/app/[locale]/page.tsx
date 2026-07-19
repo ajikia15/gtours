@@ -1,4 +1,3 @@
-import Carousel from "@/components/carousel/Carousel";
 import QuickCategory from "@/components/carousel/QuickCategory";
 import { getTranslations } from "next-intl/server";
 import DisplayCardsSection from "./display-cards-section";
@@ -6,8 +5,8 @@ import { Suspense } from "react";
 import { getTours } from "@/data/tours";
 import InteractiveMapSection from "./interactive-map-section";
 import TourCardSkeleton from "@/components/tour-card-skeleton";
-import TourSearchBar from "@/components/tour-search-bar";
-import MobileTourSearchBar from "@/components/mobile-tour-search-bar";
+import MobileHero from "@/components/mobile-hero";
+import DesktopHero from "@/components/desktop-hero";
 import ContactSection from "@/components/contact-section";
 
 export default async function HomePage() {
@@ -15,36 +14,20 @@ export default async function HomePage() {
 
   return (
     <div className="mb-6 md:mb-12">
-      {/* Mobile Search Bar - Above Carousel */}
-      <div className="md:hidden px-4 mb-4">
-        <Suspense
-          fallback={
-            <div className="bg-white shadow-lg rounded-lg p-4 h-16 animate-pulse"></div>
-          }
-        >
-          <MobileSearchBarWithData />
+      {/* Mobile Hero - full-bleed rotating clips + search */}
+      <div className="md:hidden">
+        <Suspense fallback={<div className="-mt-20 h-[100dvh] bg-neutral-900" />}>
+          <MobileHeroWithData />
         </Suspense>
       </div>
 
-      <div className="relative">
-        <Carousel />
-        {/* Desktop Search Bar - Overlaid on Carousel */}
-        <div className="hidden md:flex absolute left-0 right-0 bottom-0 justify-center pointer-events-none">
-          <div
-            className="pointer-events-auto w-full max-w-4xl px-4"
-            style={{
-              transform: "translateY(50%)",
-            }}
-          >
-            <Suspense
-              fallback={
-                <div className="bg-white shadow-lg rounded-lg p-4 h-16 animate-pulse"></div>
-              }
-            >
-              <DesktopSearchBarWithData />
-            </Suspense>
-          </div>
-        </div>
+      {/* Desktop Hero - editorial copy + promotion rotation + search band */}
+      <div className="hidden md:block">
+        <Suspense
+          fallback={<div className="h-[600px] bg-neutral-100 animate-pulse" />}
+        >
+          <DesktopHeroWithData />
+        </Suspense>
       </div>
 
       <div className="space-y-6 md:space-y-16 mt-6 md:mt-16">
@@ -103,20 +86,20 @@ export default async function HomePage() {
   );
 }
 
-async function MobileSearchBarWithData() {
+async function MobileHeroWithData() {
   const { data: tours } = await getTours({
     pagination: { page: 1, pageSize: 20 },
   });
 
-  return <MobileTourSearchBar tours={tours} className="shadow-lg" />;
+  return <MobileHero tours={tours} />;
 }
 
-async function DesktopSearchBarWithData() {
+async function DesktopHeroWithData() {
   const { data: tours } = await getTours({
     pagination: { page: 1, pageSize: 20 },
   });
 
-  return <TourSearchBar tours={tours} className="shadow-lg" />;
+  return <DesktopHero tours={tours} />;
 }
 
 async function MapWithData() {
