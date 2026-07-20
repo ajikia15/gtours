@@ -38,7 +38,7 @@ export default async function TourCard({
         )}
       </Link>
       <div className="flex flex-col gap-3 px-6 py-5">
-        <h3 className="text-lg font-light">
+        <h3 className="text-lg font-bold">
           {getLocalizedTitle(tour, locale)}
         </h3>
         <div className="text-sm font-light text-gray-500 line-clamp-3 mr-6">

@@ -17,7 +17,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { useRouter, usePathname } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
-import { GlobeIcon, ArrowLeftIcon } from "lucide-react";
+import { GlobeIcon, ArrowLeftIcon, ChevronDownIcon } from "lucide-react";
 import { useState, useEffect } from "react";
 
 interface LocaleSwitcherProps {
@@ -114,9 +114,9 @@ export default function LocaleSwitcher({ variant }: LocaleSwitcherProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="flex items-center gap-1 px-2.5 h-8 rounded-full text-xs font-semibold tracking-wide hover:bg-background transition-colors">
-          <GlobeIcon className="h-3.5 w-3.5" />
+        <button className="flex items-center gap-1 text-[15px] font-medium text-muted-foreground hover:text-foreground transition-colors">
           {locale.toUpperCase()}
+          <ChevronDownIcon className="h-4 w-4" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

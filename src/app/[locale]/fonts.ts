@@ -1,14 +1,29 @@
-import { Roboto, Noto_Sans_Georgian, Open_Sans } from "next/font/google";
+import { Noto_Sans_Georgian, Open_Sans, Plus_Jakarta_Sans, Space_Mono } from "next/font/google";
+import localFont from "next/font/local";
 
-// Define Roboto for English
-export const roboto = Roboto({
-  weight: ["400", "500", "700"], // Specify weights you need
-  subsets: ["latin", "cyrillic-ext"], // Specify subsets
-  display: "swap", // Font display strategy
-  variable: "--font-roboto", // Optional: if you want to use CSS variables
+export const cabinetGrotesk = localFont({
+  src: [
+    { path: "./fonts/CabinetGrotesk-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/CabinetGrotesk-Extrabold.woff2", weight: "800", style: "normal" },
+  ],
+  display: "swap",
+  variable: "--font-cabinet",
 });
 
-// Define Noto Sans Georgian for Georgian
+export const plusJakartaSans = Plus_Jakarta_Sans({
+  weight: ["400", "500", "600", "700", "800"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jakarta",
+});
+
+export const spaceMono = Space_Mono({
+  weight: ["400"],
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-space-mono",
+});
+
 export const notoSansGeorgian = Noto_Sans_Georgian({
   weight: ["400", "500", "700"],
   subsets: ["georgian"],
@@ -16,7 +31,6 @@ export const notoSansGeorgian = Noto_Sans_Georgian({
   variable: "--font-noto-sans-georgian",
 });
 
-// Define Open Sans for Russian
 export const openSans = Open_Sans({
   weight: ["400", "500", "700"],
   subsets: ["cyrillic", "latin"],

@@ -22,7 +22,9 @@ export default async function Navbar() {
                 width={40}
                 height={40}
               />
-              <span className="font-bold  text-primary">{t("logo")}</span>
+              <span className="font-display font-extrabold tracking-tight text-primary">
+                {t("logo")}
+              </span>
             </Link>
           </div>
 

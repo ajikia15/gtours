@@ -94,7 +94,7 @@ export default function MobileNavbar() {
         />
         <span
           className={cn(
-            "font-medium text-sm whitespace-nowrap transition-colors",
+            "font-display font-extrabold tracking-tight text-sm whitespace-nowrap transition-colors",
             scrolled ? "text-primary" : "text-white"
           )}
         >

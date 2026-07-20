@@ -123,7 +123,7 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
         </div>
 
         <div className="mb-3.5 flex items-center justify-between">
-          <span className="text-[11px] uppercase tracking-[0.14em] text-neutral-500">
+          <span className="eyebrow text-[11px] text-neutral-500">
             Up next
           </span>
           <a href="#" className="text-[13px] font-bold text-brand-secondary">

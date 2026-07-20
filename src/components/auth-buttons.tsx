@@ -46,22 +46,20 @@ export default function AuthButtons() {
   }
 
   return (
-    <div className="flex items-center gap-1 rounded-full border border-border/60 bg-muted/40 px-1.5 py-1">
+    <div className="flex items-center gap-4">
       <LocaleSwitcher />
 
       {auth.currentUser ? (
         <>
-          <span className="h-5 w-px bg-border" />
           <div className="flex items-center">
             <ShoppingCart />
           </div>
-          <span className="h-5 w-px bg-border" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full w-9 h-9 hover:bg-background"
+                className="rounded-full w-9 h-9 hover:bg-muted"
               >
                 <UserIcon className="h-5 w-5" />
               </Button>
@@ -93,19 +91,12 @@ export default function AuthButtons() {
           </DropdownMenu>
         </>
       ) : (
-        <>
-          <span className="h-5 w-px bg-border" />
-          <div className="flex items-center gap-1.5 pr-1">
-            <Link href="/login">
-              <Button variant="ghost" size="sm" className="h-8 px-3 hover:bg-background">
-                {t("signIn")}
-              </Button>
-            </Link>
-            <Link href="/register">
-              <Button size="sm" className="h-8 px-3 rounded-full">{t("signUp")}</Button>
-            </Link>
-          </div>
-        </>
+        <Link
+          href="/login"
+          className="text-[15px] font-medium text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {t("signIn")}
+        </Link>
       )}
     </div>
   );

@@ -9,7 +9,13 @@ import { AuthProvider } from "@/context/auth";
 import { CartProvider } from "@/context/cart";
 import { BookingProvider } from "@/context/booking";
 import { Toaster } from "@/components/ui/sonner";
-import { roboto, notoSansGeorgian, openSans } from "./fonts";
+import {
+  cabinetGrotesk,
+  plusJakartaSans,
+  spaceMono,
+  notoSansGeorgian,
+  openSans,
+} from "./fonts";
 import { getLocale, getMessages } from "next-intl/server";
 import { headers } from "next/headers";
 import { isMobile } from "@/lib/isMobile";
@@ -31,10 +37,11 @@ export default async function LocaleLayout({
     notFound();
   }
 
+  const englishFonts = `${plusJakartaSans.variable} ${cabinetGrotesk.variable} ${spaceMono.variable} ${plusJakartaSans.className}`;
   let fontClassName = "";
   switch (locale) {
     case "en":
-      fontClassName = roboto.className;
+      fontClassName = englishFonts;
       break;
     case "ge":
       fontClassName = notoSansGeorgian.className;
@@ -43,7 +50,7 @@ export default async function LocaleLayout({
       fontClassName = openSans.className;
       break;
     default:
-      fontClassName = roboto.className;
+      fontClassName = englishFonts;
   }
 
   const messages = await getMessages();

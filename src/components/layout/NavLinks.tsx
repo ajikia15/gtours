@@ -43,19 +43,13 @@ export default function NavLinks() {
               if (item.href !== pathname) setPendingPath(item.href);
             }}
             className={cn(
-              "group relative whitespace-nowrap text-sm lg:text-[15px] font-medium uppercase tracking-[0.08em] py-1 transition-colors",
+              "whitespace-nowrap text-[15px] font-semibold py-1 transition-colors",
               active
                 ? "text-foreground"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
             {item.label}
-            <span
-              className={cn(
-                "pointer-events-none absolute left-1/2 -bottom-0.5 h-[2px] -translate-x-1/2 bg-brand-secondary transition-all duration-200 ease-out",
-                active ? "w-full" : "w-0 group-hover:w-full"
-              )}
-            />
           </Link>
         );
       })}

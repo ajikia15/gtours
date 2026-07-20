@@ -12,6 +12,49 @@ body {
   @apply !min-w-full;
 }
 
+:lang(en) h1,
+:lang(en) h2,
+:lang(en) h3,
+:lang(en) h4,
+:lang(en) h5,
+:lang(en) h6,
+.font-display {
+  font-family: var(--font-cabinet, inherit);
+}
+
+:lang(en) h1,
+:lang(en) h2,
+:lang(en) h3,
+:lang(en) h4 {
+  font-weight: 800;
+}
+
+:lang(en) h5,
+:lang(en) h6 {
+  font-weight: 700;
+}
+
+:lang(en) h1 {
+  letter-spacing: -0.035em;
+}
+:lang(en) h2 {
+  letter-spacing: -0.03em;
+}
+:lang(en) h3 {
+  letter-spacing: -0.025em;
+}
+:lang(en) h4 {
+  letter-spacing: -0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-space-mono, monospace);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+}
+
 @media screen and (min-width: 960px) {
   html {
     margin-left: calc(100vw - 100%);
