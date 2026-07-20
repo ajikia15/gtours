@@ -6,25 +6,32 @@ import type { Tour } from "@/types/Tour";
 import TourSearchBar from "@/components/tour-search-bar";
 import type { HeroClip } from "@/components/mobile-hero";
 
-const ROTATE_MS = 5000;
+const ROTATE_MS = 10000;
 
-const PLACEHOLDER = "/sighnaghi.mp4";
-const PLACEHOLDER_POSTER = "/sighnaghi.jpg";
+const mkClip = (title: string, region: string, slug: string): HeroClip => ({
+  title,
+  region,
+  src: `/${slug}.mp4`,
+  poster: `/${slug}.jpg`,
+});
 
 const DEFAULT_CLIPS: HeroClip[] = [
-  { title: "Kazbegi", region: "Mtskheta-Mtianeti", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
-  { title: "Svaneti", region: "Upper Svaneti", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
-  { title: "Batumi", region: "Adjara", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
-  { title: "Kakheti", region: "Wine Country", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
-  { title: "Tbilisi", region: "Capital", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
+  mkClip("Shatili", "Khevsureti", "shatili"),
+  mkClip("Didgori", "Kvemo Kartli", "didgori"),
+  mkClip("Tbilisi", "Capital", "tbilisi"),
+  mkClip("Mtskheta", "Mtskheta-Mtianeti", "mtskheta"),
+  mkClip("Manglisi", "Kvemo Kartli", "manglisi"),
+  mkClip("Beshtasheni", "Trialeti", "beshtasheni"),
+  mkClip("Tsalka", "Trialeti", "tsalka"),
+  mkClip("Sighnaghi", "Kakheti", "sighnaghi"),
 ];
 
 const FAN = [
-  { x: -300, y: 96, rot: -18, scale: 0.9, z: 10 },
-  { x: -156, y: 40, rot: -9, scale: 0.96, z: 20 },
-  { x: 0, y: 0, rot: 0, scale: 1.12, z: 30 },
-  { x: 156, y: 40, rot: 9, scale: 0.96, z: 20 },
-  { x: 300, y: 96, rot: 18, scale: 0.9, z: 10 },
+  { x: -336, y: 84, rot: -13, scale: 0.9, z: 10 },
+  { x: -176, y: 48, rot: -6, scale: 0.96, z: 20 },
+  { x: 0, y: 22, rot: 0, scale: 1.06, z: 30 },
+  { x: 176, y: 48, rot: 6, scale: 0.96, z: 20 },
+  { x: 336, y: 84, rot: 13, scale: 0.9, z: 10 },
 ];
 
 const CARD_W = 248;
@@ -65,7 +72,7 @@ function FanCard({ clip, pos }: { clip: HeroClip; pos: number }) {
       exit={{ scale: slot.scale * 0.85, opacity: 0 }}
       transition={{ type: "spring", stiffness: 260, damping: 32 }}
     >
-      <div className="rounded-[14px] bg-white p-3 shadow-[0_20px_45px_-15px_rgba(0,0,0,0.35)]">
+      <div className="rounded-[14px] border border-black/5 bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)]">
         <div className="relative h-[336px] overflow-hidden rounded-[6px] bg-neutral-800">
           {clip.poster && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -91,10 +98,13 @@ function FanCard({ clip, pos }: { clip: HeroClip; pos: number }) {
           )}
           <div
             className="pointer-events-none absolute inset-0 bg-black transition-opacity duration-500"
-            style={{ opacity: isCurrent ? 0 : 0.4 }}
+            style={{ opacity: isCurrent ? 0 : 0.22 }}
           />
         </div>
-        <div className="px-1 pt-3 pb-1">
+        <div
+          className="px-1 pt-3 pb-1 transition-opacity duration-500"
+          style={{ opacity: pos > 0 ? 0 : 1 }}
+        >
           <div className="text-lg font-extrabold tracking-tight text-brand-primary">
             {clip.title}
           </div>

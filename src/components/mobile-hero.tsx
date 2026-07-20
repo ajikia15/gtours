@@ -11,17 +11,24 @@ export type HeroClip = {
   poster?: string;
 };
 
-const ROTATE_MS = 5000;
+const ROTATE_MS = 10000;
 
-const PLACEHOLDER = "/sighnaghi.mp4";
+const mkClip = (title: string, region: string, slug: string): HeroClip => ({
+  title,
+  region,
+  src: `/${slug}.mp4`,
+  poster: `/${slug}.jpg`,
+});
 
 const DEFAULT_CLIPS: HeroClip[] = [
-  { title: "Sighnaghi", region: "Kakheti · Wine Country", src: PLACEHOLDER },
-  { title: "Kazbegi", region: "Mtskheta-Mtianeti", src: PLACEHOLDER },
-  { title: "Svaneti", region: "Upper Svaneti", src: PLACEHOLDER },
-  { title: "Batumi", region: "Adjara", src: PLACEHOLDER },
-  { title: "Tbilisi", region: "Capital", src: PLACEHOLDER },
-  { title: "Racha", region: "Highlands", src: PLACEHOLDER },
+  mkClip("Shatili", "Khevsureti", "shatili"),
+  mkClip("Didgori", "Kvemo Kartli", "didgori"),
+  mkClip("Tbilisi", "Capital", "tbilisi"),
+  mkClip("Mtskheta", "Mtskheta-Mtianeti", "mtskheta"),
+  mkClip("Manglisi", "Kvemo Kartli", "manglisi"),
+  mkClip("Beshtasheni", "Trialeti", "beshtasheni"),
+  mkClip("Tsalka", "Trialeti", "tsalka"),
+  mkClip("Sighnaghi", "Kakheti", "sighnaghi"),
 ];
 
 interface MobileHeroProps {
@@ -68,12 +75,17 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
     <section className="relative -mt-20">
       <div className="sticky top-0 h-screen overflow-hidden bg-neutral-900 text-white">
         <video
+          key={current.src}
           className="absolute inset-0 h-full w-full object-cover"
-          src={PLACEHOLDER}
+          src={current.src}
+          poster={current.poster}
           autoPlay
           muted
           loop
           playsInline
+          preload="auto"
+          disablePictureInPicture
+          controlsList="nodownload noplaybackrate noremoteplayback"
         />
 
         <div
