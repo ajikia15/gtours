@@ -1,8 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { cn } from "@/lib/utils";
-import { Link } from "@/i18n/navigation";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import type { Tour } from "@/types/Tour";
 import TourSearchBar from "@/components/tour-search-bar";
 import type { HeroClip } from "@/components/mobile-hero";
@@ -10,58 +9,99 @@ import type { HeroClip } from "@/components/mobile-hero";
 const ROTATE_MS = 5000;
 
 const PLACEHOLDER = "/sighnaghi.mp4";
+const PLACEHOLDER_POSTER = "/sighnaghi.jpg";
 
 const DEFAULT_CLIPS: HeroClip[] = [
-  { title: "Kazbegi", region: "Mtskheta-Mtianeti", src: PLACEHOLDER },
-  { title: "Svaneti", region: "Upper Svaneti", src: PLACEHOLDER },
-  { title: "Batumi", region: "Adjara", src: PLACEHOLDER },
-  { title: "Kakheti", region: "Wine Country", src: PLACEHOLDER },
-  { title: "Tbilisi", region: "Capital", src: PLACEHOLDER },
-  { title: "Racha", region: "Highlands", src: PLACEHOLDER },
+  { title: "Kazbegi", region: "Mtskheta-Mtianeti", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
+  { title: "Svaneti", region: "Upper Svaneti", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
+  { title: "Batumi", region: "Adjara", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
+  { title: "Kakheti", region: "Wine Country", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
+  { title: "Tbilisi", region: "Capital", src: PLACEHOLDER, poster: PLACEHOLDER_POSTER },
 ];
 
-function ClipStack({
-  clips,
-  activeIndex,
-  play,
-}: {
-  clips: HeroClip[];
-  activeIndex: number;
-  play: boolean;
-}) {
+const FAN = [
+  { x: -300, y: 96, rot: -18, scale: 0.9, z: 10 },
+  { x: -156, y: 40, rot: -9, scale: 0.96, z: 20 },
+  { x: 0, y: 0, rot: 0, scale: 1.12, z: 30 },
+  { x: 156, y: 40, rot: 9, scale: 0.96, z: 20 },
+  { x: 300, y: 96, rot: 18, scale: 0.9, z: 10 },
+];
+
+const CARD_W = 248;
+
+const WINDOW = [-2, -1, 0, 1, 2];
+
+function FanCard({ clip, pos }: { clip: HeroClip; pos: number }) {
+  const slot = FAN[pos + 2];
+  const isCurrent = pos === 0;
+  const shouldLoad = pos === 0 || pos === 1;
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    if (isCurrent) v.play().catch(() => {});
+    else v.pause();
+  }, [isCurrent]);
+
   return (
-    <>
-      {clips.map((c, i) =>
-        play ? (
-          <video
-            key={i}
-            className={cn(
-              "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
-              i === activeIndex ? "opacity-100" : "opacity-0",
-            )}
-            src={c.src}
-            poster={c.poster}
-            autoPlay
-            muted
-            loop
-            playsInline
+    <motion.div
+      className="absolute left-1/2 top-0"
+      style={{ width: CARD_W, marginLeft: -CARD_W / 2, zIndex: slot.z }}
+      initial={{
+        x: slot.x + 60,
+        y: slot.y,
+        rotate: slot.rot,
+        scale: slot.scale * 0.85,
+        opacity: 0,
+      }}
+      animate={{
+        x: slot.x,
+        y: slot.y,
+        rotate: slot.rot,
+        scale: slot.scale,
+        opacity: 1,
+      }}
+      exit={{ scale: slot.scale * 0.85, opacity: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 32 }}
+    >
+      <div className="rounded-[14px] bg-white p-3 shadow-[0_20px_45px_-15px_rgba(0,0,0,0.35)]">
+        <div className="relative h-[336px] overflow-hidden rounded-[6px] bg-neutral-800">
+          {clip.poster && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={clip.poster}
+              alt={clip.title}
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+          )}
+          {shouldLoad && (
+            <video
+              ref={videoRef}
+              className="absolute inset-0 h-full w-full object-cover"
+              src={clip.src}
+              poster={clip.poster}
+              muted
+              loop
+              playsInline
+              preload="auto"
+              disablePictureInPicture
+              controlsList="nodownload noplaybackrate noremoteplayback"
+            />
+          )}
+          <div
+            className="pointer-events-none absolute inset-0 bg-black transition-opacity duration-500"
+            style={{ opacity: isCurrent ? 0 : 0.4 }}
           />
-        ) : (
-          <video
-            key={i}
-            className={cn(
-              "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
-              i === activeIndex ? "opacity-100" : "opacity-0",
-            )}
-            src={c.poster ? undefined : `${c.src}#t=1`}
-            poster={c.poster}
-            muted
-            playsInline
-            preload="metadata"
-          />
-        ),
-      )}
-    </>
+        </div>
+        <div className="px-1 pt-3 pb-1">
+          <div className="text-lg font-extrabold tracking-tight text-brand-primary">
+            {clip.title}
+          </div>
+          <div className="text-sm text-neutral-500">{clip.region}</div>
+        </div>
+      </div>
+    </motion.div>
   );
 }
 
@@ -79,87 +119,27 @@ export default function DesktopHero({
 
   useEffect(() => {
     if (n <= 1) return;
-    const id = setInterval(() => setActive((p) => (p + 1) % n), ROTATE_MS);
+    const id = setInterval(() => setActive((p) => p + 1), ROTATE_MS);
     return () => clearInterval(id);
   }, [n]);
 
-  const current = clips[active];
-  const topIndex = (active + 1) % n;
-  const botIndex = (active + 2) % n;
-
   return (
-    <div>
-      <section className="mx-auto flex max-w-[1440px] flex-wrap items-center">
-        <div className="min-w-0 flex-1 basis-[440px] px-10 py-16 lg:pl-16">
-          <h1 className="mb-6 text-[52px] lg:text-[68px] font-extrabold leading-none tracking-tight text-brand-primary">
-            Explore Georgia,
-            <br />
-            your way.
-          </h1>
-          <p className="mb-9 max-w-[440px] text-lg leading-relaxed text-neutral-600 text-pretty">
-            From Tbilisi&apos;s old town to Kakheti&apos;s vineyards and the
-            Black Sea coast — browse our guided tours, pick your dates, and book
-            online in minutes.
-          </p>
-          <div className="mb-12 flex gap-3.5">
-            <Link
-              href="/destinations"
-              className="rounded-full bg-brand-secondary px-8 py-4 text-base font-bold text-white hover:bg-brand-secondary/90"
-            >
-              Browse tours
-            </Link>
-            <Link
-              href="/contact"
-              className="rounded-full border border-brand-primary px-7 py-4 text-base font-semibold text-brand-primary hover:bg-brand-primary/5"
-            >
-              Talk to us
-            </Link>
-          </div>
-        </div>
+    <div className="mx-auto max-w-[1440px] px-8 pt-12 pb-8">
+      <h1 className="mb-4 text-center text-[52px] font-extrabold leading-none tracking-tight text-brand-primary">
+        Explore Georgia, your <span className="text-brand-secondary">way.</span>
+      </h1>
 
-        <div className="flex flex-1 basis-[480px] flex-wrap justify-center gap-4 px-10 py-14">
-          <div className="relative h-[540px] w-[304px] overflow-hidden rounded-[18px] bg-neutral-900">
-            <ClipStack clips={clips} activeIndex={active} play />
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
-            <div className="absolute inset-x-[18px] bottom-[18px] z-[5] text-white">
-              <div className="text-[28px] font-extrabold tracking-tight">
-                {current.title}
-              </div>
-              <div className="mb-3 text-[13px] text-white/80">
-                {current.region}
-              </div>
-              <div className="h-[3px] overflow-hidden rounded-full bg-white/30">
-                <div
-                  key={active}
-                  className="h-full bg-brand-secondary"
-                  style={{
-                    animation: `hero-fill ${ROTATE_MS}ms linear forwards`,
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="flex h-[540px] flex-col justify-between">
-            {[topIndex, botIndex].map((idx, slot) => (
-              <div
-                key={slot}
-                className="relative h-[262px] w-[262px] overflow-hidden rounded-[14px] bg-neutral-900"
-              >
-                <ClipStack clips={clips} activeIndex={idx} play={false} />
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                <span className="absolute inset-x-3 bottom-3 z-[5] text-[15px] font-bold text-white">
-                  {clips[idx].title}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <div className="mx-auto max-w-[1440px]">
-        <TourSearchBar tours={tours} compact />
+      <div className="relative mx-auto h-[560px]" style={{ perspective: 1200 }}>
+        <AnimatePresence initial={false}>
+          {WINDOW.map((p) => {
+            const seq = active + p;
+            const clip = clips[((seq % n) + n) % n];
+            return <FanCard key={seq} clip={clip} pos={p} />;
+          })}
+        </AnimatePresence>
       </div>
+
+      <TourSearchBar tours={tours} compact />
     </div>
   );
 }
