@@ -33,12 +33,14 @@ interface MobileTourSearchBarProps {
   tours: Tour[];
   onSearch?: (filters: any, results: Tour[]) => void;
   className?: string;
+  compact?: boolean;
 }
 
 export default function MobileTourSearchBar({
   tours,
   onSearch,
   className = "",
+  compact = false,
 }: MobileTourSearchBarProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [openAccordionItem, setOpenAccordionItem] = useState<string>("");
@@ -100,7 +102,7 @@ export default function MobileTourSearchBar({
                   <div className="flex items-center gap-3 w-full">
                     <MapPin className="h-5 w-5 text-gray-600" />
                     <div className="flex-1 text-left">
-                      <h3 className="font-medium">Destinations</h3>
+                      <h3 className="font-medium">Where?</h3>
                       <p className="text-sm text-gray-600">
                         {getDestinationDisplay()}
                       </p>
@@ -117,12 +119,13 @@ export default function MobileTourSearchBar({
               </AccordionItem>
 
               {/* Activities Section */}
+              {!compact && (
               <AccordionItem value="activities" className="border rounded-lg">
                 <AccordionTrigger className="px-4 py-3 hover:no-underline">
                   <div className="flex items-center gap-3 w-full">
                     <Activity className="h-5 w-5 text-gray-600" />
                     <div className="flex-1 text-left">
-                      <h3 className="font-medium">Activities</h3>
+                      <h3 className="font-medium">What?</h3>
                       <p className="text-sm text-gray-600">
                         {getActivitiesDisplay()}
                       </p>
@@ -137,6 +140,7 @@ export default function MobileTourSearchBar({
                   />
                 </AccordionContent>
               </AccordionItem>
+              )}
 
               {/* Date Section */}
               <AccordionItem value="date" className="border rounded-lg">
@@ -144,7 +148,7 @@ export default function MobileTourSearchBar({
                   <div className="flex items-center gap-3 w-full">
                     <CalendarDays className="h-5 w-5 text-gray-600" />
                     <div className="flex-1 text-left">
-                      <h3 className="font-medium">Date</h3>
+                      <h3 className="font-medium">When?</h3>
                       <p className="text-sm text-gray-600">
                         {getDateDisplay()}
                       </p>
@@ -167,7 +171,7 @@ export default function MobileTourSearchBar({
                   <div className="flex items-center gap-3 w-full">
                     <Users className="h-5 w-5 text-gray-600" />
                     <div className="flex-1 text-left">
-                      <h3 className="font-medium">Travelers</h3>
+                      <h3 className="font-medium">Who?</h3>
                       <p className="text-sm text-gray-600">
                         {getTravelersDisplay()}
                       </p>

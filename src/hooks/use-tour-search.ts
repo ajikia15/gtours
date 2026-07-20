@@ -192,7 +192,7 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
 
   // Display helpers
   const getDestinationDisplay = () => {
-    if (filters.destinations.length === 0) return "Any destination";
+    if (filters.destinations.length === 0) return "Search destinations";
     if (filters.destinations.length === 1) return filters.destinations[0];
     return `${filters.destinations.length} destinations`;
   };
@@ -208,7 +208,7 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
     if (filters.selectedDate) {
       return filters.selectedDate.toLocaleDateString();
     }
-    return "Pre-fill date";
+    return "Add dates";
   };
 
   const getTravelersDisplay = () => {
@@ -221,9 +221,9 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
       filters.travelers.children === 0 &&
       filters.travelers.infants === 0
     ) {
-      return "Pre-fill travelers";
+      return "Add guests";
     }
-    return `${total} traveler${total !== 1 ? "s" : ""}`;
+    return `${total} guest${total !== 1 ? "s" : ""}`;
   };
 
   const getSearchSummary = () => {
@@ -231,12 +231,12 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
     if (filters.destinations.length > 0) parts.push(getDestinationDisplay());
     if (filters.activities.length > 0) parts.push(getActivitiesDisplay());
     if (filters.selectedDate) parts.push(getDateDisplay());
-    if (getTravelersDisplay() !== "Pre-fill travelers")
+    if (getTravelersDisplay() !== "Add guests")
       parts.push(getTravelersDisplay());
 
     return parts.length > 0
       ? parts.join(" • ")
-      : "Search destinations, activities...";
+      : "Search destinations, add dates, add guests";
   };
 
   return {

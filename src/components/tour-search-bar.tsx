@@ -16,7 +16,6 @@ import {
   Users,
   MapPin,
   Activity,
-  ChevronDown,
   Search,
   X,
 } from "lucide-react";
@@ -29,6 +28,7 @@ interface TourSearchBarProps {
   tours: Tour[];
   onSearch?: (filters: SearchFilters, results: Tour[]) => void;
   className?: string;
+  compact?: boolean;
 }
 
 interface DestinationSelectionContentProps {
@@ -209,6 +209,7 @@ export default function TourSearchBar({
   tours,
   onSearch,
   className = "",
+  compact = false,
 }: TourSearchBarProps) {
   // UI state
   const [openPopover, setOpenPopover] = useState<string | null>(null);
@@ -231,7 +232,9 @@ export default function TourSearchBar({
   } = useTourSearch({ tours, onSearch });
 
   return (
-    <div className={cn("space-y-4", className)}>
+    <div
+      className={cn("space-y-4", compact && "mx-auto w-fit", className)}
+    >
       {/* Main Search Bar */}
       <Card
         className={cn("overflow-hidden rounded-sm border-0 py-0 bg-zinc-900")}
@@ -245,15 +248,16 @@ export default function TourSearchBar({
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900"
+                  "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                  !compact && "flex-1",
+                  compact && "w-[262px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <MapPin className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    Destination
+                    Where?
                   </span>
-                  <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
                 </div>
                 <div className="text-xs truncate text-gray-300">
                   {getDestinationDisplay()}
@@ -284,6 +288,7 @@ export default function TourSearchBar({
           </Popover>
 
           {/* Activities Section */}
+          {!compact && (
           <Popover
             open={openPopover === "activities"}
             onOpenChange={(open) => setOpenPopover(open ? "activities" : null)}
@@ -291,15 +296,16 @@ export default function TourSearchBar({
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900"
+                  "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                  !compact && "flex-1",
+                  compact && "w-[262px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <Activity className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    Activities
+                    What?
                   </span>
-                  <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
                 </div>
                 <div className="text-xs truncate text-gray-300">
                   {getActivitiesDisplay()}
@@ -328,6 +334,7 @@ export default function TourSearchBar({
               </div>
             </PopoverContent>
           </Popover>
+          )}
 
           {/* Date Section */}
           <Popover
@@ -337,15 +344,16 @@ export default function TourSearchBar({
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900"
+                  "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                  !compact && "flex-1",
+                  compact && "w-[262px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <CalendarDays className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    Date
+                    When?
                   </span>
-                  <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
                 </div>
                 <div className="text-xs truncate text-gray-300">
                   {getDateDisplay()}
@@ -368,15 +376,16 @@ export default function TourSearchBar({
             <PopoverTrigger asChild>
               <button
                 className={cn(
-                  "flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900"
+                  "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                  !compact && "flex-1",
+                  compact && "w-[262px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    Travelers
+                    Who?
                   </span>
-                  <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
                 </div>
                 <div className="text-xs truncate text-gray-300">
                   {getTravelersDisplay()}
@@ -397,7 +406,7 @@ export default function TourSearchBar({
           </Popover>
 
           {/* Search Button */}
-          <div className="px-8 flex items-center">
+          <div className={cn("flex items-center", compact ? "px-3" : "px-8")}>
             <Button
               onClick={handleSearch}
               className="rounded-full px-8 bg-brand-secondary hover:bg-brand-secondary/90 font-semibold tracking-wide shadow-md hover:shadow-lg transition-shadow"
@@ -410,17 +419,4 @@ export default function TourSearchBar({
       </Card>
     </div>
   );
-}
-
-// Component Composition Variants
-export function QuickTourSearch({ tours, ...props }: TourSearchBarProps) {
-  return <TourSearchBar tours={tours} {...props} />;
-}
-
-export function CompactTourSearch({ tours, ...props }: TourSearchBarProps) {
-  return <TourSearchBar tours={tours} {...props} />;
-}
-
-export function FullTourSearch({ tours, ...props }: TourSearchBarProps) {
-  return <TourSearchBar tours={tours} {...props} />;
 }

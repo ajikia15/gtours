@@ -107,7 +107,7 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
         </h2>
 
         <div className="mb-5">
-          <MobileTourSearchBar tours={tours} />
+          <MobileTourSearchBar tours={tours} compact />
         </div>
 
         <div className="mb-3.5 flex items-center justify-between">

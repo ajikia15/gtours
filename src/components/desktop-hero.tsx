@@ -20,11 +20,6 @@ const DEFAULT_CLIPS: HeroClip[] = [
   { title: "Racha", region: "Highlands", src: PLACEHOLDER },
 ];
 
-const STATS = [
-  { value: "200+", label: "Curated tours" },
-  { value: "11", label: "Regions covered" },
-];
-
 function ClipStack({
   clips,
   activeIndex,
@@ -42,7 +37,7 @@ function ClipStack({
             key={i}
             className={cn(
               "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
-              i === activeIndex ? "opacity-100" : "opacity-0"
+              i === activeIndex ? "opacity-100" : "opacity-0",
             )}
             src={c.src}
             poster={c.poster}
@@ -56,7 +51,7 @@ function ClipStack({
             key={i}
             className={cn(
               "absolute inset-0 h-full w-full object-cover transition-opacity duration-700",
-              i === activeIndex ? "opacity-100" : "opacity-0"
+              i === activeIndex ? "opacity-100" : "opacity-0",
             )}
             src={c.poster ? undefined : `${c.src}#t=1`}
             poster={c.poster}
@@ -64,7 +59,7 @@ function ClipStack({
             playsInline
             preload="metadata"
           />
-        )
+        ),
       )}
     </>
   );
@@ -75,7 +70,10 @@ interface DesktopHeroProps {
   clips?: HeroClip[];
 }
 
-export default function DesktopHero({ tours, clips = DEFAULT_CLIPS }: DesktopHeroProps) {
+export default function DesktopHero({
+  tours,
+  clips = DEFAULT_CLIPS,
+}: DesktopHeroProps) {
   const [active, setActive] = useState(0);
   const n = clips.length;
 
@@ -117,16 +115,6 @@ export default function DesktopHero({ tours, clips = DEFAULT_CLIPS }: DesktopHer
               Talk to us
             </Link>
           </div>
-          <div className="flex gap-12">
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <b className="block text-4xl font-extrabold text-brand-primary">
-                  {s.value}
-                </b>
-                <span className="text-[13px] text-neutral-500">{s.label}</span>
-              </div>
-            ))}
-          </div>
         </div>
 
         <div className="flex flex-1 basis-[480px] flex-wrap justify-center gap-4 px-10 py-14">
@@ -144,7 +132,9 @@ export default function DesktopHero({ tours, clips = DEFAULT_CLIPS }: DesktopHer
                 <div
                   key={active}
                   className="h-full bg-brand-secondary"
-                  style={{ animation: `hero-fill ${ROTATE_MS}ms linear forwards` }}
+                  style={{
+                    animation: `hero-fill ${ROTATE_MS}ms linear forwards`,
+                  }}
                 />
               </div>
             </div>
@@ -168,7 +158,7 @@ export default function DesktopHero({ tours, clips = DEFAULT_CLIPS }: DesktopHer
       </section>
 
       <div className="mx-auto max-w-[1440px]">
-        <TourSearchBar tours={tours} />
+        <TourSearchBar tours={tours} compact />
       </div>
     </div>
   );
