@@ -13,7 +13,21 @@
     }
   },
   "SearchBar": {
-    "whereHeaded": "Куда направляемся?"
+    "whereHeaded": "Куда направляемся?",
+    "where": "Куда?",
+    "what": "Что?",
+    "when": "Когда?",
+    "who": "Кто?",
+    "selectDestinations": "Выбери направления",
+    "selectActivities": "Выбери активности",
+    "selectTravelers": "Выбери путешественников",
+    "searchDestinations": "Поиск направлений...",
+    "searchActivities": "Поиск активностей...",
+    "selectedDestinations": "Выбранные направления:",
+    "selectedActivities": "Выбранные активности:",
+    "noDestinations": "Направления не найдены.",
+    "noActivities": "Активности не найдены.",
+    "search": "Поиск"
   },
   "Homepage": {
     "title": "Добро пожаловать",

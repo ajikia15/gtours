@@ -13,7 +13,21 @@
     }
   },
   "SearchBar": {
-    "whereHeaded": "Where are we headed?"
+    "whereHeaded": "Where are we headed?",
+    "where": "Where?",
+    "what": "What?",
+    "when": "When?",
+    "who": "Who?",
+    "selectDestinations": "Select Destinations",
+    "selectActivities": "Select Activities",
+    "selectTravelers": "Select Travelers",
+    "searchDestinations": "Search destinations...",
+    "searchActivities": "Search activities...",
+    "selectedDestinations": "Selected Destinations:",
+    "selectedActivities": "Selected Activities:",
+    "noDestinations": "No destinations found matching your search.",
+    "noActivities": "No activities found matching your search.",
+    "search": "Search"
   },
   "Homepage": {
     "title": "Welcome to the Homepage",

@@ -20,6 +20,7 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import { useTourSearch, SearchFilters } from "@/hooks/use-tour-search";
@@ -49,6 +50,7 @@ export function DestinationSelectionContent({
   selectedDestinations,
   onDestinationToggle,
 }: DestinationSelectionContentProps) {
+  const t = useTranslations("SearchBar");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredDestinations = destinations.filter((destination) =>
@@ -62,7 +64,7 @@ export function DestinationSelectionContent({
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search destinations..."
+          placeholder={t("searchDestinations")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -73,7 +75,7 @@ export function DestinationSelectionContent({
       {selectedDestinations.length > 0 && (
         <div className="space-y-2">
           <div className="text-sm font-medium text-gray-700">
-            Selected Destinations:
+            {t("selectedDestinations")}
           </div>
           <div className="flex gap-1 overflow-x-auto pb-2">
             {selectedDestinations.map((destination) => (
@@ -114,7 +116,7 @@ export function DestinationSelectionContent({
           ))
         ) : (
           <div className="p-3 text-center text-gray-500">
-            No destinations found matching your search.
+            {t("noDestinations")}
           </div>
         )}
       </div>
@@ -128,6 +130,7 @@ export function ActivitySelectionContent({
   selectedActivities,
   onActivityToggle,
 }: ActivitySelectionContentProps) {
+  const t = useTranslations("SearchBar");
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredActivities = activities.filter(([, activityName]) =>
@@ -141,7 +144,7 @@ export function ActivitySelectionContent({
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search activities..."
+          placeholder={t("searchActivities")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -152,7 +155,7 @@ export function ActivitySelectionContent({
       {selectedActivities.length > 0 && (
         <div className="space-y-2">
           <div className="text-sm font-medium text-gray-700">
-            Selected Activities:
+            {t("selectedActivities")}
           </div>
           <div className="flex gap-1 overflow-x-auto pb-2">
             {selectedActivities.map((activityId) => {
@@ -197,7 +200,7 @@ export function ActivitySelectionContent({
           ))
         ) : (
           <div className="p-3 text-center text-gray-500">
-            No activities found matching your search.
+            {t("noActivities")}
           </div>
         )}
       </div>
@@ -211,6 +214,7 @@ export default function TourSearchBar({
   className = "",
   compact = false,
 }: TourSearchBarProps) {
+  const t = useTranslations("SearchBar");
   // UI state
   const [openPopover, setOpenPopover] = useState<string | null>(null);
 
@@ -259,7 +263,7 @@ export default function TourSearchBar({
                 <div className="flex items-center gap-2 mb-1">
                   <MapPin className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    Where?
+                    {t("where")}
                   </span>
                 </div>
                 <div className="text-xs truncate text-gray-300">
@@ -270,7 +274,7 @@ export default function TourSearchBar({
             <PopoverContent className="w-80" align="start">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium">Select Destinations</h4>
+                  <h4 className="font-medium">{t("selectDestinations")}</h4>
                   {filters.destinations.length > 0 && (
                     <Button
                       variant="ghost"
@@ -308,7 +312,7 @@ export default function TourSearchBar({
                 <div className="flex items-center gap-2 mb-1">
                   <Activity className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    What?
+                    {t("what")}
                   </span>
                 </div>
                 <div className="text-xs truncate text-gray-300">
@@ -319,7 +323,7 @@ export default function TourSearchBar({
             <PopoverContent className="w-80" align="start">
               <div className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <h4 className="font-medium">Select Activities</h4>
+                  <h4 className="font-medium">{t("selectActivities")}</h4>
                   {filters.activities.length > 0 && (
                     <Button
                       variant="ghost"
@@ -357,7 +361,7 @@ export default function TourSearchBar({
                 <div className="flex items-center gap-2 mb-1">
                   <CalendarDays className="h-4 w-4 text-zinc-300" />
                   <span className="text-sm font-medium text-gray-100">
-                    When?
+                    {t("when")}
                   </span>
                 </div>
                 <div className="text-xs truncate text-gray-300">
@@ -391,7 +395,7 @@ export default function TourSearchBar({
                   <div className="flex items-center gap-2 mb-1">
                     <Users className="h-4 w-4 text-zinc-300" />
                     <span className="text-sm font-medium text-gray-100">
-                      Who?
+                      {t("who")}
                     </span>
                   </div>
                   <div className="text-xs truncate text-gray-300">
@@ -402,7 +406,7 @@ export default function TourSearchBar({
               <PopoverContent className="w-80" align="start">
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
-                    <h4 className="font-medium">Select Travelers</h4>
+                    <h4 className="font-medium">{t("selectTravelers")}</h4>
                   </div>
                   <TravelerSelection
                     travelers={filters.travelers}
@@ -418,7 +422,7 @@ export default function TourSearchBar({
                 className="rounded-full px-8 bg-brand-secondary hover:bg-brand-secondary/90 font-semibold shadow-md hover:shadow-lg transition-shadow"
                 size="lg"
               >
-                <span className="[text-box:trim-both_cap_alphabetic]">Search</span>
+                <span className="[text-box:trim-both_cap_alphabetic]">{t("search")}</span>
               </Button>
             </div>
           </div>

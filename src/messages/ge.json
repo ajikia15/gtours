@@ -13,7 +13,21 @@
     }
   },
   "SearchBar": {
-    "whereHeaded": "სად მივემგზავრებით?"
+    "whereHeaded": "სად მივემგზავრებით?",
+    "where": "სად?",
+    "what": "რა?",
+    "when": "როდის?",
+    "who": "ვინ?",
+    "selectDestinations": "აირჩიე მიმართულება",
+    "selectActivities": "აირჩიე აქტივობა",
+    "selectTravelers": "აირჩიე მოგზაურები",
+    "searchDestinations": "მოძებნე მიმართულება...",
+    "searchActivities": "მოძებნე აქტივობა...",
+    "selectedDestinations": "არჩეული მიმართულებები:",
+    "selectedActivities": "არჩეული აქტივობები:",
+    "noDestinations": "მიმართულება ვერ მოიძებნა.",
+    "noActivities": "აქტივობა ვერ მოიძებნა.",
+    "search": "ძებნა"
   },
   "Homepage": {
     "title": "მთავარ გვერდზე კეთილი იყოთ მობრძანებული",
