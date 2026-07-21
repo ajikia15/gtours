@@ -1,4 +1,20 @@
 {
+  "Hero": {
+    "headline": "Открой Грузию <accent>по-своему.</accent>",
+    "clips": {
+      "shatili": { "title": "Шатили", "region": "Хевсурети" },
+      "didgori": { "title": "Дидгори", "region": "Квемо-Картли" },
+      "tbilisi": { "title": "Тбилиси", "region": "Столица" },
+      "mtskheta": { "title": "Мцхета", "region": "Мцхета-Мтианети" },
+      "manglisi": { "title": "Манглиси", "region": "Квемо-Картли" },
+      "beshtasheni": { "title": "Бешташени", "region": "Триалети" },
+      "tsalka": { "title": "Цалка", "region": "Триалети" },
+      "sighnaghi": { "title": "Сигнахи", "region": "Кахети" }
+    }
+  },
+  "SearchBar": {
+    "whereHeaded": "Куда направляемся?"
+  },
   "Homepage": {
     "title": "Добро пожаловать",
     "description": "Это главная страница нашего приложения. Здесь вы можете найти различные ресурсы и ссылки на другие разделы.",
@@ -18,7 +34,7 @@
     "menu": "Меню",
     "cart": "Корзина",
     "planTrip": "Планируйте поездку",
-    "planShort": "План"
+    "planShort": "Спланируй"
   },
   "QuickCategory": {
     "hot-air-balloon": "Полет на воздушном шаре",

@@ -85,21 +85,13 @@ export default function MobileNavbar() {
         </Sheet>
       </div>
 
-      <Link href="/" className="flex items-center justify-center gap-2">
+      <Link href="/" className="flex items-center justify-center">
         <Image
           src="/logo_notxt.svg"
           alt="Georgia Travel Tours"
           width={22}
           height={22}
         />
-        <span
-          className={cn(
-            "font-display font-extrabold tracking-tight text-sm whitespace-nowrap transition-colors",
-            scrolled ? "text-primary" : "text-white"
-          )}
-        >
-          {t("logo")}
-        </span>
       </Link>
 
       <div className="flex justify-end">

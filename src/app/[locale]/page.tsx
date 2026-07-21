@@ -23,9 +23,7 @@ export default async function HomePage() {
 
       {/* Desktop Hero - editorial copy + promotion rotation + search band */}
       <div className="hidden md:block">
-        <Suspense
-          fallback={<div className="h-[600px] bg-neutral-100 animate-pulse" />}
-        >
+        <Suspense fallback={<DesktopHeroSkeleton />}>
           <DesktopHeroWithData />
         </Suspense>
       </div>
@@ -82,6 +80,44 @@ export default async function HomePage() {
           </Suspense>
         </div>
       </div>
+    </div>
+  );
+}
+
+function DesktopHeroSkeleton() {
+  return (
+    <div className="mx-auto max-w-[1440px] px-8 pt-12 pb-8">
+      <div className="mx-auto mb-4 h-[52px] w-[560px] max-w-full animate-pulse rounded-lg bg-neutral-200" />
+      <div className="relative mx-auto h-[560px]">
+        {[
+          { x: -336, y: 84, rot: -13, scale: 0.9, z: 10 },
+          { x: -176, y: 48, rot: -6, scale: 0.96, z: 20 },
+          { x: 0, y: 22, rot: 0, scale: 1.06, z: 30 },
+          { x: 176, y: 48, rot: 6, scale: 0.96, z: 20 },
+          { x: 336, y: 84, rot: 13, scale: 0.9, z: 10 },
+        ].map((s, i) => (
+          <div
+            key={i}
+            className="absolute left-1/2 top-0 w-[248px]"
+            style={{
+              marginLeft: -124,
+              zIndex: s.z,
+              transform: `translate(${s.x}px, ${s.y}px) rotate(${s.rot}deg) scale(${s.scale})`,
+            }}
+          >
+            <div className="rounded-[14px] bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)]">
+              <div className="h-[336px] animate-pulse rounded-[6px] bg-neutral-200" />
+              {s.x === 0 && (
+                <div className="px-1 pt-3 pb-1">
+                  <div className="mb-2 h-5 w-24 animate-pulse rounded bg-neutral-200" />
+                  <div className="h-4 w-16 animate-pulse rounded bg-neutral-200" />
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+      <div className="mx-auto h-16 w-full animate-pulse rounded-xl bg-neutral-200" />
     </div>
   );
 }

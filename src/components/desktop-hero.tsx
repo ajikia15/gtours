@@ -2,29 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useTranslations } from "next-intl";
 import type { Tour } from "@/types/Tour";
 import TourSearchBar from "@/components/tour-search-bar";
-import type { HeroClip } from "@/components/mobile-hero";
+import { useHeroClips, type HeroClip } from "@/components/mobile-hero";
 
 const ROTATE_MS = 10000;
-
-const mkClip = (title: string, region: string, slug: string): HeroClip => ({
-  title,
-  region,
-  src: `/${slug}.mp4`,
-  poster: `/${slug}.jpg`,
-});
-
-const DEFAULT_CLIPS: HeroClip[] = [
-  mkClip("Shatili", "Khevsureti", "shatili"),
-  mkClip("Didgori", "Kvemo Kartli", "didgori"),
-  mkClip("Tbilisi", "Capital", "tbilisi"),
-  mkClip("Mtskheta", "Mtskheta-Mtianeti", "mtskheta"),
-  mkClip("Manglisi", "Kvemo Kartli", "manglisi"),
-  mkClip("Beshtasheni", "Trialeti", "beshtasheni"),
-  mkClip("Tsalka", "Trialeti", "tsalka"),
-  mkClip("Sighnaghi", "Kakheti", "sighnaghi"),
-];
 
 const FAN = [
   { x: -336, y: 84, rot: -13, scale: 0.9, z: 10 },
@@ -122,8 +105,11 @@ interface DesktopHeroProps {
 
 export default function DesktopHero({
   tours,
-  clips = DEFAULT_CLIPS,
+  clips: clipsProp,
 }: DesktopHeroProps) {
+  const t = useTranslations("Hero");
+  const defaultClips = useHeroClips();
+  const clips = clipsProp ?? defaultClips;
   const [active, setActive] = useState(0);
   const n = clips.length;
 
@@ -136,7 +122,11 @@ export default function DesktopHero({
   return (
     <div className="mx-auto max-w-[1440px] px-8 pt-12 pb-8">
       <h1 className="mb-4 text-center text-[52px] font-extrabold leading-none tracking-tight text-brand-primary">
-        Explore Georgia, your <span className="text-brand-secondary">way.</span>
+        {t.rich("headline", {
+          accent: (chunks) => (
+            <span className="text-brand-secondary">{chunks}</span>
+          ),
+        })}
       </h1>
 
       <div className="relative mx-auto h-[560px]" style={{ perspective: 1200 }}>

@@ -1,4 +1,20 @@
 {
+  "Hero": {
+    "headline": "აღმოაჩინე საქართველო <accent>შენებურად.</accent>",
+    "clips": {
+      "shatili": { "title": "შატილი", "region": "ხევსურეთი" },
+      "didgori": { "title": "დიდგორი", "region": "ქვემო ქართლი" },
+      "tbilisi": { "title": "თბილისი", "region": "დედაქალაქი" },
+      "mtskheta": { "title": "მცხეთა", "region": "მცხეთა-მთიანეთი" },
+      "manglisi": { "title": "მანგლისი", "region": "ქვემო ქართლი" },
+      "beshtasheni": { "title": "ბეშთაშენი", "region": "თრიალეთი" },
+      "tsalka": { "title": "წალკა", "region": "თრიალეთი" },
+      "sighnaghi": { "title": "სიღნაღი", "region": "კახეთი" }
+    }
+  },
+  "SearchBar": {
+    "whereHeaded": "სად მივემგზავრებით?"
+  },
   "Homepage": {
     "title": "მთავარ გვერდზე კეთილი იყოთ მობრძანებული",
     "description": "ეს არის ჩვენი აპლიკაციის მთავარი გვერდი. აქ შეგიძლიათ იპოვოთ სხვადასხვა რესურსები და ბმულები სხვა სექციებზე.",
@@ -18,7 +34,7 @@
     "menu": "მენიუ",
     "cart": "კალათა",
     "planTrip": "დაგეგმე მოგზაურობა",
-    "planShort": "დაგეგმვა"
+    "planShort": "დაგეგმე"
   },
   "QuickCategory": {
     "hot-air-balloon": "საჰაერო ბუშტი",

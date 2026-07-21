@@ -1,4 +1,20 @@
 {
+  "Hero": {
+    "headline": "Explore Georgia, your <accent>way.</accent>",
+    "clips": {
+      "shatili": { "title": "Shatili", "region": "Khevsureti" },
+      "didgori": { "title": "Didgori", "region": "Kvemo Kartli" },
+      "tbilisi": { "title": "Tbilisi", "region": "Capital" },
+      "mtskheta": { "title": "Mtskheta", "region": "Mtskheta-Mtianeti" },
+      "manglisi": { "title": "Manglisi", "region": "Kvemo Kartli" },
+      "beshtasheni": { "title": "Beshtasheni", "region": "Trialeti" },
+      "tsalka": { "title": "Tsalka", "region": "Trialeti" },
+      "sighnaghi": { "title": "Sighnaghi", "region": "Kakheti" }
+    }
+  },
+  "SearchBar": {
+    "whereHeaded": "Where are we headed?"
+  },
   "Homepage": {
     "title": "Welcome to the Homepage",
     "description": "This is the homepage of our application. Here you can find various resources and links to other sections.",
