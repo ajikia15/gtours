@@ -195,14 +195,11 @@ body {
 .remix-rounded {
   --radius: 1.5rem;
 }
-.remix-sharp {
-  --radius: 0rem;
+.remix-no-progress .hero-progress {
+  display: none;
 }
-.remix-punchy {
-  --primary: oklch(0.57 0.231491 22.1799);
-  --primary-foreground: oklch(0.985 0 0);
-  --accent: oklch(0.9 0.12 250);
-  --accent-foreground: oklch(0.2 0 0);
+.remix-no-progress .hero-caption {
+  margin-bottom: 0;
 }
 
 @layer base {

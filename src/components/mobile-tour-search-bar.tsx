@@ -67,19 +67,30 @@ export default function MobileTourSearchBar({
     setIsSheetOpen(false);
   };
 
+  const hasSelection =
+    getSearchSummary() !== "Search destinations, add dates, add guests";
+
   return (
     <div className={cn("w-full", className)}>
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
         <SheetTrigger asChild>
-          <Button
-            variant="outline"
-            className="w-full h-14 justify-start bg-white border-gray-300 hover:bg-gray-50"
+          <button
+            type="button"
+            className="flex w-full items-center gap-3 h-14 rounded-full bg-white pl-5 pr-1.5 shadow-sm"
           >
-            <Search className="h-5 w-5 text-gray-400 mr-3" />
-            <span className="text-left text-gray-600 flex-1 truncate">
-              {getSearchSummary()}
+            <MapPin className="h-5 w-5 shrink-0 text-brand-secondary" />
+            <span
+              className={cn(
+                "flex-1 truncate text-left text-[15px]",
+                hasSelection ? "text-neutral-900" : "text-neutral-500"
+              )}
+            >
+              {hasSelection ? getSearchSummary() : "Where are you headed?"}
             </span>
-          </Button>
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-brand-secondary text-white">
+              <Search className="h-5 w-5" />
+            </span>
+          </button>
         </SheetTrigger>
 
         <SheetContent side="bottom" className="h-[85vh] flex flex-col">

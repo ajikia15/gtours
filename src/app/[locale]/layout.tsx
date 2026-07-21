@@ -5,6 +5,7 @@ import Navbar from "../../components/layout/Navbar";
 import "@/styles/globals.css";
 import Footer from "@/components/layout/Footer";
 import BottomNavigation from "@/components/layout/BottomNavbar";
+import BottomNavGate from "@/components/layout/BottomNavGate";
 import { AuthProvider } from "@/context/auth";
 import { CartProvider } from "@/context/cart";
 import { BookingProvider } from "@/context/booking";
@@ -74,7 +75,11 @@ export default async function LocaleLayout({
                   <Toaster />
                   <Footer />
                 </div>
-                {mobile && <BottomNavigation />}
+                {mobile && (
+                  <BottomNavGate>
+                    <BottomNavigation />
+                  </BottomNavGate>
+                )}
                 <RemixWizard />
               </BookingProvider>
             </CartProvider>

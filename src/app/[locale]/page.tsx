@@ -16,7 +16,7 @@ export default async function HomePage() {
     <div className="mb-6 md:mb-12">
       {/* Mobile Hero - full-bleed rotating clips + search */}
       <div className="md:hidden">
-        <Suspense fallback={<div className="-mt-20 h-[100dvh] bg-neutral-900" />}>
+        <Suspense fallback={<div className="-mt-20 h-[100svh] bg-neutral-900" />}>
           <MobileHeroWithData />
         </Suspense>
       </div>
@@ -31,14 +31,7 @@ export default async function HomePage() {
       </div>
 
       <div className="space-y-6 md:space-y-16 mt-6 md:mt-16">
-        <div>
-          <h1 className="text-center mb-4 md:mb-6 text-xl md:text-2xl font-bold">
-            {t("activities")}
-          </h1>
-          <QuickCategory />
-        </div>
-
-        <div>
+        <div id="popular-tours">
           <h1 className="text-center mb-4 md:mb-6 text-xl md:text-2xl font-bold">
             {t("popular-tours")}
           </h1>
@@ -53,6 +46,13 @@ export default async function HomePage() {
           >
             <DisplayCardsSection />
           </Suspense>
+        </div>
+
+        <div>
+          <h1 className="text-center mb-4 md:mb-6 text-xl md:text-2xl font-bold">
+            {t("activities")}
+          </h1>
+          <QuickCategory />
         </div>
 
         <div>

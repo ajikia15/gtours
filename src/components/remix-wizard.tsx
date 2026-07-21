@@ -2,28 +2,21 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Wand2, GripVertical, X } from "lucide-react";
-import { useAuth } from "@/context/auth";
 import { Switch } from "@/components/ui/switch";
 
 // Add a remix: one entry here + (if it needs styling) one CSS block in globals.css
 // keyed on the `class` name. `dark` reuses the existing shadcn dark theme.
 const REMIXES: { id: string; label: string; class: string }[] = [
-  { id: "dark", label: "Dark mode", class: "dark" },
   { id: "rounded", label: "Extra rounded", class: "remix-rounded" },
-  { id: "sharp", label: "Sharp corners", class: "remix-sharp" },
-  { id: "punchy", label: "Punchy colors", class: "remix-punchy" },
+  { id: "no-progress", label: "No video progress bar", class: "remix-no-progress" },
 ];
 
 const STORAGE_KEY = "remix-wizard-active";
 
 export default function RemixWizard() {
-  const auth = useAuth();
-  const isAdmin = !!auth?.customClaims?.admin;
-
   const [open, setOpen] = useState(false);
   const [active, setActive] = useState<Set<string>>(new Set());
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null);
-  const dragRef = useRef<{ dx: number; dy: number } | null>(null);
   const movedRef = useRef(false);
 
   // restore saved remixes
@@ -43,29 +36,28 @@ export default function RemixWizard() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([...active]));
   }, [active]);
 
-  useEffect(() => {
-    if (!dragRef.current) return;
-    const onMove = (e: PointerEvent) => {
-      if (!dragRef.current) return;
-      movedRef.current = true;
-      setPos({ x: e.clientX - dragRef.current.dx, y: e.clientY - dragRef.current.dy });
-    };
-    const onUp = () => (dragRef.current = null);
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
-    };
-  });
-
-  if (!isAdmin) return null;
+  if (process.env.NODE_ENV !== "development") return null;
 
   const startDrag = (e: React.PointerEvent) => {
     const rect = e.currentTarget.parentElement!.getBoundingClientRect();
-    dragRef.current = { dx: e.clientX - rect.left, dy: e.clientY - rect.top };
+    const dx = e.clientX - rect.left;
+    const dy = e.clientY - rect.top;
+    const sx = e.clientX;
+    const sy = e.clientY;
     movedRef.current = false;
-    setPos({ x: rect.left, y: rect.top });
+
+    const onMove = (ev: PointerEvent) => {
+      if (!movedRef.current && Math.hypot(ev.clientX - sx, ev.clientY - sy) < 5)
+        return;
+      movedRef.current = true;
+      setPos({ x: ev.clientX - dx, y: ev.clientY - dy });
+    };
+    const onUp = () => {
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
   };
 
   const toggle = (id: string) =>
@@ -77,8 +69,10 @@ export default function RemixWizard() {
 
   return (
     <div
-      className="fixed z-[100]"
-      style={pos ? { left: pos.x, top: pos.y } : { right: 24, bottom: 24 }}
+      className="fixed z-[100] touch-none"
+      style={pos ? { left: pos.x, top: pos.y } : { left: 24, top: 24 }}
+      onPointerDown={(e) => e.stopPropagation()}
+      onClick={(e) => e.stopPropagation()}
     >
       {open ? (
         <div className="w-64 rounded-lg border bg-popover text-popover-foreground shadow-lg">
@@ -111,7 +105,7 @@ export default function RemixWizard() {
           onPointerDown={startDrag}
           onClick={() => !movedRef.current && setOpen(true)}
           aria-label="Open remix wizard"
-          className="flex size-12 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-lg hover:opacity-90"
+          className="flex size-12 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-900 shadow-lg hover:bg-neutral-50"
         >
           <Wand2 className="size-5" />
         </button>

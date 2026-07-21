@@ -8,23 +8,21 @@ export default async function BottomNavbar() {
   const t = await getTranslations("Navbar");
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 z-40 bg-background border-t shadow-xl">
-      <div className="flex items-center justify-around py-2 px-4 safe-area-bottom">
-        {/* Home */}
-        <Link href="/" className="flex flex-col items-center">
-          <Button
-            variant="ghost"
-            size="sm"
-            className="flex flex-col h-12 w-12 p-0 rounded-xl hover:bg-accent/80 transition-colors"
-          >
-            <HomeIcon className="h-6 w-6 mb-1" />
-            <span className="text-xs font-medium">{t("home")}</span>
-          </Button>
-        </Link>
+    <div className="flex items-center justify-around py-2 px-4 safe-area-bottom">
+      {/* Home */}
+      <Link href="/" className="flex flex-col items-center">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="flex flex-col h-12 w-12 p-0 rounded-xl hover:bg-accent/80 transition-colors"
+        >
+          <HomeIcon className="h-6 w-6 mb-1" />
+          <span className="text-xs font-medium">{t("home")}</span>
+        </Button>
+      </Link>
 
-        {/* Client-side interactive components */}
-        <BottomNavClient />
-      </div>
+      {/* Client-side interactive components */}
+      <BottomNavClient />
     </div>
   );
 }

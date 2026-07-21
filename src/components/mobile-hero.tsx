@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { ArrowRight } from "lucide-react";
 import type { Tour } from "@/types/Tour";
 import MobileTourSearchBar from "@/components/mobile-tour-search-bar";
 
@@ -73,7 +74,7 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
 
   return (
     <section className="relative -mt-20">
-      <div className="sticky top-0 h-screen overflow-hidden bg-neutral-900 text-white">
+      <div className="sticky top-0 h-[100svh] overflow-hidden bg-neutral-900 text-white">
         <video
           key={current.src}
           className="absolute inset-0 h-full w-full object-cover"
@@ -96,12 +97,12 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
           }}
         />
 
-        <div className="absolute inset-x-5 bottom-[22vh]">
-          <div className="mb-2 flex items-center gap-2">
+        <div className="absolute inset-x-5 bottom-[30svh]">
+          <div className="hero-caption mb-2 flex items-center gap-2">
             <span className="text-[15px] font-bold">{current.title}</span>
             <span className="text-[13px] text-white/80">· {current.region}</span>
           </div>
-          <div className="h-[3px] max-w-[180px] overflow-hidden rounded-full bg-white/30">
+          <div className="hero-progress h-[3px] w-full overflow-hidden rounded-full bg-white/30">
             <div
               key={active}
               className="h-full bg-brand-secondary"
@@ -111,38 +112,37 @@ export default function MobileHero({ tours, clips = DEFAULT_CLIPS }: MobileHeroP
         </div>
       </div>
 
-      <div className="relative z-10 -mt-[20vh] min-h-screen rounded-t-[28px] bg-[#F5F5F7] px-5 pt-6 text-neutral-900 shadow-[0_-14px_30px_-20px_rgba(20,22,28,.4)]">
+      <div className="relative z-10 -mt-[28svh] rounded-t-[28px] bg-[#F5F5F7] px-5 pt-6 pb-10 text-neutral-900 shadow-[0_-14px_30px_-20px_rgba(20,22,28,.4)]">
         <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-neutral-300" />
-
-        <h2 className="mb-3.5 whitespace-nowrap text-2xl font-extrabold tracking-tight text-brand-primary">
-          See it, then go.
-        </h2>
 
         <div className="mb-5">
           <MobileTourSearchBar tours={tours} compact />
         </div>
 
-        <div className="mb-3.5 flex items-center justify-between">
-          <span className="eyebrow text-[11px] text-neutral-500">
-            Up next
-          </span>
-          <a href="#" className="text-[13px] font-bold text-brand-secondary">
-            See all
-          </a>
-        </div>
+        <div>
+          <div className="grid grid-cols-3 gap-3">
+            {upNext.map((c, i) => (
+              <div
+                key={`${c.title}-${i}`}
+                className="relative aspect-[9/16] overflow-hidden rounded-2xl bg-neutral-800"
+              >
+                <CardMedia clip={c} />
+                <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-[13px] font-bold text-white">
+                  {c.title}
+                </span>
+              </div>
+            ))}
+          </div>
 
-        <div className="grid grid-cols-3 gap-3">
-          {upNext.map((c, i) => (
-            <div
-              key={`${c.title}-${i}`}
-              className="relative aspect-[9/16] overflow-hidden rounded-2xl bg-neutral-800"
+          <div className="mt-3 flex items-center justify-end">
+            <a
+              href="#"
+              className="inline-flex items-center gap-1 text-[13px] font-bold text-black underline underline-offset-4"
             >
-              <CardMedia clip={c} />
-              <span className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-2 text-[13px] font-bold text-white">
-                {c.title}
-              </span>
-            </div>
-          ))}
+              See all
+              <ArrowRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </div>
     </section>

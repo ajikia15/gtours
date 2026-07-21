@@ -231,15 +231,18 @@ export default function TourSearchBar({
     getTravelersDisplay,
   } = useTourSearch({ tours, onSearch });
 
+  const colDivider =
+    "relative before:absolute before:left-0 before:top-3 before:bottom-3 before:w-px before:bg-zinc-700";
+
   return (
     <div
       className={cn("space-y-4", compact && "mx-auto w-fit", className)}
     >
       {/* Main Search Bar */}
       <Card
-        className={cn("overflow-hidden rounded-sm border-0 py-0 bg-zinc-900")}
+        className={cn("overflow-hidden rounded-2xl border-0 py-0 bg-zinc-900")}
       >
-        <div className="flex divide-x divide-zinc-700">
+        <div className="flex">
           {/* Destination Section */}
           <Popover
             open={openPopover === "destination"}
@@ -250,7 +253,7 @@ export default function TourSearchBar({
                 className={cn(
                   "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
                   !compact && "flex-1",
-                  compact && "w-[262px]"
+                  compact && "min-w-[185px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -297,8 +300,9 @@ export default function TourSearchBar({
               <button
                 className={cn(
                   "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                  colDivider,
                   !compact && "flex-1",
-                  compact && "w-[262px]"
+                  compact && "min-w-[185px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -345,8 +349,9 @@ export default function TourSearchBar({
               <button
                 className={cn(
                   "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
+                  colDivider,
                   !compact && "flex-1",
-                  compact && "w-[262px]"
+                  compact && "min-w-[185px]"
                 )}
               >
                 <div className="flex items-center gap-2 mb-1">
@@ -368,52 +373,54 @@ export default function TourSearchBar({
             </PopoverContent>
           </Popover>
 
-          {/* Travelers Section */}
-          <Popover
-            open={openPopover === "travelers"}
-            onOpenChange={(open) => setOpenPopover(open ? "travelers" : null)}
+          {/* Travelers Section + Search */}
+          <div
+            className={cn(
+              "flex items-center",
+              colDivider,
+              !compact && "flex-1",
+              compact && "min-w-[185px]"
+            )}
           >
-            <PopoverTrigger asChild>
-              <button
-                className={cn(
-                  "pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900",
-                  !compact && "flex-1",
-                  compact && "w-[262px]"
-                )}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <Users className="h-4 w-4 text-zinc-300" />
-                  <span className="text-sm font-medium text-gray-100">
-                    Who?
-                  </span>
-                </div>
-                <div className="text-xs truncate text-gray-300">
-                  {getTravelersDisplay()}
-                </div>
-              </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80" align="start">
-              <div className="space-y-3">
-                <div className="flex items-center justify-between">
-                  <h4 className="font-medium">Select Travelers</h4>
-                </div>
-                <TravelerSelection
-                  travelers={filters.travelers}
-                  setTravelers={handleTravelersChange}
-                />
-              </div>
-            </PopoverContent>
-          </Popover>
-
-          {/* Search Button */}
-          <div className={cn("flex items-center", compact ? "px-3" : "px-8")}>
-            <Button
-              onClick={handleSearch}
-              className="rounded-full px-8 bg-brand-secondary hover:bg-brand-secondary/90 font-semibold tracking-wide shadow-md hover:shadow-lg transition-shadow"
-              size="lg"
+            <Popover
+              open={openPopover === "travelers"}
+              onOpenChange={(open) => setOpenPopover(open ? "travelers" : null)}
             >
-              Search
-            </Button>
+              <PopoverTrigger asChild>
+                <button className="flex-1 pl-6 pr-4 py-3 text-left transition-colors hover:bg-zinc-800 cursor-pointer text-white bg-zinc-900">
+                  <div className="flex items-center gap-2 mb-1">
+                    <Users className="h-4 w-4 text-zinc-300" />
+                    <span className="text-sm font-medium text-gray-100">
+                      Who?
+                    </span>
+                  </div>
+                  <div className="text-xs truncate text-gray-300">
+                    {getTravelersDisplay()}
+                  </div>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80" align="start">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="font-medium">Select Travelers</h4>
+                  </div>
+                  <TravelerSelection
+                    travelers={filters.travelers}
+                    setTravelers={handleTravelersChange}
+                  />
+                </div>
+              </PopoverContent>
+            </Popover>
+
+            <div className={cn("flex items-center", compact ? "pl-5 pr-2" : "pl-6 pr-3")}>
+              <Button
+                onClick={handleSearch}
+                className="rounded-full px-8 bg-brand-secondary hover:bg-brand-secondary/90 font-semibold shadow-md hover:shadow-lg transition-shadow"
+                size="lg"
+              >
+                <span className="[text-box:trim-both_cap_alphabetic]">Search</span>
+              </Button>
+            </div>
           </div>
         </div>
       </Card>

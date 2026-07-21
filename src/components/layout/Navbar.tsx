@@ -5,11 +5,12 @@ import NavLinks from "./NavLinks";
 import UtilityBar from "./UtilityBar";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import NavShell from "./NavShell";
 
 export default async function Navbar() {
   const t = await getTranslations("Navbar");
   return (
-    <nav className="bg-background fixed top-0 z-50 w-full border-b">
+    <NavShell>
       <UtilityBar />
       <div className="container mx-auto">
         <div className="grid grid-cols-[1fr_auto_1fr] items-center h-16 gap-4">
@@ -40,14 +41,16 @@ export default async function Navbar() {
               <Button
                 variant="brandred"
                 size="sm"
-                className="rounded-full h-10 px-5 font-semibold tracking-wide shadow-md hover:shadow-lg transition-shadow"
+                className="rounded-full h-10 px-5 font-semibold shadow-md hover:shadow-lg transition-shadow"
               >
-                {t("planTrip")}
+                <span className="[text-box:trim-both_cap_alphabetic]">
+                  {t("planTrip")}
+                </span>
               </Button>
             </Link>
           </div>
         </div>
       </div>
-    </nav>
+    </NavShell>
   );
 }

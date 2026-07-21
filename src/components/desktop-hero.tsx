@@ -72,7 +72,7 @@ function FanCard({ clip, pos }: { clip: HeroClip; pos: number }) {
       exit={{ scale: slot.scale * 0.85, opacity: 0 }}
       transition={{ type: "spring", stiffness: 260, damping: 32 }}
     >
-      <div className="rounded-[14px] border border-black/5 bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)]">
+      <div className="rounded-[14px] bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)]">
         <div className="relative h-[336px] overflow-hidden rounded-[6px] bg-neutral-800">
           {clip.poster && (
             // eslint-disable-next-line @next/next/no-img-element
