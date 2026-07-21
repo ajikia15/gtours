@@ -340,7 +340,7 @@ export default function MobileHero({ tours, clips: clipsProp }: MobileHeroProps)
                     {c.title}
                   </span>
                   {i === active && (
-                    <span className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-neutral-700" />
+                    <span className="pointer-events-none absolute inset-0 rounded-2xl border-2 border-white" />
                   )}
                 </button>
               ))}
