@@ -15,6 +15,7 @@ import {
   UploadTask,
 } from "firebase/storage";
 import { storage } from "@/firebase/client";
+import { useTranslations } from "next-intl";
 type Props = Tour;
 
 export default function EditTourForm({
@@ -35,6 +36,7 @@ export default function EditTourForm({
 }: Props) {
   const auth = useAuth();
   const router = useRouter();
+  const t = useTranslations("Admin");
   async function handleSubmit(data: z.infer<typeof tourSchema>) {
     const token = await auth?.currentUser?.getIdToken();
     if (!token) {
@@ -44,7 +46,7 @@ export default function EditTourForm({
     const { images: newImages, ...rest } = data;
     const response = await editTour(rest, id, token);
     if (!!response?.error) {
-      toast.success("sucessfully updated");
+      toast.success(t("tourForm.messages.updatedSuccessfully"));
       return;
     }
     const storageTasks: (UploadTask | Promise<void>)[] = [];
@@ -69,7 +71,7 @@ export default function EditTourForm({
 
     await Promise.all(storageTasks);
     await saveTourImages({ tourId: id, images: paths }, token);
-    toast.success("Tour saved successfully");
+    toast.success(t("tourForm.messages.savedSuccessfully"));
     router.push("/admin"); // TODO: redirect to the new tour
   }
   return (

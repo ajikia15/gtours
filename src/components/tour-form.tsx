@@ -47,17 +47,20 @@ const LanguageTabTrigger = ({
   value: string;
   label: string;
   isEmpty: boolean;
-}) => (
-  <TabsTrigger value={value} className="relative">
-    {label}
-    {isEmpty && (
-      <span
-        className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
-        title="Some fields in this language are empty"
-      ></span>
-    )}
-  </TabsTrigger>
-);
+}) => {
+  const t = useTranslations("Admin");
+  return (
+    <TabsTrigger value={value} className="relative">
+      {label}
+      {isEmpty && (
+        <span
+          className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
+          title={t("emptyLanguageFields")}
+        ></span>
+      )}
+    </TabsTrigger>
+  );
+};
 
 export default function TourForm({
   handleSubmit: onSubmit,

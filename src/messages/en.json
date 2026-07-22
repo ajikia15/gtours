@@ -7,14 +7,38 @@
   "Hero": {
     "headline": "Explore Georgia, your <accent>way.</accent>",
     "clips": {
-      "shatili": { "title": "Shatili", "region": "Khevsureti" },
-      "didgori": { "title": "Didgori", "region": "Kvemo Kartli" },
-      "tbilisi": { "title": "Tbilisi", "region": "Capital" },
-      "mtskheta": { "title": "Mtskheta", "region": "Mtskheta-Mtianeti" },
-      "manglisi": { "title": "Manglisi", "region": "Kvemo Kartli" },
-      "beshtasheni": { "title": "Beshtasheni", "region": "Trialeti" },
-      "tsalka": { "title": "Tsalka", "region": "Trialeti" },
-      "sighnaghi": { "title": "Sighnaghi", "region": "Kakheti" }
+      "shatili": {
+        "title": "Shatili",
+        "region": "Khevsureti"
+      },
+      "didgori": {
+        "title": "Didgori",
+        "region": "Kvemo Kartli"
+      },
+      "tbilisi": {
+        "title": "Tbilisi",
+        "region": "Capital"
+      },
+      "mtskheta": {
+        "title": "Mtskheta",
+        "region": "Mtskheta-Mtianeti"
+      },
+      "manglisi": {
+        "title": "Manglisi",
+        "region": "Kvemo Kartli"
+      },
+      "beshtasheni": {
+        "title": "Beshtasheni",
+        "region": "Trialeti"
+      },
+      "tsalka": {
+        "title": "Tsalka",
+        "region": "Trialeti"
+      },
+      "sighnaghi": {
+        "title": "Sighnaghi",
+        "region": "Kakheti"
+      }
     }
   },
   "SearchBar": {
@@ -122,7 +146,19 @@
     "enterPassword": "Enter your password",
     "confirmYourPassword": "Confirm your password",
     "sendResetLink": "Send Reset Link",
-    "backToLogin": "Back to Login"
+    "backToLogin": "Back to Login",
+    "forgotPasswordQuestion": "Forgot password?",
+    "loggingIn": "Logging in...",
+    "creatingAccount": "Creating Account...",
+    "or": "or",
+    "enterFirstName": "Enter your first name",
+    "enterLastName": "Enter your last name",
+    "sending": "Sending...",
+    "sendResetEmail": "Send Reset Email",
+    "forgotPasswordInstructions": "Enter your email address and we'll send you a link to reset your password.",
+    "emailSentTitle": "Email Sent!",
+    "emailSentBody": "We've sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your password.",
+    "emailSentHelp": "Didn't receive the email? Check your spam folder or try again."
   },
   "Admin": {
     "dashboard": {
@@ -347,7 +383,11 @@
       },
       "messages": {
         "errorSaving": "Error saving tour",
-        "savedSuccessfully": "Tour saved successfully"
+        "savedSuccessfully": "Tour saved successfully",
+        "updatedSuccessfully": "Tour updated successfully"
+      },
+      "activities": {
+        "selectActivityType": "Select activity type"
       }
     },
     "blogForm": {
@@ -415,7 +455,8 @@
       "disabled": "Disabled",
       "published": "Published",
       "archived": "Archived"
-    }
+    },
+    "emptyLanguageFields": "Some fields in this language are empty"
   },
   "Pages": {
     "about": {
@@ -568,7 +609,41 @@
     "saveProfile": "Save Profile",
     "sendCode": "Send Code",
     "verifyCode": "Verify Code",
-    "enterVerificationCode": "Enter verification code"
+    "enterVerificationCode": "Enter verification code",
+    "completeYourProfile": "Complete Your Profile",
+    "updateProfileInformation": "Update Profile Information",
+    "provideRequiredInfo": "Please provide the required information to continue",
+    "profileComplete": "Profile Complete",
+    "nameLabel": "Name:",
+    "phoneLabel": "Phone:",
+    "verified": "Verified",
+    "emailAddress": "Email Address",
+    "phoneNumberLabel": "Phone Number",
+    "verificationCodeLabel": "Verification Code",
+    "georgia": "Georgia",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastNamePlaceholder": "Enter your last name",
+    "emailPlaceholder": "Enter your email address",
+    "codePlaceholder": "Enter 6-digit code",
+    "sending": "Sending...",
+    "resend": "Resend",
+    "verifying": "Verifying...",
+    "verify": "Verify",
+    "saving": "Saving...",
+    "saveRequiredInformation": "Save Required Information",
+    "codeSentTo": "Code sent to {phone}",
+    "phoneVerificationRequired": "Phone verification required",
+    "phoneNumberVerified": "Phone number verified",
+    "invalidPhoneNumber": "Please enter a valid 9-digit phone number",
+    "invalidVerificationCode": "Please enter a 6-digit verification code",
+    "sendCodeFailed": "Failed to send verification code",
+    "verifyCodeFailed": "Failed to verify code",
+    "verificationFailedRetry": "Verification failed. Please request a new code.",
+    "authRequired": "Authentication required",
+    "verifyPhoneFirst": "Please verify your phone number first",
+    "firstNameMin": "First name must be at least 2 characters",
+    "lastNameMin": "Last name must be at least 2 characters",
+    "phoneNumberInvalid": "Please enter a 9-digit Georgian phone number"
   },
   "Favorites": {
     "title": "My Favorite Tours",
@@ -702,6 +777,10 @@
     "saveFailed": "Failed to save.",
     "loadFailed": "Failed to load data.",
     "deleteFailed": "Failed to delete.",
-    "updateFailed": "Failed to update."
+    "updateFailed": "Failed to update.",
+    "invalidCredentials": "Invalid email or password",
+    "noAccountFound": "No account found with this email address",
+    "tooManyRequests": "Too many requests. Please try again later.",
+    "sendResetFailed": "Failed to send reset email. Please try again."
   }
 }

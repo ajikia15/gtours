@@ -17,9 +17,12 @@ import { loginUserSchema } from "@/validation/loginUser";
 import { toast } from "sonner";
 import { Link } from "@/i18n/navigation";
 import { useAuth } from "@/context/auth";
+import { useTranslations } from "next-intl";
 
 export default function LoginForm() {
   const auth = useAuth();
+  const t = useTranslations("Auth");
+  const tError = useTranslations("Errors");
 
   const form = useForm<z.infer<typeof loginUserSchema>>({
     resolver: zodResolver(loginUserSchema),
@@ -35,13 +38,12 @@ export default function LoginForm() {
     try {
       await auth?.loginWithEmail(data.email, data.password);
 
-      toast.success("Logged in successfully");
+      toast.success(t("loggedInSuccessfully"));
 
-      // Use window.location.href for a full page redirect to ensure middleware runs
       window.location.href = "/";
     } catch (e: any) {
       if (e.code === "auth/invalid-credential") {
-        toast.error("Invalid email or password");
+        toast.error(tError("invalidCredentials"));
       } else {
         toast.error(e.message);
       }
@@ -57,9 +59,9 @@ export default function LoginForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("email")}</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email" {...field} />
+                <Input type="email" placeholder={t("enterEmail")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -73,18 +75,18 @@ export default function LoginForm() {
           render={({ field }) => (
             <FormItem>
               <div className="flex items-center justify-between">
-                <FormLabel>Password</FormLabel>
+                <FormLabel>{t("password")}</FormLabel>
                 <Link
                   href="/forgot-password"
                   className="text-sm text-gray-600 underline"
                 >
-                  Forgot password?
+                  {t("forgotPasswordQuestion")}
                 </Link>
               </div>
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t("enterPassword")}
                   {...field}
                 />
               </FormControl>
@@ -99,9 +101,9 @@ export default function LoginForm() {
           className="w-full"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Logging in..." : "Login"}
+          {isSubmitting ? t("loggingIn") : t("login")}
         </Button>
-        <div className="text-center">or</div>
+        <div className="text-center">{t("or")}</div>
       </form>
       <ContinueWithGoogleButton />
     </Form>

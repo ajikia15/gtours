@@ -7,14 +7,38 @@
   "Hero": {
     "headline": "აღმოაჩინე საქართველო <accent>შენებურად.</accent>",
     "clips": {
-      "shatili": { "title": "შატილი", "region": "ხევსურეთი" },
-      "didgori": { "title": "დიდგორი", "region": "ქვემო ქართლი" },
-      "tbilisi": { "title": "თბილისი", "region": "დედაქალაქი" },
-      "mtskheta": { "title": "მცხეთა", "region": "მცხეთა-მთიანეთი" },
-      "manglisi": { "title": "მანგლისი", "region": "ქვემო ქართლი" },
-      "beshtasheni": { "title": "ბეშთაშენი", "region": "თრიალეთი" },
-      "tsalka": { "title": "წალკა", "region": "თრიალეთი" },
-      "sighnaghi": { "title": "სიღნაღი", "region": "კახეთი" }
+      "shatili": {
+        "title": "შატილი",
+        "region": "ხევსურეთი"
+      },
+      "didgori": {
+        "title": "დიდგორი",
+        "region": "ქვემო ქართლი"
+      },
+      "tbilisi": {
+        "title": "თბილისი",
+        "region": "დედაქალაქი"
+      },
+      "mtskheta": {
+        "title": "მცხეთა",
+        "region": "მცხეთა-მთიანეთი"
+      },
+      "manglisi": {
+        "title": "მანგლისი",
+        "region": "ქვემო ქართლი"
+      },
+      "beshtasheni": {
+        "title": "ბეშთაშენი",
+        "region": "თრიალეთი"
+      },
+      "tsalka": {
+        "title": "წალკა",
+        "region": "თრიალეთი"
+      },
+      "sighnaghi": {
+        "title": "სიღნაღი",
+        "region": "კახეთი"
+      }
     }
   },
   "SearchBar": {
@@ -122,7 +146,19 @@
     "enterPassword": "შეიყვანეთ თქვენი პაროლი",
     "confirmYourPassword": "დაადასტურეთ თქვენი პაროლი",
     "sendResetLink": "აღდგენის ბმულის გაგზავნა",
-    "backToLogin": "უკან შესვლაზე"
+    "backToLogin": "უკან შესვლაზე",
+    "forgotPasswordQuestion": "დაგავიწყდათ პაროლი?",
+    "loggingIn": "მიმდინარეობს შესვლა...",
+    "creatingAccount": "მიმდინარეობს ანგარიშის შექმნა...",
+    "or": "ან",
+    "enterFirstName": "შეიყვანეთ სახელი",
+    "enterLastName": "შეიყვანეთ გვარი",
+    "sending": "იგზავნება...",
+    "sendResetEmail": "აღდგენის წერილის გაგზავნა",
+    "forgotPasswordInstructions": "შეიყვანეთ თქვენი ელფოსტის მისამართი და ჩვენ გამოგიგზავნით ბმულს პაროლის აღსადგენად.",
+    "emailSentTitle": "წერილი გაიგზავნა!",
+    "emailSentBody": "ჩვენ გამოგიგზავნეთ პაროლის აღდგენის ბმული თქვენს ელფოსტაზე. გთხოვთ, შეამოწმოთ თქვენი ფოსტა და მიჰყვეთ ინსტრუქციას პაროლის აღსადგენად.",
+    "emailSentHelp": "ვერ მიიღეთ წერილი? შეამოწმეთ სპამის საქაღალდე ან სცადეთ თავიდან."
   },
   "Admin": {
     "dashboard": {
@@ -347,7 +383,11 @@
       },
       "messages": {
         "errorSaving": "შეცდომა ტურის შენახვისას",
-        "savedSuccessfully": "ტური წარმატებით შენახულია"
+        "savedSuccessfully": "ტური წარმატებით შენახულია",
+        "updatedSuccessfully": "ტური წარმატებით განახლდა"
+      },
+      "activities": {
+        "selectActivityType": "აირჩიეთ აქტივობის ტიპი"
       }
     },
     "blogForm": {
@@ -415,7 +455,8 @@
       "disabled": "გამორთული",
       "published": "გამოქვეყნებული",
       "archived": "დაარქივებული"
-    }
+    },
+    "emptyLanguageFields": "ამ ენაზე ზოგიერთი ველი ცარიელია"
   },
   "Pages": {
     "about": {
@@ -568,7 +609,41 @@
     "saveProfile": "პროფილის შენახვა",
     "sendCode": "კოდის გაგზავნა",
     "verifyCode": "კოდის ვერიფიკაცია",
-    "enterVerificationCode": "შეიყვანეთ ვერიფიკაციის კოდი"
+    "enterVerificationCode": "შეიყვანეთ ვერიფიკაციის კოდი",
+    "completeYourProfile": "შეავსეთ თქვენი პროფილი",
+    "updateProfileInformation": "პროფილის ინფორმაციის განახლება",
+    "provideRequiredInfo": "გასაგრძელებლად გთხოვთ მიუთითოთ საჭირო ინფორმაცია",
+    "profileComplete": "პროფილი შევსებულია",
+    "nameLabel": "სახელი:",
+    "phoneLabel": "ტელეფონი:",
+    "verified": "დადასტურებული",
+    "emailAddress": "ელფოსტის მისამართი",
+    "phoneNumberLabel": "ტელეფონის ნომერი",
+    "verificationCodeLabel": "ვერიფიკაციის კოდი",
+    "georgia": "საქართველო",
+    "firstNamePlaceholder": "შეიყვანეთ თქვენი სახელი",
+    "lastNamePlaceholder": "შეიყვანეთ თქვენი გვარი",
+    "emailPlaceholder": "შეიყვანეთ თქვენი ელფოსტის მისამართი",
+    "codePlaceholder": "შეიყვანეთ 6-ნიშნა კოდი",
+    "sending": "იგზავნება...",
+    "resend": "ხელახლა გაგზავნა",
+    "verifying": "მოწმდება...",
+    "verify": "დადასტურება",
+    "saving": "ინახება...",
+    "saveRequiredInformation": "საჭირო ინფორმაციის შენახვა",
+    "codeSentTo": "კოდი გაიგზავნა ნომერზე {phone}",
+    "phoneVerificationRequired": "საჭიროა ტელეფონის დადასტურება",
+    "phoneNumberVerified": "ტელეფონის ნომერი დადასტურებულია",
+    "invalidPhoneNumber": "გთხოვთ შეიყვანოთ სწორი 9-ნიშნა ტელეფონის ნომერი",
+    "invalidVerificationCode": "გთხოვთ შეიყვანოთ 6-ნიშნა ვერიფიკაციის კოდი",
+    "sendCodeFailed": "ვერიფიკაციის კოდის გაგზავნა ვერ მოხერხდა",
+    "verifyCodeFailed": "კოდის დადასტურება ვერ მოხერხდა",
+    "verificationFailedRetry": "ვერიფიკაცია ვერ მოხერხდა. გთხოვთ მოითხოვოთ ახალი კოდი.",
+    "authRequired": "საჭიროა ავტორიზაცია",
+    "verifyPhoneFirst": "ჯერ დაადასტურეთ თქვენი ტელეფონის ნომერი",
+    "firstNameMin": "სახელი უნდა შედგებოდეს მინიმუმ 2 სიმბოლოსგან",
+    "lastNameMin": "გვარი უნდა შედგებოდეს მინიმუმ 2 სიმბოლოსგან",
+    "phoneNumberInvalid": "გთხოვთ შეიყვანოთ 9-ნიშნა ქართული ტელეფონის ნომერი"
   },
   "Favorites": {
     "title": "ჩემი საყვარელი ტურები",
@@ -702,6 +777,10 @@
     "saveFailed": "შენახვა ვერ მოხერხდა.",
     "loadFailed": "მონაცემების ჩატვირთვა ვერ მოხერხდა.",
     "deleteFailed": "წაშლა ვერ მოხერხდა.",
-    "updateFailed": "განახლება ვერ მოხერხდა."
+    "updateFailed": "განახლება ვერ მოხერხდა.",
+    "invalidCredentials": "არასწორი ელფოსტა ან პაროლი",
+    "noAccountFound": "ამ ელფოსტის მისამართით ანგარიში ვერ მოიძებნა",
+    "tooManyRequests": "ძალიან ბევრი მოთხოვნა. გთხოვთ, სცადოთ მოგვიანებით.",
+    "sendResetFailed": "აღდგენის წერილის გაგზავნა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან."
   }
 }

@@ -7,14 +7,38 @@
   "Hero": {
     "headline": "Открой Грузию <accent>по-своему.</accent>",
     "clips": {
-      "shatili": { "title": "Шатили", "region": "Хевсурети" },
-      "didgori": { "title": "Дидгори", "region": "Квемо-Картли" },
-      "tbilisi": { "title": "Тбилиси", "region": "Столица" },
-      "mtskheta": { "title": "Мцхета", "region": "Мцхета-Мтианети" },
-      "manglisi": { "title": "Манглиси", "region": "Квемо-Картли" },
-      "beshtasheni": { "title": "Бешташени", "region": "Триалети" },
-      "tsalka": { "title": "Цалка", "region": "Триалети" },
-      "sighnaghi": { "title": "Сигнахи", "region": "Кахети" }
+      "shatili": {
+        "title": "Шатили",
+        "region": "Хевсурети"
+      },
+      "didgori": {
+        "title": "Дидгори",
+        "region": "Квемо-Картли"
+      },
+      "tbilisi": {
+        "title": "Тбилиси",
+        "region": "Столица"
+      },
+      "mtskheta": {
+        "title": "Мцхета",
+        "region": "Мцхета-Мтианети"
+      },
+      "manglisi": {
+        "title": "Манглиси",
+        "region": "Квемо-Картли"
+      },
+      "beshtasheni": {
+        "title": "Бешташени",
+        "region": "Триалети"
+      },
+      "tsalka": {
+        "title": "Цалка",
+        "region": "Триалети"
+      },
+      "sighnaghi": {
+        "title": "Сигнахи",
+        "region": "Кахети"
+      }
     }
   },
   "SearchBar": {
@@ -122,7 +146,19 @@
     "enterPassword": "Введите ваш пароль",
     "confirmYourPassword": "Подтвердите ваш пароль",
     "sendResetLink": "Отправить ссылку для сброса",
-    "backToLogin": "Вернуться к входу"
+    "backToLogin": "Вернуться к входу",
+    "forgotPasswordQuestion": "Забыли пароль?",
+    "loggingIn": "Вход...",
+    "creatingAccount": "Создание аккаунта...",
+    "or": "или",
+    "enterFirstName": "Введите ваше имя",
+    "enterLastName": "Введите вашу фамилию",
+    "sending": "Отправка...",
+    "sendResetEmail": "Отправить письмо для сброса",
+    "forgotPasswordInstructions": "Введите адрес вашей электронной почты, и мы отправим вам ссылку для сброса пароля.",
+    "emailSentTitle": "Письмо отправлено!",
+    "emailSentBody": "Мы отправили ссылку для сброса пароля на вашу электронную почту. Пожалуйста, проверьте почту и следуйте инструкциям для сброса пароля.",
+    "emailSentHelp": "Не получили письмо? Проверьте папку со спамом или попробуйте снова."
   },
   "Admin": {
     "dashboard": {
@@ -347,7 +383,11 @@
       },
       "messages": {
         "errorSaving": "Ошибка сохранения тура",
-        "savedSuccessfully": "Тур успешно сохранен"
+        "savedSuccessfully": "Тур успешно сохранен",
+        "updatedSuccessfully": "Тур успешно обновлён"
+      },
+      "activities": {
+        "selectActivityType": "Выберите тип активности"
       }
     },
     "blogForm": {
@@ -415,7 +455,8 @@
       "disabled": "Отключен",
       "published": "Опубликован",
       "archived": "Архивирован"
-    }
+    },
+    "emptyLanguageFields": "Некоторые поля на этом языке не заполнены"
   },
   "Pages": {
     "about": {
@@ -568,7 +609,41 @@
     "saveProfile": "Сохранить профиль",
     "sendCode": "Отправить код",
     "verifyCode": "Подтвердить код",
-    "enterVerificationCode": "Введите код подтверждения"
+    "enterVerificationCode": "Введите код подтверждения",
+    "completeYourProfile": "Заполните ваш профиль",
+    "updateProfileInformation": "Обновить информацию профиля",
+    "provideRequiredInfo": "Пожалуйста, укажите необходимую информацию для продолжения",
+    "profileComplete": "Профиль заполнен",
+    "nameLabel": "Имя:",
+    "phoneLabel": "Телефон:",
+    "verified": "Подтверждён",
+    "emailAddress": "Адрес электронной почты",
+    "phoneNumberLabel": "Номер телефона",
+    "verificationCodeLabel": "Код подтверждения",
+    "georgia": "Грузия",
+    "firstNamePlaceholder": "Введите ваше имя",
+    "lastNamePlaceholder": "Введите вашу фамилию",
+    "emailPlaceholder": "Введите ваш адрес электронной почты",
+    "codePlaceholder": "Введите 6-значный код",
+    "sending": "Отправка...",
+    "resend": "Отправить снова",
+    "verifying": "Проверка...",
+    "verify": "Подтвердить",
+    "saving": "Сохранение...",
+    "saveRequiredInformation": "Сохранить необходимую информацию",
+    "codeSentTo": "Код отправлен на {phone}",
+    "phoneVerificationRequired": "Требуется подтверждение телефона",
+    "phoneNumberVerified": "Номер телефона подтверждён",
+    "invalidPhoneNumber": "Пожалуйста, введите корректный 9-значный номер телефона",
+    "invalidVerificationCode": "Пожалуйста, введите 6-значный код подтверждения",
+    "sendCodeFailed": "Не удалось отправить код подтверждения",
+    "verifyCodeFailed": "Не удалось подтвердить код",
+    "verificationFailedRetry": "Проверка не удалась. Пожалуйста, запросите новый код.",
+    "authRequired": "Требуется авторизация",
+    "verifyPhoneFirst": "Сначала подтвердите ваш номер телефона",
+    "firstNameMin": "Имя должно содержать не менее 2 символов",
+    "lastNameMin": "Фамилия должна содержать не менее 2 символов",
+    "phoneNumberInvalid": "Пожалуйста, введите 9-значный грузинский номер телефона"
   },
   "Favorites": {
     "title": "Мои любимые туры",
@@ -702,6 +777,10 @@
     "saveFailed": "Не удалось сохранить.",
     "loadFailed": "Не удалось загрузить данные.",
     "deleteFailed": "Не удалось удалить.",
-    "updateFailed": "Не удалось обновить."
+    "updateFailed": "Не удалось обновить.",
+    "invalidCredentials": "Неверный адрес электронной почты или пароль",
+    "noAccountFound": "Аккаунт с таким адресом электронной почты не найден",
+    "tooManyRequests": "Слишком много запросов. Пожалуйста, попробуйте позже.",
+    "sendResetFailed": "Не удалось отправить письмо для сброса. Пожалуйста, попробуйте снова."
   }
 }

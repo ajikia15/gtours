@@ -36,6 +36,7 @@ import { activityTypes } from "@/data/activity-constants";
 import { z } from "zod";
 import { tourSchema } from "@/validation/tourSchema";
 import { useCoordinatePaste } from "@/lib/useCoordinatePaste";
+import { useTranslations } from "next-intl";
 
 type TourFormData = z.infer<typeof tourSchema>;
 
@@ -53,25 +54,29 @@ const LanguageTabTrigger = ({
   value: string;
   label: string;
   isEmpty: boolean;
-}) => (
-  <TabsTrigger
-    value={value}
-    className="relative text-xs sm:text-sm py-2 px-2 sm:px-3"
-  >
-    <span className="hidden sm:inline">
-      {label === "EN" ? "English" : label === "GE" ? "Georgian" : "Russian"}
-    </span>
-    <span className="sm:hidden">{label}</span>
-    {isEmpty && (
-      <span
-        className="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
-        title="Some fields in this language are empty"
-      ></span>
-    )}
-  </TabsTrigger>
-);
+}) => {
+  const t = useTranslations("Admin");
+  return (
+    <TabsTrigger
+      value={value}
+      className="relative text-xs sm:text-sm py-2 px-2 sm:px-3"
+    >
+      <span className="hidden sm:inline">
+        {label === "EN" ? "English" : label === "GE" ? "Georgian" : "Russian"}
+      </span>
+      <span className="sm:hidden">{label}</span>
+      {isEmpty && (
+        <span
+          className="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
+          title={t("emptyLanguageFields")}
+        ></span>
+      )}
+    </TabsTrigger>
+  );
+};
 
 export default function ActivityManager({ control, disabled = false }: Props) {
+  const t = useTranslations("Admin");
   const { fields, append, remove, move } = useFieldArray({
     control,
     name: "offeredActivities",
@@ -139,7 +144,9 @@ export default function ActivityManager({ control, disabled = false }: Props) {
             onValueChange={setSelectedActivityType}
           >
             <SelectTrigger className="w-48">
-              <SelectValue placeholder="Select activity type" />
+              <SelectValue
+                placeholder={t("tourForm.activities.selectActivityType")}
+              />
             </SelectTrigger>
             <SelectContent>
               {activityTypes.map((activityType) => (
@@ -246,6 +253,7 @@ function ActivityFields({
   languageIndex: number;
 }) {
   const { setValue } = useFormContext<TourFormData>();
+  const t = useTranslations("Admin");
 
   // Smart paste functionality for this activity's coordinates
   const { handlePaste } = useCoordinatePaste(
@@ -295,7 +303,7 @@ function ActivityFields({
                     onChange(e.target.value ? Number(e.target.value) : 0)
                   }
                   onPaste={(e) => handlePaste(e, true)}
-                  title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                  title={t("tourForm.help.coordinatesTitle")}
                 />
               </FormControl>
               <FormMessage />
@@ -320,7 +328,7 @@ function ActivityFields({
                     onChange(e.target.value ? Number(e.target.value) : 0)
                   }
                   onPaste={(e) => handlePaste(e, false)}
-                  title="Paste Google Maps coordinates (e.g., '41.715138, 44.827096') into either field"
+                  title={t("tourForm.help.coordinatesTitle")}
                 />
               </FormControl>
               <FormMessage />

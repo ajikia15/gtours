@@ -17,9 +17,11 @@ import { registerUserSchema } from "@/validation/registerUser";
 import { registerUser } from "./actions";
 import { toast } from "sonner";
 import { useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 export default function RegisterForm() {
   const router = useRouter();
+  const t = useTranslations("Auth");
 
   const form = useForm<z.infer<typeof registerUserSchema>>({
     resolver: zodResolver(registerUserSchema),
@@ -40,7 +42,7 @@ export default function RegisterForm() {
       toast.error(response.error);
       return;
     } else {
-      toast.success("Your account has been created successfully");
+      toast.success(t("accountCreated"));
       router.push("/login");
     }
   };
@@ -54,9 +56,9 @@ export default function RegisterForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("email")}</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email" {...field} />
+                <Input type="email" placeholder={t("enterEmail")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -69,9 +71,9 @@ export default function RegisterForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>First Name</FormLabel>
+              <FormLabel>{t("firstName")}</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your first name" {...field} />
+                <Input placeholder={t("enterFirstName")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -84,9 +86,9 @@ export default function RegisterForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Last Name</FormLabel>
+              <FormLabel>{t("lastName")}</FormLabel>
               <FormControl>
-                <Input placeholder="Enter your last name" {...field} />
+                <Input placeholder={t("enterLastName")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -99,11 +101,11 @@ export default function RegisterForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel>{t("password")}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Enter your password"
+                  placeholder={t("enterPassword")}
                   {...field}
                 />
               </FormControl>
@@ -118,11 +120,11 @@ export default function RegisterForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel>{t("confirmPassword")}</FormLabel>
               <FormControl>
                 <Input
                   type="password"
-                  placeholder="Confirm your password"
+                  placeholder={t("confirmYourPassword")}
                   {...field}
                 />
               </FormControl>
@@ -137,9 +139,9 @@ export default function RegisterForm() {
           className="w-full"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Creating Account..." : "Register"}
+          {isSubmitting ? t("creatingAccount") : t("register")}
         </Button>
-        <div className="text-center">or</div>
+        <div className="text-center">{t("or")}</div>
         <ContinueWithGoogleButton />
       </form>
     </Form>
