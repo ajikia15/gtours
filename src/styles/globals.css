@@ -6,6 +6,7 @@
 html {
   @apply overflow-x-hidden;
   font-family: "Fira Sans", sans-serif;
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -53,13 +54,6 @@ body {
   letter-spacing: 0.15em;
   font-size: 0.8125rem;
   line-height: 1.2;
-}
-
-@media screen and (min-width: 960px) {
-  html {
-    margin-left: calc(100vw - 100%);
-    margin-right: 0;
-  }
 }
 
 .no-scrollbar {

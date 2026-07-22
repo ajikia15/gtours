@@ -17,13 +17,49 @@ import {
   notoSansGeorgian,
   openSans,
 } from "./fonts";
-import { getLocale, getMessages } from "next-intl/server";
+import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 import { headers } from "next/headers";
 import { isMobile } from "@/lib/isMobile";
 import MobileNavbar from "@/components/layout/MobileNavbar";
 import NavigationProgress from "@/components/layout/navigation-progress";
 import { NavigationLoadingOverlay } from "@/components/navigation-loading-overlay";
 import RemixWizard from "@/components/remix-wizard";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getLocale();
+  const t = await getTranslations({ locale, namespace: "Metadata" });
+
+  return {
+    metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
+    title: {
+      default: t("title"),
+      template: `%s | ${t("siteName")}`,
+    },
+    description: t("description"),
+    openGraph: {
+      type: "website",
+      siteName: t("siteName"),
+      title: t("title"),
+      description: t("description"),
+      locale,
+      images: [
+        {
+          url: "/header.jpg",
+          width: 1200,
+          height: 630,
+          alt: t("siteName"),
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: t("title"),
+      description: t("description"),
+      images: ["/header.jpg"],
+    },
+  };
+}
 
 export default async function LocaleLayout({
   children,

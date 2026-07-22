@@ -1,4 +1,9 @@
 {
+  "Metadata": {
+    "siteName": "Georgia Travel Tours",
+    "title": "Georgia Travel Tours — ტურები და თავგადასავლები საქართველოში",
+    "description": "აღმოაჩინეთ და დაჯავშნეთ დაუვიწყარი ტურები საქართველოში — თბილისი, კახეთი, ბათუმი და მის ფარგლებს გარეთ. დაგეგმეთ მოგზაურობა, დაჯავშნეთ ონლაინ და იმოგზაურეთ ადგილობრივ გიდებთან ერთად."
+  },
   "Hero": {
     "headline": "აღმოაჩინე საქართველო <accent>შენებურად.</accent>",
     "clips": {
@@ -35,8 +40,8 @@
     "discover-georgia": "აღმოაჩინეთ საქართველო",
     "activities": "აქტივობები",
     "viewDetails": "ნახე ვრცლად",
-    "popular-tours": "Popular Tours",
-    "contact-us": "Contact Us"
+    "popular-tours": "პოპულარული ტურები",
+    "contact-us": "დაგვიკავშირდით"
   },
   "Navbar": {
     "home": "მთავარი",
@@ -79,10 +84,10 @@
     "customerSupport": "მომხმარებელთა მხარდაჭერა",
     "phoneNumber": "ტელეფონის ნომერი",
     "emailAddress": "ელ-ფოსტის მისამართი",
-    "facebook": "ფეისბუქი",
-    "instagram": "ინსტაგრამი",
-    "tiktok": "ტიკტოკი",
-    "youtube": "იუტუბი",
+    "facebook": "Facebook",
+    "instagram": "Instagram",
+    "tiktok": "TikTok",
+    "youtube": "YouTube",
     "localPartners": "ადგილობრივი პარტნიორები",
     "tourOperators": "ტურ-ოპერატორები",
     "hotelPartners": "სასტუმრო პარტნიორები",
@@ -392,11 +397,11 @@
         "seoKeywords": "SEO საკვანძო სიტყვები",
         "keywordPlaceholder": "დაამატეთ საკვანძო სიტყვა...",
         "addKeyword": "საკვანძო სიტყვის დამატება",
-        "contentEN": "Content (English)",
-        "contentENPlaceholder": "Write your full blog content in English...",
-        "contentGE": "Content (Georgian)",
+        "contentEN": "შინაარსი (ინგლისური)",
+        "contentENPlaceholder": "დაწერეთ ბლოგის სრული შინაარსი ინგლისურად...",
+        "contentGE": "შინაარსი (ქართული)",
         "contentGEPlaceholder": "დაწერეთ ბლოგის სრული შინაარსი ქართულად...",
-        "contentRU": "Content (Russian)",
+        "contentRU": "შინაარსი (რუსული)",
         "contentRUPlaceholder": "Напишите полное содержание блога на русском..."
       },
       "messages": {
@@ -443,7 +448,7 @@
       "yourEmail": "თქვენი ელ-ფოსტა",
       "yourMessage": "თქვენი შეტყობინება",
       "sendButton": "შეტყობინების გაგზავნა",
-      "contactDescription": "Our operators are always ready to help you. Ask a question, leave feedback or just chat with us."
+      "contactDescription": "ჩვენი ოპერატორები ყოველთვის მზად არიან დაგეხმაროთ. დასვით შეკითხვა, დატოვეთ გამოხმაურება ან უბრალოდ დაგვწერეთ."
     },
     "destinations": {
       "title": "მიმართულებები",
