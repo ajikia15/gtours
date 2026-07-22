@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { TravelerCounts } from "@/types/Booking";
+import { useTranslations } from "next-intl";
 
 export default function TravelerSelection({
   travelers,
@@ -10,6 +11,7 @@ export default function TravelerSelection({
   travelers: TravelerCounts;
   setTravelers: (travelers: TravelerCounts) => void;
 }) {
+  const t = useTranslations("Booking");
   const updateCount = (type: keyof TravelerCounts, increment: boolean) => {
     const newCount = increment ? travelers[type] + 1 : travelers[type] - 1;
 
@@ -73,22 +75,22 @@ export default function TravelerSelection({
     <div>
       <div className="space-y-0">
         <TravelerRow
-          title="Adults"
-          subtitle="12 years and up"
+          title={t("adults")}
+          subtitle={t("adultsAge")}
           count={travelers.adults}
           type="adults"
         />
 
         <TravelerRow
-          title="Children"
-          subtitle="2 - 12 years old"
+          title={t("children")}
+          subtitle={t("childrenAge")}
           count={travelers.children}
           type="children"
         />
 
         <TravelerRow
-          title="Infants"
-          subtitle="0 - 2 years old"
+          title={t("infants")}
+          subtitle={t("infantsAge")}
           count={travelers.infants}
           type="infants"
         />
@@ -96,10 +98,9 @@ export default function TravelerSelection({
 
       <div className="py-2 border-t border-gray-200">
         <p className="text-xs text-gray-600">
-          <span className="font-semibold">
-            {travelers.adults + travelers.children + travelers.infants}
-          </span>
-          travelers
+          {t("travelersSummary", {
+            count: travelers.adults + travelers.children + travelers.infants,
+          })}
         </p>
       </div>
     </div>

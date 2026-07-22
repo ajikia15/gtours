@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronUp } from "lucide-react";
@@ -22,6 +23,9 @@ export default function TourDetailsBooker({
   tour: Tour;
   collapseAble?: boolean;
 }) {
+  const t = useTranslations("TourDetails");
+  const tBooking = useTranslations("Booking");
+
   // Local State
   const [isExpanded, setIsExpanded] = useState(!collapseAble);
 
@@ -50,23 +54,25 @@ export default function TourDetailsBooker({
   // Render Functions
   const renderPricingSummary = () => (
     <div className="text-lg font-semibold text-gray-900">
-      Total: <span className="text-red-500">{totalPrice} GEL</span>
+      {t("total")} <span className="text-red-500">{totalPrice} GEL</span>
     </div>
   );
 
   const renderBookingContent = () => (
     <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-semibold text-gray-900">Choose Date</h2>
+      <h2 className="text-lg font-semibold text-gray-900">{t("chooseDate")}</h2>
       <TourDatePicker date={selectedDate} setDate={handleDateChange} />
 
-      <h2 className="text-lg font-semibold text-gray-900">Travelers</h2>
+      <h2 className="text-lg font-semibold text-gray-900">
+        {tBooking("selectTravelers")}
+      </h2>
       <TravelerSelection
         travelers={travelers}
         setTravelers={handleTravelersChange}
       />
       <div className="flex flex-row justify-between items-center">
         <h2 className="text-lg font-semibold text-gray-900">
-          Select Activities
+          {tBooking("selectActivities")}
         </h2>
         {/* disabled price changes for activities per request */}
         {/* {activityCost > 0 && (
@@ -95,7 +101,7 @@ export default function TourDetailsBooker({
           variant="brandred"
         >
           <ChevronDown className="size-4" />
-          Continue Booking
+          {t("continueBooking")}
         </Button>
       </div>
     </div>
@@ -129,7 +135,7 @@ export default function TourDetailsBooker({
         >
           <ChevronUp className="size-4" />
           {/* TODO maybe remove */}
-          Collapse
+          {t("collapse")}
         </Button>
       )}
     </div>

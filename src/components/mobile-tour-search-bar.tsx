@@ -37,6 +37,7 @@ export default function MobileTourSearchBar({
   compact = false,
 }: MobileTourSearchBarProps) {
   const t = useTranslations("SearchBar");
+  const tCommon = useTranslations("Common");
   const [isOpen, setIsOpen] = useState(false);
   const [openAccordionItem, setOpenAccordionItem] =
     useState<string>("destinations");
@@ -105,12 +106,14 @@ export default function MobileTourSearchBar({
           <div className="shrink-0 px-5 pt-3">
             <div className="mx-auto mb-4 h-1 w-10 rounded-full bg-neutral-300" />
             <div className="mb-2 flex items-center justify-between">
-              <h2 className="text-lg font-bold text-neutral-900">Search Tours</h2>
+              <h2 className="text-lg font-bold text-neutral-900">
+                {t("search")}
+              </h2>
               <button
                 type="button"
                 onClick={close}
                 className="grid h-9 w-9 place-items-center rounded-full bg-white text-neutral-700 shadow-sm"
-                aria-label="Close search"
+                aria-label={tCommon("close")}
               >
                 <X className="h-5 w-5" />
               </button>
@@ -131,7 +134,7 @@ export default function MobileTourSearchBar({
             <div className="flex items-center gap-3 w-full">
               <MapPin className="h-5 w-5 text-gray-600" />
               <div className="flex-1 text-left">
-                <h3 className="font-medium">Where?</h3>
+                <h3 className="font-medium">{t("where")}</h3>
                 <p className="text-sm text-gray-600">{getDestinationDisplay()}</p>
               </div>
             </div>
@@ -152,7 +155,7 @@ export default function MobileTourSearchBar({
               <div className="flex items-center gap-3 w-full">
                 <Activity className="h-5 w-5 text-gray-600" />
                 <div className="flex-1 text-left">
-                  <h3 className="font-medium">What?</h3>
+                  <h3 className="font-medium">{t("what")}</h3>
                   <p className="text-sm text-gray-600">
                     {getActivitiesDisplay()}
                   </p>
@@ -175,7 +178,7 @@ export default function MobileTourSearchBar({
             <div className="flex items-center gap-3 w-full">
               <CalendarDays className="h-5 w-5 text-gray-600" />
               <div className="flex-1 text-left">
-                <h3 className="font-medium">When?</h3>
+                <h3 className="font-medium">{t("when")}</h3>
                 <p className="text-sm text-gray-600">{getDateDisplay()}</p>
               </div>
             </div>
@@ -196,7 +199,7 @@ export default function MobileTourSearchBar({
             <div className="flex items-center gap-3 w-full">
               <Users className="h-5 w-5 text-gray-600" />
               <div className="flex-1 text-left">
-                <h3 className="font-medium">Who?</h3>
+                <h3 className="font-medium">{t("who")}</h3>
                 <p className="text-sm text-gray-600">{getTravelersDisplay()}</p>
               </div>
             </div>
@@ -217,7 +220,7 @@ export default function MobileTourSearchBar({
               className="w-full bg-brand-secondary hover:bg-brand-secondary/90"
               size="lg"
             >
-              Search
+              {t("search")}
             </Button>
           </div>
         </div>,

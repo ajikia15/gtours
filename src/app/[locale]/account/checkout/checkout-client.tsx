@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ShoppingCartIcon, LockIcon, CheckCircleIcon } from "lucide-react";
@@ -25,6 +26,7 @@ export default function CheckoutClient({
 }: CheckoutClientProps) {
   const cart = useCart();
   const router = useRouter();
+  const t = useTranslations("Checkout");
   const [userProfile] = useState<UserProfile | null>(initialUserProfile);
   const [profileComplete] = useState(initialProfileComplete);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -52,12 +54,12 @@ export default function CheckoutClient({
         ? item.selectedDate instanceof Date
           ? item.selectedDate.toLocaleDateString()
           : new Date(item.selectedDate).toLocaleDateString()
-        : "Date TBD"
+        : t("dateTBD")
     } • ${
       (item.travelers?.adults || 0) +
       (item.travelers?.children || 0) +
       (item.travelers?.infants || 0)
-    } travelers`,
+    } ${t("travelers")}`,
   }));
 
   const handleProfileComplete = () => {
@@ -75,17 +77,17 @@ export default function CheckoutClient({
 
       if (result.success) {
         // Show success message
-        toast.success(result.message || "Checkout completed successfully!");
+        toast.success(result.message || t("completedSuccessfully"));
 
         // Redirect to success page with invoice details
         router.push(`/account/orders?invoice=${result.invoiceId}`);
       } else {
         // Show error message
-        toast.error(result.message || "Checkout failed. Please try again.");
+        toast.error(result.message || t("checkoutFailed"));
       }
     } catch (error) {
       console.error("Checkout error:", error);
-      toast.error("An unexpected error occurred. Please try again.");
+      toast.error(t("unexpectedError"));
     } finally {
       setIsProcessing(false);
     }
@@ -112,16 +114,16 @@ export default function CheckoutClient({
         <div className="text-center space-y-4">
           <ShoppingCartIcon className="h-16 w-16 mx-auto text-gray-400" />
           <h1 className="text-2xl font-bold">
-            {isDirectTourMode ? "Tour not found in cart" : "Your cart is empty"}
+            {isDirectTourMode ? t("tourNotFoundInCart") : t("cartEmpty")}
           </h1>
           <p className="text-gray-600">
             {isDirectTourMode
-              ? "The requested tour could not be found. Please try booking again."
-              : "Add some tours to your cart before checkout"}
+              ? t("tourNotFoundDescription")
+              : t("addToursBeforeCheckout")}
           </p>
           <Link href={isDirectTourMode ? "/" : "/account/cart"}>
             <button className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-              {isDirectTourMode ? "Browse Tours" : "Go to Cart"}
+              {isDirectTourMode ? t("browseTours") : t("goToCart")}
             </button>
           </Link>
         </div>
@@ -134,10 +136,10 @@ export default function CheckoutClient({
       <div className="flex items-center gap-2 mb-6">
         <ShoppingCartIcon className="h-6 w-6" />
         <h1 className="text-2xl font-bold">
-          {isDirectTourMode ? "Book Tour" : "Checkout"}
+          {isDirectTourMode ? t("bookTour") : t("title")}
         </h1>
         <span className="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
-          {totalItems} {totalItems === 1 ? "item" : "items"}
+          {totalItems} {totalItems === 1 ? t("item") : t("items")}
         </span>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -155,11 +157,13 @@ export default function CheckoutClient({
               >
                 {profileComplete ? "✓" : "1"}
               </div>
-              <h2 className="text-lg font-semibold">Contact Information</h2>
+              <h2 className="text-lg font-semibold">
+                {t("contactInformation")}
+              </h2>
               {profileComplete && (
                 <Badge variant="default" className="text-xs">
                   <CheckCircleIcon className="h-3 w-3 mr-1" />
-                  Complete
+                  {t("complete")}
                 </Badge>
               )}
             </div>
@@ -185,18 +189,22 @@ export default function CheckoutClient({
               >
                 2
               </div>
-              <h2 className="text-lg font-semibold">Payment Information</h2>
+              <h2 className="text-lg font-semibold">
+                {t("paymentInformation")}
+              </h2>
               {!profileComplete && (
                 <Badge variant="secondary" className="text-xs">
                   <LockIcon className="h-3 w-3 mr-1" />
-                  Locked
+                  {t("locked")}
                 </Badge>
               )}
             </div>
 
             <Card className={!profileComplete ? "opacity-50" : ""}>
               <CardHeader>
-                <CardTitle className="text-base">Payment Details</CardTitle>
+                <CardTitle className="text-base">
+                  {t("paymentDetails")}
+                </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {!profileComplete && (
@@ -204,8 +212,7 @@ export default function CheckoutClient({
                     <div className="space-y-2">
                       <LockIcon className="h-8 w-8 mx-auto text-gray-400" />
                       <p className="text-sm text-gray-500">
-                        Complete your contact information to proceed with
-                        payment
+                        {t("completeContactToProceed")}
                       </p>
                     </div>
                   </div>
@@ -216,7 +223,7 @@ export default function CheckoutClient({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Card Number
+                          {t("cardNumber")}
                         </label>
                         <input
                           type="text"
@@ -226,7 +233,7 @@ export default function CheckoutClient({
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Expiry Date
+                          {t("expiryDate")}
                         </label>
                         <input
                           type="text"
@@ -238,7 +245,7 @@ export default function CheckoutClient({
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          CVV
+                          {t("cvv")}
                         </label>
                         <input
                           type="text"
@@ -248,7 +255,7 @@ export default function CheckoutClient({
                       </div>
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Cardholder Name
+                          {t("cardholderName")}
                         </label>
                         <input
                           type="text"
@@ -280,12 +287,12 @@ export default function CheckoutClient({
             buttonAction={handleCompleteCheckout}
             buttonText={
               isProcessing
-                ? "Processing..."
+                ? t("processingShort")
                 : profileComplete
-                ? `Complete Purchase - ${totalPrice} GEL`
+                ? t("completePurchase", { price: totalPrice })
                 : undefined
             }
-            title={isDirectTourMode ? "Tour Summary" : "Order Summary"}
+            title={isDirectTourMode ? t("tourSummary") : t("orderSummary")}
           />
         </div>
       </div>

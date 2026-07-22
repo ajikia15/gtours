@@ -7,14 +7,38 @@
   "Hero": {
     "headline": "აღმოაჩინე საქართველო <accent>შენებურად.</accent>",
     "clips": {
-      "shatili": { "title": "შატილი", "region": "ხევსურეთი" },
-      "didgori": { "title": "დიდგორი", "region": "ქვემო ქართლი" },
-      "tbilisi": { "title": "თბილისი", "region": "დედაქალაქი" },
-      "mtskheta": { "title": "მცხეთა", "region": "მცხეთა-მთიანეთი" },
-      "manglisi": { "title": "მანგლისი", "region": "ქვემო ქართლი" },
-      "beshtasheni": { "title": "ბეშთაშენი", "region": "თრიალეთი" },
-      "tsalka": { "title": "წალკა", "region": "თრიალეთი" },
-      "sighnaghi": { "title": "სიღნაღი", "region": "კახეთი" }
+      "shatili": {
+        "title": "შატილი",
+        "region": "ხევსურეთი"
+      },
+      "didgori": {
+        "title": "დიდგორი",
+        "region": "ქვემო ქართლი"
+      },
+      "tbilisi": {
+        "title": "თბილისი",
+        "region": "დედაქალაქი"
+      },
+      "mtskheta": {
+        "title": "მცხეთა",
+        "region": "მცხეთა-მთიანეთი"
+      },
+      "manglisi": {
+        "title": "მანგლისი",
+        "region": "ქვემო ქართლი"
+      },
+      "beshtasheni": {
+        "title": "ბეშთაშენი",
+        "region": "თრიალეთი"
+      },
+      "tsalka": {
+        "title": "წალკა",
+        "region": "თრიალეთი"
+      },
+      "sighnaghi": {
+        "title": "სიღნაღი",
+        "region": "კახეთი"
+      }
     }
   },
   "SearchBar": {
@@ -32,7 +56,17 @@
     "selectedActivities": "არჩეული აქტივობები:",
     "noDestinations": "მიმართულება ვერ მოიძებნა.",
     "noActivities": "აქტივობა ვერ მოიძებნა.",
-    "search": "ძებნა"
+    "search": "ძებნა",
+    "searchDestinationsLabel": "მოძებნეთ მიმართულებები",
+    "destinationsCount": "{count} მიმართულება",
+    "anyActivities": "ნებისმიერი აქტივობა",
+    "oneActivity": "{count} აქტივობა",
+    "manyActivities": "{count} აქტივობა",
+    "addDates": "დაამატეთ თარიღები",
+    "addGuests": "დაამატეთ სტუმრები",
+    "oneGuest": "{count} სტუმარი",
+    "manyGuests": "{count} სტუმარი",
+    "searchSummaryPlaceholder": "მოძებნეთ მიმართულებები, დაამატეთ თარიღები, დაამატეთ სტუმრები"
   },
   "Homepage": {
     "title": "მთავარ გვერდზე კეთილი იყოთ მობრძანებული",
@@ -122,7 +156,19 @@
     "enterPassword": "შეიყვანეთ თქვენი პაროლი",
     "confirmYourPassword": "დაადასტურეთ თქვენი პაროლი",
     "sendResetLink": "აღდგენის ბმულის გაგზავნა",
-    "backToLogin": "უკან შესვლაზე"
+    "backToLogin": "უკან შესვლაზე",
+    "forgotPasswordQuestion": "დაგავიწყდათ პაროლი?",
+    "loggingIn": "მიმდინარეობს შესვლა...",
+    "creatingAccount": "მიმდინარეობს ანგარიშის შექმნა...",
+    "or": "ან",
+    "enterFirstName": "შეიყვანეთ სახელი",
+    "enterLastName": "შეიყვანეთ გვარი",
+    "sending": "იგზავნება...",
+    "sendResetEmail": "აღდგენის წერილის გაგზავნა",
+    "forgotPasswordInstructions": "შეიყვანეთ თქვენი ელფოსტის მისამართი და ჩვენ გამოგიგზავნით ბმულს პაროლის აღსადგენად.",
+    "emailSentTitle": "წერილი გაიგზავნა!",
+    "emailSentBody": "ჩვენ გამოგიგზავნეთ პაროლის აღდგენის ბმული თქვენს ელფოსტაზე. გთხოვთ, შეამოწმოთ თქვენი ფოსტა და მიჰყვეთ ინსტრუქციას პაროლის აღსადგენად.",
+    "emailSentHelp": "ვერ მიიღეთ წერილი? შეამოწმეთ სპამის საქაღალდე ან სცადეთ თავიდან."
   },
   "Admin": {
     "dashboard": {
@@ -347,7 +393,11 @@
       },
       "messages": {
         "errorSaving": "შეცდომა ტურის შენახვისას",
-        "savedSuccessfully": "ტური წარმატებით შენახულია"
+        "savedSuccessfully": "ტური წარმატებით შენახულია",
+        "updatedSuccessfully": "ტური წარმატებით განახლდა"
+      },
+      "activities": {
+        "selectActivityType": "აირჩიეთ აქტივობის ტიპი"
       }
     },
     "blogForm": {
@@ -415,7 +465,8 @@
       "disabled": "გამორთული",
       "published": "გამოქვეყნებული",
       "archived": "დაარქივებული"
-    }
+    },
+    "emptyLanguageFields": "ამ ენაზე ზოგიერთი ველი ცარიელია"
   },
   "Pages": {
     "about": {
@@ -428,7 +479,27 @@
       "authenticity": "ავთენტურობა",
       "sustainability": "მდგრადობა",
       "excellence": "ხარისხი",
-      "safety": "უსაფრთხოება"
+      "safety": "უსაფრთხოება",
+      "exploreUs": "გაგვიცანით",
+      "uniqueToursFor": "უნიკალური ტურები",
+      "yourAdventure": "თქვენი თავგადასავლისთვის",
+      "passionateToCreate": "ჩვენ გატაცებული ვართ, შევქმნათ",
+      "somethingUnique": "რაღაც უნიკალური თქვენი თავგადასავლისთვის",
+      "whatWeOffer": "რას გთავაზობთ",
+      "getTheBest": "მიიღეთ საუკეთესო",
+      "memoriesEver": "მოგონებები",
+      "faq": "ხშირად დასმული კითხვები",
+      "timelineTitle": "იმოგზაურეთ ჩვენთან ევროპაში",
+      "timelineDescription": "იმოგზაურეთ ჩვენთან ევროპაში და მიიღეთ საუკეთესო გამოცდილება დასავლეთ ევროპაში",
+      "faqQuestion": "როგორ დავგეგმოთ ტური წინასწარ?",
+      "faqAnswer1": "არ ვიცი",
+      "faqAnswer2": "როგორ დავგეგმოთ ტური წინასწარ?",
+      "faqAnswer3": "როგორ დავგეგმოთ ტური წინასწარ?",
+      "altUniqueTours": "უნიკალური ტურების თავგადასავალი",
+      "altAdventureExperience": "სათავგადასავლო გამოცდილება",
+      "altWhatWeOffer": "რას გთავაზობთ",
+      "altOurService": "ჩვენი სერვისი",
+      "altOurExperience": "ჩვენი გამოცდილება"
     },
     "contact": {
       "title": "დაგვიკავშირდით",
@@ -476,7 +547,8 @@
     "defaultTitle": "რა წაიღოთ ფეხმავალ ტურზე",
     "defaultDescription": "ძირითადი ნივთები და რჩევები თქვენი რუკზაკის მომზადებისთვის საოცარი ფეხმავალი თავგადასავლისთვის.",
     "readMore": "მეტის წაკითხვა",
-    "author": "ავტორი"
+    "author": "ავტორი",
+    "blogImageAlt": "ბლოგის სურათი"
   },
   "Map": {
     "loadingMapData": "რუკის მონაცემები იტვირთება...",
@@ -506,7 +578,15 @@
     "noActivitiesSelected": "აქტივობები არ არის არჩეული",
     "experienceDescription": "განიცადეთ ამ ტურის საუკეთესო შეთავაზება ყურადღებით შერჩეული აქტივობებითა და მიმართულებებით.",
     "proceedToCheckout": "გადასახადის გაფორმება",
-    "totalPrice": "ჯამური ფასი"
+    "totalPrice": "ჯამური ფასი",
+    "georgia": "საქართველო",
+    "finished": "დასრულებულია",
+    "loadingCart": "თქვენი კალათა იტვირთება...",
+    "browseTours": "ტურების დათვალიერება",
+    "yourCart": "თქვენი კალათა",
+    "item": "ერთეული",
+    "items": "ერთეული",
+    "editBooking": "ჯავშნის რედაქტირება"
   },
   "Booking": {
     "selectTour": "აირჩიეთ ტური",
@@ -536,7 +616,81 @@
     "required": "სავალდებულო",
     "included": "ჩართული",
     "day": "დღე",
-    "days": "დღეები"
+    "days": "დღეები",
+    "heading": "ჯავშანი",
+    "completeAllRequiredFields": "გთხოვთ შეავსოთ ყველა სავალდებულო ველი",
+    "completeRequiredFields": "გთხოვთ შეავსოთ სავალდებულო ველები",
+    "failedToCheckout": "ვერ მოხერხდა გადახდაზე გადასვლა",
+    "failedToAddToCart": "ვერ მოხერხდა კალათაში დამატება",
+    "failedToPrepareCheckout": "ვერ მოხერხდა ტურის მომზადება გადახდისთვის",
+    "tour": "ტური",
+    "date": "თარიღი",
+    "travelers": "მოგზაურები",
+    "activities": "აქტივობები",
+    "selectTourFirstPrompt": "<strong>ჯერ აირჩიეთ ტური</strong> თქვენი მოგზაურობის აქტივობების ასარჩევად.",
+    "pleaseSelectTourFirst": "ჯერ აირჩიეთ ტური",
+    "processing": "მუშავდება...",
+    "checkout": "გადახდა",
+    "noToursFound": "თქვენს ძიებას შესაბამისი ტური ვერ მოიძებნა.",
+    "oneActivity": "{count} აქტივობა",
+    "manyActivities": "{count} აქტივობა",
+    "oneTraveler": "{count} მოგზაური",
+    "manyTravelers": "{count} მოგზაური",
+    "oneTourist": "{count} ტურისტი",
+    "manyTourists": "{count} ტურისტი",
+    "oneActivityCap": "{count} აქტივობა",
+    "manyActivitiesCap": "{count} აქტივობა",
+    "noActivities": "აქტივობების გარეშე",
+    "chooseDate": "აირჩიეთ თარიღი",
+    "cartItemNotFound": "კალათის ელემენტი ვერ მოიძებნა",
+    "bookingUpdatedSuccess": "ჯავშანი წარმატებით განახლდა!",
+    "directBooking": "პირდაპირი ჯავშანი",
+    "editing": "რედაქტირება",
+    "basePricePerPerson": "საბაზისო ფასი: {price} GEL ერთ ადამიანზე",
+    "totalPrice": "ჯამი: {price} GEL",
+    "sharedStateNote": "<strong>შენიშვნა:</strong> თარიღისა და მოგზაურების ცვლილება განაახლებს ყველა ტურს თქვენს კალათაში. აქტივობების არჩევანი მხოლოდ ამ ტურს ეხება.",
+    "pleaseComplete": "გთხოვთ შეავსოთ:",
+    "updateCart": "კალათის განახლება",
+    "viewInCart": "კალათაში ნახვა",
+    "failedToUpdateCart": "ვერ მოხერხდა კალათის განახლება",
+    "travelersSummary": "{count} მოგზაური",
+    "adultsAge": "12 წელი და მეტი",
+    "childrenAge": "2 - 12 წელი",
+    "infantsAge": "0 - 2 წელი",
+    "pleaseSignInCart": "კალათაში დასამატებლად გაიარეთ ავტორიზაცია",
+    "pleaseSignInContinue": "გასაგრძელებლად გაიარეთ ავტორიზაცია",
+    "tourAddedAllUpdated": "ტური დაემატა კალათას! ყველა ტური განახლდა მოგზაურობის დეტალებით.",
+    "tourAddedComplete": "ტური დაემატა კალათას! შეავსეთ ჯავშნის დეტალები, როცა მოგესურვებათ.",
+    "bookingIncomplete": "ჯავშანი არასრულია: {errors}",
+    "errorDateRequired": "ტურის თარიღი სავალდებულოა",
+    "errorDateFuture": "ტურის თარიღი მომავალში უნდა იყოს",
+    "errorTravelersRequired": "მოგზაურების ინფორმაცია სავალდებულოა",
+    "errorMinAdults": "მინიმუმ 2 ზრდასრული სავალდებულოა",
+    "errorNegativeTravelers": "მოგზაურების რაოდენობა არ შეიძლება იყოს უარყოფითი",
+    "backToTour": "ტურზე დაბრუნება",
+    "confirmYourBooking": "დაადასტურეთ თქვენი ჯავშანი",
+    "reviewAndComplete": "გადახედეთ და დაასრულეთ ჯავშანი ტურისთვის {tourName}",
+    "readyToBook": "მზადაა დასაჯავშნად",
+    "totalForTravelers": "ჯამი {count} მოგზაურისთვის",
+    "travelDate": "მოგზაურობის თარიღი",
+    "noAdditionalActivities": "ამ ტურისთვის დამატებითი აქტივობები არ არის ხელმისაწვდომი.",
+    "pleaseCompleteFollowing": "გასაგრძელებლად შეავსეთ შემდეგი:",
+    "proceedToCheckout": "გადახდაზე გადასვლა",
+    "completeRequiredFieldsButton": "შეავსეთ სავალდებულო ველები",
+    "bookingConfirmation": "ჯავშნის დადასტურება",
+    "helpReviewDetails": "გადახდაზე გადასვლამდე გადახედეთ ყველა დეტალს",
+    "helpConfirmedAfterPayment": "თქვენი ჯავშანი დადასტურდება გადახდის შემდეგ",
+    "helpModifyUntilPayment": "შეგიძლიათ შეცვალოთ ჯავშნის დეტალები გადახდის დასრულებამდე",
+    "helpPricesIncludeTaxes": "ყველა ფასი მოიცავს შესაბამის გადასახადებსა და მოსაკრებლებს",
+    "pleaseLogInFavorites": "ფავორიტებში დასამატებლად გაიარეთ ავტორიზაცია",
+    "authExpired": "ავტორიზაციის ვადა ამოიწურა. გთხოვთ თავიდან შეხვიდეთ.",
+    "addedToFavorites": "დაემატა ფავორიტებში!",
+    "removedFromFavorites": "წაიშალა ფავორიტებიდან :(",
+    "failedUpdateFavorites": "ვერ მოხერხდა ფავორიტების განახლება. გთხოვთ სცადოთ თავიდან.",
+    "confirmDeleteTour": "დარწმუნებული ხართ, რომ გსურთ ამ ტურის წაშლა?",
+    "notAuthorized": "არ ხართ ავტორიზებული",
+    "failedDeleteTour": "ვერ მოხერხდა ტურის წაშლა",
+    "tourDeleted": "ტური წაიშალა"
   },
   "Checkout": {
     "title": "გადასახადის გაფორმება",
@@ -545,7 +699,44 @@
     "orderSummary": "შეკვეთის რეზიუმე",
     "personalDetails": "პერსონალური მონაცემები",
     "paymentMethod": "გადახდის მეთოდი",
-    "confirmBooking": "ჯავშნის დადასტურება"
+    "confirmBooking": "ჯავშნის დადასტურება",
+    "dateTBD": "თარიღი დასაზუსტებელია",
+    "travelers": "მოგზაური",
+    "checkoutFailed": "გადახდა ვერ შესრულდა. გთხოვთ, სცადოთ თავიდან.",
+    "unexpectedError": "მოხდა მოულოდნელი შეცდომა. გთხოვთ, სცადოთ თავიდან.",
+    "tourNotFoundInCart": "ტური კალათაში ვერ მოიძებნა",
+    "cartEmpty": "თქვენი კალათა ცარიელია",
+    "tourNotFoundDescription": "მოთხოვნილი ტური ვერ მოიძებნა. გთხოვთ, სცადოთ დაჯავშნა თავიდან.",
+    "addToursBeforeCheckout": "გადახდამდე დაამატეთ ტურები კალათაში",
+    "browseTours": "ტურების დათვალიერება",
+    "goToCart": "კალათაში გადასვლა",
+    "bookTour": "ტურის დაჯავშნა",
+    "item": "ერთეული",
+    "items": "ერთეული",
+    "contactInformation": "საკონტაქტო ინფორმაცია",
+    "complete": "დასრულებულია",
+    "paymentInformation": "გადახდის ინფორმაცია",
+    "locked": "დაბლოკილია",
+    "paymentDetails": "გადახდის დეტალები",
+    "completeContactToProceed": "გადახდის გასაგრძელებლად შეავსეთ საკონტაქტო ინფორმაცია",
+    "cardNumber": "ბარათის ნომერი",
+    "expiryDate": "მოქმედების ვადა",
+    "cvv": "CVV",
+    "cardholderName": "ბარათის მფლობელის სახელი",
+    "processingShort": "მუშავდება...",
+    "completePurchase": "შესყიდვის დასრულება - {price} ₾",
+    "tourSummary": "ტურის შეჯამება",
+    "tours": "ტურები",
+    "startDate": "დაწყების თარიღი",
+    "finishBookingHint": "დაასრულეთ ჯავშანი",
+    "tourists": "ტურისტები",
+    "activities": "აქტივობები",
+    "locations": "მდებარეობები",
+    "finishBookingBeforePayment": "გადახდამდე დაასრულეთ ჯავშანი",
+    "canProceedToCheckout": "შეგიძლიათ გააგრძელოთ გადახდა",
+    "contactInfoRequired": "შეკვეთის დასამუშავებლად საჭიროა თქვენი საკონტაქტო ინფორმაცია",
+    "needHelp": "გჭირდებათ დახმარება?",
+    "contactUs": "დაგვიკავშირდით"
   },
   "Profile": {
     "title": "ჩემი პროფილი",
@@ -568,14 +759,56 @@
     "saveProfile": "პროფილის შენახვა",
     "sendCode": "კოდის გაგზავნა",
     "verifyCode": "კოდის ვერიფიკაცია",
-    "enterVerificationCode": "შეიყვანეთ ვერიფიკაციის კოდი"
+    "enterVerificationCode": "შეიყვანეთ ვერიფიკაციის კოდი",
+    "completeYourProfile": "შეავსეთ თქვენი პროფილი",
+    "updateProfileInformation": "პროფილის ინფორმაციის განახლება",
+    "provideRequiredInfo": "გასაგრძელებლად გთხოვთ მიუთითოთ საჭირო ინფორმაცია",
+    "profileComplete": "პროფილი შევსებულია",
+    "nameLabel": "სახელი:",
+    "phoneLabel": "ტელეფონი:",
+    "verified": "დადასტურებული",
+    "emailAddress": "ელფოსტის მისამართი",
+    "phoneNumberLabel": "ტელეფონის ნომერი",
+    "verificationCodeLabel": "ვერიფიკაციის კოდი",
+    "georgia": "საქართველო",
+    "firstNamePlaceholder": "შეიყვანეთ თქვენი სახელი",
+    "lastNamePlaceholder": "შეიყვანეთ თქვენი გვარი",
+    "emailPlaceholder": "შეიყვანეთ თქვენი ელფოსტის მისამართი",
+    "codePlaceholder": "შეიყვანეთ 6-ნიშნა კოდი",
+    "sending": "იგზავნება...",
+    "resend": "ხელახლა გაგზავნა",
+    "verifying": "მოწმდება...",
+    "verify": "დადასტურება",
+    "saving": "ინახება...",
+    "saveRequiredInformation": "საჭირო ინფორმაციის შენახვა",
+    "codeSentTo": "კოდი გაიგზავნა ნომერზე {phone}",
+    "phoneVerificationRequired": "საჭიროა ტელეფონის დადასტურება",
+    "phoneNumberVerified": "ტელეფონის ნომერი დადასტურებულია",
+    "invalidPhoneNumber": "გთხოვთ შეიყვანოთ სწორი 9-ნიშნა ტელეფონის ნომერი",
+    "invalidVerificationCode": "გთხოვთ შეიყვანოთ 6-ნიშნა ვერიფიკაციის კოდი",
+    "sendCodeFailed": "ვერიფიკაციის კოდის გაგზავნა ვერ მოხერხდა",
+    "verifyCodeFailed": "კოდის დადასტურება ვერ მოხერხდა",
+    "verificationFailedRetry": "ვერიფიკაცია ვერ მოხერხდა. გთხოვთ მოითხოვოთ ახალი კოდი.",
+    "authRequired": "საჭიროა ავტორიზაცია",
+    "verifyPhoneFirst": "ჯერ დაადასტურეთ თქვენი ტელეფონის ნომერი",
+    "firstNameMin": "სახელი უნდა შედგებოდეს მინიმუმ 2 სიმბოლოსგან",
+    "lastNameMin": "გვარი უნდა შედგებოდეს მინიმუმ 2 სიმბოლოსგან",
+    "phoneNumberInvalid": "გთხოვთ შეიყვანოთ 9-ნიშნა ქართული ტელეფონის ნომერი"
   },
   "Favorites": {
     "title": "ჩემი საყვარელი ტურები",
     "addedToFavorites": "საყვარლებში დაემატა!",
     "removedFromFavorites": "საყვარლებიდან ამოღებულია!",
     "noFavorites": "საყვარელი ტურები ჯერ არ არის",
-    "noFavoritesDescription": "დაიწყეთ გამოკვლევა და დაამატეთ ტურები თქვენს საყვარლებში"
+    "noFavoritesDescription": "დაიწყეთ გამოკვლევა და დაამატეთ ტურები თქვენს საყვარლებში",
+    "myFavourites": "ჩემი რჩეულები",
+    "noFavouritesYet": "თქვენ ჯერ არ დაგიმატებიათ ტურები რჩეულებში.",
+    "startExploring": "დაიწყეთ ტურების დათვალიერება და დაამატეთ ისინი რჩეულებში!",
+    "unableToLoad": "თქვენი რჩეული ტურების ჩატვირთვა ვერ მოხერხდა.",
+    "tryAgainLater": "გთხოვთ, სცადოთ მოგვიანებით.",
+    "favouriteCount": "თქვენ გაქვთ {count, plural, one {# რჩეული ტური} other {# რჩეული ტური}}",
+    "somethingWrong": "რაღაც შეცდომა მოხდა თქვენი რჩეულების ჩატვირთვისას.",
+    "refreshPage": "გთხოვთ, განაახლოთ გვერდი ან სცადოთ მოგვიანებით."
   },
   "TourDetails": {
     "overview": "მიმოხილვა",
@@ -603,7 +836,26 @@
     "meetingPoint": "შეხვედრის ადგილი",
     "endPoint": "დასრულების ადგილი",
     "tourSchedule": "გრაფიკი",
-    "noDescription": "აღწერა არ არის ხელმისაწვდომი"
+    "noDescription": "აღწერა არ არის ხელმისაწვდომი",
+    "tourDetailsHeading": "ტურის დეტალები",
+    "tourDurationDays": "ტურის ხანგრძლივობა: {days} დღე",
+    "departs": "გასვლა: {time}",
+    "returns": "დაბრუნება: {time}",
+    "gotQuestions": "გაქვთ შეკითხვები?",
+    "contactUs": "დაგვიკავშირდით",
+    "total": "სულ:",
+    "chooseDate": "აირჩიეთ თარიღი",
+    "continueBooking": "ჯავშნის გაგრძელება",
+    "collapse": "დაკეცვა",
+    "completeBooking": "დაასრულეთ ჯავშანი",
+    "base": "საბაზისო: {price} ლარი",
+    "totalForTravelers": "სულ {count} მოგზაურისთვის",
+    "travelDate": "მოგზაურობის თარიღი",
+    "noActivitiesAvailable": "ამ ტურისთვის დამატებითი აქტივობები არ არის ხელმისაწვდომი.",
+    "pleaseComplete": "ახლავე დასაჯავშნად შეავსეთ შემდეგი:",
+    "continueBrowsing": "დათვალიერების გაგრძელება",
+    "exploreWonders": "აღმოაჩინეთ {title}-ის საოცრებები",
+    "suggestions": "შესაძლოა მოგეწონოთ"
   },
   "Common": {
     "loading": "იტვირთება...",
@@ -681,7 +933,13 @@
     "dashboard": "პანელი",
     "home": "მთავარი",
     "menu": "მენიუ",
-    "navigation": "ნავიგაცია"
+    "navigation": "ნავიგაცია",
+    "openNavigationMenu": "ნავიგაციის მენიუს გახსნა",
+    "zoomIn": "გადიდება",
+    "zoomOut": "დაპატარავება",
+    "previousImage": "წინა სურათი",
+    "nextImage": "შემდეგი სურათი",
+    "goToImage": "სურათზე გადასვლა {index}"
   },
   "Errors": {
     "general": "რაღაც არასწორად წავიდა. გთხოვთ ხელახლა სცადოთ.",
@@ -702,6 +960,29 @@
     "saveFailed": "შენახვა ვერ მოხერხდა.",
     "loadFailed": "მონაცემების ჩატვირთვა ვერ მოხერხდა.",
     "deleteFailed": "წაშლა ვერ მოხერხდა.",
-    "updateFailed": "განახლება ვერ მოხერხდა."
+    "updateFailed": "განახლება ვერ მოხერხდა.",
+    "invalidCredentials": "არასწორი ელფოსტა ან პაროლი",
+    "noAccountFound": "ამ ელფოსტის მისამართით ანგარიში ვერ მოიძებნა",
+    "tooManyRequests": "ძალიან ბევრი მოთხოვნა. გთხოვთ, სცადოთ მოგვიანებით.",
+    "sendResetFailed": "აღდგენის წერილის გაგზავნა ვერ მოხერხდა. გთხოვთ, სცადოთ თავიდან."
+  },
+  "Orders": {
+    "yourOrders": "თქვენი შეკვეთები",
+    "noRecentOrders": "ბოლოდროინდელი შეკვეთები ვერ მოიძებნა.",
+    "orderNotFound": "შეკვეთა ვერ მოიძებნა",
+    "orderNotFoundDescription": "მოთხოვნილი შეკვეთა ვერ მოიძებნა.",
+    "orderCompleted": "შეკვეთა დასრულდა!",
+    "invoiceGenerated": "თქვენი ინვოისი შეიქმნა და მზადაა ჩამოსატვირთად. ასლი ასევე გამოგზავნილია თქვენს ელფოსტაზე.",
+    "emailNoteLabel": "შენიშვნა ელფოსტაზე:",
+    "emailNoteText": "თუ ინვოისის წერილს ვერ ხედავთ შემოსულებში, გთხოვთ, შეამოწმოთ სპამის საქაღალდე. ზოგჯერ ჩამოტვირთვის ბმულების მქონე წერილები შესაძლოა გაფილტროს ელფოსტის პროვაიდერმა.",
+    "orderDetails": "შეკვეთის დეტალები",
+    "completed": "დასრულებული",
+    "invoiceNumber": "ინვოისის ნომერი",
+    "invoiceDate": "ინვოისის თარიღი",
+    "customer": "მომხმარებელი",
+    "expectedGuestDate": "სავარაუდო ვიზიტის თარიღი",
+    "totalAmount": "სრული თანხა",
+    "downloadInvoicePDF": "ინვოისის PDF-ის ჩამოტვირთვა",
+    "orderedTours": "შეკვეთილი ტურები"
   }
 }

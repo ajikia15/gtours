@@ -9,6 +9,7 @@ import { ShoppingCart, Eye, BookmarkCheck } from "lucide-react";
 import { Tour } from "@/types/Tour";
 import { toast } from "sonner";
 import { updateCartItem } from "@/data/cart";
+import { useTranslations } from "next-intl";
 
 interface TourActionButtonProps {
   tour: Tour;
@@ -57,6 +58,8 @@ export default function TourActionButton({
   const router = useRouter();
   const cart = useCart();
   const booking = useBooking();
+  const t = useTranslations("Booking");
+  const tErrors = useTranslations("Errors");
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Determine current state
@@ -108,7 +111,7 @@ export default function TourActionButton({
       if (existingCartItem && hasUserMadeChanges) {
         return {
           action: "update-cart",
-          text: "Update Cart",
+          text: t("updateCart"),
           icon: <ShoppingCart className="h-4 w-4" />,
           variant: "brandred" as const,
         };
@@ -120,7 +123,7 @@ export default function TourActionButton({
       } // Show "Add to Cart" only if no item exists
       return {
         action: "add-to-cart",
-        text: "Add to Cart",
+        text: t("addToCart"),
         icon: <ShoppingCart className="h-4 w-4" />,
         variant: "outline" as const,
       };
@@ -130,7 +133,7 @@ export default function TourActionButton({
     if (existingCartItem && hasUserMadeChanges) {
       return {
         action: "update-cart",
-        text: "Update Cart",
+        text: t("updateCart"),
         icon: <ShoppingCart className="h-4 w-4" />,
         variant: "brandred" as const,
       };
@@ -139,14 +142,14 @@ export default function TourActionButton({
     if (existingCartItem) {
       return {
         action: "view-cart",
-        text: "View in Cart",
+        text: t("viewInCart"),
         icon: <Eye className="h-4 w-4" />,
         variant: "secondary" as const,
       };
     } // Primary intent with no cart item - show "Book Now"
     return {
       action: "book-now",
-      text: "Book Now",
+      text: t("bookNow"),
       icon: <BookmarkCheck className="h-4 w-4" />,
       variant: variant,
     };
@@ -179,10 +182,10 @@ export default function TourActionButton({
 
             if (result?.success !== false) {
               onUpdateSuccess?.(); // Call the callback to reset initial state
-              toast.success("Cart updated!");
+              toast.success(t("cartUpdated"));
               router.push("/account/cart");
             } else {
-              toast.error("Failed to update cart");
+              toast.error(t("failedToUpdateCart"));
             }
           }
           break;
@@ -191,7 +194,7 @@ export default function TourActionButton({
           if (validateForAddToCart) {
             const validation = validateForAddToCart();
             if (!validation.isComplete) {
-              toast.error("Please complete required fields");
+              toast.error(t("completeRequiredFields"));
               break;
             }
           }
@@ -203,7 +206,7 @@ export default function TourActionButton({
           if (result.success) {
             // Stay on current page after adding to cart
           } else {
-            toast.error(result.message || "Failed to add to cart");
+            toast.error(result.message || t("failedToAddToCart"));
           }
           break;
 
@@ -212,7 +215,7 @@ export default function TourActionButton({
           if (validateForBookNow) {
             const validation = validateForBookNow();
             if (!validation.isComplete) {
-              toast.error("Please complete all required fields");
+              toast.error(t("completeAllRequiredFields"));
               break;
             }
           }
@@ -224,7 +227,7 @@ export default function TourActionButton({
       }
     } catch (error) {
       console.error("Action failed:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error(tErrors("general"));
     } finally {
       setIsProcessing(false);
     }
@@ -237,7 +240,7 @@ export default function TourActionButton({
     return null;
   }
 
-  const displayText = isProcessing ? "Processing..." : buttonState.text;
+  const displayText = isProcessing ? t("processing") : buttonState.text;
   const buttonVariant = buttonState.variant;
 
   return (

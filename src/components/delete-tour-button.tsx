@@ -8,11 +8,12 @@ import { deleteTour } from "@/app/[locale]/admin/tours/actions";
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "@/firebase/client";
 import * as React from "react";
+import { useTranslations } from "next-intl";
 
 export default function DeleteTourButton({
   tourId,
   images,
-  title = "Delete",
+  title,
 }: {
   tourId: string;
   images?: string[];
@@ -20,20 +21,21 @@ export default function DeleteTourButton({
 }) {
   const auth = useAuth();
   const router = useRouter();
+  const t = useTranslations("Booking");
+  const tCommon = useTranslations("Common");
   const [loading, setLoading] = React.useState(false);
+  const displayTitle = title ?? tCommon("delete");
 
   async function handleDelete() {
     if (loading) return;
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this tour?"
-    );
+    const confirmed = window.confirm(t("confirmDeleteTour"));
     if (!confirmed) return;
 
     setLoading(true);
     try {
       const token = await auth?.currentUser?.getIdToken();
       if (!token) {
-        toast.error("Not authorized");
+        toast.error(t("notAuthorized"));
         setLoading(false);
         return;
       }
@@ -47,16 +49,16 @@ export default function DeleteTourButton({
 
       const res = await deleteTour(tourId, token);
       if ((res as any)?.error) {
-        toast.error((res as any)?.message || "Failed to delete tour");
+        toast.error((res as any)?.message || t("failedDeleteTour"));
         setLoading(false);
         return;
       }
 
-      toast.success("Tour deleted");
+      toast.success(t("tourDeleted"));
       router.refresh();
     } catch (err) {
       console.error(err);
-      toast.error("Failed to delete tour");
+      toast.error(t("failedDeleteTour"));
     } finally {
       setLoading(false);
     }
@@ -65,7 +67,7 @@ export default function DeleteTourButton({
   return (
     <Button
       variant="outline"
-      title={title}
+      title={displayTitle}
       onClick={handleDelete}
       disabled={loading}
     >

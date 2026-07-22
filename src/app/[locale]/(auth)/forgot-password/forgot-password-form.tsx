@@ -15,14 +15,21 @@ import { z } from "zod";
 import { sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/firebase/client";
 import { toast } from "sonner";
-import { useState } from "react";
-
-const resetPasswordSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
+import { useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 export default function ForgotPasswordForm() {
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const t = useTranslations("Auth");
+  const tError = useTranslations("Errors");
+
+  const resetPasswordSchema = useMemo(
+    () =>
+      z.object({
+        email: z.string().email(tError("invalidEmail")),
+      }),
+    [tError]
+  );
 
   const form = useForm<z.infer<typeof resetPasswordSchema>>({
     resolver: zodResolver(resetPasswordSchema),
@@ -36,15 +43,15 @@ export default function ForgotPasswordForm() {
   const onSubmit = async (data: z.infer<typeof resetPasswordSchema>) => {
     try {
       await sendPasswordResetEmail(auth, data.email);
-      toast.success("Password reset email sent! Check your inbox.");
+      toast.success(t("passwordResetSent"));
       setIsSubmitted(true);
     } catch (e: any) {
       if (e.code === "auth/user-not-found") {
-        toast.error("No account found with this email address");
+        toast.error(tError("noAccountFound"));
       } else if (e.code === "auth/too-many-requests") {
-        toast.error("Too many requests. Please try again later.");
+        toast.error(tError("tooManyRequests"));
       } else {
-        toast.error("Failed to send reset email. Please try again.");
+        toast.error(tError("sendResetFailed"));
       }
     }
   };
@@ -53,15 +60,10 @@ export default function ForgotPasswordForm() {
     return (
       <div className="text-center space-y-4">
         <div className="text-green-600 text-lg font-semibold">
-          ✓ Email Sent!
+          ✓ {t("emailSentTitle")}
         </div>
-        <p className="text-gray-600">
-          We&apos;ve sent a password reset link to your email address. Please
-          check your inbox and follow the instructions to reset your password.
-        </p>
-        <p className="text-sm text-gray-500">
-          Didn&apos;t receive the email? Check your spam folder or try again.
-        </p>
+        <p className="text-gray-600">{t("emailSentBody")}</p>
+        <p className="text-sm text-gray-500">{t("emailSentHelp")}</p>
       </div>
     );
   }
@@ -70,10 +72,7 @@ export default function ForgotPasswordForm() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <div className="text-center mb-4">
-          <p className="text-gray-600 text-sm">
-            Enter your email address and we&apos;ll send you a link to reset
-            your password.
-          </p>
+          <p className="text-gray-600 text-sm">{t("forgotPasswordInstructions")}</p>
         </div>
 
         <FormField
@@ -82,9 +81,9 @@ export default function ForgotPasswordForm() {
           disabled={isSubmitting}
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("email")}</FormLabel>
               <FormControl>
-                <Input type="email" placeholder="Enter your email" {...field} />
+                <Input type="email" placeholder={t("enterEmail")} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -97,7 +96,7 @@ export default function ForgotPasswordForm() {
           className="w-full"
           disabled={isSubmitting}
         >
-          {isSubmitting ? "Sending..." : "Send Reset Email"}
+          {isSubmitting ? t("sending") : t("sendResetEmail")}
         </Button>
       </form>
     </Form>

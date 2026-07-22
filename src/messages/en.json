@@ -7,14 +7,38 @@
   "Hero": {
     "headline": "Explore Georgia, your <accent>way.</accent>",
     "clips": {
-      "shatili": { "title": "Shatili", "region": "Khevsureti" },
-      "didgori": { "title": "Didgori", "region": "Kvemo Kartli" },
-      "tbilisi": { "title": "Tbilisi", "region": "Capital" },
-      "mtskheta": { "title": "Mtskheta", "region": "Mtskheta-Mtianeti" },
-      "manglisi": { "title": "Manglisi", "region": "Kvemo Kartli" },
-      "beshtasheni": { "title": "Beshtasheni", "region": "Trialeti" },
-      "tsalka": { "title": "Tsalka", "region": "Trialeti" },
-      "sighnaghi": { "title": "Sighnaghi", "region": "Kakheti" }
+      "shatili": {
+        "title": "Shatili",
+        "region": "Khevsureti"
+      },
+      "didgori": {
+        "title": "Didgori",
+        "region": "Kvemo Kartli"
+      },
+      "tbilisi": {
+        "title": "Tbilisi",
+        "region": "Capital"
+      },
+      "mtskheta": {
+        "title": "Mtskheta",
+        "region": "Mtskheta-Mtianeti"
+      },
+      "manglisi": {
+        "title": "Manglisi",
+        "region": "Kvemo Kartli"
+      },
+      "beshtasheni": {
+        "title": "Beshtasheni",
+        "region": "Trialeti"
+      },
+      "tsalka": {
+        "title": "Tsalka",
+        "region": "Trialeti"
+      },
+      "sighnaghi": {
+        "title": "Sighnaghi",
+        "region": "Kakheti"
+      }
     }
   },
   "SearchBar": {
@@ -32,7 +56,17 @@
     "selectedActivities": "Selected Activities:",
     "noDestinations": "No destinations found matching your search.",
     "noActivities": "No activities found matching your search.",
-    "search": "Search"
+    "search": "Search",
+    "searchDestinationsLabel": "Search destinations",
+    "destinationsCount": "{count} destinations",
+    "anyActivities": "Any activities",
+    "oneActivity": "{count} activity",
+    "manyActivities": "{count} activities",
+    "addDates": "Add dates",
+    "addGuests": "Add guests",
+    "oneGuest": "{count} guest",
+    "manyGuests": "{count} guests",
+    "searchSummaryPlaceholder": "Search destinations, add dates, add guests"
   },
   "Homepage": {
     "title": "Welcome to the Homepage",
@@ -122,7 +156,19 @@
     "enterPassword": "Enter your password",
     "confirmYourPassword": "Confirm your password",
     "sendResetLink": "Send Reset Link",
-    "backToLogin": "Back to Login"
+    "backToLogin": "Back to Login",
+    "forgotPasswordQuestion": "Forgot password?",
+    "loggingIn": "Logging in...",
+    "creatingAccount": "Creating Account...",
+    "or": "or",
+    "enterFirstName": "Enter your first name",
+    "enterLastName": "Enter your last name",
+    "sending": "Sending...",
+    "sendResetEmail": "Send Reset Email",
+    "forgotPasswordInstructions": "Enter your email address and we'll send you a link to reset your password.",
+    "emailSentTitle": "Email Sent!",
+    "emailSentBody": "We've sent a password reset link to your email address. Please check your inbox and follow the instructions to reset your password.",
+    "emailSentHelp": "Didn't receive the email? Check your spam folder or try again."
   },
   "Admin": {
     "dashboard": {
@@ -347,7 +393,11 @@
       },
       "messages": {
         "errorSaving": "Error saving tour",
-        "savedSuccessfully": "Tour saved successfully"
+        "savedSuccessfully": "Tour saved successfully",
+        "updatedSuccessfully": "Tour updated successfully"
+      },
+      "activities": {
+        "selectActivityType": "Select activity type"
       }
     },
     "blogForm": {
@@ -415,7 +465,8 @@
       "disabled": "Disabled",
       "published": "Published",
       "archived": "Archived"
-    }
+    },
+    "emptyLanguageFields": "Some fields in this language are empty"
   },
   "Pages": {
     "about": {
@@ -428,7 +479,27 @@
       "authenticity": "Authenticity",
       "sustainability": "Sustainability",
       "excellence": "Excellence",
-      "safety": "Safety"
+      "safety": "Safety",
+      "exploreUs": "Explore us",
+      "uniqueToursFor": "Unique Tours For",
+      "yourAdventure": "Your Adventure",
+      "passionateToCreate": "We are passionate to create",
+      "somethingUnique": "Something Unique for Your Adventure",
+      "whatWeOffer": "What we offer",
+      "getTheBest": "Get The Best",
+      "memoriesEver": "Memories Ever",
+      "faq": "FAQ",
+      "timelineTitle": "Travel with us in Europe",
+      "timelineDescription": "Travel with us in Europe and get the best experience ever in the west Europe",
+      "faqQuestion": "How to plan a tour beforehand?",
+      "faqAnswer1": "I don't know",
+      "faqAnswer2": "How to plan a tour beforehand?",
+      "faqAnswer3": "How to plan a tour beforehand?",
+      "altUniqueTours": "Unique Tours Adventure",
+      "altAdventureExperience": "Adventure Experience",
+      "altWhatWeOffer": "What we offer",
+      "altOurService": "Our service",
+      "altOurExperience": "Our experience"
     },
     "contact": {
       "title": "Contact Us",
@@ -476,7 +547,8 @@
     "defaultTitle": "What to pack for your hiking trip",
     "defaultDescription": "Essential items and tips for preparing your backpack for an amazing hiking adventure.",
     "readMore": "Read more",
-    "author": "By"
+    "author": "By",
+    "blogImageAlt": "Blog Image"
   },
   "Map": {
     "loadingMapData": "Loading map data...",
@@ -506,7 +578,15 @@
     "noActivitiesSelected": "No activities selected",
     "experienceDescription": "Experience the best of what this tour has to offer with carefully selected activities and destinations.",
     "proceedToCheckout": "Proceed to checkout",
-    "totalPrice": "Total Price"
+    "totalPrice": "Total Price",
+    "georgia": "Georgia",
+    "finished": "Finished",
+    "loadingCart": "Loading your cart...",
+    "browseTours": "Browse Tours",
+    "yourCart": "Your Cart",
+    "item": "item",
+    "items": "items",
+    "editBooking": "Edit Booking"
   },
   "Booking": {
     "selectTour": "Select a tour",
@@ -536,7 +616,81 @@
     "required": "Required",
     "included": "Included",
     "day": "day",
-    "days": "days"
+    "days": "days",
+    "heading": "Booking",
+    "completeAllRequiredFields": "Please complete all required fields",
+    "completeRequiredFields": "Please complete required fields",
+    "failedToCheckout": "Failed to proceed to checkout",
+    "failedToAddToCart": "Failed to add to cart",
+    "failedToPrepareCheckout": "Failed to prepare tour for checkout",
+    "tour": "Tour",
+    "date": "Date",
+    "travelers": "Travelers",
+    "activities": "Activities",
+    "selectTourFirstPrompt": "<strong>Select a tour first</strong> to choose activities for your trip.",
+    "pleaseSelectTourFirst": "Please select a tour first",
+    "processing": "Processing...",
+    "checkout": "Checkout",
+    "noToursFound": "No tours found matching your search.",
+    "oneActivity": "{count} activity",
+    "manyActivities": "{count} activities",
+    "oneTraveler": "{count} traveler",
+    "manyTravelers": "{count} travelers",
+    "oneTourist": "{count} Tourist",
+    "manyTourists": "{count} Tourists",
+    "oneActivityCap": "{count} Activity",
+    "manyActivitiesCap": "{count} Activities",
+    "noActivities": "No Activities",
+    "chooseDate": "Choose Date",
+    "cartItemNotFound": "Cart item not found",
+    "bookingUpdatedSuccess": "Booking updated successfully!",
+    "directBooking": "Direct Booking",
+    "editing": "Editing",
+    "basePricePerPerson": "Base price: {price} GEL per person",
+    "totalPrice": "Total: {price} GEL",
+    "sharedStateNote": "<strong>Note:</strong> Date and traveler changes will update all tours in your cart. Activity selections are specific to this tour only.",
+    "pleaseComplete": "Please complete:",
+    "updateCart": "Update Cart",
+    "viewInCart": "View in Cart",
+    "failedToUpdateCart": "Failed to update cart",
+    "travelersSummary": "{count} travelers",
+    "adultsAge": "12 years and up",
+    "childrenAge": "2 - 12 years old",
+    "infantsAge": "0 - 2 years old",
+    "pleaseSignInCart": "Please sign in to add items to cart",
+    "pleaseSignInContinue": "Please sign in to continue",
+    "tourAddedAllUpdated": "Tour added to cart! All tours updated with travel details.",
+    "tourAddedComplete": "Tour added to cart! Complete the booking details when ready.",
+    "bookingIncomplete": "Booking incomplete: {errors}",
+    "errorDateRequired": "Tour date is required",
+    "errorDateFuture": "Tour date must be in the future",
+    "errorTravelersRequired": "Traveler information is required",
+    "errorMinAdults": "Minimum 2 adults required",
+    "errorNegativeTravelers": "Traveler counts cannot be negative",
+    "backToTour": "Back to Tour",
+    "confirmYourBooking": "Confirm Your Booking",
+    "reviewAndComplete": "Review and complete your booking for {tourName}",
+    "readyToBook": "Ready to Book",
+    "totalForTravelers": "Total for {count} travelers",
+    "travelDate": "Travel Date",
+    "noAdditionalActivities": "No additional activities available for this tour.",
+    "pleaseCompleteFollowing": "Please complete the following to proceed:",
+    "proceedToCheckout": "Proceed to Checkout",
+    "completeRequiredFieldsButton": "Complete Required Fields",
+    "bookingConfirmation": "Booking Confirmation",
+    "helpReviewDetails": "Review all details before proceeding to checkout",
+    "helpConfirmedAfterPayment": "Your booking will be confirmed after payment",
+    "helpModifyUntilPayment": "You can modify your booking details until payment is completed",
+    "helpPricesIncludeTaxes": "All prices include applicable taxes and fees",
+    "pleaseLogInFavorites": "Please log in to add to favorites",
+    "authExpired": "Authentication expired. Please log in again.",
+    "addedToFavorites": "Added to favorites!",
+    "removedFromFavorites": "Removed from favorites :(",
+    "failedUpdateFavorites": "Failed to update favorites. Please try again.",
+    "confirmDeleteTour": "Are you sure you want to delete this tour?",
+    "notAuthorized": "Not authorized",
+    "failedDeleteTour": "Failed to delete tour",
+    "tourDeleted": "Tour deleted"
   },
   "Checkout": {
     "title": "Checkout",
@@ -545,7 +699,44 @@
     "orderSummary": "Order Summary",
     "personalDetails": "Personal Details",
     "paymentMethod": "Payment Method",
-    "confirmBooking": "Confirm Booking"
+    "confirmBooking": "Confirm Booking",
+    "dateTBD": "Date TBD",
+    "travelers": "travelers",
+    "checkoutFailed": "Checkout failed. Please try again.",
+    "unexpectedError": "An unexpected error occurred. Please try again.",
+    "tourNotFoundInCart": "Tour not found in cart",
+    "cartEmpty": "Your cart is empty",
+    "tourNotFoundDescription": "The requested tour could not be found. Please try booking again.",
+    "addToursBeforeCheckout": "Add some tours to your cart before checkout",
+    "browseTours": "Browse Tours",
+    "goToCart": "Go to Cart",
+    "bookTour": "Book Tour",
+    "item": "item",
+    "items": "items",
+    "contactInformation": "Contact Information",
+    "complete": "Complete",
+    "paymentInformation": "Payment Information",
+    "locked": "Locked",
+    "paymentDetails": "Payment Details",
+    "completeContactToProceed": "Complete your contact information to proceed with payment",
+    "cardNumber": "Card Number",
+    "expiryDate": "Expiry Date",
+    "cvv": "CVV",
+    "cardholderName": "Cardholder Name",
+    "processingShort": "Processing...",
+    "completePurchase": "Complete Purchase - {price} GEL",
+    "tourSummary": "Tour Summary",
+    "tours": "Tours",
+    "startDate": "Start date",
+    "finishBookingHint": "finish booking",
+    "tourists": "Tourists",
+    "activities": "Activities",
+    "locations": "Locations",
+    "finishBookingBeforePayment": "Finish booking before payment",
+    "canProceedToCheckout": "You can proceed to checkout",
+    "contactInfoRequired": "Your contact information is required to process your order",
+    "needHelp": "Need help?",
+    "contactUs": "Contact us"
   },
   "Profile": {
     "title": "My Profile",
@@ -568,14 +759,56 @@
     "saveProfile": "Save Profile",
     "sendCode": "Send Code",
     "verifyCode": "Verify Code",
-    "enterVerificationCode": "Enter verification code"
+    "enterVerificationCode": "Enter verification code",
+    "completeYourProfile": "Complete Your Profile",
+    "updateProfileInformation": "Update Profile Information",
+    "provideRequiredInfo": "Please provide the required information to continue",
+    "profileComplete": "Profile Complete",
+    "nameLabel": "Name:",
+    "phoneLabel": "Phone:",
+    "verified": "Verified",
+    "emailAddress": "Email Address",
+    "phoneNumberLabel": "Phone Number",
+    "verificationCodeLabel": "Verification Code",
+    "georgia": "Georgia",
+    "firstNamePlaceholder": "Enter your first name",
+    "lastNamePlaceholder": "Enter your last name",
+    "emailPlaceholder": "Enter your email address",
+    "codePlaceholder": "Enter 6-digit code",
+    "sending": "Sending...",
+    "resend": "Resend",
+    "verifying": "Verifying...",
+    "verify": "Verify",
+    "saving": "Saving...",
+    "saveRequiredInformation": "Save Required Information",
+    "codeSentTo": "Code sent to {phone}",
+    "phoneVerificationRequired": "Phone verification required",
+    "phoneNumberVerified": "Phone number verified",
+    "invalidPhoneNumber": "Please enter a valid 9-digit phone number",
+    "invalidVerificationCode": "Please enter a 6-digit verification code",
+    "sendCodeFailed": "Failed to send verification code",
+    "verifyCodeFailed": "Failed to verify code",
+    "verificationFailedRetry": "Verification failed. Please request a new code.",
+    "authRequired": "Authentication required",
+    "verifyPhoneFirst": "Please verify your phone number first",
+    "firstNameMin": "First name must be at least 2 characters",
+    "lastNameMin": "Last name must be at least 2 characters",
+    "phoneNumberInvalid": "Please enter a 9-digit Georgian phone number"
   },
   "Favorites": {
     "title": "My Favorite Tours",
     "addedToFavorites": "Added to favorites!",
     "removedFromFavorites": "Removed from favorites!",
     "noFavorites": "No favorite tours yet",
-    "noFavoritesDescription": "Start exploring and add tours to your favorites"
+    "noFavoritesDescription": "Start exploring and add tours to your favorites",
+    "myFavourites": "My Favourites",
+    "noFavouritesYet": "You haven't added any tours to your favourites yet.",
+    "startExploring": "Start exploring tours and add them to your favourites!",
+    "unableToLoad": "Unable to load your favourite tours.",
+    "tryAgainLater": "Please try again later.",
+    "favouriteCount": "You have {count, plural, one {# favourite tour} other {# favourite tours}}",
+    "somethingWrong": "Something went wrong while loading your favourites.",
+    "refreshPage": "Please refresh the page or try again later."
   },
   "TourDetails": {
     "overview": "Overview",
@@ -603,7 +836,26 @@
     "meetingPoint": "Meeting Point",
     "endPoint": "End Point",
     "tourSchedule": "Schedule",
-    "noDescription": "No description available"
+    "noDescription": "No description available",
+    "tourDetailsHeading": "Tour Details",
+    "tourDurationDays": "Tour duration: {days} days",
+    "departs": "Departs: {time}",
+    "returns": "Returns: {time}",
+    "gotQuestions": "Got any questions?",
+    "contactUs": "Contact us",
+    "total": "Total:",
+    "chooseDate": "Choose Date",
+    "continueBooking": "Continue Booking",
+    "collapse": "Collapse",
+    "completeBooking": "Complete Your Booking",
+    "base": "Base: {price} GEL",
+    "totalForTravelers": "Total for {count} travelers",
+    "travelDate": "Travel Date",
+    "noActivitiesAvailable": "No additional activities available for this tour.",
+    "pleaseComplete": "Please complete the following to book now:",
+    "continueBrowsing": "Continue Browsing",
+    "exploreWonders": "Explore wonders of {title}",
+    "suggestions": "You might also like"
   },
   "Common": {
     "loading": "Loading...",
@@ -681,7 +933,13 @@
     "dashboard": "Dashboard",
     "home": "Home",
     "menu": "Menu",
-    "navigation": "Navigation"
+    "navigation": "Navigation",
+    "openNavigationMenu": "Open navigation menu",
+    "zoomIn": "Zoom in",
+    "zoomOut": "Zoom out",
+    "previousImage": "Previous image",
+    "nextImage": "Next image",
+    "goToImage": "Go to image {index}"
   },
   "Errors": {
     "general": "Something went wrong. Please try again.",
@@ -702,6 +960,29 @@
     "saveFailed": "Failed to save.",
     "loadFailed": "Failed to load data.",
     "deleteFailed": "Failed to delete.",
-    "updateFailed": "Failed to update."
+    "updateFailed": "Failed to update.",
+    "invalidCredentials": "Invalid email or password",
+    "noAccountFound": "No account found with this email address",
+    "tooManyRequests": "Too many requests. Please try again later.",
+    "sendResetFailed": "Failed to send reset email. Please try again."
+  },
+  "Orders": {
+    "yourOrders": "Your Orders",
+    "noRecentOrders": "No recent orders found.",
+    "orderNotFound": "Order Not Found",
+    "orderNotFoundDescription": "The requested order could not be found.",
+    "orderCompleted": "Order Completed!",
+    "invoiceGenerated": "Your invoice has been generated and is ready for download. We've also sent a copy to your email address.",
+    "emailNoteLabel": "Email Note:",
+    "emailNoteText": "Please check your spam/junk folder if you don't see the invoice email in your inbox. Sometimes emails with download links may be filtered by email providers.",
+    "orderDetails": "Order Details",
+    "completed": "completed",
+    "invoiceNumber": "Invoice Number",
+    "invoiceDate": "Invoice Date",
+    "customer": "Customer",
+    "expectedGuestDate": "Expected Guest Date",
+    "totalAmount": "Total Amount",
+    "downloadInvoicePDF": "Download Invoice PDF",
+    "orderedTours": "Ordered Tours"
   }
 }

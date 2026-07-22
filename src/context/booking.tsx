@@ -20,6 +20,7 @@ import { addToCart, updateCartItem } from "@/data/cart";
 import { useAuth } from "./auth";
 import { useCart } from "./cart";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 /**
  * Shared booking state that persists across all tours
@@ -121,6 +122,7 @@ export const BookingProvider = ({
 }) => {
   const auth = useAuth();
   const cart = useCart();
+  const t = useTranslations("Booking");
 
   // Default shared state
   const defaultSharedState: SharedBookingState = {
@@ -322,20 +324,20 @@ export const BookingProvider = ({
 
     // Check required date
     if (!booking.selectedDate) {
-      errors.push("Tour date is required");
+      errors.push(t("errorDateRequired"));
     } else if (booking.selectedDate <= new Date()) {
-      errors.push("Tour date must be in the future");
+      errors.push(t("errorDateFuture"));
     }
 
     // Check travelers
     if (!booking.travelers) {
-      errors.push("Traveler information is required");
+      errors.push(t("errorTravelersRequired"));
     } else {
       if (booking.travelers.adults < 2) {
-        errors.push("Minimum 2 adults required");
+        errors.push(t("errorMinAdults"));
       }
       if (booking.travelers.children < 0 || booking.travelers.infants < 0) {
-        errors.push("Traveler counts cannot be negative");
+        errors.push(t("errorNegativeTravelers"));
       }
     }
 
@@ -367,7 +369,7 @@ export const BookingProvider = ({
     selectedActivities: string[]
   ): Promise<{ success: boolean; message?: string }> => {
     if (!auth?.currentUser) {
-      toast.error("Please sign in to add items to cart");
+      toast.error(t("pleaseSignInCart"));
       return { success: false, message: "User not authenticated" };
     }
 
@@ -381,9 +383,9 @@ export const BookingProvider = ({
     // Validate booking before adding to cart
     const validation = validateBooking(booking);
     if (!validation.isComplete) {
-      const errorMessage = `Booking incomplete: ${validation.errors.join(
-        ", "
-      )}`;
+      const errorMessage = t("bookingIncomplete", {
+        errors: validation.errors.join(", "),
+      });
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }
@@ -403,17 +405,15 @@ export const BookingProvider = ({
         // Sync existing cart items with the new shared state
         await syncCartWithSharedState();
 
-        toast.success(
-          "Tour added to cart! All tours updated with travel details."
-        );
+        toast.success(t("tourAddedAllUpdated"));
         return { success: true };
       } else {
-        toast.error(result.message || "Failed to add to cart");
+        toast.error(result.message || t("failedToAddToCart"));
         return { success: false, message: result.message };
       }
     } catch (error) {
       console.error("Error adding booking to cart:", error);
-      const errorMessage = "Failed to add to cart";
+      const errorMessage = t("failedToAddToCart");
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }
@@ -430,7 +430,7 @@ export const BookingProvider = ({
     selectedActivities: string[]
   ): Promise<{ success: boolean; message?: string }> => {
     if (!auth?.currentUser) {
-      toast.error("Please sign in to add items to cart");
+      toast.error(t("pleaseSignInCart"));
       return { success: false, message: "User not authenticated" };
     }
 
@@ -458,20 +458,18 @@ export const BookingProvider = ({
         });
 
         if (validation.isComplete) {
-          toast.success("Tour added to cart!");
+          toast.success(t("tourAddedToCart"));
         } else {
-          toast.success(
-            "Tour added to cart! Complete the booking details when ready."
-          );
+          toast.success(t("tourAddedComplete"));
         }
         return { success: true };
       } else {
-        toast.error(result.message || "Failed to add to cart");
+        toast.error(result.message || t("failedToAddToCart"));
         return { success: false, message: result.message };
       }
     } catch (error) {
       console.error("Error adding partial booking to cart:", error);
-      const errorMessage = "Failed to add to cart";
+      const errorMessage = t("failedToAddToCart");
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }
@@ -488,7 +486,7 @@ export const BookingProvider = ({
     selectedActivities: string[]
   ): Promise<{ success: boolean; checkoutUrl?: string; message?: string }> => {
     if (!auth?.currentUser) {
-      toast.error("Please sign in to continue");
+      toast.error(t("pleaseSignInContinue"));
       return { success: false, message: "User not authenticated" };
     }
 
@@ -511,7 +509,7 @@ export const BookingProvider = ({
         });
 
         if (cartResult.success) {
-          toast.success("Tour updated and proceeding to checkout...");
+          toast.success(t("tourUpdated"));
         }
       } else {
         // Add new item to cart
@@ -521,7 +519,7 @@ export const BookingProvider = ({
       if (!cartResult.success) {
         return {
           success: false,
-          message: cartResult.message || "Failed to prepare tour for checkout",
+          message: cartResult.message || t("failedToPrepareCheckout"),
         };
       }
 
@@ -535,7 +533,7 @@ export const BookingProvider = ({
       };
     } catch (error) {
       console.error("Error in direct checkout:", error);
-      const errorMessage = "Failed to proceed to checkout";
+      const errorMessage = t("failedToCheckout");
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }
@@ -552,16 +550,16 @@ export const BookingProvider = ({
     booking: BookingSelection
   ): Promise<{ success: boolean; checkoutUrl?: string; message?: string }> => {
     if (!auth?.currentUser) {
-      toast.error("Please sign in to continue");
+      toast.error(t("pleaseSignInContinue"));
       return { success: false, message: "User not authenticated" };
     }
 
     // Validate the booking first
     const validation = validateBooking(booking);
     if (!validation.isComplete) {
-      const errorMessage = `Booking incomplete: ${validation.errors.join(
-        ", "
-      )}`;
+      const errorMessage = t("bookingIncomplete", {
+        errors: validation.errors.join(", "),
+      });
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }
@@ -585,7 +583,7 @@ export const BookingProvider = ({
         });
 
         if (cartResult.success) {
-          toast.success("Tour updated and proceeding to checkout...");
+          toast.success(t("tourUpdated"));
         }
       } else {
         // Add new item to cart with booking details
@@ -602,14 +600,14 @@ export const BookingProvider = ({
         });
 
         if (cartResult.success) {
-          toast.success("Proceeding to checkout...");
+          toast.success(t("proceedingToCheckout"));
         }
       }
 
       if (!cartResult.success) {
         return {
           success: false,
-          message: cartResult.message || "Failed to prepare tour for checkout",
+          message: cartResult.message || t("failedToPrepareCheckout"),
         };
       }
 
@@ -623,7 +621,7 @@ export const BookingProvider = ({
       };
     } catch (error) {
       console.error("Error in direct checkout with details:", error);
-      const errorMessage = "Failed to proceed to checkout";
+      const errorMessage = t("failedToCheckout");
       toast.error(errorMessage);
       return { success: false, message: errorMessage };
     }

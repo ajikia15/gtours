@@ -11,6 +11,7 @@ import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
 import { toast } from "sonner";
 import { updateCartItem } from "@/data/cart";
+import { useTranslations } from "next-intl";
 
 // Import booking components
 import TourDatePicker from "@/components/booking/tour-date-picker";
@@ -37,6 +38,8 @@ export default function UnifiedBookingForm({
   const router = useRouter();
   const booking = useBooking();
   const cart = useCart();
+  const t = useTranslations("Booking");
+  const tErrors = useTranslations("Errors");
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Use shared state only if cart has multiple items (for synchronization)
@@ -112,7 +115,7 @@ export default function UnifiedBookingForm({
 
   const handleSubmit = async () => {
     if (!isComplete) {
-      toast.error("Please complete all required fields");
+      toast.error(t("completeAllRequiredFields"));
       return;
     }
 
@@ -131,12 +134,12 @@ export default function UnifiedBookingForm({
           router.push(result.checkoutUrl);
           onSuccess?.("proceed-to-checkout");
         } else {
-          toast.error(result.message || "Failed to proceed to checkout");
+          toast.error(result.message || t("failedToCheckout"));
         }
       } else {
         // Cart edit mode
         if (!cartItem) {
-          toast.error("Cart item not found");
+          toast.error(t("cartItemNotFound"));
           return;
         }
 
@@ -157,7 +160,7 @@ export default function UnifiedBookingForm({
             );
 
           await Promise.all(updatePromises);
-          toast.success("All bookings updated successfully!");
+          toast.success(t("allBookingsUpdated"));
         } else {
           // Update only this cart item
           await updateCartItem(cartItem.id, {
@@ -165,14 +168,14 @@ export default function UnifiedBookingForm({
             travelers: currentState.travelers,
             selectedActivities: currentState.selectedActivities,
           });
-          toast.success("Booking updated successfully!");
+          toast.success(t("bookingUpdatedSuccess"));
         }
 
         onSuccess?.("updated");
       }
     } catch (error) {
       console.error("Submit failed:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error(tErrors("general"));
     } finally {
       setIsProcessing(false);
     }
@@ -184,18 +187,18 @@ export default function UnifiedBookingForm({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Badge variant={mode === "direct" ? "default" : "secondary"}>
-            {mode === "direct" ? "Direct Booking" : "Editing"}
+            {mode === "direct" ? t("directBooking") : t("editing")}
           </Badge>
           <div>
             <h3 className="font-semibold">{tour.title[0]}</h3>
             <p className="text-sm text-gray-600">
-              Base price: {tour.basePrice} GEL per person
+              {t("basePricePerPerson", { price: tour.basePrice })}
             </p>
           </div>
         </div>
         <div className="text-right">
           <p className="text-lg font-semibold text-red-600">
-            Total: {totalPrice} GEL
+            {t("totalPrice", { price: totalPrice })}
           </p>
         </div>
       </div>
@@ -204,16 +207,16 @@ export default function UnifiedBookingForm({
       {useSharedState && (
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <p className="text-sm text-blue-800">
-            <strong>Note:</strong> Date and traveler changes will update all
-            tours in your cart. Activity selections are specific to this tour
-            only.
+            {t.rich("sharedStateNote", {
+              strong: (chunks) => <strong>{chunks}</strong>,
+            })}
           </p>
         </div>
       )}
 
       {/* Date Selection */}
       <div className="space-y-3">
-        <h4 className="font-medium">Select Date</h4>
+        <h4 className="font-medium">{t("selectDate")}</h4>
         <TourDatePicker
           date={currentState.selectedDate}
           setDate={handleDateChange}
@@ -222,7 +225,7 @@ export default function UnifiedBookingForm({
 
       {/* Traveler Selection */}
       <div className="space-y-3">
-        <h4 className="font-medium">Select Travelers</h4>
+        <h4 className="font-medium">{t("selectTravelers")}</h4>
         <TravelerSelection
           travelers={currentState.travelers}
           setTravelers={handleTravelersChange}
@@ -232,7 +235,7 @@ export default function UnifiedBookingForm({
       {/* Activity Selection */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <h4 className="font-medium">Select Activities</h4>
+          <h4 className="font-medium">{t("selectActivities")}</h4>
           {currentState.selectedActivities.length > 0 && (
             <p className="text-sm text-gray-600">
               +
@@ -258,7 +261,9 @@ export default function UnifiedBookingForm({
       {/* Validation Errors */}
       {!validation.isComplete && validation.errors.length > 0 && (
         <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-          <h5 className="font-medium text-red-900 mb-2">Please complete:</h5>
+          <h5 className="font-medium text-red-900 mb-2">
+            {t("pleaseComplete")}
+          </h5>
           <ul className="text-sm text-red-800 space-y-1">
             {validation.errors.map((error, index) => (
               <li key={index}>• {error}</li>
@@ -275,10 +280,10 @@ export default function UnifiedBookingForm({
         size="lg"
       >
         {isProcessing
-          ? "Processing..."
+          ? t("processing")
           : mode === "direct"
-          ? "Book Now"
-          : "Update Booking"}
+          ? t("bookNow")
+          : t("updateBooking")}
       </Button>
     </Card>
   );

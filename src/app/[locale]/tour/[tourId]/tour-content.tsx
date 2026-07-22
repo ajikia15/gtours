@@ -15,6 +15,7 @@ import {
   getLocalizedTitle,
   getLocalizedDescription,
 } from "@/lib/localizationHelpers";
+import { getTranslations } from "next-intl/server";
 
 interface TourContentProps {
   tourId: string;
@@ -28,6 +29,7 @@ export default async function TourContent({
   mobile,
 }: TourContentProps) {
   const tour = await getTourById(tourId);
+  const t = await getTranslations("TourDetails");
 
   return (
     <>
@@ -58,7 +60,7 @@ export default async function TourContent({
               {getLocalizedTitle(tour, locale)}
             </h1>
             <h3 className="text-xl text-center text-gray-700 mb-1">
-              Explore wonders of {getLocalizedTitle(tour, locale)}
+              {t("exploreWonders", { title: getLocalizedTitle(tour, locale) })}
             </h3>
             <div className="w-full mt-8 mb-2 h-px bg-gray-300"></div>
           </div>{" "}

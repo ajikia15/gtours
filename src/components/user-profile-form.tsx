@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -53,6 +54,8 @@ export default function UserProfileForm({
   showCard = true,
 }: UserProfileFormProps) {
   const auth = useAuth();
+  const t = useTranslations("Profile");
+  const tErrors = useTranslations("Errors");
   const [verificationState, setVerificationState] = useState<
     "none" | "sending" | "sent" | "verifying" | "verified"
   >("none");
@@ -60,30 +63,29 @@ export default function UserProfileForm({
   const [canResend, setCanResend] = useState(true);
   const [resendTimer, setResendTimer] = useState(0);
 
-  // Create a unified schema that adapts based on mode
   const createSchema = () => {
     return z.object({
-      firstName: z.string().min(2, "First name must be at least 2 characters"),
-      lastName: z.string().min(2, "Last name must be at least 2 characters"),
+      firstName: z.string().min(2, t("firstNameMin")),
+      lastName: z.string().min(2, t("lastNameMin")),
       email:
         mode === "complete"
-          ? z.string().email("Please enter a valid email address").optional()
+          ? z.string().email(tErrors("invalidEmail")).optional()
           : z.string().optional(),
       phoneNumber:
         mode === "required"
           ? z
               .string()
-              .min(9, "Please enter a 9-digit Georgian phone number")
+              .min(9, t("phoneNumberInvalid"))
               .refine(
                 (val) => /^[0-9]{9}$/.test(val),
-                "Please enter a 9-digit Georgian phone number"
+                t("phoneNumberInvalid")
               )
           : z
               .string()
               .optional()
               .refine(
                 (val) => !val || /^[0-9]{9}$/.test(val),
-                "Please enter a 9-digit Georgian phone number"
+                t("phoneNumberInvalid")
               ),
       verificationCode: z.string().optional(),
     });
@@ -126,17 +128,14 @@ export default function UserProfileForm({
       !phoneChanged
     );
 
-  // Get display title and description
   const displayTitle =
     title ||
     (mode === "required"
-      ? "Complete Your Profile"
-      : "Update Profile Information");
+      ? t("completeYourProfile")
+      : t("updateProfileInformation"));
   const displayDescription =
     description ||
-    (mode === "required"
-      ? "Please provide the required information to continue"
-      : undefined);
+    (mode === "required" ? t("provideRequiredInfo") : undefined);
 
   const startResendTimer = () => {
     setCanResend(false);
@@ -162,7 +161,7 @@ export default function UserProfileForm({
 
   const handleSendCode = async () => {
     if (!phoneNumber || phoneNumber.length !== 9) {
-      toast.error("Please enter a valid 9-digit phone number");
+      toast.error(t("invalidPhoneNumber"));
       return;
     }
 
@@ -178,14 +177,14 @@ export default function UserProfileForm({
         return;
       }
 
-      toast.success("Code sent!");
+      toast.success(t("codeSent"));
       setPendingPhoneNumber(`+995${phoneNumber}`);
       setVerificationState("sent");
       form.setValue("verificationCode", "");
       startResendTimer();
     } catch (error: any) {
       console.error("Error sending verification code:", error);
-      toast.error(error.message || "Failed to send verification code");
+      toast.error(error.message || t("sendCodeFailed"));
       setVerificationState("none");
       cleanupRecaptcha();
     }
@@ -193,7 +192,7 @@ export default function UserProfileForm({
 
   const handleVerifyCode = async () => {
     if (!verificationCode || verificationCode.length !== 6) {
-      toast.error("Please enter a 6-digit verification code");
+      toast.error(t("invalidVerificationCode"));
       return;
     }
 
@@ -211,14 +210,14 @@ export default function UserProfileForm({
       }
 
       console.log("Verification successful");
-      toast.success("Phone verified!");
+      toast.success(t("phoneVerified"));
       setVerificationState("verified");
 
       // Clean up after successful verification
       cleanupRecaptcha();
     } catch (error: any) {
       console.error("Error verifying code:", error);
-      toast.error(error.message || "Failed to verify code");
+      toast.error(error.message || t("verifyCodeFailed"));
       setVerificationState("sent");
 
       // If there was a major error, reset the verification process
@@ -227,7 +226,7 @@ export default function UserProfileForm({
         error.message?.includes("captcha") ||
         error.code === "auth/missing-verification-code"
       ) {
-        toast.error("Verification failed. Please request a new code.");
+        toast.error(t("verificationFailedRetry"));
         resetVerification();
       }
     }
@@ -237,12 +236,12 @@ export default function UserProfileForm({
     try {
       const token = await auth?.currentUser?.getIdToken();
       if (!token) {
-        toast.error("Authentication required");
+        toast.error(t("authRequired"));
         return;
       }
 
       if (phoneChanged && verificationState !== "verified") {
-        toast.error("Please verify your phone number first");
+        toast.error(t("verifyPhoneFirst"));
         return;
       }
 
@@ -266,11 +265,11 @@ export default function UserProfileForm({
       const response = await saveUserProfile(profileData, token);
 
       if (response.error) {
-        toast.error(response.message || "Failed to save profile");
+        toast.error(response.message || tErrors("saveFailed"));
         return;
       }
 
-      toast.success("Profile saved successfully!");
+      toast.success(t("profileSaved"));
       cleanupRecaptcha();
 
       // Call onComplete callback if provided
@@ -281,7 +280,7 @@ export default function UserProfileForm({
       }
     } catch (error) {
       console.error("Error updating profile:", error);
-      toast.error("Failed to update profile");
+      toast.error(tErrors("updateFailed"));
     }
   };
 
@@ -291,17 +290,17 @@ export default function UserProfileForm({
       <CardContent className="pt-6">
         <div className="flex items-center justify-center space-x-2 text-green-600">
           <CheckCircleIcon className="h-5 w-5" />
-          <span className="font-medium">Profile Complete</span>
+          <span className="font-medium">{t("profileComplete")}</span>
         </div>
         <div className="mt-4 space-y-2 text-sm text-gray-600">
           <div>
-            Name: {initialData?.firstName} {initialData?.lastName}
+            {t("nameLabel")} {initialData?.firstName} {initialData?.lastName}
           </div>
           <div className="flex items-center gap-2">
-            Phone: {initialData?.phoneNumber}
+            {t("phoneLabel")} {initialData?.phoneNumber}
             <Badge variant="default" className="text-xs">
               <ShieldCheckIcon className="h-3 w-3 mr-1" />
-              Verified
+              {t("verified")}
             </Badge>
           </div>
         </div>
@@ -336,10 +335,10 @@ export default function UserProfileForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      First Name {mode === "required" && "*"}
+                      {t("firstName")} {mode === "required" && "*"}
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your first name" {...field} />
+                      <Input placeholder={t("firstNamePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -352,10 +351,10 @@ export default function UserProfileForm({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>
-                      Last Name {mode === "required" && "*"}
+                      {t("lastName")} {mode === "required" && "*"}
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your last name" {...field} />
+                      <Input placeholder={t("lastNamePlaceholder")} {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -370,11 +369,11 @@ export default function UserProfileForm({
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email Address</FormLabel>
+                    <FormLabel>{t("emailAddress")}</FormLabel>
                     <FormControl>
                       <Input
                         type="email"
-                        placeholder="Enter your email address"
+                        placeholder={t("emailPlaceholder")}
                         {...field}
                       />
                     </FormControl>
@@ -392,21 +391,21 @@ export default function UserProfileForm({
                 <FormItem>
                   <FormLabel className="flex items-center gap-2">
                     <PhoneIcon className="h-4 w-4" />
-                    Phone Number {mode === "required" && "*"}
+                    {t("phoneNumberLabel")} {mode === "required" && "*"}
                     {isPhoneVerified && (
                       <Badge variant="default" className="text-xs">
                         <ShieldCheckIcon className="h-3 w-3 mr-1" />
-                        Verified
+                        {t("verified")}
                       </Badge>
                     )}
                     {verificationState === "verified" && (
                       <Badge variant="default" className="text-xs bg-green-600">
                         <CheckCircleIcon className="h-3 w-3 mr-1" />
-                        Verified
+                        {t("verified")}
                       </Badge>
                     )}
                     <Badge variant="outline" className="text-xs font-mono">
-                      🇬🇪 Georgia
+                      🇬🇪 {t("georgia")}
                     </Badge>
                   </FormLabel>
                   <FormControl>
@@ -448,7 +447,7 @@ export default function UserProfileForm({
                         className="rounded-l-none min-w-[100px]"
                       >
                         {verificationState === "sending" ? (
-                          "Sending..."
+                          t("sending")
                         ) : verificationState === "sent" && !canResend ? (
                           `${resendTimer}s`
                         ) : verificationState === "verified" ? (
@@ -457,8 +456,8 @@ export default function UserProfileForm({
                           <>
                             <SendIcon className="h-4 w-4 mr-1" />
                             {verificationState === "sent"
-                              ? "Resend"
-                              : "Send Code"}
+                              ? t("resend")
+                              : t("sendCode")}
                           </>
                         )}
                       </Button>
@@ -475,11 +474,11 @@ export default function UserProfileForm({
               name="verificationCode"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Verification Code</FormLabel>
+                  <FormLabel>{t("verificationCodeLabel")}</FormLabel>
                   <FormControl>
                     <div className="flex gap-2">
                       <Input
-                        placeholder="Enter 6-digit code"
+                        placeholder={t("codePlaceholder")}
                         {...field}
                         value={field.value || ""}
                         onChange={(e) => {
@@ -507,8 +506,8 @@ export default function UserProfileForm({
                         }
                       >
                         {verificationState === "verifying"
-                          ? "Verifying..."
-                          : "Verify"}
+                          ? t("verifying")
+                          : t("verify")}
                       </Button>
                     </div>
                   </FormControl>
@@ -517,17 +516,17 @@ export default function UserProfileForm({
                   {/* Status Messages */}
                   {verificationState === "sent" && pendingPhoneNumber && (
                     <p className="text-xs text-blue-600">
-                      Code sent to {pendingPhoneNumber}
+                      {t("codeSentTo", { phone: pendingPhoneNumber })}
                     </p>
                   )}
                   {phoneChanged && verificationState === "none" && (
                     <p className="text-xs text-amber-600">
-                      Phone verification required
+                      {t("phoneVerificationRequired")}
                     </p>
                   )}
                   {verificationState === "verified" && (
                     <p className="text-xs text-green-600">
-                      Phone number verified ✓
+                      {t("phoneNumberVerified")} ✓
                     </p>
                   )}
                 </FormItem>
@@ -543,10 +542,10 @@ export default function UserProfileForm({
               }
             >
               {isSubmitting
-                ? "Saving..."
+                ? t("saving")
                 : mode === "required"
-                ? "Save Required Information"
-                : "Save Profile"}
+                ? t("saveRequiredInformation")
+                : t("saveProfile")}
             </Button>
           </form>
         </Form>

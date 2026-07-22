@@ -6,7 +6,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Tour } from "@/types/Tour";
 import { getLocalizedTitle } from "@/lib/localizationHelpers";
 
@@ -32,6 +32,7 @@ interface UseTourSearchOptions {
 
 export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
   const locale = useLocale();
+  const t = useTranslations("SearchBar");
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -192,23 +193,23 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
 
   // Display helpers
   const getDestinationDisplay = () => {
-    if (filters.destinations.length === 0) return "Search destinations";
+    if (filters.destinations.length === 0) return t("searchDestinationsLabel");
     if (filters.destinations.length === 1) return filters.destinations[0];
-    return `${filters.destinations.length} destinations`;
+    return t("destinationsCount", { count: filters.destinations.length });
   };
 
   const getActivitiesDisplay = () => {
-    if (filters.activities.length === 0) return "Any activities";
-    return `${filters.activities.length} activit${
-      filters.activities.length !== 1 ? "ies" : "y"
-    }`;
+    if (filters.activities.length === 0) return t("anyActivities");
+    return filters.activities.length === 1
+      ? t("oneActivity", { count: filters.activities.length })
+      : t("manyActivities", { count: filters.activities.length });
   };
 
   const getDateDisplay = () => {
     if (filters.selectedDate) {
       return filters.selectedDate.toLocaleDateString();
     }
-    return "Add dates";
+    return t("addDates");
   };
 
   const getTravelersDisplay = () => {
@@ -221,9 +222,11 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
       filters.travelers.children === 0 &&
       filters.travelers.infants === 0
     ) {
-      return "Add guests";
+      return t("addGuests");
     }
-    return `${total} guest${total !== 1 ? "s" : ""}`;
+    return total === 1
+      ? t("oneGuest", { count: total })
+      : t("manyGuests", { count: total });
   };
 
   const getSearchSummary = () => {
@@ -231,12 +234,12 @@ export function useTourSearch({ tours, onSearch }: UseTourSearchOptions) {
     if (filters.destinations.length > 0) parts.push(getDestinationDisplay());
     if (filters.activities.length > 0) parts.push(getActivitiesDisplay());
     if (filters.selectedDate) parts.push(getDateDisplay());
-    if (getTravelersDisplay() !== "Add guests")
+    if (getTravelersDisplay() !== t("addGuests"))
       parts.push(getTravelersDisplay());
 
     return parts.length > 0
       ? parts.join(" • ")
-      : "Search destinations, add dates, add guests";
+      : t("searchSummaryPlaceholder");
   };
 
   return {

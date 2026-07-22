@@ -15,6 +15,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { ScheduleItem } from "@/types/Tour";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 type Props = {
   schedules?: ScheduleItem[];
@@ -30,23 +31,26 @@ const LanguageTabTrigger = ({
   value: string;
   label: string;
   isEmpty: boolean;
-}) => (
-  <TabsTrigger
-    value={value}
-    className="relative text-xs sm:text-sm py-2 px-2 sm:px-3"
-  >
-    <span className="hidden sm:inline">
-      {label === "EN" ? "English" : label === "KA" ? "Georgian" : "Russian"}
-    </span>
-    <span className="sm:hidden">{label}</span>
-    {isEmpty && (
-      <span
-        className="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
-        title="Some fields in this language are empty"
-      ></span>
-    )}
-  </TabsTrigger>
-);
+}) => {
+  const t = useTranslations("Admin");
+  return (
+    <TabsTrigger
+      value={value}
+      className="relative text-xs sm:text-sm py-2 px-2 sm:px-3"
+    >
+      <span className="hidden sm:inline">
+        {label === "EN" ? "English" : label === "KA" ? "Georgian" : "Russian"}
+      </span>
+      <span className="sm:hidden">{label}</span>
+      {isEmpty && (
+        <span
+          className="absolute -top-0.5 -right-0.5 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-red-500 rounded-full border border-white shadow-sm"
+          title={t("emptyLanguageFields")}
+        ></span>
+      )}
+    </TabsTrigger>
+  );
+};
 
 // Component for schedules list by language
 function SchedulesListByLanguage({
