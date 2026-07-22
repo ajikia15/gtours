@@ -79,6 +79,8 @@ function UserDrawerBottomNav() {
   const auth = useAuth();
   const t = useTranslations("Auth");
 
+  const tCommon = useTranslations("Common");
+
   if (!auth?.currentUser) return null;
 
   const handleAuthAction = (action?: () => Promise<void>) => {
@@ -98,7 +100,7 @@ function UserDrawerBottomNav() {
           className="flex flex-col h-12 w-12 p-0 rounded-xl hover:bg-accent/80 transition-colors"
         >
           <UserCircleIcon className="h-6 w-6 mb-1" />
-          <span className="text-xs font-medium">Profile</span>
+          <span className="text-xs font-medium">{tCommon("profile")}</span>
         </Button>
       </DrawerTrigger>
       <DrawerContent>

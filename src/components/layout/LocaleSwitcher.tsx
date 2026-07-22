@@ -1,5 +1,5 @@
 "use client";
-import { Locale, useLocale } from "next-intl";
+import { Locale, useLocale, useTranslations } from "next-intl";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -26,6 +26,7 @@ interface LocaleSwitcherProps {
 
 export default function LocaleSwitcher({ variant }: LocaleSwitcherProps) {
   const locale = useLocale();
+  const t = useTranslations("Common");
   const router = useRouter();
   const pathname = usePathname();
   const [isMobile, setIsMobile] = useState(false);
@@ -71,7 +72,7 @@ export default function LocaleSwitcher({ variant }: LocaleSwitcherProps) {
             className="flex flex-col h-14 w-14 p-0 rounded-xl hover:bg-accent/80 transition-colors"
           >
             <GlobeIcon className="h-6 w-6 mb-1" />
-            <span className="text-xs font-medium">Language</span>
+            <span className="text-xs font-medium">{t("language")}</span>
           </Button>
         </DrawerTrigger>
         <DrawerContent>

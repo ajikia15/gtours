@@ -23,7 +23,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
     return (
       <div className="flex w-full flex-col gap-6 mb-20">
         <div className="flex">
-          <div className="w-5/6 aspect-video">
+          <div className="flex-1 min-w-0 aspect-video">
             <Image
               src="https://images.unsplash.com/photo-1523906834658-6e24ef2386f9?q=80&w=2566&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
               alt={t("blogImageAlt")}
@@ -32,7 +32,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
               className="rounded-sm w-full h-full object-cover"
             />
           </div>
-          <ul className="grid w-1/6 grid-rows-3 px-6">
+          <ul className="grid w-16 shrink-0 grid-rows-3 px-2">
             <li className="grid place-items-center border-t border-zinc-300 font-bold">
               09
             </li>
