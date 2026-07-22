@@ -8,6 +8,7 @@ import {
 import { getImageUrl } from "@/lib/imageHelpers";
 import { Link } from "@/i18n/navigation";
 import { useLocale } from "next-intl";
+import { stripMarkdown } from "@/lib/markdown";
 
 interface BlogCardProps {
   blog?: Blog;
@@ -58,7 +59,7 @@ export default function BlogCard({ blog }: BlogCardProps) {
 
   // Real blog data
   const title = getLocalizedTitle(blog, locale);
-  const description = getLocalizedDescription(blog, locale);
+  const description = stripMarkdown(getLocalizedDescription(blog, locale));
   const publishedDate =
     blog.publishedDate instanceof Date
       ? blog.publishedDate
