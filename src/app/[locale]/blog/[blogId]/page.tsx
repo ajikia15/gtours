@@ -56,7 +56,7 @@ export default async function BlogPage({
         <div className="mb-8">
           <div className="flex mb-6">
             {/* Main Image */}
-            <div className="w-11/12 aspect-video">
+            <div className="flex-1 min-w-0 aspect-video">
               {mainImage && (
                 <Image
                   src={getImageUrl(mainImage)}
@@ -69,7 +69,7 @@ export default async function BlogPage({
               )}
             </div>
             {/* Date Column */}
-            <ul className="grid w-1/12 grid-rows-3 px-3">
+            <ul className="grid w-16 shrink-0 grid-rows-3 px-2">
               <li className="grid place-items-center border-t border-zinc-300 font-bold text-sm">
                 {day}
               </li>
@@ -114,7 +114,7 @@ export default async function BlogPage({
             )}
 
             {/* Main Content - ReactMarkdown */}
-            <article className="tour-description prose prose-lg max-w-none">
+            <article className="tour-description prose prose-lg max-w-none break-words">
               <ReactMarkdown>{description}</ReactMarkdown>
             </article>
 
