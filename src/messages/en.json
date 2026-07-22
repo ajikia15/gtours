@@ -939,7 +939,8 @@
     "zoomOut": "Zoom out",
     "previousImage": "Previous image",
     "nextImage": "Next image",
-    "goToImage": "Go to image {index}"
+    "goToImage": "Go to image {index}",
+    "georgia": "Georgia"
   },
   "Errors": {
     "general": "Something went wrong. Please try again.",

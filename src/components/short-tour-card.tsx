@@ -7,11 +7,12 @@ import { getLocalizedTitle } from "@/lib/localizationHelpers";
 // import ToggleFavouriteButton from "@/components/toggle-favourite-button";
 import { ArrowRight, MapPinIcon } from "lucide-react";
 import TourActionButton from "./tour-action-button";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { Button } from "./ui/button";
 
 export default async function ShortTourCard({ tour }: { tour: Tour }) {
   const locale = await getLocale();
+  const t = await getTranslations("Common");
 
   return (
     <div className="flex flex-col h-full border border-gray-300 shadow-xs rounded-xl">
@@ -37,8 +38,8 @@ export default async function ShortTourCard({ tour }: { tour: Tour }) {
           <p className=" font-bold text-brand-secondary">₾{tour.basePrice}</p>
         </div>
         <div className="text-sm text-gray-500 flex items-center gap-1">
-          <MapPinIcon size={14} /> {getLocalizedTitle(tour, locale)},
-          საკარტველოუ
+          <MapPinIcon size={14} /> {getLocalizedTitle(tour, locale)},{" "}
+          {t("georgia")}
         </div>
         <div className="flex justify-between items-center">
           <div className="flex gap-2 mt-2 mb-2">
