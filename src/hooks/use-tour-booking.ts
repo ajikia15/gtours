@@ -7,6 +7,7 @@
  */
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { Tour } from "@/types/Tour";
 import { useBooking } from "@/context/booking";
 import { useCart } from "@/context/cart";
@@ -22,6 +23,7 @@ export function useTourBooking({
 }: UseTourBookingOptions) {
   const booking = useBooking();
   const cart = useCart();
+  const t = useTranslations("Booking");
 
   // Local state for activities (tour-specific)
   const [selectedActivities, setSelectedActivities] =
@@ -117,21 +119,23 @@ export function useTourBooking({
 
   // Helper functions for display
   const getDateDisplay = () => {
-    if (!selectedDate) return "Choose Date";
+    if (!selectedDate) return t("chooseDate");
     return selectedDate.toLocaleDateString();
   };
 
   const getTravelersDisplay = () => {
     const total = booking.getTotalPeople(travelers);
-    if (total === 0) return "Select Travelers";
-    return `${total} Tourist${total !== 1 ? "s" : ""}`;
+    if (total === 0) return t("selectTravelers");
+    return total === 1
+      ? t("oneTourist", { count: total })
+      : t("manyTourists", { count: total });
   };
 
   const getActivitiesDisplay = () => {
-    if (selectedActivities.length === 0) return "No Activities";
-    return `${selectedActivities.length} Activit${
-      selectedActivities.length !== 1 ? "ies" : "y"
-    }`;
+    if (selectedActivities.length === 0) return t("noActivities");
+    return selectedActivities.length === 1
+      ? t("oneActivityCap", { count: selectedActivities.length })
+      : t("manyActivitiesCap", { count: selectedActivities.length });
   };
 
   const getTotalPeopleCount = () => booking.getTotalPeople(travelers);
@@ -173,7 +177,7 @@ export function useTourBooking({
   // Direct checkout function
   const proceedToCheckout = async () => {
     if (!validation.isComplete) {
-      return { success: false, message: "Please complete all required fields" };
+      return { success: false, message: t("completeAllRequiredFields") };
     }
 
     return await booking.proceedToDirectCheckoutWithDetails(tour, {

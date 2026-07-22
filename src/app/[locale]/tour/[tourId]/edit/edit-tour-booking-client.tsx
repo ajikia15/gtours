@@ -11,6 +11,7 @@ import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
 interface EditTourBookingClientProps {
   tour: Tour;
@@ -20,6 +21,7 @@ export default function EditTourBookingClient({
   tour,
 }: EditTourBookingClientProps) {
   const router = useRouter();
+  const t = useTranslations("Booking");
 
   // Use shared booking logic hook
   const {
@@ -47,7 +49,7 @@ export default function EditTourBookingClient({
   const handleProceedToCheckout = async () => {
     const validation = validateForBookNow();
     if (!validation.isComplete) {
-      toast.error("Please complete all required fields");
+      toast.error(t("completeAllRequiredFields"));
       return;
     }
 
@@ -59,10 +61,10 @@ export default function EditTourBookingClient({
     });
 
     if (result.success && result.checkoutUrl) {
-      toast.success("Proceeding to checkout...");
+      toast.success(t("proceedingToCheckout"));
       router.push(result.checkoutUrl);
     } else {
-      toast.error(result.message || "Failed to proceed to checkout");
+      toast.error(result.message || t("failedToCheckout"));
     }
   };
 
@@ -72,12 +74,12 @@ export default function EditTourBookingClient({
       <div className="flex items-center gap-4">
         <Button variant="outline" size="sm" onClick={handleBack}>
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Tour
+          {t("backToTour")}
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Confirm Your Booking</h1>
+          <h1 className="text-2xl font-bold">{t("confirmYourBooking")}</h1>
           <p className="text-gray-600">
-            Review and complete your booking for {tour.title[0]}
+            {t("reviewAndComplete", { tourName: tour.title[0] })}
           </p>
         </div>
       </div>
@@ -86,12 +88,12 @@ export default function EditTourBookingClient({
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
-            <Badge variant="secondary">Ready to Book</Badge>
+            <Badge variant="secondary">{t("readyToBook")}</Badge>
             <div>
               <h3 className="font-semibold text-lg">{tour.title[0]}</h3>
               <p className="text-gray-600">
-                Base price: {tour.basePrice} GEL per person • {tour.duration}
-                days
+                {t("basePricePerPerson", { price: tour.basePrice })} •{" "}
+                {tour.duration} {t("days")}
               </p>
             </div>
           </div>
@@ -100,7 +102,7 @@ export default function EditTourBookingClient({
               {totalPrice} GEL
             </div>
             <div className="text-sm text-gray-500">
-              Total for {getTotalPeopleCount()} travelers
+              {t("totalForTravelers", { count: getTotalPeopleCount() })}
             </div>
           </div>
         </div>
@@ -111,10 +113,10 @@ export default function EditTourBookingClient({
         {/* Date Selection */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Travel Date</h3>
+            <h3 className="font-semibold">{t("travelDate")}</h3>
             {!bookingState.hasDate && (
               <Badge variant="destructive" className="text-xs">
-                Required
+                {t("required")}
               </Badge>
             )}
           </div>
@@ -124,7 +126,7 @@ export default function EditTourBookingClient({
         {/* Traveler Selection */}
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold">Travelers</h3>
+            <h3 className="font-semibold">{t("travelers")}</h3>
             <div className="text-sm text-gray-600">{getTravelersDisplay()}</div>
           </div>
           <TravelerSelection
@@ -137,7 +139,7 @@ export default function EditTourBookingClient({
       {/* Activity Selection */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold">Activities</h3>
+          <h3 className="font-semibold">{t("activities")}</h3>
           <div className="text-sm text-gray-600">{getActivitiesDisplay()}</div>
         </div>
         {tour.offeredActivities && tour.offeredActivities.length > 0 ? (
@@ -150,7 +152,7 @@ export default function EditTourBookingClient({
           />
         ) : (
           <p className="text-sm text-gray-500 italic">
-            No additional activities available for this tour.
+            {t("noAdditionalActivities")}
           </p>
         )}
       </Card>
@@ -189,7 +191,7 @@ export default function EditTourBookingClient({
       {!bookingState.isComplete && bookingState.errors.length > 0 && (
         <Card className="p-4 bg-red-50 border-red-200">
           <h4 className="font-medium text-red-800 mb-2">
-            Please complete the following to proceed:
+            {t("pleaseCompleteFollowing")}
           </h4>
           <ul className="text-sm text-red-700 space-y-1">
             {bookingState.errors.map((error, index) => (
@@ -202,7 +204,7 @@ export default function EditTourBookingClient({
       {/* Action Buttons */}
       <div className="flex gap-4">
         <Button variant="outline" onClick={handleBack} className="flex-1">
-          Back to Tour
+          {t("backToTour")}
         </Button>
         <Button
           onClick={handleProceedToCheckout}
@@ -210,8 +212,8 @@ export default function EditTourBookingClient({
           className="flex-1 bg-red-600 hover:bg-red-700"
         >
           {bookingState.isComplete
-            ? "Proceed to Checkout"
-            : "Complete Required Fields"}
+            ? t("proceedToCheckout")
+            : t("completeRequiredFieldsButton")}
         </Button>
       </div>
 
@@ -221,15 +223,13 @@ export default function EditTourBookingClient({
           <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5 flex-shrink-0" />
           <div>
             <h3 className="font-medium text-blue-900 mb-2">
-              Booking Confirmation
+              {t("bookingConfirmation")}
             </h3>
             <ul className="text-sm text-blue-800 space-y-1">
-              <li>• Review all details before proceeding to checkout</li>
-              <li>• Your booking will be confirmed after payment</li>
-              <li>
-                • You can modify your booking details until payment is completed
-              </li>
-              <li>• All prices include applicable taxes and fees</li>
+              <li>• {t("helpReviewDetails")}</li>
+              <li>• {t("helpConfirmedAfterPayment")}</li>
+              <li>• {t("helpModifyUntilPayment")}</li>
+              <li>• {t("helpPricesIncludeTaxes")}</li>
             </ul>
           </div>
         </div>

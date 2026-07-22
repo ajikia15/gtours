@@ -7,6 +7,7 @@ import { useRouter } from "@/i18n/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getFreshToken } from "@/lib/client-auth-utils";
+import { useTranslations } from "next-intl";
 
 export default function ToggleFavouriteButton({
   tourId,
@@ -17,6 +18,7 @@ export default function ToggleFavouriteButton({
 }) {
   const auth = useAuth();
   const router = useRouter();
+  const t = useTranslations("Booking");
   const [isLoading, setIsLoading] = useState(false);
   const [optimisticFavourite, setOptimisticFavourite] = useState(isFavourite);
 
@@ -29,7 +31,7 @@ export default function ToggleFavouriteButton({
         try {
           if (!auth?.currentUser) {
             setIsLoading(false);
-            toast.info("Please log in to add to favorites");
+            toast.info(t("pleaseLogInFavorites"));
             return;
           }
 
@@ -37,7 +39,7 @@ export default function ToggleFavouriteButton({
           const token = await getFreshToken();
           if (!token) {
             setIsLoading(false);
-            toast.error("Authentication expired. Please log in again.");
+            toast.error(t("authExpired"));
             window.location.href = "/account";
             return;
           }
@@ -54,14 +56,14 @@ export default function ToggleFavouriteButton({
           router.refresh();
           toast.success(
             newFavouriteState
-              ? "Added to favorites!"
-              : "Removed from favorites :("
+              ? t("addedToFavorites")
+              : t("removedFromFavorites")
           );
           setIsLoading(false);
         } catch (error) {
           // Revert optimistic update on error
           setOptimisticFavourite(isFavourite);
-          toast.error("Failed to update favorites. Please try again.");
+          toast.error(t("failedUpdateFavorites"));
           setIsLoading(false);
           console.error("Error toggling favourite:", error);
         }

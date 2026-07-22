@@ -29,7 +29,7 @@ import TourDatePicker from "@/components/booking/tour-date-picker";
 import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
 import { getLocalizedTitle } from "@/lib/localizationHelpers";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 interface BookingBarProps {
   tours: Tour[];
@@ -54,6 +54,9 @@ export default function BookingBar({
   const booking = useBooking();
   const cart = useCart();
   const locale = useLocale();
+  const t = useTranslations("Booking");
+  const tCommon = useTranslations("Common");
+  const tErrors = useTranslations("Errors");
   // Use shared state only in edit mode (like tour-details-booker)
   const { selectedDate: sharedDate, travelers: sharedTravelers } =
     booking.sharedState;
@@ -163,7 +166,7 @@ export default function BookingBar({
 
   const handleSubmit = async () => {
     if (!selectedTour || !isComplete) {
-      toast.error("Please complete all required fields");
+      toast.error(t("completeAllRequiredFields"));
       return;
     }
 
@@ -178,7 +181,7 @@ export default function BookingBar({
             travelers,
             selectedActivities,
           });
-          toast.success("Booking updated! Proceeding to checkout...");
+          toast.success(t("bookingUpdated"));
           router.push(`/account/checkout?itemId=${editingItem.id}`);
           onSuccess?.();
         } else {
@@ -193,7 +196,7 @@ export default function BookingBar({
             })
           );
           await Promise.all(updatePromises);
-          toast.success("All bookings updated successfully!");
+          toast.success(t("allBookingsUpdated"));
           router.push("/account/cart");
           onSuccess?.();
         }
@@ -211,11 +214,11 @@ export default function BookingBar({
           );
 
           if (result.success && result.checkoutUrl) {
-            toast.success("Proceeding to checkout...");
+            toast.success(t("proceedingToCheckout"));
             router.push(result.checkoutUrl);
             onSuccess?.();
           } else {
-            toast.error(result.message || "Failed to proceed to checkout");
+            toast.error(result.message || t("failedToCheckout"));
           }
         } else {
           // Normal add mode: add partial booking to cart (allows incomplete)
@@ -237,14 +240,14 @@ export default function BookingBar({
 
             onSuccess?.();
           } else {
-            toast.error(result.message || "Failed to add to cart");
+            toast.error(result.message || t("failedToAddToCart"));
             return;
           }
         }
       }
     } catch (error) {
       console.error("Booking operation failed:", error);
-      toast.error("Something went wrong. Please try again.");
+      toast.error(tErrors("general"));
     } finally {
       setIsProcessing(false);
     }
@@ -252,27 +255,29 @@ export default function BookingBar({
 
   // Section content helpers
   const getTourDisplay = () => {
-    if (!selectedTour) return "Select tour";
+    if (!selectedTour) return t("selectTour");
     return getLocalizedTitle(selectedTour, locale);
   };
 
   const getActivitiesDisplay = () => {
-    if (!selectedTour) return "Select activities";
-    if (selectedActivities.length === 0) return "Select activities";
-    return `${selectedActivities.length} activit${
-      selectedActivities.length !== 1 ? "ies" : "y"
-    }`;
+    if (!selectedTour) return t("selectActivities");
+    if (selectedActivities.length === 0) return t("selectActivities");
+    return selectedActivities.length === 1
+      ? t("oneActivity", { count: selectedActivities.length })
+      : t("manyActivities", { count: selectedActivities.length });
   };
 
   const getDateDisplay = () => {
-    if (!selectedDate) return "Select date";
+    if (!selectedDate) return t("selectDate");
     return selectedDate.toLocaleDateString();
   };
 
   const getTravelersDisplay = () => {
     const total = booking.getTotalPeople(travelers);
-    if (total === 0) return "Select travelers";
-    return `${total} traveler${total !== 1 ? "s" : ""}`;
+    if (total === 0) return t("selectTravelers");
+    return total === 1
+      ? t("oneTraveler", { count: total })
+      : t("manyTravelers", { count: total });
   };
 
   return (
@@ -303,7 +308,9 @@ export default function BookingBar({
             >
               <div className="flex items-center gap-2 mb-1">
                 <MapPin className="h-4 w-4 text-zinc-300" />
-                <span className="text-sm font-medium text-gray-100">Tour</span>
+                <span className="text-sm font-medium text-gray-100">
+                  {t("tour")}
+                </span>
                 <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
               <div className="text-xs truncate text-gray-300">
@@ -316,12 +323,13 @@ export default function BookingBar({
               {tourOpenedFromActivities && (
                 <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-800">
-                    <strong>Select a tour first</strong> to choose activities
-                    for your trip.
+                    {t.rich("selectTourFirstPrompt", {
+                      strong: (chunks) => <strong>{chunks}</strong>,
+                    })}
                   </p>
                 </div>
               )}
-              <h4 className="font-medium">Select Tour</h4>
+              <h4 className="font-medium">{t("selectTour")}</h4>
               <TourSelectionContent
                 tours={tours}
                 selectedTour={selectedTour}
@@ -358,7 +366,7 @@ export default function BookingBar({
               <div className="flex items-center gap-2 mb-1">
                 <Activity className="h-4 w-4 text-zinc-300" />
                 <span className="text-sm font-medium text-gray-100">
-                  Activities
+                  {t("activities")}
                 </span>
                 <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
@@ -369,7 +377,7 @@ export default function BookingBar({
           </PopoverTrigger>
           <PopoverContent className="w-80" align="start">
             <div className="space-y-3">
-              <h4 className="font-medium">Select Activities</h4>
+              <h4 className="font-medium">{t("selectActivities")}</h4>
               {selectedTour ? (
                 <ActivitySelection
                   activities={selectedTour.offeredActivities || []}
@@ -382,7 +390,7 @@ export default function BookingBar({
                 />
               ) : (
                 <p className="text-sm text-gray-500">
-                  Please select a tour first
+                  {t("pleaseSelectTourFirst")}
                 </p>
               )}
             </div>
@@ -402,7 +410,9 @@ export default function BookingBar({
             >
               <div className="flex items-center gap-2 mb-1">
                 <CalendarDays className="h-4 w-4 text-zinc-300" />
-                <span className="text-sm font-medium text-gray-100">Date</span>
+                <span className="text-sm font-medium text-gray-100">
+                  {t("date")}
+                </span>
                 <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
               <div className="text-xs truncate text-gray-300">
@@ -429,7 +439,7 @@ export default function BookingBar({
               <div className="flex items-center gap-2 mb-1">
                 <Users className="h-4 w-4 text-zinc-300" />
                 <span className="text-sm font-medium text-gray-100">
-                  Travelers
+                  {t("travelers")}
                 </span>
                 <ChevronDown className="h-4 w-4 text-zinc-300 ml-auto" />
               </div>
@@ -440,7 +450,7 @@ export default function BookingBar({
           </PopoverTrigger>
           <PopoverContent className="w-80" align="start">
             <div className="space-y-3">
-              <h4 className="font-medium">Select Travelers</h4>
+              <h4 className="font-medium">{t("selectTravelers")}</h4>
               <TravelerSelection
                 travelers={travelers}
                 setTravelers={handleTravelersChange}
@@ -458,12 +468,12 @@ export default function BookingBar({
             size="lg"
           >
             {isProcessing
-              ? "Processing..."
+              ? t("processing")
               : mode === "edit" && directBooking
-              ? "Checkout"
+              ? t("checkout")
               : mode === "edit"
-              ? "Update"
-              : "Book Now"}
+              ? tCommon("update")
+              : t("bookNow")}
           </Button>
         </div>
       </div>
@@ -485,6 +495,7 @@ function TourSelectionContent({
   onTourSelect,
   locale = "en",
 }: TourSelectionContentProps) {
+  const t = useTranslations("Booking");
   const [searchQuery, setSearchQuery] = useState("");
 
   // Filter tours based on search query and selected locale
@@ -500,7 +511,7 @@ function TourSelectionContent({
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
         <Input
           type="text"
-          placeholder="Search tours..."
+          placeholder={t("searchTours")}
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="pl-10"
@@ -525,13 +536,13 @@ function TourSelectionContent({
                 {getLocalizedTitle(tour, locale)}
               </div>
               <div className="text-sm text-gray-500">
-                {tour.basePrice} GEL • {tour.duration} days
+                {tour.basePrice} GEL • {tour.duration} {t("days")}
               </div>
             </button>
           ))
         ) : (
           <div className="p-3 text-center text-gray-500">
-            No tours found matching your search.
+            {t("noToursFound")}
           </div>
         )}
       </div>
