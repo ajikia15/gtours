@@ -5,16 +5,13 @@ export default async function ContactSection() {
   const t = await getTranslations("Pages.contact");
 
   return (
-    <div className="flex flex-col md:flex-row gap-12">
-      <div className="space-y-8">
-        <div>
-          <h2 className="font-bold text-xl">{t("title")}</h2>
-        </div>
+    <div className="flex flex-col md:flex-row gap-8 md:gap-12">
+      <div className="w-full md:w-1/2 space-y-6 md:space-y-8">
         <div>
           <p className="text-gray-500">{t("contactDescription")}</p>
         </div>
         <div className="flex flex-row gap-3 items-center">
-          <div className=" rounded-md bg-gray-200  grid place-items-center w-12 h-12">
+          <div className=" rounded-md bg-gray-200  grid place-items-center w-12 h-12 shrink-0">
             <Phone />
           </div>
           <div>
@@ -24,7 +21,7 @@ export default async function ContactSection() {
         </div>
 
         <div className="flex flex-row gap-3 items-center">
-          <div className="rounded-md bg-gray-200  grid place-items-center w-12 h-12">
+          <div className="rounded-md bg-gray-200  grid place-items-center w-12 h-12 shrink-0">
             <Mail />
           </div>
           <div>
@@ -34,7 +31,7 @@ export default async function ContactSection() {
         </div>
 
         <div className="flex flex-row gap-3 items-center">
-          <div className="rounded-md bg-gray-200  grid place-items-center w-12 h-12">
+          <div className="rounded-md bg-gray-200  grid place-items-center w-12 h-12 shrink-0">
             <MapPin />
           </div>
           <div>
@@ -44,7 +41,7 @@ export default async function ContactSection() {
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full md:w-1/2">
         <h3 className="text-xl font-bold  mb-4">{t("sendMessage")}</h3>
         <form className="space-y-4">
           <div>
