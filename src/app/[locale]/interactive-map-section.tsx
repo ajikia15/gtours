@@ -15,12 +15,15 @@ import MapTourCard from "./map-tour-card";
 import MapTourCardSkeleton from "@/components/map-tour-card-skeleton";
 import MapTourCardMobile from "./map-tour-card-mobile";
 import { isMobile } from "@/lib/isMobile";
+import { useTranslations } from "next-intl";
 // import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 // Default map settings
 const DEFAULT_CENTER: [number, number] = [43.5, 42.3];
 
 export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
+  const t = useTranslations("Map");
+  const tCommon = useTranslations("Common");
   const [selectedTour, setSelectedTour] = useState<Tour | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isMounted, setIsMounted] = useState(false);
@@ -91,7 +94,7 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
           <div className="order-1 lg:order-2 lg:flex-1">
             <div className="w-full aspect-[16/9] bg-gray-100 dark:bg-gray-800 border border-gray-200 rounded-xl shadow-sm animate-pulse flex items-center justify-center">
               <span className="text-gray-500 dark:text-gray-400 text-sm">
-                Loading map...
+                {t("loadingMapData")}
               </span>
             </div>
           </div>
@@ -205,14 +208,14 @@ export default function InteractiveMapSection({ tours }: { tours: Tour[] }) {
             <button
               onClick={handleZoomIn}
               className="w-10 h-10 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center font-bold text-lg"
-              aria-label="Zoom in"
+              aria-label={tCommon("zoomIn")}
             >
               +
             </button>
             <button
               onClick={handleZoomOut}
               className="w-10 h-10 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-50 flex items-center justify-center font-bold text-lg"
-              aria-label="Zoom out"
+              aria-label={tCommon("zoomOut")}
             >
               −
             </button>

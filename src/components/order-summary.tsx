@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { useCart } from "@/context/cart";
 import { useBooking } from "@/context/booking";
 import { Link, useRouter } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 
 // Type for simple order items (like on checkout page)
 export interface SimpleOrderItem {
@@ -55,12 +56,16 @@ export default function OrderSummary({
   disabledReason,
   buttonAction,
   showButton = true,
-  title = "Order Summary",
+  title,
   className = "",
 }: OrderSummaryProps) {
   const cart = useCart();
   const booking = useBooking();
   const router = useRouter();
+  const t = useTranslations("Checkout");
+  const tCommon = useTranslations("Common");
+  const tCart = useTranslations("Cart");
+  const displayTitle = title ?? t("orderSummary");
 
   const isCartMode = mode === "cart";
   const { selectedDate, travelers } = booking?.sharedState || {};
@@ -87,7 +92,7 @@ export default function OrderSummary({
     <div
       className={`bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-4 ${className}`}
     >
-      <h2 className="text-lg font-semibold mb-4">{title}</h2>
+      <h2 className="text-lg font-semibold mb-4">{displayTitle}</h2>
 
       {/* Simplified Items List */}
       <div className="space-y-3 mb-4">
@@ -96,7 +101,8 @@ export default function OrderSummary({
             {/* Tours */}
             <div className="flex justify-between text-sm">
               <span>
-                <span className="font-bold">Tours</span> - {cart.items.length}
+                <span className="font-bold">{t("tours")}</span> -{" "}
+                {cart.items.length}
               </span>
               <span>
                 {cart.items.reduce(
@@ -109,18 +115,20 @@ export default function OrderSummary({
 
             {/* Start Date */}
             <div className="flex justify-between text-sm">
-              <span className="font-bold">Start date</span>
+              <span className="font-bold">{t("startDate")}</span>
               {selectedDate ? (
                 <span>{format(selectedDate, "PPP")}</span>
               ) : (
-                <span className="italic text-gray-500">finish booking</span>
+                <span className="italic text-gray-500">
+                  {t("finishBookingHint")}
+                </span>
               )}
             </div>
 
             {/* Amount of tourists */}
             <div className="flex justify-between text-sm">
               <span>
-                <span className="font-bold">Tourists</span> -
+                <span className="font-bold">{t("tourists")}</span> -
                 {(travelers?.adults ?? 0) +
                   (travelers?.children ?? 0) +
                   (travelers?.infants ?? 0)}
@@ -135,7 +143,7 @@ export default function OrderSummary({
             {/* Amount of activities */}
             <div className="flex justify-between text-sm">
               <span>
-                <span className="font-bold">Activities</span> -
+                <span className="font-bold">{t("activities")}</span> -
                 {cart.items.reduce(
                   (total, item) =>
                     total + (item.selectedActivities?.length || 0),
@@ -154,7 +162,7 @@ export default function OrderSummary({
 
             {/* Locations */}
             <div className="flex justify-between text-sm">
-              <span className="font-bold">Locations</span>
+              <span className="font-bold">{t("locations")}</span>
               <span className="font-bold text-right">
                 {cart.items.map((item) => item.tourTitle).join(", ")}
               </span>
@@ -170,7 +178,7 @@ export default function OrderSummary({
                   <p className="text-xs text-gray-500">{item.description}</p>
                 )}
                 <p className="text-xs text-gray-500">
-                  Quantity: {item.quantity}
+                  {tCommon("quantity")}: {item.quantity}
                 </p>
               </div>
               <p className="font-medium">
@@ -184,7 +192,7 @@ export default function OrderSummary({
       {/* Total Price Section */}
       <div className="border-t border-b border-gray-300 py-4 mb-4">
         <div className="flex justify-between text-base font-semibold">
-          <span>Total price</span>
+          <span>{tCart("totalPrice")}</span>
           <span className="text-black">
             {isCartMode ? `${cart.totalPrice} GEL` : `$${total.toFixed(2)}`}
           </span>
@@ -195,8 +203,8 @@ export default function OrderSummary({
       <div className="text-center mb-2">
         <p className="text-xs text-gray-600">
           {isCartMode && incompleteItems.length > 0
-            ? "Finish booking before payment"
-            : "You can proceed to checkout"}
+            ? t("finishBookingBeforePayment")
+            : t("canProceedToCheckout")}
         </p>
       </div>
 
@@ -209,15 +217,13 @@ export default function OrderSummary({
             disabled={disabled || (isCartMode && incompleteItems.length > 0)}
             onClick={getDefaultButtonAction()}
           >
-            Checkout
+            {t("title")}
           </Button>
 
           {(disabled || (isCartMode && incompleteItems.length > 0)) && (
             <p className="text-xs text-amber-600 text-center">
               {disabledReason ||
-                (isCartMode
-                  ? ""
-                  : "Your contact information is required to process your order")}
+                (isCartMode ? "" : t("contactInfoRequired"))}
             </p>
           )}
         </div>
@@ -226,12 +232,12 @@ export default function OrderSummary({
       {/* Help Text */}
       <div className="mt-4 pt-4 border-t">
         <p className="text-xs text-gray-500 text-center">
-          Need help?
+          {t("needHelp")}
           <Link
             href="/contact"
             className="font-semibold text-red-600 hover:underline"
           >
-            Contact us
+            {t("contactUs")}
           </Link>
         </p>
       </div>

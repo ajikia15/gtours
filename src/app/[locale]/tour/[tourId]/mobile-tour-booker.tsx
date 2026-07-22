@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Tour } from "@/types/Tour";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -22,6 +23,8 @@ import TravelerSelection from "@/components/booking/traveler-selection";
 import ActivitySelection from "@/components/booking/activity-selection";
 
 export default function MobileTourBooker({ tour }: { tour: Tour }) {
+  const t = useTranslations("TourDetails");
+  const tBooking = useTranslations("Booking");
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   // Use shared booking logic hook
@@ -92,7 +95,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
       <DrawerContent className="max-h-[90vh]">
         <DrawerHeader className="pb-4">
           <DrawerTitle className="text-xl font-bold">
-            Complete Your Booking
+            {t("completeBooking")}
           </DrawerTitle>
           <div className="flex items-center justify-between">
             <div>
@@ -100,8 +103,10 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
                 {tour.title[0]}
               </h2>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <span>Base: {tour.basePrice} GEL</span>
-                <Badge variant="outline">{tour.duration} days</Badge>
+                <span>{t("base", { price: tour.basePrice })}</span>
+                <Badge variant="outline">
+                  {tour.duration} {tBooking("days")}
+                </Badge>
               </div>
             </div>
             <div className="text-right">
@@ -109,7 +114,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
                 {totalPrice} GEL
               </div>
               <div className="text-xs text-gray-500">
-                Total for {getTotalPeopleCount()} travelers
+                {t("totalForTravelers", { count: getTotalPeopleCount() })}
               </div>
             </div>
           </div>
@@ -121,11 +126,11 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Calendar className="h-5 w-5 text-gray-600" />
-                <h3 className="font-medium">Travel Date</h3>
+                <h3 className="font-medium">{t("travelDate")}</h3>
               </div>
               {!bookingState.hasDate && (
                 <Badge variant="destructive" className="text-xs">
-                  Required
+                  {tBooking("required")}
                 </Badge>
               )}
             </div>
@@ -137,7 +142,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Users className="h-5 w-5 text-gray-600" />
-                <h3 className="font-medium">Travelers</h3>
+                <h3 className="font-medium">{tBooking("selectTravelers")}</h3>
               </div>
               <div className="text-sm text-gray-600">
                 {getTravelersDisplay()}
@@ -154,7 +159,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Activity className="h-5 w-5 text-gray-600" />
-                <h3 className="font-medium">Activities</h3>
+                <h3 className="font-medium">{tBooking("selectActivities")}</h3>
               </div>
               <div className="text-sm text-gray-600">
                 {getActivitiesDisplay()}
@@ -172,7 +177,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
               />
             ) : (
               <p className="text-sm text-gray-500 italic">
-                No additional activities available for this tour.
+                {t("noActivitiesAvailable")}
               </p>
             )}
           </Card>
@@ -212,7 +217,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
           {!bookingState.isComplete && bookingState.errors.length > 0 && (
             <Card className="p-4 bg-red-50 border-red-200">
               <h4 className="font-medium text-red-800 mb-2">
-                Please complete the following to book now:
+                {t("pleaseComplete")}
               </h4>
               <ul className="text-sm text-red-700 space-y-1">
                 {bookingState.errors.map((error, index) => (
@@ -251,7 +256,7 @@ export default function MobileTourBooker({ tour }: { tour: Tour }) {
           />
           <DrawerClose asChild>
             <Button variant="ghost" size="lg" className="w-full">
-              Continue Browsing
+              {t("continueBrowsing")}
             </Button>
           </DrawerClose>
         </DrawerFooter>

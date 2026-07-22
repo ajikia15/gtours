@@ -18,6 +18,7 @@ import { cn } from "@/lib/utils";
 import Image from "next/image";
 export default function MobileNavbar() {
   const t = useTranslations("Navbar");
+  const tCommon = useTranslations("Common");
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -51,7 +52,7 @@ export default function MobileNavbar() {
                 "h-10 w-10 p-0 hover:bg-transparent",
                 scrolled ? "text-primary" : "text-white"
               )}
-              aria-label="Open navigation menu"
+              aria-label={tCommon("openNavigationMenu")}
             >
               <Menu size={26} strokeWidth={1.5} />
             </Button>

@@ -8,6 +8,7 @@ import { Trash2, MapPin, Pencil, Activity, GripVertical } from "lucide-react";
 import { removeFromCart } from "@/data/cart";
 import { toast } from "sonner";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { DraggableProvidedDragHandleProps } from "@hello-pangea/dnd";
 
 interface CartCardProps {
@@ -22,6 +23,7 @@ export default function CartCard({
   onEdit,
 }: CartCardProps) {
   const [isRemoving, setIsRemoving] = useState(false);
+  const t = useTranslations("Cart");
 
   const handleRemoveItem = async () => {
     setIsRemoving(true);
@@ -29,12 +31,12 @@ export default function CartCard({
     try {
       const result = await removeFromCart(item.id);
       if (result.success) {
-        toast.success("Item removed from cart");
+        toast.success(t("itemRemoved"));
       } else {
-        toast.error(result.message || "Failed to remove item");
+        toast.error(result.message || t("failedToRemove"));
       }
     } catch (error) {
-      toast.error(`Failed to remove item: ${error}`);
+      toast.error(`${t("failedToRemove")}: ${error}`);
     } finally {
       setIsRemoving(false);
     }
@@ -76,18 +78,24 @@ export default function CartCard({
 
               <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-500 mt-1">
                 <MapPin className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                <span className="line-clamp-1">{item.tourTitle}, Georgia</span>
+                <span className="line-clamp-1">
+                  {item.tourTitle}, {t("georgia")}
+                </span>
               </div>
 
               <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-600 mt-2">
                 <Activity className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                 {item.selectedActivities.length > 0 ? (
                   <span>
-                    {item.selectedActivities.length} activit
-                    {item.selectedActivities.length > 1 ? "ies" : "y"} selected
+                    {item.selectedActivities.length}{" "}
+                    {item.selectedActivities.length > 1
+                      ? t("activitiesSelected")
+                      : t("activitySelected")}
                   </span>
                 ) : (
-                  <span className="text-gray-500">No activities selected</span>
+                  <span className="text-gray-500">
+                    {t("noActivitiesSelected")}
+                  </span>
                 )}
               </div>
             </div>
@@ -99,7 +107,7 @@ export default function CartCard({
                 size="icon"
                 onClick={handleEditItem}
                 className="text-gray-500 hover:text-blue-600 hover:bg-blue-50 rounded-full h-8 w-8"
-                title="Edit booking details"
+                title={t("editBookingDetails")}
               >
                 <Pencil className="h-4 w-4" />
               </Button>
@@ -109,7 +117,7 @@ export default function CartCard({
                 onClick={handleRemoveItem}
                 disabled={isRemoving}
                 className="text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full h-8 w-8"
-                title="Remove from cart"
+                title={t("removeFromCart")}
               >
                 <Trash2 className="h-4 w-4" />
               </Button>
@@ -132,7 +140,7 @@ export default function CartCard({
                     : "bg-black text-white hover:bg-gray-800"
                 }`}
               >
-                {item.isComplete ? "Finished" : "Finish booking"}
+                {item.isComplete ? t("finished") : t("finishBooking")}
               </Button>
             </div>
           </div>

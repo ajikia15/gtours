@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useState, ReactNode } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import { EmblaOptionsType } from "embla-carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 type ActivityCarouselProps = {
   children: ReactNode;
@@ -13,6 +14,7 @@ export const ActivityCarousel: React.FC<ActivityCarouselProps> = ({
   children,
   className,
 }) => {
+  const tCommon = useTranslations("Common");
   const [prevBtnVisible, setPrevBtnVisible] = useState(false);
   const [nextBtnVisible, setNextBtnVisible] = useState(true);
 
@@ -65,7 +67,7 @@ export const ActivityCarousel: React.FC<ActivityCarouselProps> = ({
         <button
           onClick={scrollPrev}
           className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-0.5 sm:p-1 shadow-md"
-          aria-label="Previous"
+          aria-label={tCommon("previous")}
         >
           <ChevronLeft className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
         </button>
@@ -75,7 +77,7 @@ export const ActivityCarousel: React.FC<ActivityCarouselProps> = ({
         <button
           onClick={scrollNext}
           className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white rounded-full p-0.5 sm:p-1 shadow-md"
-          aria-label="Next"
+          aria-label={tCommon("next")}
         >
           <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5 text-gray-600" />
         </button>

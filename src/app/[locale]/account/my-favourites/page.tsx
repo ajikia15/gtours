@@ -1,8 +1,11 @@
 import { getUserFavourites } from "@/data/favourites";
 import { getToursById } from "@/data/tours";
 import MapTourCard from "../../../../components/tour-card";
+import { getTranslations } from "next-intl/server";
 
 export default async function FavouritesPage() {
+  const t = await getTranslations("Favorites");
+
   try {
     const favourites = await getUserFavourites();
 
@@ -10,14 +13,10 @@ export default async function FavouritesPage() {
     if (!favourites || favourites.length === 0) {
       return (
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-6">My Favourites</h1>
+          <h1 className="text-2xl font-bold mb-6">{t("myFavourites")}</h1>
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">
-              You haven&apos;t added any tours to your favourites yet.
-            </p>
-            <p className="text-gray-400 mt-2">
-              Start exploring tours and add them to your favourites!
-            </p>
+            <p className="text-gray-500 text-lg">{t("noFavouritesYet")}</p>
+            <p className="text-gray-400 mt-2">{t("startExploring")}</p>
           </div>
         </div>
       );
@@ -29,12 +28,10 @@ export default async function FavouritesPage() {
     if (!tours || tours.length === 0) {
       return (
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-2xl font-bold mb-6">My Favourites</h1>
+          <h1 className="text-2xl font-bold mb-6">{t("myFavourites")}</h1>
           <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">
-              Unable to load your favourite tours.
-            </p>
-            <p className="text-gray-400 mt-2">Please try again later.</p>
+            <p className="text-gray-500 text-lg">{t("unableToLoad")}</p>
+            <p className="text-gray-400 mt-2">{t("tryAgainLater")}</p>
           </div>
         </div>
       );
@@ -42,9 +39,9 @@ export default async function FavouritesPage() {
 
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">My Favourites</h1>
+        <h1 className="text-2xl font-bold mb-6">{t("myFavourites")}</h1>
         <p className="text-gray-600 mb-8">
-          You have {tours.length} favourite tour{tours.length !== 1 ? "s" : ""}
+          {t("favouriteCount", { count: tours.length })}
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {tours.map((tour) => (
@@ -61,14 +58,10 @@ export default async function FavouritesPage() {
     console.error("Error loading favourites:", error);
     return (
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold mb-6">My Favourites</h1>
+        <h1 className="text-2xl font-bold mb-6">{t("myFavourites")}</h1>
         <div className="text-center py-12">
-          <p className="text-red-500 text-lg">
-            Something went wrong while loading your favourites.
-          </p>
-          <p className="text-gray-400 mt-2">
-            Please refresh the page or try again later.
-          </p>
+          <p className="text-red-500 text-lg">{t("somethingWrong")}</p>
+          <p className="text-gray-400 mt-2">{t("refreshPage")}</p>
         </div>
       </div>
     );

@@ -5,18 +5,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircleIcon, DownloadIcon, AlertCircleIcon } from "lucide-react";
 import { redirect } from "@/i18n/navigation";
+import { getTranslations } from "next-intl/server";
 
 interface OrdersPageProps {
   searchParams: Promise<{ invoice?: string }>;
 }
 
 async function OrderContent({ invoiceId }: { invoiceId?: string }) {
+  const t = await getTranslations("Orders");
   if (!invoiceId) {
     return (
       <div className="max-w-4xl mx-auto p-6">
         <div className="text-center space-y-4">
-          <h1 className="text-2xl font-bold">Your Orders</h1>
-          <p className="text-gray-600">No recent orders found.</p>
+          <h1 className="text-2xl font-bold">{t("yourOrders")}</h1>
+          <p className="text-gray-600">{t("noRecentOrders")}</p>
         </div>
       </div>
     );
@@ -34,10 +36,8 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
       <div className="max-w-4xl mx-auto p-6">
         <div className="text-center space-y-4">
           <AlertCircleIcon className="h-16 w-16 mx-auto text-red-500" />
-          <h1 className="text-2xl font-bold">Order Not Found</h1>
-          <p className="text-gray-600">
-            The requested order could not be found.
-          </p>
+          <h1 className="text-2xl font-bold">{t("orderNotFound")}</h1>
+          <p className="text-gray-600">{t("orderNotFoundDescription")}</p>
         </div>
       </div>
     );
@@ -50,48 +50,43 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
         <div className="flex items-center justify-center">
           <CheckCircleIcon className="h-16 w-16 text-green-500" />
         </div>
-        <h1 className="text-3xl font-bold">Order Completed!</h1>
-        <p className="text-gray-600">
-          Your invoice has been generated and is ready for download. We&apos;ve
-          also sent a copy to your email address.
-        </p>
+        <h1 className="text-3xl font-bold">{t("orderCompleted")}</h1>
+        <p className="text-gray-600">{t("invoiceGenerated")}</p>
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4 mt-4">
           <p className="text-sm text-amber-800">
-            <strong>📧 Email Note:</strong> Please check your spam/junk folder
-            if you don&apos;t see the invoice email in your inbox. Sometimes
-            emails with download links may be filtered by email providers.
+            <strong>📧 {t("emailNoteLabel")}</strong> {t("emailNoteText")}
           </p>
         </div>
       </div>
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Order Details</span>
-            <Badge variant="default">completed</Badge>
+            <span>{t("orderDetails")}</span>
+            <Badge variant="default">{t("completed")}</Badge>
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <p className="text-sm text-gray-600">Invoice Number</p>
+              <p className="text-sm text-gray-600">{t("invoiceNumber")}</p>
               <p className="font-semibold">{invoice.data?.invoiceNumber}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Invoice Date</p>
+              <p className="text-sm text-gray-600">{t("invoiceDate")}</p>
               <p className="font-semibold">{invoice.data?.invoiceDate}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Customer</p>
+              <p className="text-sm text-gray-600">{t("customer")}</p>
               <p className="font-semibold">{invoice.data?.customer?.name}</p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Expected Guest Date</p>
+              <p className="text-sm text-gray-600">{t("expectedGuestDate")}</p>
               <p className="font-semibold">
                 {invoice.data?.summary?.startDate}
               </p>
             </div>
             <div>
-              <p className="text-sm text-gray-600">Total Amount</p>
+              <p className="text-sm text-gray-600">{t("totalAmount")}</p>
               <p className="font-semibold">
                 {invoice.data?.summary?.totalPrice}
                 {invoice.data?.summary?.currency}
@@ -107,7 +102,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
               className="inline-flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors"
             >
               <DownloadIcon className="h-4 w-4" />
-              Download Invoice PDF
+              {t("downloadInvoicePDF")}
             </a>
           </div>
         </CardContent>
@@ -115,7 +110,7 @@ async function OrderContent({ invoiceId }: { invoiceId?: string }) {
       {invoice.data?.tourDetails && invoice.data.tourDetails.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle>Ordered Tours</CardTitle>
+            <CardTitle>{t("orderedTours")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">

@@ -16,6 +16,7 @@ import {
 import { useState } from "react";
 import { Tour } from "@/types/Tour";
 import { CartItem } from "@/types/Cart";
+import { useTranslations } from "next-intl";
 
 interface CartPageClientProps {
   tours: Tour[];
@@ -23,6 +24,7 @@ interface CartPageClientProps {
 
 export default function CartPageClient({ tours }: CartPageClientProps) {
   const cart = useCart();
+  const t = useTranslations("Cart");
 
   // Edit modal state
   const [editingItem, setEditingItem] = useState<CartItem | null>(null);
@@ -40,7 +42,7 @@ export default function CartPageClient({ tours }: CartPageClientProps) {
       <div className="container mx-auto px-4 py-8 min-h-screen">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-          <p className="mt-2 text-gray-600">Loading your cart...</p>
+          <p className="mt-2 text-gray-600">{t("loadingCart")}</p>
         </div>
       </div>
     );
@@ -52,13 +54,11 @@ export default function CartPageClient({ tours }: CartPageClientProps) {
         <div className="text-center">
           <ShoppingCart className="mx-auto h-16 w-16 text-gray-400 mb-4" />
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
-            Your Cart is Empty
+            {t("empty")}
           </h1>
-          <p className="text-gray-600 mb-4">
-            Start exploring our tours to add them to your cart
-          </p>
+          <p className="text-gray-600 mb-4">{t("emptyDescription")}</p>
           <Link href="/">
-            <Button>Browse Tours</Button>
+            <Button>{t("browseTours")}</Button>
           </Link>
         </div>
       </div>
@@ -70,9 +70,9 @@ export default function CartPageClient({ tours }: CartPageClientProps) {
       <div className="container mx-auto px-4 py-8 min-h-screen">
         <div className="flex items-center gap-3 mb-6">
           <ShoppingCart className="h-8 w-8" />
-          <h1 className="text-3xl font-bold">Your Cart</h1>
+          <h1 className="text-3xl font-bold">{t("yourCart")}</h1>
           <span className="bg-gray-100 text-gray-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
-            {cart.totalItems} {cart.totalItems === 1 ? "item" : "items"}
+            {cart.totalItems} {cart.totalItems === 1 ? t("item") : t("items")}
           </span>
         </div>
 
@@ -100,7 +100,7 @@ export default function CartPageClient({ tours }: CartPageClientProps) {
         <Dialog open onOpenChange={() => setEditingItem(null)}>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Edit Booking</DialogTitle>
+              <DialogTitle>{t("editBooking")}</DialogTitle>
             </DialogHeader>
             <UnifiedBookingForm
               tour={getTourForItem(editingItem)!}
