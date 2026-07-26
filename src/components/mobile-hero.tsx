@@ -33,6 +33,7 @@ export const HERO_SLUGS = [
   "beshtasheni",
   "tsalka",
   "sighnaghi",
+  "sameba",
 ] as const;
 
 export function useHeroClips(): HeroClip[] {
