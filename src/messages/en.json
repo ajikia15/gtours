@@ -42,6 +42,10 @@
       "sameba": {
         "title": "Sameba",
         "region": "Capital"
+      },
+      "ushguli": {
+        "title": "Ushguli",
+        "region": "Svaneti"
       }
     }
   },

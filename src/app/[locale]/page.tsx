@@ -107,12 +107,7 @@ function DesktopHeroSkeleton() {
           >
             <div className="rounded-[14px] bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)]">
               <div className="h-[336px] animate-pulse rounded-[6px] bg-neutral-200" />
-              {s.x === 0 && (
-                <div className="px-1 pt-3 pb-1">
-                  <div className="mb-2 h-5 w-24 animate-pulse rounded bg-neutral-200" />
-                  <div className="h-4 w-16 animate-pulse rounded bg-neutral-200" />
-                </div>
-              )}
+              <div className="h-16" />
             </div>
           </div>
         ))}

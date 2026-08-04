@@ -21,7 +21,15 @@ const CARD_W = 248;
 
 const WINDOW = [-2, -1, 0, 1, 2];
 
-function FanCard({ clip, pos }: { clip: HeroClip; pos: number }) {
+function FanCard({
+  clip,
+  pos,
+  onSelect,
+}: {
+  clip: HeroClip;
+  pos: number;
+  onSelect: () => void;
+}) {
   const slot = FAN[pos + 2];
   const isCurrent = pos === 0;
   const shouldLoad = pos === 0 || pos === 1;
@@ -55,7 +63,12 @@ function FanCard({ clip, pos }: { clip: HeroClip; pos: number }) {
       exit={{ scale: slot.scale * 0.85, opacity: 0 }}
       transition={{ type: "spring", stiffness: 260, damping: 32 }}
     >
-      <div className="rounded-[14px] bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)]">
+      <div
+        onClick={isCurrent ? undefined : onSelect}
+        className={`rounded-[14px] bg-white p-3 shadow-[0_16px_38px_-16px_rgba(0,0,0,0.3)] ${
+          isCurrent ? "" : "cursor-pointer"
+        }`}
+      >
         <div className="relative h-[336px] overflow-hidden rounded-[6px] bg-neutral-800">
           {clip.poster && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -117,7 +130,7 @@ export default function DesktopHero({
     if (n <= 1) return;
     const id = setInterval(() => setActive((p) => p + 1), ROTATE_MS);
     return () => clearInterval(id);
-  }, [n]);
+  }, [n, active]);
 
   return (
     <div className="mx-auto max-w-[1440px] px-8 pt-12 pb-8">
@@ -134,7 +147,14 @@ export default function DesktopHero({
           {WINDOW.map((p) => {
             const seq = active + p;
             const clip = clips[((seq % n) + n) % n];
-            return <FanCard key={seq} clip={clip} pos={p} />;
+            return (
+              <FanCard
+                key={seq}
+                clip={clip}
+                pos={p}
+                onSelect={() => setActive(seq)}
+              />
+            );
           })}
         </AnimatePresence>
       </div>
