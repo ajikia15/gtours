@@ -46,8 +46,17 @@
       "ushguli": {
         "title": "უშგული",
         "region": "სვანეთი"
+      },
+      "batumi": {
+        "title": "ბათუმი",
+        "region": "აჭარა"
+      },
+      "paliastomi": {
+        "title": "პალიასტომი",
+        "region": "სამეგრელო"
       }
-    }
+    },
+    "viewTour": "წავედით"
   },
   "SearchBar": {
     "whereHeaded": "სად მივემგზავრებით?",

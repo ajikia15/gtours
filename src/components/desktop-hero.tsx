@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { ArrowRight } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import type { Tour } from "@/types/Tour";
 import TourSearchBar from "@/components/tour-search-bar";
 import { useHeroClips, type HeroClip } from "@/components/mobile-hero";
@@ -30,6 +32,7 @@ function FanCard({
   pos: number;
   onSelect: () => void;
 }) {
+  const t = useTranslations("Hero");
   const slot = FAN[pos + 2];
   const isCurrent = pos === 0;
   const shouldLoad = pos === 0 || pos === 1;
@@ -98,13 +101,24 @@ function FanCard({
           />
         </div>
         <div
-          className="px-1 pt-3 pb-1 transition-opacity duration-500"
+          className="flex items-center gap-2 px-1 pt-3 pb-1 transition-opacity duration-500"
           style={{ opacity: pos > 0 ? 0 : 1 }}
         >
-          <div className="text-lg font-extrabold tracking-tight text-brand-primary">
-            {clip.title}
+          <div className="min-w-0">
+            <div className="truncate text-lg font-extrabold tracking-tight text-brand-primary">
+              {clip.title}
+            </div>
+            <div className="text-sm text-neutral-500">{clip.region}</div>
           </div>
-          <div className="text-sm text-neutral-500">{clip.region}</div>
+          {isCurrent && clip.tourId && (
+            <Link
+              href={`/tour/${clip.tourId}`}
+              className="ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-secondary px-3 py-1.5 text-xs font-bold text-white transition-colors hover:bg-brand-secondary/90"
+            >
+              {t("viewTour")}
+              <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>

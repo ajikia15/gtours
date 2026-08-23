@@ -46,8 +46,17 @@
       "ushguli": {
         "title": "Ushguli",
         "region": "Svaneti"
+      },
+      "batumi": {
+        "title": "Batumi",
+        "region": "Adjara"
+      },
+      "paliastomi": {
+        "title": "Paliastomi",
+        "region": "Samegrelo"
       }
-    }
+    },
+    "viewTour": "Let's go"
   },
   "SearchBar": {
     "whereHeaded": "Where are we headed?",

@@ -12,6 +12,7 @@ import {
 } from "motion/react";
 import { ArrowRight } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import type { Tour } from "@/types/Tour";
 import MobileTourSearchBar from "@/components/mobile-tour-search-bar";
 
@@ -20,6 +21,7 @@ export type HeroClip = {
   region: string;
   src: string;
   poster?: string;
+  tourId?: string;
 };
 
 const ROTATE_MS = 10000;
@@ -35,7 +37,24 @@ export const HERO_SLUGS = [
   "sighnaghi",
   "sameba",
   "ushguli",
+  "batumi",
+  "paliastomi",
 ] as const;
+
+const HERO_TOUR_IDS: Record<(typeof HERO_SLUGS)[number], string> = {
+  shatili: "x66oGcBq390tpd7Q240w",
+  didgori: "PjFzdolmP4zKtIm319Yt",
+  tbilisi: "gkjX4cUbAkX6309a6GLI",
+  mtskheta: "ntsDr3oaIb4kdaLdw8H6",
+  manglisi: "PjFzdolmP4zKtIm319Yt",
+  beshtasheni: "PjFzdolmP4zKtIm319Yt",
+  tsalka: "PjFzdolmP4zKtIm319Yt",
+  sighnaghi: "UBIJ2Undca3zhGBoHL6V",
+  sameba: "gkjX4cUbAkX6309a6GLI",
+  ushguli: "7zXCnGeRebWDgiNhlpbk",
+  batumi: "LaYMAEVtdK2hEAIxysG6",
+  paliastomi: "N70gf20nQO5kLsgRWrq8",
+};
 
 export function useHeroClips(): HeroClip[] {
   const t = useTranslations("Hero");
@@ -44,6 +63,7 @@ export function useHeroClips(): HeroClip[] {
     region: t(`clips.${slug}.region`),
     src: `/${slug}.mp4`,
     poster: `/${slug}.jpg`,
+    tourId: HERO_TOUR_IDS[slug],
   }));
 }
 
@@ -75,6 +95,7 @@ function CardMedia({ clip }: { clip: HeroClip }) {
 }
 
 export default function MobileHero({ tours, clips: clipsProp }: MobileHeroProps) {
+  const t = useTranslations("Hero");
   const defaultClips = useHeroClips();
   const clips = clipsProp ?? defaultClips;
   const [active, setActive] = useState(0);
@@ -276,12 +297,25 @@ export default function MobileHero({ tours, clips: clipsProp }: MobileHeroProps)
         />
 
         <motion.div
-          className="pointer-events-none absolute inset-x-5 bottom-[30svh] z-20"
+          className="pointer-events-none absolute inset-x-5 bottom-[30svh] z-40"
           style={{ opacity: overlayOpacity }}
         >
           <div className="hero-caption mb-2 flex items-center gap-2">
-            <span className="text-[15px] font-bold">{current.title}</span>
-            <span className="text-[13px] text-white/80">· {current.region}</span>
+            <span className="flex items-baseline gap-2">
+              <span className="text-[15px] font-bold">{current.title}</span>
+              <span className="text-[13px] text-white/80">
+                · {current.region}
+              </span>
+            </span>
+            {current.tourId && (
+              <Link
+                href={`/tour/${current.tourId}`}
+                className="pointer-events-auto ml-auto inline-flex shrink-0 items-center gap-1 rounded-full bg-white/15 px-2.5 py-1 text-[11px] font-bold whitespace-nowrap backdrop-blur-sm"
+              >
+                {t("viewTour")}
+                <ArrowRight className="h-3 w-3" />
+              </Link>
+            )}
           </div>
           <div className="hero-progress h-[3px] w-full overflow-hidden rounded-full bg-white/30">
             <div

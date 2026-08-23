@@ -46,8 +46,17 @@
       "ushguli": {
         "title": "Ушгули",
         "region": "Сванети"
+      },
+      "batumi": {
+        "title": "Батуми",
+        "region": "Аджария"
+      },
+      "paliastomi": {
+        "title": "Палиастоми",
+        "region": "Самегрело"
       }
-    }
+    },
+    "viewTour": "Поехали"
   },
   "SearchBar": {
     "whereHeaded": "Куда направляемся?",
